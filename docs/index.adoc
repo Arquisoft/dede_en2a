@@ -3,7 +3,7 @@
 //
 // ====================================
 
-= image:LogoASW.png[arc42] DeDe_0
+= image:LogoASW.png[arc42] DeDe_en_02a
 // toc-title definition MUST follow document title without blank line!
 :toc: left
 :toc-title: Table of Contents
