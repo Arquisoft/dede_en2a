@@ -1,0 +1,61 @@
+{
+  "name": "webapp",
+  "version": "0.1.0",
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.5",
+    "@mui/material": "^5.2.5",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/node": "^16.11.14",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "express": "^4.17.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.5.4",
+    "web-vitals": "^2.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --coverage",
+    "test:e2e": "start-server-and-test 'npm --prefix ../restapi start' http://localhost:5000/api/users/list prod 3000 'cd e2e && jest'",
+    "eject": "react-scripts eject",
+    "prod": "ts-node-dev ./server.ts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/expect-puppeteer": "^4.4.7",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.0",
+    "@types/puppeteer": "^5.4.4",
+    "expect-puppeteer": "^6.0.2",
+    "jest-cucumber": "^3.0.1",
+    "jest-puppeteer": "^6.0.3",
+    "puppeteer": "^13.0.1",
+    "start-server-and-test": "^1.14.0",
+    "ts-jest": "^27.1.2",
+    "ts-node-dev": "^1.1.8",
+    "react-scripts": "5.0.0"
+  }
+}
