@@ -1,6 +1,6 @@
 ## The documentation
 In this project the documentation is compiled locally and deployed to GitHub pages.
-The deployment url is: [https://pglez82.github.io/asw2122_0/](https://arquisoft.github.io/dede_en2a/).
+The deployment url is: [https://arquisoft.github.io/dede_en2a/](https://arquisoft.github.io/dede_en2a/).
 
 ### Documentation build
 For the documentation we are going to use [AsciiDoc](https://asciidoc.org/) and [PlantUML](https://plantuml.com) and follows the [Arc42](https://github.com/arc42/arc42-template) template. If you want to be able to generate the doc locally you need to install Ruby, Java and some dependencies to translate the asciidoc code into html. If you are in Linux you can install Ruby and Java simply by executing:
