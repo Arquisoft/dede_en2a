@@ -1,3 +1,4 @@
+
 # dede_en2a
 
 [![Actions Status](https://github.com/arquisoft/dede_0/workflows/CI%20for%20ASW2122/badge.svg)](https://github.com/arquisoft/dede_en2a/actions)
@@ -50,5 +51,15 @@ You can get more information about the respository in the other README files:
 - Webapp: https://github.com/arquisoft/dede_en2a/tree/master/webapp
 - Restapi: https://github.com/arquisoft/dede_en2a/tree/master/restapi
 
-Lorenzo La Rocca
 
+
+
+
+## GROUP MEMBERS:
+
+- Lorenzo La Rocca
+- Álvaro Rodríguez González - UO277776
+- Pablo Lopez Amado - UO271580
+- Andrés Martínez Rodríguez - UO277915
+- Ángel Iglesias Préstamo - UO270534
+- Noelia Iglesias Cuesta - UO269652
