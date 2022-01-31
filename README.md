@@ -49,3 +49,5 @@ You can get more information about the respository in the other README files:
 - Documentation: https://github.com/arquisoft/dede_en2a/tree/master/docs
 - Webapp: https://github.com/arquisoft/dede_en2a/tree/master/webapp
 - Restapi: https://github.com/arquisoft/dede_en2a/tree/master/restapi
+
+Álvaro Rodríguez González - UO277776
