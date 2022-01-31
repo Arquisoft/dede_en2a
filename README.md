@@ -52,6 +52,9 @@ You can get more information about the respository in the other README files:
 - Restapi: https://github.com/arquisoft/dede_en2a/tree/master/restapi
 
 
-Álvaro Rodríguez González - UO277776
-Andrés Martínez Rodríguez
-Ángel Iglesias Préstamo
+GROUP MEMBERS:
+
+- Álvaro Rodríguez González - UO277776
+- Pablo Lopez Amado - UO271580
+- Andrés Martínez Rodríguez
+- Ángel Iglesias Préstamo
