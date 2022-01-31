@@ -52,8 +52,12 @@ You can get more information about the respository in the other README files:
 - Restapi: https://github.com/arquisoft/dede_en2a/tree/master/restapi
 
 
+
+
+
 ## GROUP MEMBERS:
 
+- Lorenzo La Rocca
 - Álvaro Rodríguez González - UO277776
 - Pablo Lopez Amado - UO271580
 - Andrés Martínez Rodríguez - UO277915
