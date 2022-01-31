@@ -51,4 +51,5 @@ You can get more information about the respository in the other README files:
 - Webapp: https://github.com/arquisoft/dede_en2a/tree/master/webapp
 - Restapi: https://github.com/arquisoft/dede_en2a/tree/master/restapi
 
+Andrés Martínez Rodríguez
 Ángel Iglesias Préstamo
