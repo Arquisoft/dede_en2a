@@ -1,3 +1,4 @@
+
 # dede_en2a
 
 [![Actions Status](https://github.com/arquisoft/dede_0/workflows/CI%20for%20ASW2122/badge.svg)](https://github.com/arquisoft/dede_en2a/actions)
@@ -49,3 +50,5 @@ You can get more information about the respository in the other README files:
 - Documentation: https://github.com/arquisoft/dede_en2a/tree/master/docs
 - Webapp: https://github.com/arquisoft/dede_en2a/tree/master/webapp
 - Restapi: https://github.com/arquisoft/dede_en2a/tree/master/restapi
+
+Ángel Iglesias Préstamo
