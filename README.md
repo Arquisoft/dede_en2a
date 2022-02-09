@@ -57,7 +57,7 @@ You can get more information about the respository in the other README files:
 
 ## GROUP MEMBERS:
 
-- Lorenzo La Rocca
+- Lorenzo La Rocca - UO292842
 - Álvaro Rodríguez González - UO277776
 - Pablo Lopez Amado - UO271580
 - Andrés Martínez Rodríguez - UO277915
