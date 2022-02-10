@@ -18,7 +18,7 @@ technical constraints, organizational and political constraints and
 conventions (e.g. programming or versioning guidelines, documentation or naming conventions)
 ****
 
-=== Table 1. Technical Constraint
+=== Table 1. Technical Constraints
 
 [options="header",cols="1,3"]
 |===
