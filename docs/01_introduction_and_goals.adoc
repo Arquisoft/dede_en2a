@@ -30,6 +30,13 @@ If requirements documents exist this overview should refer to these documents.
 Keep these excerpts as short as possible. Balance readability of this document with potential redundancy w.r.t to requirements documents.
 ****
 
+The functional requirements that the application will have:
+
+* Users will be able to select and order products to buy.
+* Users will be able to see the delivery costs of their orders.
+* Users will be able to visualize all the orders they have made.
+* The information of the users will be obtain from the users' pods.
+
 === Quality Goals
 
 [role="arc42help"]
