@@ -36,6 +36,6 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 |===
 |Constraint| Explanation
 |App development| There is a due date to develop and finish the app
-|Team | The team creating the project is built up by 5 members
+|Team | The team creating the project is built up by 6 members
 |Testing| Different scenarios will be taken into account to test a correct behaviour of the app 
 |===
