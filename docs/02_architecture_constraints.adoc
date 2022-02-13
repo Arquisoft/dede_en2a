@@ -28,3 +28,18 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 |Solid| Solid Specifications are required to preserve customer's privacy 
 |Github| The version control is managed through GitHub, Git Bash. It provides tools for organizing and sharing the work. 
 |===
+
+
+=== Table 2. Organizational Constraints
+
+[options="header",cols="1,7"]
+|===
+|Constraint| Explanation
+|App development| There is a due date to develop and finish the app
+|Team | The team creating the project is built up by 6 members
+|Testing| Different scenarios will be taken into account to test a correct behaviour of the app 
+|Meetings | We will discuss the organization of the tasks to do in a meeting at each laboratory class
+|Experience | Team members have different experience when working with the diverse technologies going to be used
+|Team Work | It is the first time for every member of the group working together to develop an application
+|Coordination | A good coordination must be carried out by each component of the group to accomplish all the objectives proposed
+|===
