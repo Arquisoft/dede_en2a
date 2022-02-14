@@ -29,7 +29,6 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 |Github| The version control is managed through GitHub, Git Bash. It provides tools for organizing and sharing the work. 
 |===
 
-
 === Table 2. Organizational Constraints
 
 [options="header",cols="1,7"]
@@ -42,4 +41,16 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 |Experience | Team members have different experience when working with the diverse technologies going to be used
 |Team Work | It is the first time for every member of the group working together to develop an application
 |Coordination | A good coordination must be carried out by each component of the group to accomplish all the objectives proposed
+|===
+
+=== Table 3. Conventions
+
+[options="header",cols="1,3"]
+|===
+|Constraint| Explanation
+|Language | The application must be navigable by any person that knows English.
+|Clean Code | The code conforming the application must be well done and clean, so it is easier to understand and work with.
+|Documentation| The documentation must be created by following https://arc42.org/[Arc42] Structure, so it is clear, simple and effective.
+|Accessibility| The application must be easy to navigate through so any user interested on using it can do it easily.
+|Programming Language Conventions | We should follow the conventions of every programming language that we shall use. (Solid, Typescript, Java...)
 |===
