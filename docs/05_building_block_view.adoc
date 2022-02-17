@@ -11,7 +11,7 @@
 ****
 ****
 
-= image:level1.png[arc42]
+= image:level1.png
 :imagesdir: ./images
 
 
@@ -36,7 +36,7 @@ Contained Building Blocks::
 [role="arc42help"]
 ****
 ****
-= image:level2.png[arc42]
+= image:level2.png
 :imagesdir: ./images
 
 Motivation::
@@ -58,7 +58,7 @@ Contained Building Blocks::
 [role="arc42help"]
 ****
 ****
-= image:level3.png[arc42]
+= image:level3.png
 :imagesdir: ./images
 
 Motivation::
