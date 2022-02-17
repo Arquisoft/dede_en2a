@@ -12,8 +12,7 @@
 ****
 
 :imagesdir: ./images
-= image:level1.jpg
-
+= image:level1.jpg[arc42]
 
 
 Motivation::
