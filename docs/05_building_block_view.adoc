@@ -1,20 +1,18 @@
 [[section-building-block-view]]
-// header file for arc42-template,
-// including all help texts
-//
-// ====================================
 
+
+== Building Block View
 [role="arc42help"]
 ****
-==5. Building Block View
+****
 
+=== 5.1. Level 1 Whitebox Overall System
+[role="arc42help"]
+****
+****
 
-
-
-===5.1. Level 1 Whitebox Overall System
 = image:level1.png[arc42]
 :imagesdir: ./images
-
 
 
 Motivation::
@@ -33,12 +31,11 @@ Contained Building Blocks::
 |User pod | Where the user's information is saved with total security 
 |===
 
-****
 
-
+=== 5.2. Level 2
 [role="arc42help"]
 ****
-====5.2. Level 2
+****
 = image:level2.png[arc42]
 :imagesdir: ./images
 
@@ -56,17 +53,14 @@ Contained Building Blocks::
 |MongoDB | Database used to stored the minimum data needed from the users
 |===
 
-****
 
-
+=== 5.3. Level 3
 [role="arc42help"]
 ****
-====5.3. Level 3
+****
 = image:level3.png[arc42]
 :imagesdir: ./images
 
-[role="arc42help"]
-****
 Motivation::
 
 Detailed structure of the system application. Focused in the components of the User Interface and Data Access.
@@ -86,5 +80,3 @@ Contained Building Blocks::
 |Account | In this part the client is going to be able to perform any operation in their account like introducing new data or removing it
 |Sign out | It signs out the application from the last user.
 |===
-
-****
