@@ -1,17 +1,21 @@
 [[section-building-block-view]]
-
-
-==5. Building Block View
+// header file for arc42-template,
+// including all help texts
+//
+// ====================================
 
 [role="arc42help"]
 ****
+==5. Building Block View
+
+
+
 
 ===5.1. Level 1 Whitebox Overall System
 = image:level1.png[arc42]
 :imagesdir: ./images
 
-[role="arc42help"]
-****
+
 
 Motivation::
 
@@ -32,12 +36,12 @@ Contained Building Blocks::
 ****
 
 
+[role="arc42help"]
+****
 ====5.2. Level 2
 = image:level2.png[arc42]
 :imagesdir: ./images
 
-[role="arc42help"]
-****
 Motivation::
 
 Shows how the application will work internally in general terms. The client through the interface will get the data requested by using the Data Access layer.
@@ -54,6 +58,9 @@ Contained Building Blocks::
 
 ****
 
+
+[role="arc42help"]
+****
 ====5.3. Level 3
 = image:level3.png[arc42]
 :imagesdir: ./images
