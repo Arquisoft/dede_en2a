@@ -35,8 +35,9 @@ Solid: lets people store their data securely in decentralized data stores called
 
 React: is a JavaScript library for creating user interfaces for web applications which is easy to learn. 
 
-Typescript: is a strong typed programming language that runs on JavaScript developed mainly by Microsoft.
-
 === 4.2 Top-level Decompostition
 ==== 4.2.1 IDEs
 Our choice is Visual Studio Code mainly because is available for many platforms such as Windows/Ios/Linux and via plugins it supports many coding languages and documentation. Git is integrated for version control. 
+
+==== 4.2.2 Visual tools
+The initial choice for diagrams and are two tools which are UMLet and PlantUML.
