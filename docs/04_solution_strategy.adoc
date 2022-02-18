@@ -33,17 +33,13 @@ Refer to details in the following sections.
 |Scenario
 |Solution approach
 
-|*Privacy*
+|*Privacy and Security*
 |The user will feel safe while using our product as his data will be stored as he pleases.
-|We will use SOLID pods in order to achieve this. As we only manage the information that the user wants to share in his POD.
+|We will use SOLID pods in order to achieve this. As we only manage the information that the user wants to share in his POD. We will aim for solving problems that may compromise the robustness and security of the application.
 
 |*Usability*
 |The user will perform the task he wants to do without any trouble.
 |The use of CSS and JS frameworks that are preconfigured with that in mind. More in more, we will take advantage from the knowledge we earned from other subjects like SEW (Software y Estándares para la Web). Some techniques such as metaphors or conventions, will be used.
-
-|*Security*
-|The user won't be worried about what we do with his data as he will have full-control of it.
-|We will use SOLID pods in order to achieve this. We will aim for solving problems that may compromise the robustness and security of the application.
 
 |*Maintanability*
 |The code we write will be easy to read and modify. No spaguetti code or any kind of code smells.
