@@ -44,15 +44,15 @@ component "RestApi" as RApi
 
 |User
 |User will receive the service provided by the app.
-|The user will create the pod and store there his/her information and also it will manage the app to ordewr products to buy.
+|The user will create the pod and store there their information and also it will manage the app to order products to buy.
 
 |WebApp
-|The app will display information store in the database and show it to the user. Also it will receive the information from the user using the PODs.
+|The app will display information stored in the database and show it to the user. Also it will receive the information from the user using the PODs.
 |It will make requests to the RestApi in order to get information about users, products, orders, etc. Also store the orders done by the users. 
 
 |RestApi
 |From the app, the api will receive requests to get information stored in the database and the database will return the result of performing queries.
-|The api will send queries to the database and convert the response received in order to send back the information in a proper way to the WebApp.
+|The api will send queries to the database and convert the response received in order to send back the information in a proper way for the WebApp.
 
 |Database
 |The database will receive queries to get information (products, orders, users,...) from the RestApi.
