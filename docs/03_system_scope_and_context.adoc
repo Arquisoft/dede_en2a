@@ -59,8 +59,17 @@ together with a mapping table showing the relationships between channels and inp
 
 ****
 
-**<Diagram or Table>**
+For this app we are using:
 
-**<optionally: Explanation of technical interfaces>**
+- SOLID: The SOLID Pods store information from the user and the app will access the Pod to get the user data
+- React: Open-source library to ease the develop the user interface
+- Typescript
 
-**<Mapping Input/Output to Channels>**
+[options="header",cols="1,2"]
+|===
+|Technical Interface | Description
+|SOLID|Architecture that determines the structure of the data management of the project. Data is decentralized and protected stored on Pods
+|SOLID Pod|Data management unit used to store confidential and personal information according to the SOLID architecture.
+|Typescript|Language used to program the user interface 
+|React|Library to ease the programming of the application.
+|===
