@@ -39,8 +39,6 @@ The functional requirements that the application will have:
 
 === Quality Goals
 
-[role="arc42help"]
-****
 [options="header",cols="1,3,3,1"]
 |===
 |Quality goal
@@ -73,7 +71,6 @@ The functional requirements that the application will have:
 |The whole project, including all the components: code, documentation... Must be uploaded to a public repository, for it to be accessible to anyone in any place.
 |Medium
 |===
-****
 
 === Stakeholders
 
