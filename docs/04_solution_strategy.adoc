@@ -1,7 +1,6 @@
 [[section-solution-strategy]]
 == Solution Strategy
 
-
 [role="arc42help"]
 ****
 .Contents
