@@ -23,25 +23,45 @@ Various options:
 
 === Business Context
 
-[role="arc42help"]
-****
-.Contents
-Specification of *all* communication partners (users, IT-systems, ...) with explanations of domain specific inputs and outputs or interfaces.
-Optionally you can add domain specific formats or communication protocols.
+[plantuml, "ContextDiagramComponent", png]
+----
+database "Database" as Db
+database "User's POD" as Pod
+component "WebApp" as WApp
+component "RestApi" as RApi
+:User: --> [Pod]: Creates
+:User: --> [WApp]: Interacts
+[Db] --> [RApi]: Queries' result
+[RApi] --> [Db]: Perform queries
+[RApi] --> [WApp]: DB information
+[WApp] --> [RApi]: Make requests
+[WApp] --> [Pod]: Request permissions
+[Pod] --> [WApp]: User's information
+----
+[%header, cols=3]
+|===
+|Entity|Input|Output
 
-.Motivation
-All stakeholders should understand which data are exchanged with the environment of the system.
+|User
+|User will receive the service provided by the app.
+|The user will create the pod and store there their information and also it will manage the app to order products to buy.
 
-.Form
-All kinds of diagrams that show the system as a black box and specify the domain interfaces to communication partners.
+|WebApp
+|The app will display information stored in the database and show it to the user. Also it will receive the information from the user using the PODs.
+|It will make requests to the RestApi in order to get information about users, products, orders, etc. Also store the orders done by the users. 
 
-Alternatively (or additionally) you can use a table.
-The title of the table is the name of your system, the three columns contain the name of the communication partner, the inputs, and the outputs.
-****
+|RestApi
+|From the app, the api will receive requests to get information stored in the database and the database will return the result of performing queries.
+|The api will send queries to the database and convert the response received in order to send back the information in a proper way for the WebApp.
 
-**<Diagram or Table>**
+|Database
+|The database will receive queries to get information (products, orders, users,...) from the RestApi.
+|It will return the result of performing the queries received.
 
-**<optionally: Explanation of external domain interfaces>**
+|Solid PODs
+|It will receive petitions from the WebApp to get information about the users.
+|Will return users' information, mainly the addresses to calculate the shipping costs for orders.
+|===
 
 === Technical Context
 
@@ -59,8 +79,17 @@ together with a mapping table showing the relationships between channels and inp
 
 ****
 
-**<Diagram or Table>**
+For this app we are using:
 
-**<optionally: Explanation of technical interfaces>**
+- SOLID: The SOLID Pods store information from the user and the app will access the Pod to get the user data
+- React: Open-source library to ease the develop the user interface
+- Typescript
 
-**<Mapping Input/Output to Channels>**
+[options="header",cols="1,2"]
+|===
+|Technical Interface | Description
+|SOLID|Architecture that determines the structure of the data management of the project. Data is decentralized and protected stored on Pods
+|SOLID Pod|Data management unit used to store confidential and personal information according to the SOLID architecture.
+|Typescript|Language used to program the user interface 
+|React|Library to ease the programming of the application.
+|===
