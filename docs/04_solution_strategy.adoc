@@ -1,27 +1,24 @@
 [[section-solution-strategy]]
 == Solution Strategy
+=== 4.1 Technology Decisions
+==== 4.1.1 Technology Stack
+In order to develop the application and satisfy the constraint we decided this technologies:
+
+Database: we chose to use MongoDB during our last meeting on the 14-02-2022.
+
+Solid: lets people store their data securely in decentralized data stores called Pods.
+
+React: is a JavaScript library for creating user interfaces for web applications which is easy to learn. 
+
+=== 4.2 Top-level Decompostition
+==== 4.2.1 IDEs
+Our choice is Visual Studio Code mainly because is available for many platforms such as Windows/Ios/Linux and via plugins it supports many coding languages and documentation. Git is integrated for version control. 
+
+==== 4.2.2 Visual tools
+The initial choice for diagrams and are two tools which are UMLet and PlantUML.
 
 
-[role="arc42help"]
-****
-.Contents
-A short summary and explanation of the fundamental decisions and solution strategies, that shape the system's architecture. These include
 
-* technology decisions
-* decisions about the top-level decomposition of the system, e.g. usage of an architectural pattern or design pattern
-* decisions on how to achieve key quality goals
-* relevant organizational decisions, e.g. selecting a development process or delegating certain tasks to third parties.
-
-.Motivation
-These decisions form the cornerstones for your architecture. They are the basis for many other detailed decisions or implementation rules.
-
-.Form
-Keep the explanation of these key decisions short.
-
-Motivate what you have decided and why you decided that way,
-based upon your problem statement, the quality goals and key constraints.
-Refer to details in the following sections.
-****
 
 === Approaches to achieve top quality goals
 
