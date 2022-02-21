@@ -4,9 +4,12 @@
 ==== 4.1.1 Technology Stack
 In order to develop the application and satisfy the constraint we decided this technologies:
 
+[role="arc42help"]
+
 Database: we chose to use MongoDB during our last meeting on the 14-02-2022.
 
 Solid: lets people store their data securely in decentralized data stores called Pods.
+
 
 React: is a JavaScript library for creating user interfaces for web applications which is easy to learn. 
 
