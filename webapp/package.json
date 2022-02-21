@@ -15,6 +15,7 @@
     "express": "^4.17.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1",
     "typescript": "^4.5.4",
     "web-vitals": "^2.1.2"
   },
@@ -53,9 +54,9 @@
     "jest-cucumber": "^3.0.1",
     "jest-puppeteer": "^6.0.3",
     "puppeteer": "^13.0.1",
+    "react-scripts": "5.0.0",
     "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.1.2",
-    "ts-node-dev": "^1.1.8",
-    "react-scripts": "5.0.0"
+    "ts-node-dev": "^1.1.8"
   }
 }

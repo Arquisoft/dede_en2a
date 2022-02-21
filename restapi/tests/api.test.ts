@@ -4,24 +4,31 @@ import * as http from 'http';
 import bp from 'body-parser';
 import cors from 'cors';
 import api from '../api';
+import mongoose from 'mongoose';
 
 let app:Application;
 let server:http.Server;
 
 beforeAll(async () => {
-    app = express();
-    const port: number = 5000;
-    const options: cors.CorsOptions = {
-        origin: ['http://localhost:3000']
-    };
-    app.use(cors(options));
-    app.use(bp.json());
-    app.use("/api", api)
+    const mongo_uri = "mongodb+srv://dede:dede@dede.sieuk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    mongoose.connect(mongo_uri).then(() => {
+        app = express();
+        const port: number = 5000;
 
-    server = app.listen(port, ():void => {
-        console.log('Restapi server for testing listening on '+ port);
-    }).on("error",(error:Error)=>{
-        console.error('Error occured: ' + error.message);
+        const options: cors.CorsOptions = {
+            origin: ['http://localhost:3000']
+        };
+
+        app.use(cors(options));
+        app.use(bp.json());
+
+        app.use("/api", api)
+
+        server = app.listen(port, ():void => {
+            console.log('Restapi server for testing listening on '+ port);
+        }).on("error",(error:Error)=>{
+            console.error('Error occured: ' + error.message);
+        });
     });
 });
 
