@@ -1,9 +1,17 @@
 import React from 'react';
+import ShoppingCart from './ShoppingCart';
+import {Product} from '../shared/shareddtypes';
+import NavBar from './NavBar';
 
-function Shopping() :JSX.Element{
+type ShoppingProps = {
+    products : Product[];
+}
+
+function Shopping(props: ShoppingProps) :JSX.Element{
     return(
-        <>
-            <h1>Shooping Cart</h1>
+        <>  
+            <NavBar/>
+            <ShoppingCart products={props.products}/>
         </>
     )
 }

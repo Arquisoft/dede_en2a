@@ -10,7 +10,7 @@ type ShoppingCartProps = {
     products: Product[],
 }
 
-function calculateTotal(products : Product[]){
+function calculateTotal(products : Product[]) : number{
     let total: number = 0;
     products.forEach((product) => {
         total += product.price;
