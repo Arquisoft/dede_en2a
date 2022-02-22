@@ -5,6 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import {Product} from '../shared/shareddtypes';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import { FlowNode } from 'typescript';
+import { useEffect, useState } from 'react';
 
 type ShoppingCartProps = {
     products: Product[],
@@ -20,17 +21,41 @@ function calculateTotal(products : Product[]) : number{
 }
 function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
 
+    const [shoppingCart, setShoppingCart] = useState<Product[]>([]);
+    const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(new Map());
+
+    const updateCart = (products: Product[]) =>{
+        const cart = shoppingCart.slice();
+        products.forEach((product : Product) =>{
+            if (unitsProduct.has(product.code)){
+                let value = unitsProduct.get(product.code)!;
+                unitsProduct.set(product.code, value + 1);
+            } else{
+                unitsProduct.set(product.code, 1);
+                cart.push(product);
+                setShoppingCart(cart);
+            }
+        })
+
+        setUnitsProducts(unitsProduct);
+    }
+
+    useEffect(()=>{
+        updateCart(props.products);
+    },[]);
+
     return (
         <>
             <h2>Shopping Cart</h2>
             <List>
-                {props.products.map((product, i) =>{
+                {shoppingCart.map((product, i) =>{
                     return (
                         <ListItem key={product.code}>
                             <ListItemIcon>
                                 <Inventory2Icon/>
                             </ListItemIcon>
                             <ListItemText primary={product.name} secondary={product.price}/>
+                            <ListItemText primary={unitsProduct.get(product.code)}/>
                         </ListItem>
                     )
                 })}
