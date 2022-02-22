@@ -24,7 +24,5 @@ PUT {{url}}/users/update/pablog@gmail.com
 Content-Type: application/json
 
 {
-    "name": "pepe",
-    "surname": "gonzalez",
-    "email": "pablog@gmail.com"
+    
 }
