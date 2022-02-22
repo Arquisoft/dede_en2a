@@ -6,61 +6,49 @@ import {Product} from '../shared/shareddtypes';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import { FlowNode } from 'typescript';
 import { useEffect, useState } from 'react';
+import { render } from 'react-dom';
+import { handleBreakpoints } from '@mui/system';
+import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
 type ShoppingCartProps = {
-    products: Product[],
+    products: Product[];
+    units: Map<string, number>;
+    onIncrementUnit: (product: Product) => void;
+    onDecrementUnit: (product: Product) => void;
 }
 
-function calculateTotal(products : Product[]) : number{
-    let total: number = 0;
-    products.forEach((product) => {
-        total += product.price;
+function calculateTotal(products : Product[], units : Map<string, number>) : number{
+    let total:number = 0;
+    products.forEach((product: Product) =>{
+        let unit = units.get(product.code)!;
+        total += unit * product.price;
     })
     return total;
-    
 }
 function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
 
-    const [shoppingCart, setShoppingCart] = useState<Product[]>([]);
-    const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(new Map());
-
-    const updateCart = (products: Product[]) =>{
-        const cart = shoppingCart.slice();
-        products.forEach((product : Product) =>{
-            if (unitsProduct.has(product.code)){
-                let value = unitsProduct.get(product.code)!;
-                unitsProduct.set(product.code, value + 1);
-            } else{
-                unitsProduct.set(product.code, 1);
-                cart.push(product);
-                setShoppingCart(cart);
-            }
-        })
-
-        setUnitsProducts(unitsProduct);
-    }
-
-    useEffect(()=>{
-        updateCart(props.products);
-    },[]);
+    const [productsCart, setProducts] = useState<Product[]>(props.products);
+    const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(props.units);
 
     return (
         <>
             <h2>Shopping Cart</h2>
             <List>
-                {shoppingCart.map((product, i) =>{
+                {productsCart.map((product, i) =>{
                     return (
                         <ListItem key={product.code}>
                             <ListItemIcon>
                                 <Inventory2Icon/>
                             </ListItemIcon>
                             <ListItemText primary={product.name} secondary={product.price}/>
-                            <ListItemText primary={unitsProduct.get(product.code)}/>
+                            <p>{unitsProduct.get(product.code)}</p>
+                            <button onClick={() => props.onIncrementUnit(product)}>+</button>
+                            <button onClick={() => props.onDecrementUnit(product)}>-</button>
                         </ListItem>
                     )
                 })}
             </List>
-            <h3>Total Price - {calculateTotal(props.products)} €</h3>
+            <h3>Total Price - {calculateTotal(productsCart, unitsProduct)} €</h3>
         </>
     )
 }
