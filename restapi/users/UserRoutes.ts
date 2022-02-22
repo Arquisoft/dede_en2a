@@ -3,12 +3,14 @@ import * as UserController from './UserController';
 
 const api:Router = express.Router()
 
-api.get('/users', UserController.getUsers)
+api.get('/users/list', UserController.getUsers)
 
-api.get('/users/:id', UserController.getUser)
+api.get('/users/findByEmail/:email', UserController.getUser)
 
-api.post('/users', UserController.createUser)
+api.post('/users/create', UserController.createUser)
 
-api.delete('/users/:id', UserController.deleteUser)
+api.delete('/users/deleteByEmail/:email', UserController.deleteUser)
 
-api.put('/users/:id', UserController.updateUser)
+api.put('/users/update/:email', UserController.updateUser)
+
+export default api

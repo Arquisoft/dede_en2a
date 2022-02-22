@@ -1,15 +1,30 @@
 @url = http://localhost:5000
 
-GET {{url}}/users
+GET {{url}}/users/list
 
 ###
-GET {{url}}/users/1
+GET {{url}}/users/findByEmail/pablog@gmail.com
 
 ###
-POST  {{url}}/users
+POST  {{url}}/users/create
 Content-Type: application/json
 
 {
-    "name": "juan",
-    "surname": "aspas"
+    "name": "dani",
+    "surname": "alvarez",
+    "email": "danialvz@gmail.com"
+}
+
+###
+DELETE {{url}}/users/deleteByEmail/pablolopez@gmail.com
+
+###
+PUT {{url}}/users/update/pablog@gmail.com
+
+Content-Type: application/json
+
+{
+    "name": "pepe",
+    "surname": "gonzalez",
+    "email": "pablog@gmail.com"
 }

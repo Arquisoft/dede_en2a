@@ -3,12 +3,13 @@ import cors from 'cors';
 import bp from 'body-parser';
 import promBundle from 'express-prom-bundle';
 import morgan from "morgan";
+import api from "./users/UserRoutes"
 
 const app: Application = express();
 const port: number = 5000;
 
 const mongoose = require('mongoose')
-const connectionString: string = 'mongodb+srv://DedeAdmin:dedeen2a.@dede.b1agy.mongodb.net/dede?retryWrites=true&w=majority'
+const connectionString: string = 'mongodb+srv://DedeAdmin:dedeen2a.@cluster0.b1agy.mongodb.net/dede?retryWrites=true&w=majority'
 
 const options: cors.CorsOptions = {
   origin: ['http://localhost:3000']
@@ -21,6 +22,8 @@ app.use(metricsMiddleware);
 app.use(cors(options));
 app.use(bp.json());
 app.use(morgan('dev'))
+
+app.use(api)
 
 app.listen(port, ():void => {
     console.log('Restapi listening on '+ port);
