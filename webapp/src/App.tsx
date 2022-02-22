@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Home from './components/Home';
 import Shopping from './components/Shopping';
+import Pay from './components/Pay';
 import {Product} from './shared/shareddtypes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -26,6 +27,7 @@ function App(): JSX.Element {
               <Route path="/" element={<Home onAdd={handleAddCart} />}/>
               <Route index element={<Home onAdd={handleAddCart}/>} />
               <Route path="cart" element={<Shopping products = {productsCart} />}/>
+              <Route path="pay" element={<Pay />}/>
           </Routes>
         </Router>
   );
