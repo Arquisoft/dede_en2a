@@ -1,7 +1,7 @@
-import {useState} from 'react';
-import type { AlertColor } from '@mui/material/Alert';
+import {useEffect, useState} from 'react';
 import {Product} from '../shared/shareddtypes';
 import ProductBox from './ProductBox';
+import {getProducts} from '../api/api';
 
 type ProductListProps = {
     products: Product[];
@@ -10,11 +10,24 @@ type ProductListProps = {
 
 function ProductList(props: ProductListProps) : JSX.Element{
 
-    let product: Product = {code:"1234", name: "Camiseta Real Madrid Vinisius", description:"Camistea Real Madrid XL Temporada 21/22", price: 75.5, image:"realmadrid.jpg"};
-    let product1 : Product = {code:"1236", name: "Camiseta Real Madrid Mbappe", description:"Camistea Real Madrid XL Temporada 22/23 Bastante Fake La verdad", price: 250, image:"realmadrid.jpg"};
-    let product2 : Product={code: "1237", name: "Camiseta Real Madrid El Bichooo", description:"SUUUUUUUUUUUUUU", price: 1500, image:'elbicho.jpg'};
-    let product3 : Product={code:"1347", name:"Camiseta Real Sporting Jony", description: "Ni de coña chaval", price:10.99, image:"jony.jpg"};
+    
+    let product: Product = {code:"1234", name: "Camiseta Real Madrid Vinisius", description:"Camistea Real Madrid XL Temporada 21/22", price: 75.5};
+    let product1 : Product = {code:"1236", name: "Camiseta Real Madrid Mbappe", description:"Camistea Real Madrid XL Temporada 22/23 Bastante Fake La verdad", price: 250};
+    let product2 : Product={code: "1237", name: "Camiseta Real Madrid El Bichooo", description:"SUUUUUUUUUUUUUU", price: 1500};
+    let product3 : Product={code:"1347", name:"Camiseta Real Sporting Jony", description: "Ni de coña chaval", price:10.99};
     const [products] = useState([product, product1, product2, product3]);
+
+    /*
+    const[products, setProducts] = useState<Product[]>([]);
+    
+    const refreshProductList = async () =>{
+        setProducts(await getProducts());
+    }
+
+    useEffect(() =>{
+        refreshProductList();
+    })*/
+
     return (
         <>
             <div>

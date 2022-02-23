@@ -11,7 +11,7 @@ import Home from './components/Home';
 import Shopping from './components/Shopping';
 import Pay from './components/Pay';
 import { Product } from './shared/shareddtypes';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App(): JSX.Element {
 

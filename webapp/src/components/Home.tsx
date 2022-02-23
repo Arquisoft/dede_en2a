@@ -5,8 +5,6 @@ import  {getUsers} from '../api/api';
 import {User} from '../shared/shareddtypes';
 import {Product} from '../shared/shareddtypes';
 import ProductList from './ProductList';
-import ShoppingCart from './ShoppingCart';
-import {Link} from "react-router-dom";
 import NavBar from './NavBar';
 
 type HomeProps = {

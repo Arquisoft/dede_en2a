@@ -9,7 +9,7 @@ type ProductProps = {
 }
 
 function ProductBox(props: any): JSX.Element{
-    let image : string = '../images/' + props.product.image;
+    console.log('../images/'.concat(props.product.code).concat('.jpg'));
     return (
         <>
            <Box component="div">
@@ -20,7 +20,7 @@ function ProductBox(props: any): JSX.Element{
                         <button onClick={() => props.onAdd(props.product)}>Añadir producto</button>
                     </Grid>
                     <Grid item xs={2}>
-                        <img src={require('../images/'.concat(props.product.image))} width="300px" alt="image"/>
+                        <img src={require('../images/'.concat(props.product.code).concat('.jpg'))} width="300px" alt="image"/>
                     </Grid>
                </Grid>
            </Box>

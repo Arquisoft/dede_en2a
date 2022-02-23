@@ -4,11 +4,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {Product} from '../shared/shareddtypes';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
-import { FlowNode } from 'typescript';
 import { useEffect, useState } from 'react';
-import { render } from 'react-dom';
-import { handleBreakpoints } from '@mui/system';
-import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
+import 'bootstrap/dist/css/bootstrap.css';
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
 
 type ShoppingCartProps = {
     products: Product[];
@@ -36,15 +35,17 @@ function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
             <List>
                 {productsCart.map((product, i) =>{
                     return (
+                        <>
                         <ListItem key={product.code}>
-                            <ListItemIcon>
-                                <Inventory2Icon/>
-                            </ListItemIcon>
-                            <ListItemText primary={product.name} secondary={product.price}/>
-                            <p>{unitsProduct.get(product.code)}</p>
-                            <button onClick={() => props.onIncrementUnit(product)}>+</button>
-                            <button onClick={() => props.onDecrementUnit(product)}>-</button>
+                            <img className="m-2" src={require('../images/'.concat(product.code).concat('.jpg'))} width="100px"></img>
+                            <p className="font-weight-bold">{product.name}</p>
+                            <div style={{float: "right"}}>
+                                <Badge className="m-2" bg="primary">{unitsProduct.get(product.code)}</Badge>
+                                <Button onClick={() => props.onIncrementUnit(product)} className="m-1" variant="success">+</Button>
+                                <Button onClick={() => props.onDecrementUnit(product)} className="m-1" variant="danger">-</Button>
+                            </div>
                         </ListItem>
+                        </>
                     )
                 })}
             </List>
