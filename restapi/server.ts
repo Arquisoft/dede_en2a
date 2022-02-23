@@ -3,7 +3,8 @@ import cors from 'cors';
 import bp from 'body-parser';
 import promBundle from 'express-prom-bundle';
 import morgan from "morgan";
-import api from "./users/UserRoutes"
+import apiUser from "./users/UserRoutes"
+import apiProduct from "./products/ProductRoutes"
 
 const app: Application = express();
 const port: number = 5000;
@@ -23,7 +24,8 @@ app.use(cors(options));
 app.use(bp.json());
 app.use(morgan('dev'))
 
-app.use(api)
+app.use(apiUser)
+app.use(apiProduct)
 
 app.listen(port, ():void => {
     console.log('Restapi listening on '+ port);
