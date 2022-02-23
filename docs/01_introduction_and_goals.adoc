@@ -51,6 +51,11 @@ The functional requirements that the application will have:
 |The only way for us to ensure privacy is allowing users to know what we do with their data. This is only possible if the source code is available for anyone to read it. More in more, we will allow users to use their data as they please, not as we do.
 |High
 
+|*Performance*
+|"80% of the effects come from 20% of the causes"
+|We will aim for the application to load in less than 1.5 seconds; indeed, 47% of the internet users expect a site to load in 2 seconds or less, so we are focusing in doing it better than the average. 
+|High
+
 |*Usability*
 |"If a user is having a problem, it's our problem."
 |We aim for 90% of the users to be able to complete any -separate- task in less than 2 minutes, without any previous knowledge of the app.
