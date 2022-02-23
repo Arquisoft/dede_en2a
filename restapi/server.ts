@@ -20,8 +20,10 @@ const options: cors.CorsOptions = {
 const metricsMiddleware:RequestHandler = promBundle({includeMethod: true});
 app.use(metricsMiddleware);
 
+
 app.use(cors(options));
 app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
 app.use(apiUser)

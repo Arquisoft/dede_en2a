@@ -7,4 +7,10 @@ api.get('/products/list', ProdctController.getProducts)
 
 api.get('/products/findByCode/:code', ProdctController.getProduct)
 
+api.post('/products/create', ProdctController.createProduct)
+
+api.delete('/products/delete/:code', ProdctController.deleteProduct)
+
+api.put('/products/update/:code', ProdctController.updateProduct)
+
 export default api
