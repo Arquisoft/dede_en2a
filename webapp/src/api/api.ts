@@ -26,3 +26,13 @@ export async function getProducts():Promise<Product[]>{
     let response = await fetch(apiEndPoint+'/products/list');
     return response.json();
 }
+
+export async function updateProduct(product: Product){
+    const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000';
+    let response = await fetch(apiEndPoint + '/products/update/' + product.code,{
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({'name':product.name, 'price': product.price, 
+      'description': product.description, 'stock':product.stock})
+    });
+}
