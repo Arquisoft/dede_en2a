@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
+import {getProduct} from '../api/api';
 
 type ShoppingCartProps = {
     products: Product[];
@@ -29,6 +30,14 @@ function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
     const [productsCart, setProducts] = useState<Product[]>(props.products);
     const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(props.units);
 
+    const handleButton = (product: Product) =>{
+        if (unitsProduct.get(product.code)! >= product.stock){
+            return false;
+        } else{
+            return true;
+        }
+    }  
+
     return (
         <>
             <h2>Shopping Cart</h2>
@@ -41,7 +50,7 @@ function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
                             <p className="font-weight-bold">{product.name}</p>
                             <div style={{float: "right"}}>
                                 <Badge className="m-2" bg="primary">{unitsProduct.get(product.code)}</Badge>
-                                <Button onClick={() => props.onIncrementUnit(product)} className="m-1" variant="success">+</Button>
+                                <Button onClick={() => props.onIncrementUnit(product)} disabled={!handleButton(product)} className="m-1" variant="success">+</Button>
                                 <Button onClick={() => props.onDecrementUnit(product)} className="m-1" variant="danger">-</Button>
                             </div>
                         </ListItem>
