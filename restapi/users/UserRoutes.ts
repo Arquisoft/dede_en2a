@@ -11,6 +11,6 @@ api.post('/users/create', UserController.createUser)
 
 api.delete('/users/deleteByEmail/:email', UserController.deleteUser)
 
-api.put('/users/update/:email', UserController.updateUser)
+api.post('/users/update/:email', UserController.updateUser)
 
 export default api

@@ -11,6 +11,6 @@ api.post('/products/create', ProdctController.createProduct)
 
 api.delete('/products/delete/:code', ProdctController.deleteProduct)
 
-api.put('/products/update/:code', ProdctController.updateProduct)
+api.post('/products/update/:code', ProdctController.updateProduct)
 
 export default api

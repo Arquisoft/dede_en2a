@@ -19,10 +19,10 @@ Content-Type: application/json
 DELETE {{url}}/users/deleteByEmail/pablolopez@gmail.com
 
 ###
-PUT {{url}}/users/update/pablog@gmail.com
+POST {{url}}/users/update/sitom@gmail.com
 
 Content-Type: application/json
-
 {
-    
+    "name": "sitos",
+    "surname": "martinezs"
 }

@@ -45,7 +45,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 export const updateProduct: RequestHandler = async (req, res) => {
     try {
         console.log(req.body)
-        const product = await productModel.findOneAndUpdate({code: req.params.code},{$set: {name: req.body.name}}, {new: true})
+        const product = await productModel.findOneAndUpdate({code: req.params.code}, req.body, {new: true})
         res.json(product)
     }catch (error){
         res.json(error)

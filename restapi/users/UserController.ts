@@ -39,5 +39,11 @@ export const deleteUser: RequestHandler = async (req, res) => {
 }
 
 export const updateUser: RequestHandler = async (req, res) => {
-    //TODO
+    try {
+        console.log(req.body)
+        const user = await userModel.findOneAndUpdate({email: req.params.email}, req.body, {new: true})
+        res.json(user)
+    }catch (error){
+        res.json(error)
+    }
 }
