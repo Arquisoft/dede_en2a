@@ -12,13 +12,13 @@ type ProductListProps = {
 function ProductList(props: ProductListProps) : JSX.Element{
 
     
-    let product: Product = {code:"1234", name: "Camiseta Real Madrid Vinisius", description:"Camistea Real Madrid XL Temporada 21/22", price: 75.5, stock: 100};
+    /*let product: Product = {code:"1234", name: "Camiseta Real Madrid Vinisius", description:"Camistea Real Madrid XL Temporada 21/22", price: 75.5, stock: 100};
     let product1 : Product = {code:"1236", name: "Camiseta Real Madrid Mbappe", description:"Camistea Real Madrid XL Temporada 22/23 Bastante Fake La verdad", price: 250, stock: 50};
     let product2 : Product={code: "1237", name: "Camiseta Real Madrid El Bichooo", description:"SUUUUUUUUUUUUUU", price: 1500, stock: 0};
     let product3 : Product={code:"1347", name:"Camiseta Real Sporting Jony", description: "Ni de coña chaval", price:10.99, stock: 10};
-    const [products] = useState([product, product1, product2, product3]);
+    const [products] = useState([product, product1, product2, product3]);*/
 
-    /*
+    
     const[products, setProducts] = useState<Product[]>([]);
     
     const refreshProductList = async () =>{
@@ -27,7 +27,7 @@ function ProductList(props: ProductListProps) : JSX.Element{
 
     useEffect(() =>{
         refreshProductList();
-    })*/
+    })
 
     return (
         <>
