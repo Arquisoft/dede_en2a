@@ -29,3 +29,4 @@ yarn-error.log*
 #documentation build does not go into master
 docs/build
 
+*.http

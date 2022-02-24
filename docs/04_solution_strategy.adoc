@@ -1,24 +1,59 @@
 [[section-solution-strategy]]
 == Solution Strategy
-
+=== 4.1 Technology Decisions
+==== 4.1.1 Technology Stack
+In order to develop the application and satisfy the constraint we decided this technologies:
 
 [role="arc42help"]
-****
-.Contents
-A short summary and explanation of the fundamental decisions and solution strategies, that shape the system's architecture. These include
 
-* technology decisions
-* decisions about the top-level decomposition of the system, e.g. usage of an architectural pattern or design pattern
-* decisions on how to achieve key quality goals
-* relevant organizational decisions, e.g. selecting a development process or delegating certain tasks to third parties.
+Database: we chose to use MongoDB during our last meeting on the 14-02-2022.
 
-.Motivation
-These decisions form the cornerstones for your architecture. They are the basis for many other detailed decisions or implementation rules.
+Solid: lets people store their data securely in decentralized data stores called Pods.
 
-.Form
-Keep the explanation of these key decisions short.
 
-Motivate what you have decided and why you decided that way,
-based upon your problem statement, the quality goals and key constraints.
-Refer to details in the following sections.
-****
+React: is a JavaScript library for creating user interfaces for web applications which is easy to learn. 
+
+=== Top-level Decompostition
+==== IDEs
+Our choice is Visual Studio Code mainly because is available for many platforms such as Windows/Ios/Linux and via plugins it supports many coding languages and documentation. Git is integrated for version control. 
+
+==== Visual tools
+The initial choice for diagrams and are two tools which are UMLet and PlantUML.
+
+
+
+
+=== Approaches to achieve top quality goals
+
+[options="header",cols="1,3,3"]
+|===
+|Quality goal
+|Scenario
+|Solution approach
+
+|*Privacy and Security*
+|The user will feel safe while using our product as his data will be stored as he pleases.
+|We will use SOLID pods in order to achieve this. As we only manage the information that the user wants to share in his POD. We will aim for solving problems that may compromise the robustness and security of the application.
+
+|*Usability*
+|The user will perform the task he wants to do without any trouble.
+|The use of CSS and JS frameworks that are preconfigured with that in mind. More in more, we will take advantage from the knowledge we earned from other subjects like SEW (Software y Estándares para la Web). Some techniques such as metaphors or conventions, will be used.
+
+|*Maintanability*
+|The code we write will be easy to read and modify. No spaguetti code or any kind of code smells.
+|We will implement design patterns and follow code conventions in order to achive a clean code. More in more, we will write code with tests in mind, covering more than the 50% of the project.
+
+|*Freedom*
+|The project will be accesible for everyone to read it. This will include future students.
+|By means of a public repository anything from our project will be available for everybody.
+|===
+
+=== Organizational decisions
+
+We have taken the following organizational decisions:app-name:
+
+* *Language*: the whole project: code, documentation and conversations among the team members - that includes: issues and other chats - will be in our shared language: English.
+
+* *Issues*: even if private chats are a good tool for solving quick doubts, anything apart from that will represent an issue in _Github_. This way, anyone can see what we discuss about.
+
+* *Kanban*: by means of this tool we will be able to plan the development process of the application. More in more, _Github_ has a built-in option for that purpose.
