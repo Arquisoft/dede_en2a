@@ -27,6 +27,12 @@ export async function getProducts():Promise<Product[]>{
     return response.json();
 }
 
+export async function getProduct(productCode : string): Promise<Product> {
+    const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000';
+    let response = await fetch(apiEndPoint + '/products/findByCode/' + productCode);
+    return response.json();
+}
+
 export async function updateProduct(product: Product){
     const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000';
     let response = await fetch(apiEndPoint + '/products/update/' + product.code,{
