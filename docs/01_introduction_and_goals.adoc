@@ -105,4 +105,5 @@ Table with role names, person names, and their expectations with respect to the 
 | Students | Lorenzo La Rocca, Álvaro Rodríguez González, Pablo Lopez Amado, Andrés Martínez Rodríguez, Ángel Iglesias Préstamo, Noelia Iglesias Cuesta | Main developers of the application. They will develop the whole application and hence they will improve their teamwork capacity and coding skills.
 | Teachers | José Emilio Labra Gallo, Pablo González González | They will supervise students work, make sure they are going in the right direction and help them if necessary.
 | Users | | Users will be the ones using the application so they have to find it easy to use, intuitive and practical.
+| Empathy | C. Jimena Fernández de la Vega, 101, 33394 Gijón, Asturias | They are interested in the project, especially in the part that deals with SOLID Pods because they are used and are important in their working area. Also to offer students business practices
 |===
