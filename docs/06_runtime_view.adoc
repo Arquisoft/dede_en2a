@@ -1,57 +1,168 @@
 [[section-runtime-view]]
 == Runtime View
 
+This section, at this moment, is very poor. We will greatly increase it once we have started working with the project
+and once we know how many optional features we will implement.
 
-[role="arc42help"]
-****
-.Contents
-The runtime view describes concrete behavior and interactions of the system’s building blocks in form of scenarios from the following areas:
-
-* important use cases or features: how do building blocks execute them?
-* interactions at critical external interfaces: how do building blocks cooperate with users and neighboring systems?
-* operation and administration: launch, start-up, stop
-* error and exception scenarios
-
-Remark: The main criterion for the choice of possible scenarios (sequences, workflows) is their *architectural relevance*. It is *not* important to describe a large number of scenarios. You should rather document a representative selection.
-
-.Motivation
-You should understand how (instances of) building blocks of your system perform their job and communicate at runtime.
-You will mainly capture scenarios in your documentation to communicate your architecture to stakeholders that are less willing or able to read and understand the static models (building block view, deployment view).
-
-.Form
-There are many notations for describing scenarios, e.g.
-
-* numbered list of steps (in natural language)
-* activity diagrams or flow charts
-* sequence diagrams
-* BPMN or EPCs (event process chains)
-* state machines
-* ...
-
-****
-
-=== <Runtime Scenario 1>
+=== User adds item to their shopping cart
 
 
-* _<insert runtime diagram or textual description of the scenario>_
-* _<insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.>_
+Once the user logs in, they can select any product they want and add it to their shopping cart.
 
-It is possible to use a sequence diagram:
-
-[plantuml,"Sequence diagram",png]
+[plantuml,"Add Item Diagram",png]
 ----
-actor Alice
-actor Bob
-database Pod as "Bob's Pod"
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
-Alice  --> Pod: Store route
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+header Runtime View
+title Item Addition
+
+Actor Juan
+Participant DeDe
+Database DataBase as "System's DataBase" #lightgreen
+
+skinparam responseMessageBelowArrow true
+
+...
+
+Juan -> DeDe: Logins with his user
+
+DeDe -> DataBase: Requests account confirmation
+DeDe <-- DataBase: Confirms account validity
+
+Juan <- DeDe: Shows the main page but logged in
+
+|||
+...Juan looks at the items in the shop......
+|||
+
+Juan -> DeDe: Selects item to add
+
+DeDe -> DataBase: Inserts the item to Juan's cart
+DeDe <-- DataBase: Confirms addition
+
+Juan <- DeDe: Shows confimation message
+
 ----
-=== <Runtime Scenario 2>
 
-=== ...
+=== User confirms their shopping cart
 
-=== <Runtime Scenario n>
+
+Once the user is happy with the product selected, they can confirm the purchase.
+
+[plantuml,"Cart Confirmation Diagram",png]
+----
+header Runtime View
+title Cart Confirmation
+
+Actor Juan
+Participant DeDe
+Database Pod as "Juan's Pod" #pink
+Database DataBase as "System's DataBase" #lightgreen
+
+skinparam responseMessageBelowArrow true
+
+Juan -> DeDe: Opens the cart
+
+DeDe -> DataBase: Requests cart data
+DeDe <-- DataBase: Returns cart data
+
+Juan <-- DeDe: Shows all the items added
+
+|||
+...Some time to decide...
+|||
+
+Juan -> DeDe: Confirms cart
+
+note right of DeDe #lightyellow
+The system will take
+the default address
+if Juan does not
+directly change it.
+end note
+
+|||
+
+DeDe -> Pod: Request desired address
+
+
+DeDe <-- Pod: Return Juan's address
+|||
+DeDe -> DeDe: Compute delivery costs
+|||
+DeDe --> Juan: Shows price with delivery
+
+----
+
+
+=== User accepts the final price
+
+
+Once the user sees the final price, including delivery, they must accept it, and then the system will prepare the package for delivery.
+
+[plantuml,"Finish Purchase Diagram",png]
+----
+header Runtime View
+title Finish Purchase
+
+Actor Juan
+Participant DeDe
+Database DataBase as "System's DataBase" #lightgreen
+
+Juan -> DeDe: Accepts final price
+
+|||
+
+skinparam responseMessageBelowArrow true
+DeDe -> DataBase: Store Purchase Data
+DeDe <-- DataBase: Confirm Insertion
+
+|||
+
+Juan <-- DeDe: Shows confirmation message
+
+
+----
+
+
+=== User reviews orders previously done
+
+
+A logged-in user can always look at the orders they have previously done.
+
+[plantuml,"Review Orders Diagram",png]
+----
+header Runtime View
+title Review Orders
+
+Actor Juan
+Participant DeDe
+Database DataBase as "System's DataBase" #lightgreen
+
+skinparam responseMessageBelowArrow true
+
+Juan -> DeDe: Selects 'orders' menu
+
+|||
+
+DeDe -> DataBase: Requests orders done by Juan
+DeDe <-- DataBase: Returns orders
+
+|||
+
+Juan <-- DeDe: Shows menu with all the orders done
+
+|||
+...Juan wants to what what he bought on one of them......
+|||
+
+Juan -> DeDe: Selects the order he wants view
+
+|||
+
+DeDe -> DataBase: Requests details on the order
+DeDe <-- DataBase: Returns order details
+
+|||
+
+Juan <-- DeDe: Shows order details
+
+----

@@ -1,7 +1,6 @@
 [[section-design-decisions]]
 == Design Decisions
 
-
 [role="arc42help"]
 ****
 .Contents
@@ -24,3 +23,33 @@ Various options:
 * more detailed in form of separate sections per decision
 * ADR (architecture decision record) for every important decision
 ****
+
+Those are the different decisions we have taken for developing our project. They are ordered by importance:
+
+[options="header",cols="1,2,2,2"]
+|===
+|Architectural decision
+|Advantages
+|Disadvantages
+|Link to the ADR
+
+| Typescript
+| Solves one of the hardes inconveniences of using JavaScript: dynamic binding. This project is increasing its popularity among developers: probably the future of the web.
+| None of us has ever used this programming languange. Indeed, we are not experts in JavaScript neither.
+| This decision was not taken by us, we were told to use it in the project's assignment.
+
+| React
+| Aimed for simplifying the Frontend development process. Well documented. Developed by one of the biggest tech-companies: Facebook.
+| Not only we are not experts in TypeScript, but we aren't familiarized with this library neither.
+| This decision was not taken by us, we were told to use it in the project's assignment.
+
+| MongoDB
+| NoSQL database that is easy to work-with and integrate using TypeScript. Plenty of resources online.
+| Transactions are not supported. Stores data by using high memory resources.
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%233%3A-DB-to-be-used[ADR #3]
+
+| Visual Studio Code
+| Extremely easy to use. Lightweight and highly customizable. Available for many operating systems. Another advantage is the fact that is widely used in real-world project.
+| We need to install a bunch of plugins for us to be able to develop the project in a more comfortabe way. More in more, we have to agree which of them we are using, so that everyone has the same UE (user experience).
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%232%3A-IDE[ADR #2]
+|===
