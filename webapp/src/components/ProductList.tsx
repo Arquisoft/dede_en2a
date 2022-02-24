@@ -25,9 +25,10 @@ function ProductList(props: ProductListProps) : JSX.Element{
         setProducts(await getProducts());
     }
 
+    //Works like componentDidMount(), it is called when the component is render for the first time.
     useEffect(() =>{
         refreshProductList();
-    })
+    },[]);
 
     return (
         <>

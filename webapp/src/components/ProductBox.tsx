@@ -38,7 +38,7 @@ function ProductBox(props: any): JSX.Element{
 
     return (
         <>
-           <Box component="div" className="m-2">
+           <Box component="div">
                <Grid container alignItems="center" className="m-5" direction="column" rowSpacing="5">
                     <Grid item xs>
                         <img src={require('../images/'.concat(props.product.code).concat('.jpg'))} width="300px" alt="image"/>
