@@ -1,16 +1,29 @@
 const mongoose = require('mongoose')
 const { model, Schema } = mongoose
 
-import { userModel } from "../users/User";
-import { productModel } from "../products/Product";
+const orderProduct = new Schema({
+    code: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    amount: {
+        type: Number,
+        required: true,
+        trim: true
+    }
+}, {
+    versionKey: false,
+    timestamps: true
+})
 
 const orderSchema = new Schema({
-    user: {
-        type: userModel,
+    userId: {
+        type: String,
         required: true,        
     },
     products:{
-        type: [productModel]
+        type: [orderProduct]
     },
     totalPrice:{
         type: Number,
@@ -25,4 +38,5 @@ const orderSchema = new Schema({
     timestamps: true
 })
 
+export const orderProductModel = model('OrderProduct', orderProduct)
 export const orderModel = model ('Order', orderSchema)
