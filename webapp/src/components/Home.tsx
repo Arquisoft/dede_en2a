@@ -1,36 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import Container from '@mui/material/Container';
-import Welcome from '../components/Welcome';
-import  {getUsers} from '../api/api';
-import {User} from '../shared/shareddtypes';
-import {Product} from '../shared/shareddtypes';
+
+import CssBaseline from '@mui/material/CssBaseline';
+
+import { getUsers } from '../api/api';
+import { User } from '../shared/shareddtypes';
+import { Product } from '../shared/shareddtypes';
+
 import ProductList from './ProductList';
 import NavBar from './NavBar';
 
 type HomeProps = {
     onAdd: (product : Product) => void;
 }
+
 function Home(props: HomeProps) : JSX.Element{
-  const [users,setUsers] = useState<User[]>([]);
-  
+	const [users,setUsers] = useState<User[]>([]);
 
-  const refreshUserList = async () => {
-    setUsers(await getUsers());
-  }
+	const refreshUserList = async () => {
+		setUsers(await getUsers());
+	}
 
-  useEffect(()=>{
-    refreshUserList();
-  },[]);
+	useEffect(()=>{
+		refreshUserList();
+	},
+	[]);
 
-  return (
-    <>
-        <NavBar/>
-        <Container maxWidth="sm">
-            <Welcome message="DeDe Application"/>
-            <ProductList products={[]} OnAddCart={props.onAdd}/>
-        </Container>
-    </>
-  );
+	return (
+		<React.Fragment>
+			<CssBaseline />
+			<NavBar/>
+			<ProductList 
+				products={[]} 
+				OnAddCart={props.onAdd}
+			/>
+		</React.Fragment>
+	);
 };
 
 export default Home;
