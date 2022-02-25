@@ -4,8 +4,8 @@ import { orderModel } from "./Order";
 
 export const getOrders: RequestHandler = async (req, res) => {
     try {
-        const users = await orderModel.find()
-        return res.json(users)
+        const orders = await orderModel.find()
+        return res.json(orders)
     } catch (error) {
         res.json(error)
     }

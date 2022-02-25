@@ -6,6 +6,7 @@ import morgan from "morgan";
 import apiUser from "./users/UserRoutes"
 import apiProduct from "./products/ProductRoutes"
 import apiOrders from "./orders/OrderRoutes"
+import apiCarts from "./carts/CartRoutes"
 
 const app: Application = express();
 const port: number = 5000;
@@ -30,6 +31,7 @@ app.use(morgan('dev'))
 app.use(apiUser)
 app.use(apiProduct)
 app.use(apiOrders)
+app.use(apiCarts)
 
 app.listen(port, (): void => {
   console.log('Restapi listening on ' + port);

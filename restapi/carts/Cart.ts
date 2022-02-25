@@ -1,22 +1,19 @@
 const mongoose = require('mongoose')
 const { model, Schema } = mongoose
 
-import { orderProduct } from "./OrderProduct"
+import { orderProduct } from "../orders/OrderProduct"
 
 
-const orderSchema = new Schema({
+const cartSchema = new Schema({
     userId: {
         type: String,
         required: true,
+        unique: true
     },
     products: {
         type: [orderProduct]
     },
     totalPrice: {
-        type: Number,
-        required: true
-    },
-    shippingPrice: {
         type: Number,
         required: true
     }
@@ -25,4 +22,4 @@ const orderSchema = new Schema({
     timestamps: true
 })
 
-export const orderModel = model('Order', orderSchema)
+export const cartModel = model('Cart', cartSchema)
