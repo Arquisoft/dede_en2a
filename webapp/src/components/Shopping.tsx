@@ -1,7 +1,14 @@
-import ShoppingCart from './ShoppingCart';
-import {Product} from '../shared/shareddtypes';
-import NavBar from './NavBar';
+import React from 'react';
 import {Link} from 'react-router-dom';
+
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
+import ShoppingCart from './ShoppingCart';
+import NavBar from './NavBar';
+import {Product} from '../shared/shareddtypes';
+
 import {updateProduct} from '../api/api';
 
 type ShoppingProps = {
@@ -21,15 +28,38 @@ function Shopping(props: ShoppingProps) :JSX.Element{
     }
 
     return(
-        <>  
+        <React.Fragment>
             <NavBar/>
-            <ShoppingCart products={props.products} units={props.units} onIncrementUnit={props.onIncrementUnit} onDecrementUnit={props.onDecrementUnit}/>
-            <Link to="/pay">
-                <button onClick={handleUpdateStock}>
-                    Comprar
-                </button>
-            </Link>
-        </>
+            <Typography variant="h4" className="m-2">Shopping Cart</Typography>
+            <ShoppingCart 
+                products={props.products}
+                units={props.units} 
+                onIncrementUnit={props.onIncrementUnit} 
+                onDecrementUnit={props.onDecrementUnit}
+            />
+            <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                justifyContent="space-between"
+                alignItems="center"
+            >
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Button
+                        variant="outlined"
+                        className="m-1">
+                            Continue shopping
+                    </Button>
+                </Link>
+
+                <Link to="/pay" style={{ textDecoration: 'none' }}>
+                    <Button 
+                        variant="contained"
+                        onClick={ handleUpdateStock }
+                        className="m-1">
+                            Proceed to checkout
+                    </Button>
+                </Link>
+            </Stack>
+        </React.Fragment>
     )
 }
 
