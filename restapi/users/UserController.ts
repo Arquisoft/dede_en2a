@@ -26,7 +26,7 @@ export const createUser: RequestHandler = async (req, res) => {
         const usersaved = await user.save()
         res.json(usersaved)
     } catch (error) {
-        res.status(301).json({ message: 'Already exists that email' })
+        res.status(301).json({ message: 'The data is not valid'})
     }
 }
 

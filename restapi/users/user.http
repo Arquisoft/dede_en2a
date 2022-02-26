@@ -10,9 +10,10 @@ POST  {{url}}/users/create
 Content-Type: application/json
 
 {
-    "name": "sito",
-    "surname": "martinez",
-    "email": "sitom@gmail.com"
+    "name": "pablo",
+    "surname": "lopez",
+    "email": "pablol@gmail.com",
+    "password": "bph59woegryjse45"
 }
 
 ###
