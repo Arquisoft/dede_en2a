@@ -4,9 +4,9 @@ import { Product } from './shared/shareddtypes';
 
 import Home from './components/Home';
 import Shopping from './components/Shopping';
-import Pay from './components/Pay';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import Checkout from './components/Checkout';
 
 import './App.css';
 
@@ -78,7 +78,7 @@ function App(): JSX.Element {
 								onIncrementUnit={handleAddCart}/>
 							} 
 				/>
-				<Route path="pay" element={ <Pay /> } />
+				<Route path="checkout" element={ <Checkout /> } />
 				<Route path="sign-in" element={ <SignIn /> } />
 				<Route path="sign-up" element={ <SignUp />} />
 			</Routes>

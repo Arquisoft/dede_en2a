@@ -2,6 +2,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
@@ -30,35 +32,53 @@ function Shopping(props: ShoppingProps) :JSX.Element{
     return(
         <React.Fragment>
             <NavBar/>
-            <Typography variant="h4" className="m-2">Shopping Cart</Typography>
-            <ShoppingCart 
-                products={props.products}
-                units={props.units} 
-                onIncrementUnit={props.onIncrementUnit} 
-                onDecrementUnit={props.onDecrementUnit}
-            />
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                justifyContent="space-between"
-                alignItems="center"
+            <Container 
+                component="main" 
+                maxWidth="sm" 
+                sx={{ mb: 4 }}
             >
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Button
-                        variant="outlined"
-                        className="m-1">
-                            Continue shopping
-                    </Button>
-                </Link>
+                <Paper 
+                    variant="outlined" 
+                    sx={{ my: { xs: 3, md: 6 }, 
+                        p: { xs: 2, md: 3 } }}
+                >
+                    <Typography 
+                        component="h1" 
+                        variant="h4" 
+                        align="center"
+                    >
+                        Shopping cart
+                    </Typography>
+                    <ShoppingCart 
+                        products={props.products}
+                        units={props.units} 
+                        onIncrementUnit={props.onIncrementUnit} 
+                        onDecrementUnit={props.onDecrementUnit}
+                    />
+                    <Stack
+                        direction={{ xs: 'column', sm: 'row' }}
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <Link to="/" style={{ textDecoration: 'none' }}>
+                            <Button
+                                variant="outlined"
+                                className="m-1">
+                                    Continue shopping
+                            </Button>
+                        </Link>
 
-                <Link to="/pay" style={{ textDecoration: 'none' }}>
-                    <Button 
-                        variant="contained"
-                        onClick={ handleUpdateStock }
-                        className="m-1">
-                            Proceed to checkout
-                    </Button>
-                </Link>
-            </Stack>
+                        <Link to="/checkout" style={{ textDecoration: 'none' }}>
+                            <Button 
+                                variant="contained"
+                                onClick={ handleUpdateStock }
+                                className="m-1">
+                                    Proceed to checkout
+                            </Button>
+                        </Link>
+                    </Stack>
+                </Paper>
+            </Container>
         </React.Fragment>
     )
 }
