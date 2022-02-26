@@ -26,7 +26,6 @@ function calculateTotal(products : Product[], units : Map<string, number>) : num
     return total;
 }
 function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
-
     const [productsCart, setProducts] = useState<Product[]>(props.products);
     const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(props.units);
 

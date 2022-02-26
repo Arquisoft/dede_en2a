@@ -15,12 +15,9 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-import {getProducts} from '../api/api';
+import {Link} from 'react-router-dom';
 
-import { useNavigate } from "react-router-dom";
-
-
-function NavBar(): JSX.Element{
+function NavBar(props : any): JSX.Element {
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [state, setState] = React.useState(false);
@@ -55,7 +52,10 @@ function NavBar(): JSX.Element{
                     <Typography variant="inherit">Home</Typography>
                 </MenuItem>
 
-                <MenuItem onClick={event =>  window.location.href='cart'} >
+                <MenuItem
+                    component={ Link } 
+                    to="/cart"
+                >
                     <ListItemIcon>
                         <ShoppingCartIcon fontSize="small" />
                     </ListItemIcon>
@@ -107,10 +107,11 @@ function NavBar(): JSX.Element{
                         size="large"
                         aria-label=""
                         color="inherit"
-                        href="/cart"
+                        component={ Link } 
+                        to="/cart"
                     >
                         <Badge 
-                            badgeContent={ getProducts.length } 
+                            badgeContent={ props.units } 
                             color="error"
                         >
                             <ShoppingCartIcon />

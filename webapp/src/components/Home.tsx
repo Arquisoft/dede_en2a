@@ -28,7 +28,7 @@ function Home(props: HomeProps) : JSX.Element{
 	return (
 		<React.Fragment>
 			<CssBaseline />
-			<NavBar/>
+			<NavBar />
 			<ProductList 
 				products={[]} 
 				OnAddCart={props.onAdd}

@@ -1,10 +1,8 @@
-import React from 'react';
 import ShoppingCart from './ShoppingCart';
 import {Product} from '../shared/shareddtypes';
 import NavBar from './NavBar';
 import {Link} from 'react-router-dom';
 import {updateProduct} from '../api/api';
-import ProductList from './ProductList';
 
 type ShoppingProps = {
     products : Product[];
@@ -14,7 +12,6 @@ type ShoppingProps = {
 }
 
 function Shopping(props: ShoppingProps) :JSX.Element{
-
     const handleUpdateStock = () =>{
         props.products.forEach((product) => {
             let productUnits : number = props.units.get(product.code)!;

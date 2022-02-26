@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import ReactDOM from 'react-dom';
-
 import { Product } from './shared/shareddtypes';
 
 import Home from './components/Home';
@@ -12,11 +10,11 @@ import SignUp from './components/SignUp';
 
 import './App.css';
 
+import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -65,14 +63,25 @@ function App(): JSX.Element {
 
 	return (
 		<Router>
-		<Routes>
-			<Route path="/" element={<Home onAdd={handleAddCart} />} />
-			<Route index element={<Home onAdd={handleAddCart} />} />
-			<Route path="cart" element={<Shopping products={productsCart} units={unitProducts} onDecrementUnit={handleDecrementUnit} onIncrementUnit={handleAddCart}/>} />
-			<Route path="pay" element={<Pay />} />
-			<Route path="sign-in" element={<SignIn />} />
-			<Route path="sign-up" element={<SignUp />} />
-		</Routes>
+			<Routes>
+				<Route 
+					index 
+					element={ <Home
+						onAdd={ handleAddCart } /> 
+					} 
+				/>
+				<Route 
+					path="cart" 
+					element={ <Shopping products={productsCart} 
+								units={unitProducts} 
+								onDecrementUnit={handleDecrementUnit} 
+								onIncrementUnit={handleAddCart}/>
+							} 
+				/>
+				<Route path="pay" element={ <Pay /> } />
+				<Route path="sign-in" element={ <SignIn /> } />
+				<Route path="sign-up" element={ <SignUp />} />
+			</Routes>
 		</Router>
 	);
 }

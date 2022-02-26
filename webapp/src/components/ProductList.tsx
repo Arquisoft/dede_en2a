@@ -1,36 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 import { Product } from '../shared/shareddtypes';
 import ProductBox from './ProductBox';
 import { getProducts } from '../api/api';
 
-
 type ProductListProps = {
     products: Product[];
     OnAddCart: (product : Product) => void;
-}
-
-function ProductRow(props : any) : JSX.Element {
-    return (
-        <React.Fragment>
-            <Grid item xs={6}>
-                <ProductBox 
-                    product={props.product1} 
-                    onAdd={(productToAdd : Product) => props.OnAddCart(productToAdd)}
-                />
-            </Grid>
-
-            <Grid item xs={6}>
-                <ProductBox 
-                    product={props.product2}
-                    onAdd={(productToAdd : Product) => props.OnAddCart(productToAdd)}
-                />
-            </Grid>
-        </React.Fragment>
-    )
 }
 
 function ProductList(props: ProductListProps) : JSX.Element{
@@ -54,21 +32,19 @@ function ProductList(props: ProductListProps) : JSX.Element{
 
     return (
         <Grid 
-            container 
+            container
+            columns={50}
             rowSpacing={5}
             className="mt-2 mb-2"
         >
             {
                 products.map(product => (
-                    <Grid 
-                        container 
-                        item 
-                    >
-                        <ProductRow 
-                            product1={product}
-                            product2={product}
+                    <Grid item xs={25}>
+                        <ProductBox 
+                            product={product}
+                            onAdd={(productToAdd : Product) => props.OnAddCart(productToAdd)}
                         />
-                  </Grid>
+                    </Grid>
                 ))
             }
         </Grid>
