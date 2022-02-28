@@ -1,14 +1,18 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import React, { useState } from 'react';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+
 import {Product} from '../shared/shareddtypes';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
-import { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
-import {getProduct} from '../api/api';
 
 type ShoppingCartProps = {
     products: Product[];
@@ -26,7 +30,6 @@ function calculateTotal(products : Product[], units : Map<string, number>) : num
     return total;
 }
 function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
-
     const [productsCart, setProducts] = useState<Product[]>(props.products);
     const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(props.units);
 
@@ -36,31 +39,89 @@ function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
         } else{
             return true;
         }
-    }  
+    }
 
-    return (
-        <>
-            <h2>Shopping Cart</h2>
-            <List>
-                {productsCart.map((product, i) =>{
-                    return (
-                        <>
-                        <ListItem key={product.code}>
-                            <img className="m-2" src={require('../images/'.concat(product.code).concat('.jpg'))} width="100px"></img>
-                            <p className="font-weight-bold">{product.name}</p>
-                            <div style={{float: "right"}}>
-                                <Badge className="m-2" bg="primary">{unitsProduct.get(product.code)}</Badge>
-                                <Button onClick={() => props.onIncrementUnit(product)} disabled={!handleButton(product)} className="m-1" variant="success">+</Button>
-                                <Button onClick={() => props.onDecrementUnit(product)} className="m-1" variant="danger">-</Button>
-                            </div>
-                        </ListItem>
-                        </>
-                    )
-                })}
-            </List>
-            <h3>Total Price - {calculateTotal(productsCart, unitsProduct)} €</h3>
-        </>
-    )
+    const Img = styled('img')({
+        display: 'block',
+        width: '25%',
+    });
+
+    if (productsCart.length > 0)
+        return (
+            <React.Fragment>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell> Product </TableCell>
+                                <TableCell> Quantity </TableCell>
+                                <TableCell> Price per unit </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {
+                            productsCart.map((product : Product) => {
+                                return (
+                                    <TableRow key={product.code}>
+                                        <TableCell>
+                                            <Stack 
+                                                direction={{ xs: 'column', sm: 'row' }}
+                                                spacing={{ xs: 1, sm: 2, md: 4 }}
+                                                justifyContent="flex-start"
+                                                alignItems="center"
+                                            >
+                                                <Img 
+                                                    alt="Imagen del producto en el carrito"
+                                                    src={ require('../images/'.concat(product.code).concat('.jpg')) } 
+                                                /> 
+                                                {product.name}
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Stack
+                                                direction={{ xs: 'column', sm: 'row' }}
+                                                justifyContent="space-evenly"
+                                                alignItems="center"
+                                            >
+                                                <Button 
+                                                    onClick={ () => props.onDecrementUnit(product) } 
+                                                    className="m-1">
+                                                        -
+                                                </Button>
+                                                <Typography component="div">
+                                                    {unitsProduct.get(product.code)}
+                                                </Typography>
+                                                <Button 
+                                                    onClick={ () => props.onIncrementUnit(product) } 
+                                                    disabled={!handleButton(product)} 
+                                                    className="m-1">
+                                                        +
+                                                </Button>
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography component="div">
+                                                { product.price }€
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            }
+                        )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Typography variant="h6" className="m-2">
+                    Total Price - {calculateTotal(productsCart, unitsProduct)}€
+                </Typography>
+            </React.Fragment>
+        )
+    else
+        return (
+            <Typography variant="h6" className="m-2">
+                Shopping cart is empty :(
+            </Typography>
+        )                           
 }
 
 export default ShoppingCart;

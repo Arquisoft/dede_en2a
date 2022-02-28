@@ -1,10 +1,18 @@
 import React from 'react';
-import ShoppingCart from './ShoppingCart';
-import {Product} from '../shared/shareddtypes';
-import NavBar from './NavBar';
 import {Link} from 'react-router-dom';
+
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
+import ShoppingCart from './ShoppingCart';
+import NavBar from './NavBar';
+import Footer from './Footer';
+import {Product} from '../shared/shareddtypes';
+
 import {updateProduct} from '../api/api';
-import ProductList from './ProductList';
 
 type ShoppingProps = {
     products : Product[];
@@ -14,7 +22,6 @@ type ShoppingProps = {
 }
 
 function Shopping(props: ShoppingProps) :JSX.Element{
-
     const handleUpdateStock = () =>{
         props.products.forEach((product) => {
             let productUnits : number = props.units.get(product.code)!;
@@ -24,15 +31,57 @@ function Shopping(props: ShoppingProps) :JSX.Element{
     }
 
     return(
-        <>  
+        <React.Fragment>
             <NavBar/>
-            <ShoppingCart products={props.products} units={props.units} onIncrementUnit={props.onIncrementUnit} onDecrementUnit={props.onDecrementUnit}/>
-            <Link to="/pay">
-                <button onClick={handleUpdateStock}>
-                    Comprar
-                </button>
-            </Link>
-        </>
+            <Container 
+                component="main" 
+                maxWidth="sm" 
+                sx={{ mb: 4 }}
+            >
+                <Paper 
+                    variant="outlined" 
+                    sx={{ my: { xs: 3, md: 6 }, 
+                        p: { xs: 2, md: 3 } }}
+                >
+                    <Typography 
+                        component="h1" 
+                        variant="h4" 
+                        align="center"
+                    >
+                        Shopping cart
+                    </Typography>
+                    <ShoppingCart 
+                        products={props.products}
+                        units={props.units} 
+                        onIncrementUnit={props.onIncrementUnit} 
+                        onDecrementUnit={props.onDecrementUnit}
+                    />
+                    <Stack
+                        direction={{ xs: 'column', sm: 'row' }}
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
+                        <Link to="/" style={{ textDecoration: 'none' }}>
+                            <Button
+                                variant="outlined"
+                                className="m-1">
+                                    Continue shopping
+                            </Button>
+                        </Link>
+
+                        <Link to="/checkout" style={{ textDecoration: 'none' }}>
+                            <Button 
+                                variant="contained"
+                                onClick={ handleUpdateStock }
+                                className="m-1">
+                                    Proceed to checkout
+                            </Button>
+                        </Link>
+                    </Stack>
+                </Paper>
+            </Container>
+            <Footer />
+        </React.Fragment>
     )
 }
 
