@@ -21,6 +21,7 @@ import "bootstrap/dist/css/bootstrap.css";
 function App(): JSX.Element {
   const [productsCart, setProductsCart] = useState<Product[]>([]);
   const [unitProducts, setUnits] = useState<Map<string, number>>(new Map()); //String - product code // Number - Products Units
+  const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
 
   const handleAddCart = (product: Product) => {
     if (unitProducts.has(product.code))
@@ -33,6 +34,7 @@ function App(): JSX.Element {
       setProductsCart(products);
     }
 
+    setTotalUnitsInCart(totalUnitsInCart + 1);
     setUnits(unitProducts);
     render();
   };
@@ -47,6 +49,7 @@ function App(): JSX.Element {
       });
     }
 
+    setTotalUnitsInCart(totalUnitsInCart - 1);
     render();
   };
 
@@ -62,7 +65,7 @@ function App(): JSX.Element {
 
   return (
     <Router>
-      <NavBar isAuthenticated={false} />
+      <NavBar isAuthenticated={false} totalUnitsInCart={totalUnitsInCart} />
       <Routes>
         <Route index element={<Home onAdd={handleAddCart} />} />
         <Route

@@ -121,7 +121,7 @@ function NavBar(props: any): JSX.Element {
           </Typography>
 
           <IconButton size="large" color="inherit" component={Link} to="/cart">
-            <Badge badgeContent={props.units} color="error">
+            <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
