@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import CssBaseline from "@mui/material/CssBaseline";
-
-import { Product } from "./shared/shareddtypes";
-
+import { CartItem, Product } from "./shared/shareddtypes";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
@@ -19,48 +16,42 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 
 function App(): JSX.Element {
-  const [productsCart, setProductsCart] = useState<Product[]>([]);
-  const [unitProducts, setUnits] = useState<Map<string, number>>(new Map()); //String - product code // Number - Products Units
+  const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
 
   const handleAddCart = (product: Product) => {
-    if (unitProducts.has(product.code))
-      unitProducts.set(product.code, unitProducts.get(product.code)! + 1);
-    else {
-      unitProducts.set(product.code, 1);
+    const products = productsCart.slice();
+    let found: number = -1;
+    products.forEach((cartItem, index) => {
+      if (cartItem.product.code == product.code) {
+        found = index;
+      }
+    });
 
-      const products = productsCart.slice();
-      products.push(product);
-      setProductsCart(products);
+    if (found >= 0) {
+      products[found].amount += 1;
+    } else {
+      products.push({ product: product, amount: 1 });
     }
-
+    setProductsCart(products);
     setTotalUnitsInCart(totalUnitsInCart + 1);
-    setUnits(unitProducts);
-    render();
   };
 
   const handleDecrementUnit = (product: Product) => {
-    unitProducts.set(product.code, unitProducts.get(product.code)! - 1);
+    const products = productsCart.slice();
+    let found: number = -1;
+    products.forEach((cartItem, index) => {
+      if (cartItem.product.code == product.code) {
+        found = index;
+      }
+    });
 
-    if (unitProducts.get(product.code) == 0) {
-      unitProducts.delete(product.code);
-      productsCart.forEach((p, index: number) => {
-        if (p.code == product.code) delete productsCart[index];
-      });
+    products[found].amount -= 1;
+    if (products[found].amount == 0) {
+      delete products[found];
     }
-
+    setProductsCart(products);
     setTotalUnitsInCart(totalUnitsInCart - 1);
-    render();
-  };
-
-  const render = () => {
-    ReactDOM.render(
-      <React.StrictMode>
-        <CssBaseline />
-        <App />
-      </React.StrictMode>,
-      document.getElementById("root")
-    );
   };
 
   return (
@@ -73,7 +64,6 @@ function App(): JSX.Element {
           element={
             <Shopping
               products={productsCart}
-              units={unitProducts}
               onDecrementUnit={handleDecrementUnit}
               onIncrementUnit={handleAddCart}
             />

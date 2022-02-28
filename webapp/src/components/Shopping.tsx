@@ -9,22 +9,21 @@ import Button from "@mui/material/Button";
 
 import ShoppingCart from "./ShoppingCart";
 
-import { Product } from "../shared/shareddtypes";
+import { CartItem, Product } from "../shared/shareddtypes";
 import { updateProduct } from "../api/api";
 
 type ShoppingProps = {
-  products: Product[];
-  units: Map<string, number>;
+  products: CartItem[];
   onIncrementUnit: (product: Product) => void;
   onDecrementUnit: (product: Product) => void;
 };
 
 function Shopping(props: ShoppingProps): JSX.Element {
   const handleUpdateStock = () => {
-    props.products.forEach((product) => {
-      let productUnits: number = props.units.get(product.code)!;
-      product.stock = product.stock - productUnits;
-      updateProduct(product);
+    props.products.forEach((cartItem: CartItem) => {
+      let productUnits: number = cartItem.amount;
+      cartItem.product.stock -= productUnits;
+      updateProduct(cartItem.product);
     });
   };
 
@@ -40,7 +39,6 @@ function Shopping(props: ShoppingProps): JSX.Element {
           </Typography>
           <ShoppingCart
             products={props.products}
-            units={props.units}
             onIncrementUnit={props.onIncrementUnit}
             onDecrementUnit={props.onDecrementUnit}
           />
