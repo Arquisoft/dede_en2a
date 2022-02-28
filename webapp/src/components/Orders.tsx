@@ -1,42 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import NavBar from './NavBar';
-import {Link} from 'react-router-dom';
-import { Order } from '../shared/shareddtypes';
-import Container from '@mui/material/Container';
-import { getOrders } from '../api/api';
-import OrderItem from './OrderItem';
+import React, { useEffect, useState } from "react";
 
-//type OrdersProps = {
-  //  pedidos : Order[];
-//}
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
-function Orders():JSX.Element{
-    const[pedidos, setOrders] = useState<Order[]>([]);
-    const refreshOrderList = async () =>{
-      setOrders(await getOrders());
-    }
+import NavBar from "./NavBar";
+import OrderItem from "./OrderItem";
 
-    //useEffect(() =>{
-      // refreshOrderList();
-    //},[]);
+import { Order } from "../shared/shareddtypes";
+import { getOrders } from "../api/api";
 
-    return(
-        <>
-        <NavBar/>
-        <h2>
-            Your orders
-        </h2>
-        <ul>Orders
-            {pedidos.map(pedido => (
-                <OrderItem orders = {pedido}/>
-            ))}
-        </ul>
-        </>
+function Orders(): JSX.Element {
+  const [orders, setOrders] = useState<Order[]>([]);
 
-    )
+  const refreshOrderList = async () => {
+    setOrders(await getOrders());
+  };
 
-    
+  useEffect(() => {
+    refreshOrderList();
+  });
+
+  return (
+    <React.Fragment>
+      <NavBar />
+      <Typography>Your orders</Typography>
+      <Grid container>
+        {orders.map((order) => (
+          <OrderItem orders={order} />
+        ))}
+      </Grid>
+    </React.Fragment>
+  );
 }
- 
 
 export default Orders;
