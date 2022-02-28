@@ -55,6 +55,7 @@ function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
                             <TableRow>
                                 <TableCell> Product </TableCell>
                                 <TableCell> Quantity </TableCell>
+                                <TableCell> Price per unit </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -97,6 +98,11 @@ function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
                                                         +
                                                 </Button>
                                             </Stack>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography component="div">
+                                                { product.price }€
+                                            </Typography>
                                         </TableCell>
                                     </TableRow>
                                 )
