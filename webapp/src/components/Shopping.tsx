@@ -8,10 +8,8 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
 import ShoppingCart from "./ShoppingCart";
-import NavBar from "./NavBar";
-import Footer from "./Footer";
-import { Product } from "../shared/shareddtypes";
 
+import { Product } from "../shared/shareddtypes";
 import { updateProduct } from "../api/api";
 
 type ShoppingProps = {
@@ -32,7 +30,6 @@ function Shopping(props: ShoppingProps): JSX.Element {
 
   return (
     <React.Fragment>
-      <NavBar />
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
@@ -71,7 +68,6 @@ function Shopping(props: ShoppingProps): JSX.Element {
           </Stack>
         </Paper>
       </Container>
-      <Footer />
     </React.Fragment>
   );
 }

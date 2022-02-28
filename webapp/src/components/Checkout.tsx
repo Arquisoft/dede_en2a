@@ -9,9 +9,6 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import NavBar from "./NavBar";
-import Footer from "./Footer";
-
 function getSteps() {
   return ["Shipping address", "Review your order"];
 }
@@ -39,7 +36,6 @@ export default function Checkout() {
 
   return (
     <React.Fragment>
-      <NavBar />
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
@@ -78,7 +74,6 @@ export default function Checkout() {
           </Stack>
         </Paper>
       </Container>
-      <Footer />
     </React.Fragment>
   );
 }
