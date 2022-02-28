@@ -54,7 +54,13 @@ function NavBar(props: any): JSX.Element {
     };
 
   const list = () => (
-    <Grid onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+    <Grid
+      container
+      alignItems="center"
+      direction="column"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
       <MenuList>
         <MenuItem component={Link} to="/">
           <ListItemIcon>
@@ -69,9 +75,9 @@ function NavBar(props: any): JSX.Element {
           </ListItemIcon>
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
-
-        <UserButton />
       </MenuList>
+
+      <UserButton isAuthenticated={props.isAuthenticated} />
     </Grid>
   );
 
@@ -103,17 +109,23 @@ function NavBar(props: any): JSX.Element {
             component={Link}
             to="/"
             color="inherit"
-            sx={{ flexGrow: 1, textDecoration: "none" }}
+            sx={{
+              flexGrow: 1,
+              textDecoration: "none",
+              ":hover": {
+                color: "white",
+              },
+            }}
           >
             Dede
           </Typography>
 
           <IconButton size="large" color="inherit" component={Link} to="/cart">
-            <Badge badgeContent={props.units} color="error">
+            <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          <UserButton isAuthenticated={false} />
+          <UserButton isAuthenticated={props.isAuthenticated} />
         </Toolbar>
       </AppBar>
     </Box>
