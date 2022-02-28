@@ -12,34 +12,25 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 
-import { Product } from "../shared/shareddtypes";
+import { CartItem, Product } from "../shared/shareddtypes";
 
 type ShoppingCartProps = {
-  products: Product[];
-  units: Map<string, number>;
+  products: CartItem[];
   onIncrementUnit: (product: Product) => void;
   onDecrementUnit: (product: Product) => void;
 };
 
-function calculateTotal(
-  products: Product[],
-  units: Map<string, number>
-): number {
+function calculateTotal(products: CartItem[]): number {
   let total: number = 0;
-  products.forEach((product: Product) => {
-    let unit = units.get(product.code)!;
-    total += unit * product.price;
+  products.forEach((cartItem: CartItem) => {
+    let unit = cartItem.amount;
+    total += unit * cartItem.product.price;
   });
   return total;
 }
 function ShoppingCart(props: ShoppingCartProps): JSX.Element {
-  const [productsCart, setProducts] = useState<Product[]>(props.products);
-  const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(
-    props.units
-  );
-
-  const handleButton = (product: Product) => {
-    if (unitsProduct.get(product.code)! >= product.stock) {
+  const handleButton = (cartItem: CartItem) => {
+    if (cartItem.amount >= cartItem.product.stock) {
       return false;
     } else {
       return true;
@@ -51,7 +42,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
     width: "25%",
   });
 
-  if (productsCart.length > 0)
+  if (props.products.length > 0)
     return (
       <React.Fragment>
         <TableContainer component={Paper}>
@@ -64,9 +55,9 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {productsCart.map((product: Product) => {
+              {props.products.map((cartItem: CartItem) => {
                 return (
-                  <TableRow key={product.code}>
+                  <TableRow key={cartItem.product.code}>
                     <TableCell>
                       <Stack
                         direction={{ xs: "column", sm: "row" }}
@@ -77,10 +68,10 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                         <Img
                           alt="Imagen del producto en el carrito"
                           src={require("../images/"
-                            .concat(product.code)
+                            .concat(cartItem.product.code)
                             .concat(".jpg"))}
                         />
-                        {product.name}
+                        {cartItem.product.name}
                       </Stack>
                     </TableCell>
                     <TableCell>
@@ -90,17 +81,21 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                         alignItems="center"
                       >
                         <Button
-                          onClick={() => props.onDecrementUnit(product)}
+                          onClick={() =>
+                            props.onDecrementUnit(cartItem.product)
+                          }
                           className="m-1"
                         >
                           -
                         </Button>
                         <Typography component="div">
-                          {unitsProduct.get(product.code)}
+                          {cartItem.amount}
                         </Typography>
                         <Button
-                          onClick={() => props.onIncrementUnit(product)}
-                          disabled={!handleButton(product)}
+                          onClick={() =>
+                            props.onIncrementUnit(cartItem.product)
+                          }
+                          disabled={!handleButton(cartItem)}
                           className="m-1"
                         >
                           +
@@ -108,7 +103,9 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      <Typography component="div">{product.price}€</Typography>
+                      <Typography component="div">
+                        {cartItem.product.price}€
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 );
@@ -117,7 +114,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
           </Table>
         </TableContainer>
         <Typography variant="h6" className="m-2">
-          Total Price - {calculateTotal(productsCart, unitsProduct)}€
+          Total Price - {calculateTotal(props.products)}€
         </Typography>
       </React.Fragment>
     );
