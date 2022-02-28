@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -9,11 +10,16 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import NavBar from './NavBar';
 import Footer from './Footer';
 
 import { Link } from 'react-router-dom';
+
+import * as Api from '../api/api'
+import { User, NotificationType } from '../shared/shareddtypes'
 
 export default function SignUp() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,10 +27,45 @@ export default function SignUp() {
         const data = new FormData(event.currentTarget);
     };
 
+    const signUp = ( async () => {
+        const newUser: User = {
+            'name': name,
+            'surname': surname,
+            'email': email,
+            'password': password
+        }
+        const works: Boolean = await Api.addUser(newUser)
+        if (works) {
+            console.log('Signed up')
+            setNotificationStatus(true);
+            setNotification({
+                severity: 'success',
+                message: 'You sign up correctly!'
+            });
+            window.location.href = '/'
+        } else {
+            setNotificationStatus(true);
+            setNotification({
+                severity: 'error',
+                message: 'Fill all the fields or use another email'
+            });
+            console.log('Already someone with that email')
+        }
+    })
+
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const [notificationStatus, setNotificationStatus] = useState(false);
+    const [notification, setNotification] = useState<NotificationType>({ severity: 'success', message: '' });
+
+
     return (
         <React.Fragment>
             <NavBar />
-            
+
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -41,10 +82,10 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box 
-                        component="form" 
-                        noValidate 
-                        onSubmit={handleSubmit} 
+                    <Box
+                        component="form"
+                        noValidate
+                        onSubmit={handleSubmit}
                         sx={{ mt: 3 }}
                     >
                         <Grid container spacing={2}>
@@ -56,6 +97,7 @@ export default function SignUp() {
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
+                                    onChange={e => setName(e.target.value)}
                                     autoFocus
                                 />
                             </Grid>
@@ -67,6 +109,7 @@ export default function SignUp() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="family-name"
+                                    onChange={e => setSurname(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -76,6 +119,7 @@ export default function SignUp() {
                                     id="email"
                                     label="Email Address"
                                     name="email"
+                                    onChange={e => setEmail(e.target.value)}
                                     autoComplete="email"
                                 />
                             </Grid>
@@ -87,6 +131,7 @@ export default function SignUp() {
                                     label="Password"
                                     type="password"
                                     id="password"
+                                    onChange={e => setPassword(e.target.value)}
                                     autoComplete="new-password"
                                 />
                             </Grid>
@@ -96,6 +141,7 @@ export default function SignUp() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            onClick={signUp}
                         >
                             Sign Up
                         </Button>
@@ -110,9 +156,19 @@ export default function SignUp() {
                         </Grid>
                     </Box>
                 </Box>
+
+                <Snackbar open={notificationStatus} autoHideDuration={3000} onClose={() => { setNotificationStatus(false) }}>
+                    <Alert severity={notification.severity} sx={{ width: '100%' }}>
+                        {notification.message}
+                    </Alert>
+                </Snackbar>
+
             </Container>
 
             <Footer />
+
+
+
         </React.Fragment>
-  );
+    );
 }
