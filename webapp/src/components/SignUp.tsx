@@ -4,7 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,6 +11,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import NavBar from './NavBar';
+import Footer from './Footer';
+
+import { Link } from 'react-router-dom';
 
 export default function SignUp() {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -99,14 +101,18 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="sign-in" variant="body2">
-                                    Already have an account? Sign in
+                                <Link to="/sign-in">
+                                    <Typography>
+                                        {"Already have an account? Sign in"}
+                                    </Typography>
                                 </Link>
                             </Grid>
                         </Grid>
                     </Box>
                 </Box>
             </Container>
+
+            <Footer />
         </React.Fragment>
   );
 }

@@ -5,9 +5,10 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
@@ -15,16 +16,36 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function NavBar(props : any): JSX.Element {
+function UserButton(props : any) : JSX.Element {
+    if (props.isAuthenticated)
+        return (
+            <IconButton
+                size="large"
+                color="inherit"
+                component={ Link } 
+                to="/"
+            >
+                <AccountCircle />
+            </IconButton>
+        );
+        else
+            return (
+                <Link to="/sign-in" style={{ textDecoration: 'none' }}>
+                    <Button 
+                        variant="contained"
+                        color="secondary"
+                        className="m-1">
+                            Sign-In
+                    </Button>
+                </Link>
+            );
+} 
+
+function NavBar(props : any) : JSX.Element {
     const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [state, setState] = React.useState(false);
-
-    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     const toggleDrawer = 
         (open: boolean) =>
@@ -41,11 +62,15 @@ function NavBar(props : any): JSX.Element {
     
       const list = () => (
         <Box
+            alignItems="center"
             onClick={ toggleDrawer(false) } 
             onKeyDown={ toggleDrawer(false) }
         >
             <MenuList>
-                <MenuItem onClick={event =>  window.location.href='/'} >
+                <MenuItem 
+                    component={ Link } 
+                    to="/" 
+                >
                     <ListItemIcon>
                         <HomeIcon fontSize="small" />
                     </ListItemIcon>
@@ -62,12 +87,7 @@ function NavBar(props : any): JSX.Element {
                     <Typography variant="inherit">Cart</Typography>
                 </MenuItem>
 
-                <MenuItem onClick={event =>  window.location.href='sign-in'} >
-                    <ListItemIcon>
-                        <AccountCircle fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="inherit">Sign-in</Typography>
-                </MenuItem>
+                <UserButton isAuthenticated={ false } />
             </MenuList>
         </Box>
       );
@@ -97,15 +117,18 @@ function NavBar(props : any): JSX.Element {
 
                     <Typography 
                         variant="h6" 
-                        component="div" 
-                        sx={{ flexGrow: 1 }}
+                        component={ Link }
+                        to="/"
+                        color="inherit"
+                        sx={{ flexGrow: 1, 
+                              textDecoration: 'none',
+                        }}
                     >
                         Dede
                     </Typography>
 
                     <IconButton
                         size="large"
-                        aria-label=""
                         color="inherit"
                         component={ Link } 
                         to="/cart"
@@ -117,18 +140,7 @@ function NavBar(props : any): JSX.Element {
                             <ShoppingCartIcon />
                         </Badge>
                     </IconButton>
-
-                    <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                        href="/sign-in"
-                    >
-                        <AccountCircle />
-                    </IconButton>
+                    <UserButton isAuthenticated={ false } />
                 </Toolbar>
             </AppBar>
         </Box>

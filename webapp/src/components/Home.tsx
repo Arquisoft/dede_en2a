@@ -8,6 +8,7 @@ import { Product } from '../shared/shareddtypes';
 
 import ProductList from './ProductList';
 import NavBar from './NavBar';
+import Footer from './Footer';
 
 type HomeProps = {
     onAdd: (product : Product) => void;
@@ -33,6 +34,7 @@ function Home(props: HomeProps) : JSX.Element{
 				products={[]} 
 				OnAddCart={props.onAdd}
 			/>
+			<Footer />
 		</React.Fragment>
 	);
 };

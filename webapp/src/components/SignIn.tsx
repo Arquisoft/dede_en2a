@@ -7,9 +7,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 
 import NavBar from './NavBar';
+import Footer from './Footer';
+
+import { Link } from 'react-router-dom';
 
 export default function SignIn() {
     const handleSubmit = (event : React.FormEvent<HTMLFormElement>) => {
@@ -78,12 +80,16 @@ export default function SignIn() {
                             Sign In
                         </Button>
                         
-                        <Link href="sign-up" variant="body2">
-                            {"Don't have an account? Sign Up"}
+                        <Link to="/sign-up">
+                            <Typography>
+                                {"Don't have an account? Sign Up"}
+                            </Typography>
                         </Link>
                     </Box>
                 </Box>
             </Container>
+
+            <Footer />
         </React.Fragment>
     );
 }
