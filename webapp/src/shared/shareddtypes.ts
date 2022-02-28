@@ -10,3 +10,15 @@ export type Product = {
     price: number;
     stock: number;
 }
+
+export type OrderProduct = {
+    code: string;
+    amount: number;
+}
+
+export type Order = {
+    userId: string;
+    products: [OrderProduct];
+    totalPrice: number;
+    shippingPrice: number;
+}

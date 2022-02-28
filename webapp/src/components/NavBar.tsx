@@ -22,6 +22,11 @@ function NavBar(): JSX.Element{
                         <Link to="/cart">Cart
                         </Link>
                     </Nav.Link>
+
+                    <Nav.Link>
+                        <Link to="/orders">Orders
+                        </Link>
+                    </Nav.Link>
                     </Nav>
                 </Container>
             </Navbar>

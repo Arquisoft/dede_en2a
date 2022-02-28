@@ -10,13 +10,16 @@ import {
 import Home from './components/Home';
 import Shopping from './components/Shopping';
 import Pay from './components/Pay';
-import { Product } from './shared/shareddtypes';
+import { Order, Product, OrderProduct } from './shared/shareddtypes';
 import 'bootstrap/dist/css/bootstrap.css';
+import  Orders  from './components/Orders';
+import { getOrders } from './api/api';
 
 function App(): JSX.Element {
 
   const [productsCart, setProductsCart] = useState<Product[]>([]);
   const [unitProducts, setUnits] = useState<Map<string, number>>(new Map()); //String - product code // Number - Products Units
+  const [orders, setOrders] = useState<Order[]>([]);//([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const handleAddCart = (product: Product) => {
     if (unitProducts.has(product.code)) {
@@ -45,9 +48,12 @@ function App(): JSX.Element {
       })
     }
 
-    render();
-    
+    render();    
   }
+
+  //const handleGetOrders = async () => {
+    //setOrders(await getOrders());
+  //}
 
   const render = () =>{
     ReactDOM.render(
@@ -65,6 +71,7 @@ function App(): JSX.Element {
         <Route index element={<Home onAdd={handleAddCart} />} />
         <Route path="cart" element={<Shopping products={productsCart} units={unitProducts} onDecrementUnit={handleDecrementUnit} onIncrementUnit={handleAddCart}/>} />
         <Route path="pay" element={<Pay />} />
+        <Route path='orders' element={<Orders />} />
       </Routes>
     </Router>
   );
