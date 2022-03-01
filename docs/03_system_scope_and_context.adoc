@@ -63,8 +63,6 @@ component "RestApi" as RApi
 |Will return users' information, mainly the addresses to calculate the shipping costs for orders.
 |===
 
-**<optionally: Explanation of external domain interfaces>**
-
 === Technical Context
 
 [role="arc42help"]

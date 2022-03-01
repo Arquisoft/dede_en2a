@@ -1,10 +1,10 @@
 [[section-runtime-view]]
-== 6. Runtime View
+== Runtime View
 
 This section, at this moment, is very poor. We will greatly increase it once we have started working with the project
 and once we know how many optional features we will implement.
 
-=== 6.1. User adds item to their shopping cart
+=== User adds item to their shopping cart
 
 
 Once the user logs in, they can select any product they want and add it to their shopping cart.
@@ -42,7 +42,7 @@ Juan <- DeDe: Shows confimation message
 
 ----
 
-=== 6.2. User confirms their shopping cart
+=== User confirms their shopping cart
 
 
 Once the user is happy with the product selected, they can confirm the purchase.
@@ -93,7 +93,7 @@ DeDe --> Juan: Shows price with delivery
 ----
 
 
-=== 6.3. User accepts the final price
+=== User accepts the final price
 
 
 Once the user sees the final price, including delivery, they must accept it, and then the system will prepare the package for delivery.
@@ -123,7 +123,7 @@ Juan <-- DeDe: Shows confirmation message
 ----
 
 
-=== 6.4. User reviews orders previously done
+=== User reviews orders previously done
 
 
 A logged-in user can always look at the orders they have previously done.

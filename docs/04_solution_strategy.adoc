@@ -17,7 +17,7 @@ In order to develop the application and satisfy the constraint we decided this t
 ==== 4.2.1 IDEs
 Our choice is Visual Studio Code mainly because is available for many platforms such as Windows/Ios/Linux and via plugins it supports many coding languages and documentation. Git is integrated for version control. 
 
-==== 4.2.2 Visual tools
+==== Visual tools
 The initial choice for diagrams and are two tools which are UMLet and PlantUML.
 
 === Approaches to achieve top quality goals
