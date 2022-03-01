@@ -18,7 +18,10 @@ function getSteps() {
 
 export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [isCostsCalculated, setCostsCalculated] =
+    React.useState<boolean>(false);
   const [costs, setCosts] = React.useState<number>(Number());
+
   const steps = getSteps();
 
   const handleNext = () => {
@@ -27,12 +30,21 @@ export default function Checkout(props: any) {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setCostsCalculated(false);
+    setCosts(Number());
   };
 
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <ShippingCosts handleCosts={setCosts} />;
+        return (
+          <ShippingCosts
+            handleCosts={setCosts}
+            costs={costs}
+            handleCostsCalculated={setCostsCalculated}
+            isCostsCalculated={isCostsCalculated}
+          />
+        );
       case 1:
         return (
           <Review productsCart={props.productsCart} shippingCosts={costs} />
@@ -79,7 +91,12 @@ export default function Checkout(props: any) {
               Back
             </Button>
 
-            <Button variant="contained" onClick={handleNext} className="m-1">
+            <Button
+              disabled={!isCostsCalculated}
+              variant="contained"
+              onClick={handleNext}
+              className="m-1"
+            >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Stack>

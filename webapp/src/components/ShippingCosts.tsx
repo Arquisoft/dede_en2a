@@ -15,16 +15,13 @@ import {
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [address, setAddress] = React.useState("");
-  const [costs, setCosts] = React.useState<number>(0);
   const [map, setMap] = React.useState<string>();
-  const [costsCalculated, setCostsCalculated] = React.useState<boolean>(false);
 
   const shippingCosts = async (address: string) => {
     let destCoords: string = await getCoordinatesFromAddress(address);
+    props.handleCostsCalculated(true);
+    props.handleCosts(await calculateShippingCosts(destCoords));
     setMap(await showMapRoute(destCoords));
-    setCosts(await calculateShippingCosts(destCoords));
-    setCostsCalculated(true);
-    props.handleCosts(costs);
   };
 
   const calculateCosts = () => {
@@ -61,11 +58,11 @@ export default function ShippingCosts(props: any): JSX.Element {
       >
         Calculate Shipping Costs
       </Button>
-      {costsCalculated && (
+      {props.isCostsCalculated && (
         <Box component="div">
           <Divider sx={{ mt: 2, mb: 2 }}>DELIVERY</Divider>
           <Img src={map} alt="Image of the delivery process" />
-          <Typography>The shipping costs are {costs}€</Typography>
+          <Typography>The shipping costs are {props.costs}€</Typography>
         </Box>
       )}
     </React.Fragment>
