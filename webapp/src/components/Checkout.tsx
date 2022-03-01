@@ -9,48 +9,12 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-
-function calculateCoordinates(address: String) {
-  const axios = require("axios");
-
-  const params = {
-    access_key: "ec869c9b938ff61bb2d002a3fdc953b6",
-    query: address,
-  };
-
-  return axios
-    .get("http://api.positionstack.com/v1/forward", { params })
-    .then((response: any) => {
-      return response.data;
-    })
-    .catch((error: any) => {
-      return error;
-    });
-}
-
-function getDistanceFromLatLonInKm(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2 - lat1); // deg2rad below
-  var dLon = deg2rad(lon2 - lon1);
-  var a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c; // Distance in km
-  return d;
-}
-
-function deg2rad(deg: number) {
-  return deg * (Math.PI / 180);
-}
+import Box from "@mui/material/Box";
+import {
+  calculateShippingCosts,
+  showMapRoute,
+} from "../util/distanceCalculation";
+import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
 
 function getSteps() {
   return ["Shipping address", "Review your order"];
@@ -59,6 +23,7 @@ function getSteps() {
 export default function Checkout() {
   const [address, setAddress] = React.useState("");
   const [costs, setCosts] = React.useState<number>(0);
+  const [map, setMap] = React.useState<string>();
   const [costsCalculated, setCostsCalculated] = React.useState<boolean>(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -71,30 +36,14 @@ export default function Checkout() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const calculateShippingCosts = async (destAddress: String) => {
-    let destCoords = await calculateCoordinates(destAddress);
-    let fromCoords = await calculateCoordinates(
-      "Calle Gonzalez Besada, 31, 33007 Oviedo"
-    );
-    let destLat = destCoords.data[0].latitude;
-    let destLon = destCoords.data[0].longitude;
-    let fromLat = fromCoords.data[0].latitude;
-    let fromLon = fromCoords.data[0].longitude;
-
-    let distance = getDistanceFromLatLonInKm(
-      fromLat,
-      fromLon,
-      destLat,
-      destLon
-    );
-
-    let costs = Math.round(distance * 2 * 100) / 100; //2 euros per km
-    setCosts(costs);
+  const shippingCosts = async (address: string) => {
+    setMap(await showMapRoute(address));
+    setCosts(await calculateShippingCosts(address));
     setCostsCalculated(true);
   };
 
   const calculateCosts = () => {
-    calculateShippingCosts(address);
+    shippingCosts(address);
   };
 
   const getStepContent = (stepIndex: number) => {
@@ -120,7 +69,12 @@ export default function Checkout() {
             >
               Calculate Shipping Costs
             </Button>
-            {costsCalculated && <p>The shipping costs are {costs} €</p>}
+            {costsCalculated && (
+              <Box component="div">
+                <p>The shipping costs are {costs} €</p>
+                <img src={map}></img>
+              </Box>
+            )}
           </React.Fragment>
         );
       case 1:
