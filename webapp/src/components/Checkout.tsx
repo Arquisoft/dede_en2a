@@ -8,18 +8,10 @@ import StepLabel from "@mui/material/StepLabel";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import ShippingCosts from "./ShippingCosts";
 
 function getSteps() {
   return ["Shipping address", "Review your order"];
-}
-
-function getStepContent(stepIndex: number) {
-  switch (stepIndex) {
-    case 0:
-      return "Here it goes the solid pod's thing";
-    case 1:
-      return "Review your order";
-  }
 }
 
 export default function Checkout() {
@@ -32,6 +24,15 @@ export default function Checkout() {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const getStepContent = (stepIndex: number) => {
+    switch (stepIndex) {
+      case 0:
+        return <ShippingCosts />;
+      case 1:
+        return "Review your order";
+    }
   };
 
   return (
@@ -52,7 +53,7 @@ export default function Checkout() {
             ))}
           </Stepper>
 
-          <Typography>{getStepContent(activeStep)}</Typography>
+          <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
 
           <Stack
             direction={{ xs: "column", sm: "row" }}
