@@ -6,14 +6,21 @@
 ****
 ****
 
-=== 5.1. Level 1 Whitebox Overall System
+=== Level 1 Whitebox Overall System
 [role="arc42help"]
 ****
 ****
 
-:imagesdir: ./images
-= image:level1.jpg[arc42]
+[plantuml, "level1", png]
+----
+Actor Juan
+Component DeDe
+Component pod as "Pod's service"
 
+Juan -right-> DeDe: interacts with
+
+DeDe <-right-> pod: gets data
+----
 
 Motivation::
 
@@ -32,12 +39,26 @@ Contained Building Blocks::
 |===
 
 
-=== 5.2. Level 2
+=== Level 2
 [role="arc42help"]
 ****
 ****
-= image:level2.jpg[arc42]
-:imagesdir: ./images
+[plantuml, "level2", png]
+----
+Actor Juan
+Component DeDe {
+    Component ui as "User Interface"
+    Component da as "Data Access"
+    Database db as "MongoDB"
+}
+Component pod as "Pod's service"
+
+Juan -right-> ui
+ui <-right-> da: data
+
+da <--> db: data flow
+da <--> pod: get address
+----
 
 Motivation::
 
@@ -54,13 +75,53 @@ Contained Building Blocks::
 |===
 
 
-=== 5.3. Level 3
+=== Level 3
 [role="arc42help"]
 ****
 ****
-= image:level3.jpg[arc42]
-:imagesdir: ./images
 
+[plantuml, "level3", png]
+----
+Actor Juan
+
+Component Interface{
+    Component vi as "Views"{
+       Component lo as "Log in"
+       Component re as "Register"
+       Component ho as "Home"
+       Component loc as "Location"
+       Component no as "Notifications"
+       Component my as "My deliveries"
+       Component ac as "Account"
+       Component out as "Sign out"
+       Component sh as "Shopping cart"
+    }    
+}
+
+Component DataAccess{
+       Component sol as "Solid"
+       Component res as "RestApi"
+}
+
+Component pod as "Pod's service"
+Database db as "MongoDB"
+Juan -right->Interface: interacts
+lo -down-> sol
+re -down-> sol
+ho -down-> sol
+loc -down-> sol
+no -down-> sol
+my -down-> sol
+ac -down-> sol
+out -down-> sol
+sh -down->sol
+lo -down-> res
+my -down-> res
+ac -down-> res
+
+sol <-down-> pod:acceses
+res <-down-> db:data
+----
 Motivation::
 
 Detailed structure of the system application. Focused in the components of the User Interface and Data Access.
