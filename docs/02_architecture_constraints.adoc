@@ -32,7 +32,7 @@
 |Explanation
 
 |*Team size* 
-|The team is made out of six people, in case someone leaves the team we will a bit compromised
+|The team is made out of six people, in case someone leaves we will a bit compromised
 
 |*Testing*
 |Different scenarios will be taken into account to test a correct behaviour of the app
@@ -50,7 +50,8 @@
 |A good coordination must be carried out by each component of the group to accomplish all the objectives proposed
 
 |*Due dates*
-|For sure we have to stick to some deadlines for us to deliver our project. This depends on the evaluation of the subject. You can see more information about this in the milestones of the github repository
+|For sure we have to stick to some deadlines for us to deliver our project. This depends on the evaluation of the subject:
+First delivery due by _February 22, 2022_, while the second is by _March 14, 2022_. The third will be _April 04, 2022_ and lastly _May 03, 2022_.
 |===
 
 === Table 3. Conventions
