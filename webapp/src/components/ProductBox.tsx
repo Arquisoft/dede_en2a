@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";

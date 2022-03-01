@@ -8,14 +8,17 @@ import StepLabel from "@mui/material/StepLabel";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+
 import ShippingCosts from "./ShippingCosts";
+import Review from "./Review";
 
 function getSteps() {
   return ["Shipping address", "Review your order"];
 }
 
-export default function Checkout() {
+export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [costs, setCosts] = React.useState<number>(Number());
   const steps = getSteps();
 
   const handleNext = () => {
@@ -29,9 +32,11 @@ export default function Checkout() {
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <ShippingCosts />;
+        return <ShippingCosts handleCosts={setCosts} />;
       case 1:
-        return "Review your order";
+        return (
+          <Review productsCart={props.productsCart} shippingCosts={costs} />
+        );
     }
   };
 
@@ -45,7 +50,11 @@ export default function Checkout() {
           <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
-          <Stepper activeStep={activeStep} alternativeLabel>
+          <Stepper
+            activeStep={activeStep}
+            sx={{ pt: 3, pb: 5 }}
+            alternativeLabel
+          >
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -56,6 +65,7 @@ export default function Checkout() {
           <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
 
           <Stack
+            sx={{ pt: 2 }}
             direction={{ xs: "column", sm: "row" }}
             justifyContent="space-between"
             alignItems="center"

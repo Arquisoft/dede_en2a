@@ -69,7 +69,10 @@ function App(): JSX.Element {
             />
           }
         />
-        <Route path="checkout" element={<Checkout />} />
+        <Route
+          path="checkout"
+          element={<Checkout productsCart={productsCart.slice()} />}
+        />
         <Route path="sign-in" element={<SignIn />} />
         <Route path="sign-up" element={<SignUp />} />
       </Routes>
