@@ -1,50 +1,38 @@
 import Box from "@mui/material/Box";
 
-export const calculateShippingCosts = async (destAddress: String) => {
-  let destCoords = await calculateCoordinates(destAddress);
-  let fromCoords = await calculateCoordinates(
-    "Calle Gonzalez Besada, 11, 33007, Oviedo"
-  );
-  let destLat = destCoords.data[0].latitude;
-  let destLon = destCoords.data[0].longitude;
-  let fromLat = fromCoords.data[0].latitude;
-  let fromLon = fromCoords.data[0].longitude;
+const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
-  let data = await getDistanceDriving(fromLat, fromLon, destLat, destLon);
-  let distance = data.resourceSets[0].resources[0].travelDistance;
+export const calculateShippingCosts = async (destAddress: String) => {
+  let distance = await getDistanceDriving(destAddress);
 
   let costs = Math.round(distance * 2 * 100) / 100; //2 euros per km
 
   return costs;
 };
 
-export const showMapRoute = async (destAddress: String) => {
-  let destCoords = await calculateCoordinates(destAddress);
-  let fromCoords = await calculateCoordinates(
-    "Calle Gonzalez Besada, 11, 33007, Oviedo"
-  );
-  let destLat = destCoords.data[0].latitude;
-  let destLon = destCoords.data[0].longitude;
-  let fromLat = fromCoords.data[0].latitude;
-  let fromLon = fromCoords.data[0].longitude;
-
-  let map = await getRouteImage(fromLat, fromLon, destLat, destLon);
+export const showMapRoute = async (destCoords: String) => {
+  let map = await getRouteImage(destCoords);
   const url = URL.createObjectURL(map);
 
   return url;
 }
 
+export const getCoordinatesFromAddress = async (address: String) => {
+  let coords = await calculateCoordinates(address);
 
-export function calculateCoordinates(address: String) {
+  let lat = coords.features[0].geometry.coordinates[1];
+  let lon = coords.features[0].geometry.coordinates[0];
+
+  return lat + "," + lon; //e.g 36.23423,-5.23423
+}
+
+
+function calculateCoordinates(address: String) {
     const axios = require("axios");
   
-    const params = {
-      access_key: "ec869c9b938ff61bb2d002a3fdc953b6",
-      query: address,
-    };
-  
     return axios
-      .get("http://api.positionstack.com/v1/forward", { params })
+      .get("https://api.mapbox.com/geocoding/v5/mapbox.places/" + address +
+       ".json?access_token=pk.eyJ1IjoiYWx2YW1pZ2UiLCJhIjoiY2wwOGM2MmVhMDBiMTNjcGhjNWx2NmE4cCJ9.UvE6niHt0R9W3uj-41Gl8g")
       .then((response: any) => {
         return response.data;
       })
@@ -53,34 +41,40 @@ export function calculateCoordinates(address: String) {
       });
 }
 
-export function getDistanceDriving(
-    fromLat: number,
-    fromLon: number,
-    destLat: number,
-    destLon: number
-  ) {
+function getDistanceDriving(destCoords: String) {
     const axios = require("axios");
-    const params = {
-      access_key:
-        "Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
-    };
   
     return axios
       .get(
         "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
-          fromLat +
-          "," +
-          fromLon +
+          fromCoords +
           "&wp.1=" +
-          destLat +
-          "," +
-          destLon +
+          destCoords +
           "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-")
+      .then((response: any) => {
+        return response.data.resourceSets[0].resources[0].travelDistance;
+      });
+}
+
+function getRouteImage(destCoords: String){
+  const axios = require("axios");
+  
+    return axios
+      .get(
+        "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
+          fromCoords +
+          "&wp.1=" +
+          destCoords+
+          "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
+          {responseType: "blob"}
+      )
       .then((response: any) => {
         return response.data;
       });
 }
-  
+
+//Use to calculate the distance in straight line
+/*
 export function getDistanceFromLatLonInKm(
     lat1: number,
     lon1: number,
@@ -104,28 +98,4 @@ export function getDistanceFromLatLonInKm(
 function deg2rad(deg: number) {
     return deg * (Math.PI / 180);
   }
-
-export function getRouteImage(fromLat: number, fromLon: number, destLat: number, destLon: number){
-  const axios = require("axios");
-    const params = {
-      access_key:
-        "Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
-    };
-  
-    return axios
-      .get(
-        "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
-          fromLat +
-          "," +
-          fromLon +
-          "&wp.1=" +
-          destLat +
-          "," +
-          destLon +
-          "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
-          {responseType: "blob"}
-      )
-      .then((response: any) => {
-        return response.data;
-      });
-}
+*/

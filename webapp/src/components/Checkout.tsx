@@ -7,24 +7,14 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import {
-  calculateShippingCosts,
-  showMapRoute,
-} from "../util/distanceCalculation";
-import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
+import ShippingCosts from "./ShippingCosts";
 
 function getSteps() {
   return ["Shipping address", "Review your order"];
 }
 
 export default function Checkout() {
-  const [address, setAddress] = React.useState("");
-  const [costs, setCosts] = React.useState<number>(0);
-  const [map, setMap] = React.useState<string>();
-  const [costsCalculated, setCostsCalculated] = React.useState<boolean>(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
@@ -36,47 +26,10 @@ export default function Checkout() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const shippingCosts = async (address: string) => {
-    setMap(await showMapRoute(address));
-    setCosts(await calculateShippingCosts(address));
-    setCostsCalculated(true);
-  };
-
-  const calculateCosts = () => {
-    shippingCosts(address);
-  };
-
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return (
-          <React.Fragment>
-            <TextField
-              name="address"
-              required
-              fullWidth
-              id="address"
-              label="Address"
-              onChange={(e) => setAddress(e.target.value)}
-              autoFocus
-            />
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={calculateCosts}
-            >
-              Calculate Shipping Costs
-            </Button>
-            {costsCalculated && (
-              <Box component="div">
-                <p>The shipping costs are {costs} €</p>
-                <img src={map}></img>
-              </Box>
-            )}
-          </React.Fragment>
-        );
+        return <ShippingCosts />;
       case 1:
         return "Review your order";
     }
