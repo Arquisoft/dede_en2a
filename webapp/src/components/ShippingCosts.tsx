@@ -11,7 +11,7 @@ import {
   Thing,
 } from "@inrupt/solid-client";
 
-import { VCARD, FOAF } from "@inrupt/vocab-common-rdf";
+import { VCARD } from "@inrupt/vocab-common-rdf";
 
 import {
   showMapRoute,
@@ -20,24 +20,24 @@ import {
 } from "../util/distanceCalculation";
 
 export default function ShippingCosts(): JSX.Element {
+  const [webId, setWebId] = React.useState("");
   const [address, setAddress] = React.useState("");
   const [costs, setCosts] = React.useState<number>(0);
   const [map, setMap] = React.useState<string>();
   const [costsCalculated, setCostsCalculated] = React.useState<boolean>(false);
 
-  const solidPodName = async () => {
-    let webId = "https://pod.inrupt.com/angelip2303/profile/card#me";
+  const solidPodAddress = async () => {
     let profileDocumentURI = webId.split("#")[0]; // we are just interested in the card
     let myDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
     let profile = getThing(myDataset, webId); // we obtain the thing we are looking for from the dataset
-    let formattedName = getStringNoLocale(
+    let street_address: string = getStringNoLocale(
       profile as Thing,
       VCARD.street_address
-    ); // we obtain the property we are looking for
-    console.log(formattedName);
+    ) as string; // we obtain the property we are looking for
+    setAddress(street_address);
   };
 
-  const shippingCosts = async (address: string) => {
+  const shippingCosts = async () => {
     let destCoords: string = await getCoordinatesFromAddress(address);
     setMap(await showMapRoute(destCoords));
     setCosts(await calculateShippingCosts(destCoords));
@@ -45,10 +45,9 @@ export default function ShippingCosts(): JSX.Element {
   };
 
   const calculateCosts = () => {
-    shippingCosts(address);
+    solidPodAddress(); // we obtain the address from the solid pod
+    shippingCosts(); // we compute the address given the pod
   };
-
-  solidPodName();
 
   return (
     <React.Fragment>
@@ -57,8 +56,8 @@ export default function ShippingCosts(): JSX.Element {
         required
         fullWidth
         id="address"
-        label="Address"
-        onChange={(e) => setAddress(e.target.value)}
+        label="WebID"
+        onChange={(e) => setWebId(e.target.value)}
         autoFocus
       />
       <Button
