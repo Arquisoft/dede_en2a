@@ -8,18 +8,15 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
 function ProductBox(props: any): JSX.Element {
-  const [stockOption, setStockOption] = useState<boolean>(true);
+  const [amount, setAmount] = useState<number>(Number());
 
   function StockAlert(props: any): JSX.Element {
-    if (props.stock <= 0) {
+    if (props.stock - amount <= 0) {
       // to prevent from some issues regarding no stock
-      setStockOption(false);
       return <Chip label="No stock available!" color="error" />;
-    } else if (props.stock <= 10) {
-      setStockOption(true);
+    } else if (props.stock - amount <= 10) {
       return <Chip label="Few units left!" color="warning" />;
     } else {
-      setStockOption(true);
       return <Chip label="Stock available!" color="success" />;
     }
   }
@@ -59,8 +56,11 @@ function ProductBox(props: any): JSX.Element {
       <Grid item xs>
         <Button
           variant="contained"
-          disabled={!stockOption}
-          onClick={() => props.onAdd(props.product)}
+          disabled={props.product.stock - amount <= 0}
+          onClick={() => {
+            setAmount(amount + 1);
+            props.onAdd(props.product);
+          }}
         >
           Add product
         </Button>
