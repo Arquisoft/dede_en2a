@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
@@ -19,7 +18,8 @@ function ProductBox(props: any): JSX.Element {
   const [stockOption, setStockOption] = useState<boolean>(true);
 
   function StockAlert(props: any): JSX.Element {
-    if (props.stock === 0) {
+    if (props.stock <= 0) {
+      // to prevent from some issues regarding no stock
       setStockOption(false);
       return <Chip label="No stock available!" color="error" />;
     } else if (props.stock <= 10) {

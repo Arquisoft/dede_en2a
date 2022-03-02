@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 
+import { calculateTotal } from "../helpers/ShoppingCartHelper";
 import { CartItem, Product } from "../shared/shareddtypes";
 
 type ShoppingCartProps = {
@@ -20,14 +21,6 @@ type ShoppingCartProps = {
   onDecrementUnit: (product: Product) => void;
 };
 
-function calculateTotal(products: CartItem[]): number {
-  let total: number = 0;
-  products.forEach((cartItem: CartItem) => {
-    let unit = cartItem.amount;
-    total += unit * cartItem.product.price;
-  });
-  return total;
-}
 function ShoppingCart(props: ShoppingCartProps): JSX.Element {
   const handleButton = (cartItem: CartItem) => {
     if (cartItem.amount >= cartItem.product.stock) {

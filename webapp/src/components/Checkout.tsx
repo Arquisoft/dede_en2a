@@ -8,14 +8,20 @@ import StepLabel from "@mui/material/StepLabel";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+
 import ShippingCosts from "./ShippingCosts";
+import Review from "./Review";
 
 function getSteps() {
   return ["Shipping address", "Review your order"];
 }
 
-export default function Checkout() {
+export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [isCostsCalculated, setCostsCalculated] =
+    React.useState<boolean>(false);
+  const [costs, setCosts] = React.useState<number>(Number());
+
   const steps = getSteps();
 
   const handleNext = () => {
@@ -24,14 +30,25 @@ export default function Checkout() {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setCostsCalculated(false);
+    setCosts(Number());
   };
 
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <ShippingCosts />;
+        return (
+          <ShippingCosts
+            handleCosts={setCosts}
+            costs={costs}
+            handleCostsCalculated={setCostsCalculated}
+            isCostsCalculated={isCostsCalculated}
+          />
+        );
       case 1:
-        return "Review your order";
+        return (
+          <Review productsCart={props.productsCart} shippingCosts={costs} />
+        );
     }
   };
 
@@ -45,7 +62,11 @@ export default function Checkout() {
           <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
-          <Stepper activeStep={activeStep} alternativeLabel>
+          <Stepper
+            activeStep={activeStep}
+            sx={{ pt: 3, pb: 5 }}
+            alternativeLabel
+          >
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -56,6 +77,7 @@ export default function Checkout() {
           <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
 
           <Stack
+            sx={{ pt: 2 }}
             direction={{ xs: "column", sm: "row" }}
             justifyContent="space-between"
             alignItems="center"
@@ -69,7 +91,12 @@ export default function Checkout() {
               Back
             </Button>
 
-            <Button variant="contained" onClick={handleNext} className="m-1">
+            <Button
+              disabled={!isCostsCalculated}
+              variant="contained"
+              onClick={handleNext}
+              className="m-1"
+            >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Stack>
