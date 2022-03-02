@@ -21,9 +21,11 @@ DELETE {{url}}/users/deleteByEmail/pablolopez@gmail.com
 
 ###
 POST {{url}}/users/update/sitom@gmail.com
-
 Content-Type: application/json
 {
     "name": "sitos",
     "surname": "martinezs"
 }
+
+### 
+GET {{url}}/users/signIn/pablol@gmail.com/pablo

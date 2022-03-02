@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -7,13 +8,51 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 import { Link } from "react-router-dom";
+import { User, NotificationType } from "../shared/shareddtypes";
+
+import { checkSignIn, getUser } from "../api/api";
 
 export default function SignIn() {
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [user, setUser] = React.useState<User>();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // we prevent the default behaviour
     const data: FormData = new FormData(event.currentTarget);
+  };
+
+  const signIn = async () => {
+    try {
+      const isUser = await checkSignIn(email, password);
+
+      if (isUser) {
+        setUser(await getUser(email));
+        setNotificationStatus(true);
+        setNotification({
+          severity: "success",
+          message: "You sign in correctly!",
+        });
+        window.location.href = "/";
+      } else {
+        setNotificationStatus(true);
+        setNotification({
+          severity: "error",
+          message: "error",
+        });
+      }
+    } catch (error) {}
   };
 
   return (
@@ -50,6 +89,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <TextField
@@ -61,6 +101,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <Button
@@ -68,6 +109,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={signIn}
             >
               Sign In
             </Button>
@@ -77,6 +119,22 @@ export default function SignIn() {
             </Link>
           </Box>
         </Box>
+
+        <Snackbar
+          open={notificationStatus}
+          autoHideDuration={3000}
+          onClose={() => {
+            setNotificationStatus(false);
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Alert severity={notification.severity} sx={{ width: "100%" }}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
       </Container>
     </React.Fragment>
   );

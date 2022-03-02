@@ -158,6 +158,10 @@ export default function SignUp() {
           onClose={() => {
             setNotificationStatus(false);
           }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
         >
           <Alert severity={notification.severity} sx={{ width: "100%" }}>
             {notification.message}
