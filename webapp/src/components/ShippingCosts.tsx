@@ -24,30 +24,27 @@ import {
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
-  const [address, setAddress] = React.useState("");
   const [map, setMap] = React.useState<string>();
 
   const solidPodAddress = async () => {
     let profileDocumentURI = webId.split("#")[0]; // we are just interested in the card
     let myDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
     let profile = getThing(myDataset, webId); // we obtain the thing we are looking for from the dataset
-    let street_address: string = getStringNoLocale(
-      profile as Thing,
-      VCARD.street_address
-    ) as string; // we obtain the property we are looking for
-    setAddress(street_address);
+
+    // we obtain the property we are looking for and return it
+    return getStringNoLocale(profile as Thing, VCARD.street_address) as string;
   };
 
-  const shippingCosts = async () => {
-    let destCoords: string = await getCoordinatesFromAddress(address);
+  const shippingCosts = async (street_address: string) => {
+    let destCoords: string = await getCoordinatesFromAddress(street_address);
     props.handleCostsCalculated(true);
     props.handleCosts(await calculateShippingCosts(destCoords));
     setMap(await showMapRoute(destCoords));
   };
 
-  const calculateCosts = () => {
-    solidPodAddress(); // we obtain the address from the solid pod
-    shippingCosts(); // we compute the address given the pod
+  const calculateCosts = async () => {
+    let street_address = await solidPodAddress(); // we obtain the address from the solid pod
+    shippingCosts(street_address); // we compute the address given the pod
   };
 
   const Img = styled("img")({
