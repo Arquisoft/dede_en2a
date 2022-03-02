@@ -26,7 +26,7 @@ function ProductList(props: ProductListProps): JSX.Element {
   return (
     <Grid container columns={50} rowSpacing={5} className="mt-2 mb-2">
       {products.map((product) => (
-        <Grid item xs={25}>
+        <Grid item xs={25} key={product.code}>
           <ProductBox
             product={product}
             onAdd={(productToAdd: Product) => props.OnAddCart(productToAdd)}
