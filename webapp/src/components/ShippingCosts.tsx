@@ -20,7 +20,7 @@ import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
-} from "../util/distanceCalculation";
+} from "../helpers/ComputeDistanceHelper";
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");

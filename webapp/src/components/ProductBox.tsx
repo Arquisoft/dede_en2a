@@ -7,13 +7,6 @@ import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
-import { Product } from "../shared/shareddtypes";
-
-type ProductProps = {
-  product: Product;
-  onAdd: () => void;
-};
-
 function ProductBox(props: any): JSX.Element {
   const [stockOption, setStockOption] = useState<boolean>(true);
 

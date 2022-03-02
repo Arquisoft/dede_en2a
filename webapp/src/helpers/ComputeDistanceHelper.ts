@@ -1,11 +1,9 @@
-import Box from "@mui/material/Box";
-
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
 export const calculateShippingCosts = async (destAddress: String) => {
   let distance = await getDistanceDriving(destAddress);
 
-  let costs = Math.round(distance * 2 * 100) / 100; //2 euros per km
+  let costs = Math.round(distance * 2 * 100) / 100; // 2 euros per km
 
   return costs;
 };
@@ -15,7 +13,7 @@ export const showMapRoute = async (destCoords: String) => {
   const url = URL.createObjectURL(map);
 
   return url;
-}
+};
 
 export const getCoordinatesFromAddress = async (address: String) => {
   let coords = await calculateCoordinates(address);
@@ -24,53 +22,56 @@ export const getCoordinatesFromAddress = async (address: String) => {
   let lon = coords.features[0].geometry.coordinates[0];
 
   return lat + "," + lon; //e.g 36.23423,-5.23423
-}
-
+};
 
 function calculateCoordinates(address: String) {
-    const axios = require("axios");
-  
-    return axios
-      .get("https://api.mapbox.com/geocoding/v5/mapbox.places/" + address +
-       ".json?access_token=pk.eyJ1IjoiYWx2YW1pZ2UiLCJhIjoiY2wwOGM2MmVhMDBiMTNjcGhjNWx2NmE4cCJ9.UvE6niHt0R9W3uj-41Gl8g")
-      .then((response: any) => {
-        return response.data;
-      })
-      .catch((error: any) => {
-        return error;
-      });
+  const axios = require("axios");
+
+  return axios
+    .get(
+      "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
+        address +
+        ".json?access_token=pk.eyJ1IjoiYWx2YW1pZ2UiLCJhIjoiY2wwOGM2MmVhMDBiMTNjcGhjNWx2NmE4cCJ9.UvE6niHt0R9W3uj-41Gl8g"
+    )
+    .then((response: any) => {
+      return response.data;
+    })
+    .catch((error: any) => {
+      return error;
+    });
 }
 
 function getDistanceDriving(destCoords: String) {
-    const axios = require("axios");
-  
-    return axios
-      .get(
-        "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
-          fromCoords +
-          "&wp.1=" +
-          destCoords +
-          "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-")
-      .then((response: any) => {
-        return response.data.resourceSets[0].resources[0].travelDistance;
-      });
+  const axios = require("axios");
+
+  return axios
+    .get(
+      "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
+        fromCoords +
+        "&wp.1=" +
+        destCoords +
+        "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-"
+    )
+    .then((response: any) => {
+      return response.data.resourceSets[0].resources[0].travelDistance;
+    });
 }
 
-function getRouteImage(destCoords: String){
+function getRouteImage(destCoords: String) {
   const axios = require("axios");
-  
-    return axios
-      .get(
-        "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
-          fromCoords +
-          "&wp.1=" +
-          destCoords+
-          "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
-          {responseType: "blob"}
-      )
-      .then((response: any) => {
-        return response.data;
-      });
+
+  return axios
+    .get(
+      "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
+        fromCoords +
+        "&wp.1=" +
+        destCoords +
+        "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
+      { responseType: "blob" }
+    )
+    .then((response: any) => {
+      return response.data;
+    });
 }
 
 //Use to calculate the distance in straight line
