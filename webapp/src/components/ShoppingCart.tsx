@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,6 +17,7 @@ import { CartItem, Product } from "../shared/shareddtypes";
 
 type ShoppingCartProps = {
   products: CartItem[];
+  totalUnitsInCart: number;
   onIncrementUnit: (product: Product) => void;
   onDecrementUnit: (product: Product) => void;
 };
@@ -35,7 +36,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
     width: "25%",
   });
 
-  if (props.products.length > 0)
+  if (props.totalUnitsInCart > 0)
     return (
       <React.Fragment>
         <TableContainer component={Paper}>
@@ -49,59 +50,60 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.products.map((cartItem: CartItem) => {
-                return (
-                  <TableRow key={cartItem.product.code}>
-                    <TableCell>
-                      <Stack
-                        direction={{ xs: "column", sm: "row" }}
-                        spacing={{ xs: 1, sm: 2, md: 4 }}
-                        justifyContent="flex-start"
-                        alignItems="center"
-                      >
-                        <Img
-                          alt="Imagen del producto en el carrito"
-                          src={require("../images/"
-                            .concat(cartItem.product.code)
-                            .concat(".jpg"))}
-                        />
-                        {cartItem.product.name}
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      <Stack
-                        direction={{ xs: "column", sm: "row" }}
-                        justifyContent="space-evenly"
-                        alignItems="center"
-                      >
-                        <Button
-                          onClick={() =>
-                            props.onDecrementUnit(cartItem.product)
-                          }
-                          className="m-1"
+                if (cartItem.amount > 0)
+                  return (
+                    <TableRow key={cartItem.product.code}>
+                      <TableCell>
+                        <Stack
+                          direction={{ xs: "column", sm: "row" }}
+                          spacing={{ xs: 1, sm: 2, md: 4 }}
+                          justifyContent="flex-start"
+                          alignItems="center"
                         >
-                          -
-                        </Button>
+                          <Img
+                            alt="Imagen del producto en el carrito"
+                            src={require("../images/"
+                              .concat(cartItem.product.code)
+                              .concat(".jpg"))}
+                          />
+                          {cartItem.product.name}
+                        </Stack>
+                      </TableCell>
+                      <TableCell>
+                        <Stack
+                          direction={{ xs: "column", sm: "row" }}
+                          justifyContent="space-evenly"
+                          alignItems="center"
+                        >
+                          <Button
+                            onClick={() =>
+                              props.onDecrementUnit(cartItem.product)
+                            }
+                            className="m-1"
+                          >
+                            -
+                          </Button>
+                          <Typography component="div">
+                            {cartItem.amount}
+                          </Typography>
+                          <Button
+                            onClick={() =>
+                              props.onIncrementUnit(cartItem.product)
+                            }
+                            disabled={!handleButton(cartItem)}
+                            className="m-1"
+                          >
+                            +
+                          </Button>
+                        </Stack>
+                      </TableCell>
+                      <TableCell>
                         <Typography component="div">
-                          {cartItem.amount}
+                          {cartItem.product.price}€
                         </Typography>
-                        <Button
-                          onClick={() =>
-                            props.onIncrementUnit(cartItem.product)
-                          }
-                          disabled={!handleButton(cartItem)}
-                          className="m-1"
-                        >
-                          +
-                        </Button>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      <Typography component="div">
-                        {cartItem.product.price}€
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                );
+                      </TableCell>
+                    </TableRow>
+                  );
               })}
             </TableBody>
           </Table>

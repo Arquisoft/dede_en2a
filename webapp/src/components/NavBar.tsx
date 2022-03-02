@@ -120,7 +120,13 @@ function NavBar(props: any): JSX.Element {
             Dede
           </Typography>
 
-          <IconButton size="large" color="inherit" component={Link} to="/cart">
+          <IconButton
+            size="large"
+            color="inherit"
+            component={Link}
+            to="/cart"
+            sx={{ mr: 2 }}
+          >
             <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />
             </Badge>

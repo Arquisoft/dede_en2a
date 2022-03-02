@@ -14,6 +14,7 @@ import { updateProduct } from "../api/api";
 
 type ShoppingProps = {
   products: CartItem[];
+  totalUnitsInCart: number;
   onIncrementUnit: (product: Product) => void;
   onDecrementUnit: (product: Product) => void;
 };
@@ -39,11 +40,13 @@ function Shopping(props: ShoppingProps): JSX.Element {
           </Typography>
           <ShoppingCart
             products={props.products}
+            totalUnitsInCart={props.totalUnitsInCart}
             onIncrementUnit={props.onIncrementUnit}
             onDecrementUnit={props.onDecrementUnit}
           />
           <Stack
             direction={{ xs: "column", sm: "row" }}
+            sx={{ mt: 2 }}
             justifyContent="space-between"
             alignItems="center"
           >

@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
@@ -10,14 +10,19 @@ export default function Footer(): JSX.Element {
       sx={{
         py: 3,
         px: 2,
-        mt: "auto",
+        mt: 2,
       }}
     >
-      <Container maxWidth="sm">
-        <Typography align="center">
-          Made with <FavoriteIcon color="error" /> in Asturias
-        </Typography>
-      </Container>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+      >
+        <Typography align="center">Made with </Typography>
+        <FavoriteIcon color="error" />
+        <Typography align="center"> in Asturias</Typography>
+      </Stack>
     </Box>
   );
 }
