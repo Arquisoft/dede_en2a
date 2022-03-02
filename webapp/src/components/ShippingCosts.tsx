@@ -5,6 +5,15 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 
 import {
+  getSolidDataset,
+  getThing,
+  getStringNoLocale,
+  Thing,
+} from "@inrupt/solid-client";
+
+import { VCARD, FOAF } from "@inrupt/vocab-common-rdf";
+
+import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
@@ -16,6 +25,18 @@ export default function ShippingCosts(): JSX.Element {
   const [map, setMap] = React.useState<string>();
   const [costsCalculated, setCostsCalculated] = React.useState<boolean>(false);
 
+  const solidPodName = async () => {
+    let webId = "https://pod.inrupt.com/angelip2303/profile/card#me";
+    let profileDocumentURI = webId.split("#")[0]; // we are just interested in the card
+    let myDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
+    let profile = getThing(myDataset, webId); // we obtain the thing we are looking for from the dataset
+    let formattedName = getStringNoLocale(
+      profile as Thing,
+      VCARD.street_address
+    ); // we obtain the property we are looking for
+    console.log(formattedName);
+  };
+
   const shippingCosts = async (address: string) => {
     let destCoords: string = await getCoordinatesFromAddress(address);
     setMap(await showMapRoute(destCoords));
@@ -26,6 +47,8 @@ export default function ShippingCosts(): JSX.Element {
   const calculateCosts = () => {
     shippingCosts(address);
   };
+
+  solidPodName();
 
   return (
     <React.Fragment>
