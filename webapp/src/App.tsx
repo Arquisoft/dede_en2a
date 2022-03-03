@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -33,12 +33,14 @@ function App(): JSX.Element {
     } else {
       products.push({ product: product, amount: 1 });
     }
+    localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
+
     setProductsCart(products);
     setTotalUnitsInCart(totalUnitsInCart + 1);
   };
 
   const handleDecrementUnit = (product: Product) => {
-    const products = productsCart.slice();
+    let products = productsCart.slice();
     let found: number = -1;
     products.forEach((cartItem, index) => {
       if (cartItem.product.code == product.code) {
@@ -46,13 +48,37 @@ function App(): JSX.Element {
       }
     });
 
-    products[found].amount -= 1;
-    if (products[found].amount == 0) {
-      delete products[found];
+    if (found >= 0) {
+      products[found].amount -= 1;
+      if (products[found].amount <= 0) {
+        delete products[found];
+      }
     }
+
+    products = products.filter(Boolean);
+
+    localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
+
     setProductsCart(products);
     setTotalUnitsInCart(totalUnitsInCart - 1);
   };
+
+  useEffect(() => {
+    const sessionCart = localStorage.getItem("cart");
+
+    if (sessionCart) {
+      let cart: CartItem[] = JSON.parse(sessionCart);
+
+      let units: number = 0;
+      cart.forEach((cartItem) => {
+        units += cartItem.amount;
+      });
+      setTotalUnitsInCart(units);
+      setProductsCart(cart); //Set the cart when the componenet is rendered
+    } else {
+      localStorage.setItem("cart", JSON.stringify([]));
+    }
+  }, []);
 
   return (
     <Router>
