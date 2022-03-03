@@ -15,6 +15,7 @@ import ProductDetails from "./components/ProductDetails";
 import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.css";
+import ProductList from "./components/ProductList";
 
 function App(): JSX.Element {
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
@@ -73,7 +74,7 @@ function App(): JSX.Element {
         <Route path="checkout" element={< Checkout />} />
         <Route path="sign-in" element={< SignIn />} />
         <Route path="sign-up" element={< SignUp />} />
-        <Route path="product/:id" element={< ProductDetails />} />
+        <Route path="product/:id" element={< ProductDetails product={null as any} />} />
       </Routes>
       <Footer />
     </Router>

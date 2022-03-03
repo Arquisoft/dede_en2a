@@ -13,7 +13,7 @@ export const getUsers: RequestHandler = async (req, res) => {
 };
 
 export const getUser: RequestHandler = async (req, res) => {
-  const userFound = await userModel.find({ email: req.params.email });
+  const userFound = await userModel.findOne({ email: req.params.email });
   if (userFound) {
     return res.json(userFound);
   } else {

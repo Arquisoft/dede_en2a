@@ -45,7 +45,7 @@ function ProductBox(props: any): JSX.Element {
   return (
     <Grid container alignItems="center" direction="column" rowSpacing="5">
       <Grid item>
-        <ButtonBase onClick={() => navigate("product/" + props.product.code)}>
+        <ButtonBase onClick={() => navigate("product/" + props.product.code )}>
           <Img
             alt="Image of the product"
             src={require("../images/"
