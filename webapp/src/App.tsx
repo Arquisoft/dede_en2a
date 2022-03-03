@@ -17,22 +17,17 @@ import { getProducts } from "./api/api";
 import "./App.css";
 
 function App(): JSX.Element {
+  const [products, setProducts] = useState<Product[]>([]);
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
 
   const createShop = async () => {
-    const cartItems: CartItem[] = []; // we initialize the cartItems
-    const products: Product[] = await getProducts(); // and obtain the products
-
-    products.forEach((product) => {
-      cartItems.push({ product: product, amount: 0 }); // as default: no element on cart
-    });
-
-    setProductsCart(cartItems);
+    const dbProducts: Product[] = await getProducts(); // and obtain the products
+    setProducts(dbProducts);
   };
 
   const handleAddCart = (product: Product) => {
-    const products = productsCart.slice();
+    let products = productsCart.slice();
     let found: number = -1;
     products.forEach((cartItem, index) => {
       if (cartItem.product.code === product.code) {
@@ -40,8 +35,14 @@ function App(): JSX.Element {
       }
     });
 
-    // we are sure we are finding the product as it's previously initialized
-    products[found].amount += 1;
+    //We check if the product is in the cart. In this case we add 1 to the amount,
+    //otherwise we push the product with amount 1
+    if (found >= 0) {
+      products[found].amount += 1;
+    } else {
+      products.push({ product: product, amount: 1 });
+    }
+
     localStorage.setItem("cart", JSON.stringify(products));
     setProductsCart(products); // we update the products in the cart
     setTotalUnitsInCart(totalUnitsInCart + 1);
@@ -71,8 +72,9 @@ function App(): JSX.Element {
 
   useEffect(() => {
     createShop();
-    const sessionCart = localStorage.getItem("cart");
 
+    //Retrive the cart from the session.
+    const sessionCart = localStorage.getItem("cart");
     if (sessionCart) {
       let cart: CartItem[] = JSON.parse(sessionCart);
 
@@ -93,7 +95,13 @@ function App(): JSX.Element {
       <Routes>
         <Route
           index
-          element={<Home products={productsCart} onAdd={handleAddCart} />}
+          element={
+            <Home
+              products={products}
+              cartProducts={productsCart}
+              onAdd={handleAddCart}
+            />
+          }
         />
         <Route
           path="cart"
