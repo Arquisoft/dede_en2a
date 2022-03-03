@@ -10,7 +10,6 @@ import Button from "@mui/material/Button";
 import ShoppingCart from "./ShoppingCart";
 
 import { CartItem, Product } from "../shared/shareddtypes";
-import { updateProduct } from "../api/api";
 
 type ShoppingProps = {
   products: CartItem[];
@@ -20,14 +19,6 @@ type ShoppingProps = {
 };
 
 function Shopping(props: ShoppingProps): JSX.Element {
-  const handleUpdateStock = () => {
-    props.products.forEach((cartItem: CartItem) => {
-      let productUnits: number = cartItem.amount;
-      cartItem.product.stock -= productUnits;
-      updateProduct(cartItem.product);
-    });
-  };
-
   return (
     <React.Fragment>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
@@ -61,7 +52,6 @@ function Shopping(props: ShoppingProps): JSX.Element {
               disabled={props.products.length === 0}
               component={Link}
               to="/checkout"
-              onClick={handleUpdateStock}
               className="m-1"
             >
               Proceed to checkout
