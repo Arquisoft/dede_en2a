@@ -14,6 +14,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 import { Link, Navigate } from "react-router-dom";
+import * as Checker from "../helpers/CheckFieldsHelper";
 
 import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
@@ -22,24 +23,38 @@ type SignUpProps = {
   setCurrentUser: (user: User) => void;
 };
 
-
-export default function SignUp(props : SignUpProps) {
+export default function SignUp(props: SignUpProps) {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repPassword, setRepPassword] = useState("");
 
   const [notificationStatus, setNotificationStatus] = useState(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",
   });
-  
+
   const [redirect, setRedirect] = useState<Boolean>(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+  };
+
+  const checkFields = () => {
+    if (Checker.checkTextField(name) && Checker.checkTextField(surname))
+      if (Checker.checkEmail(email))
+        if (Checker.checkPasswords(password, repPassword))
+          if (Checker.checkPassword(password)) signUp();
+          else
+            sendErrorNotification(
+              "Password must have: Length 6, lowercase, uppercase and digits"
+            );
+        else sendErrorNotification("Passwords must match");
+      else sendErrorNotification("Invalid email format");
+    else sendErrorNotification("Invalid name or surname");
   };
 
   const signUp = async () => {
@@ -52,18 +67,22 @@ export default function SignUp(props : SignUpProps) {
     const correctSignUp = await Api.addUser(newUser);
     if (correctSignUp) {
       props.setCurrentUser(await Api.getUser(email));
-      setRedirect(true)
+      setRedirect(true);
     } else {
-      setNotificationStatus(true);
-      setNotification({
-        severity: "error",
-        message: "Fill all the fields or use another email",
-      });
+      sendErrorNotification("Use a different email or sign in.");
     }
   };
 
-  if (redirect){
-    return <Navigate to = '/'/>
+  const sendErrorNotification = (msg: string) => {
+    setNotificationStatus(true);
+    setNotification({
+      severity: "error",
+      message: msg,
+    });
+  };
+
+  if (redirect) {
+    return <Navigate to="/" />;
   }
 
   return (
@@ -137,13 +156,25 @@ export default function SignUp(props : SignUpProps) {
                   autoComplete="new-password"
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="repPassword"
+                  label="Repeat password"
+                  type="password"
+                  id="repPassword"
+                  onChange={(e) => setRepPassword(e.target.value)}
+                  autoComplete="new-password"
+                />
+              </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={signUp}
+              onClick={checkFields}
             >
               Sign Up
             </Button>
