@@ -10,6 +10,7 @@ import Shopping from "./components/Shopping";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
+import ProductDetails from "./components/ProductDetails";
 
 import "./App.css";
 
@@ -69,9 +70,10 @@ function App(): JSX.Element {
             />
           }
         />
-        <Route path="checkout" element={<Checkout />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
+        <Route path="checkout" element={< Checkout />} />
+        <Route path="sign-in" element={< SignIn />} />
+        <Route path="sign-up" element={< SignUp />} />
+        <Route path="product/:id" element={< ProductDetails />} />
       </Routes>
       <Footer />
     </Router>

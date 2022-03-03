@@ -29,6 +29,7 @@ function calculateTotal(products: CartItem[]): number {
   return total;
 }
 function ShoppingCart(props: ShoppingCartProps): JSX.Element {
+  
   const handleButton = (cartItem: CartItem) => {
     if (cartItem.amount >= cartItem.product.stock) {
       return false;
