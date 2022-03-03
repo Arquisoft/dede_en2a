@@ -9,6 +9,9 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+import { updateProduct } from "../api/api";
+import { CartItem } from "../shared/shareddtypes";
+
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 
@@ -24,8 +27,25 @@ export default function Checkout(props: any) {
 
   const steps = getSteps();
 
+  const handleUpdateStock = () => {
+    props.productsCart.forEach((cartItem: CartItem) => {
+      let productUnits: number = cartItem.amount;
+      cartItem.product.stock -= productUnits;
+      updateProduct(cartItem.product);
+    });
+  };
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    // when we click FINISH button ==> update the stock
+    if (activeStep === steps.length - 1) {
+      handleUpdateStock();
+      console.log("asd");
+
+      // redirect to home...
+      document.location.href = "/";
+    }
   };
 
   const handleBack = () => {

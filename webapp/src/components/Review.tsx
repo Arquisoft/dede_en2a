@@ -16,16 +16,19 @@ export default function Review(props: any) {
         Order summary
       </Typography>
       <List>
-        {props.productsCart.slice().map((cartItem: CartItem) => (
-          <ListItem key={cartItem.product.code} sx={{ py: 1, px: 0 }}>
-            <Typography mr={4}>{cartItem.amount}</Typography>
-            <ListItemText
-              primary={cartItem.product.name}
-              secondary={cartItem.product.description}
-            />
-            <Typography>{cartItem.product.price}€</Typography>
-          </ListItem>
-        ))}
+        {props.productsCart.slice().map(
+          (cartItem: CartItem) =>
+            cartItem.amount > 0 && (
+              <ListItem key={cartItem.product.code} sx={{ py: 1, px: 0 }}>
+                <Typography mr={4}>{cartItem.amount}</Typography>
+                <ListItemText
+                  primary={cartItem.product.name}
+                  secondary={cartItem.product.description}
+                />
+                <Typography>{cartItem.product.price}€</Typography>
+              </ListItem>
+            )
+        )}
 
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Shipping costs" />

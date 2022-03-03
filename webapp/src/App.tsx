@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
+
 import { CartItem, Product } from "./shared/shareddtypes";
+
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
@@ -11,31 +12,38 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
 
-import "./App.css";
+import { getProducts } from "./api/api";
 
-import "bootstrap/dist/css/bootstrap.css";
+import "./App.css";
 
 function App(): JSX.Element {
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
 
+  const createShop = async () => {
+    const cartItems: CartItem[] = []; // we initialize the cartItems
+    const products: Product[] = await getProducts(); // and obtain the products
+
+    products.forEach((product) => {
+      cartItems.push({ product: product, amount: 0 }); // as default: no element on cart
+    });
+
+    setProductsCart(cartItems);
+  };
+
   const handleAddCart = (product: Product) => {
     const products = productsCart.slice();
     let found: number = -1;
     products.forEach((cartItem, index) => {
-      if (cartItem.product.code == product.code) {
+      if (cartItem.product.code === product.code) {
         found = index;
       }
     });
 
-    if (found >= 0) {
-      products[found].amount += 1;
-    } else {
-      products.push({ product: product, amount: 1 });
-    }
-    localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
-
-    setProductsCart(products);
+    // we are sure we are finding the product as it's previously initialized
+    products[found].amount += 1;
+    localStorage.setItem("cart", JSON.stringify(products));
+    setProductsCart(products); // we update the products in the cart
     setTotalUnitsInCart(totalUnitsInCart + 1);
   };
 
@@ -43,16 +51,14 @@ function App(): JSX.Element {
     let products = productsCart.slice();
     let found: number = -1;
     products.forEach((cartItem, index) => {
-      if (cartItem.product.code == product.code) {
+      if (cartItem.product.code === product.code) {
         found = index;
       }
     });
 
-    if (found >= 0) {
-      products[found].amount -= 1;
-      if (products[found].amount <= 0) {
-        delete products[found];
-      }
+    products[found].amount -= 1;
+    if (products[found].amount === 0) {
+      delete products[found];
     }
 
     products = products.filter(Boolean);
@@ -64,6 +70,7 @@ function App(): JSX.Element {
   };
 
   useEffect(() => {
+    createShop();
     const sessionCart = localStorage.getItem("cart");
 
     if (sessionCart) {
@@ -84,12 +91,16 @@ function App(): JSX.Element {
     <Router>
       <NavBar isAuthenticated={false} totalUnitsInCart={totalUnitsInCart} />
       <Routes>
-        <Route index element={<Home onAdd={handleAddCart} />} />
+        <Route
+          index
+          element={<Home products={productsCart} onAdd={handleAddCart} />}
+        />
         <Route
           path="cart"
           element={
             <Shopping
               products={productsCart}
+              totalUnitsInCart={totalUnitsInCart}
               onDecrementUnit={handleDecrementUnit}
               onIncrementUnit={handleAddCart}
             />
