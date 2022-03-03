@@ -28,7 +28,8 @@ export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const usersaved = await new userModel(req.body).save();
-    res.json(generateToken(req.body.email));
+    localStorage.setItem("token", generateToken(req.body.email));
+    res.json(usersaved);
   } catch (error) {
     res.status(412).json({ message: "The data is not valid" });
   }
@@ -62,7 +63,8 @@ export const requestToken: RequestHandler = async (req, res) => {
 
   if (user !== null) {
     if (await user.matchPassword(query.password.toString())) {
-      res.json(generateToken(query.email));
+      localStorage.setItem("token", generateToken(query.email));
+      res.status(200).json()
     } else {
       res.status(412).json();
     }

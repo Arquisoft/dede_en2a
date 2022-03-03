@@ -37,7 +37,7 @@ function App(): JSX.Element {
 
   const [auth, setAuth] = useState<Boolean>(false);
 
-  const setCurrentUser = (user: User, token: string) => {
+  const setCurrentUser = (user: User) => {
     setUser(user);
     setNotificationStatus(true);
     setNotification({
@@ -45,9 +45,8 @@ function App(): JSX.Element {
       message: "Welcome to DeDe application " + user.name + " " + user.surname,
     });
 
-    console.log(token);
-    if (token !== null) {
-      localStorage.setItem("token", token);
+    if (localStorage.getItem("token") !== null) {
+      //localStorage.setItem("token", token);
       setAuth(true);
     } else {
       setAuth(false);

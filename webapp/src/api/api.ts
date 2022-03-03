@@ -1,7 +1,7 @@
 import { User } from "../shared/shareddtypes";
 import { Product } from "../shared/shareddtypes";
 
-export async function addUser(user: User): Promise<boolean | string> {
+export async function addUser(user: User): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/users/create", {
     method: "POST",
@@ -13,14 +13,14 @@ export async function addUser(user: User): Promise<boolean | string> {
       password: user.password,
     }),
   });
-  if (response.status === 200) return response.json();
+  if (response.status === 200) return true;
   else return false;
 }
 
 export async function checkUser(
   email: String,
   password: String
-): Promise<boolean | string> {
+): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/users/requestToken", {
     method: "POST",
@@ -32,7 +32,7 @@ export async function checkUser(
   });
   
   if (response.status === 200) {
-    return response.json();
+    return true;
   } else {
     return false;
   }
