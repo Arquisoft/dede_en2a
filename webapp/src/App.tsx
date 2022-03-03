@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CartItem, Product } from "./shared/shareddtypes";
 import NavBar from "./components/NavBar";
@@ -27,15 +30,27 @@ function App(): JSX.Element {
 
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [user, setUser] = React.useState<User>();
+  const [user, setUser] = useState<User>();
 
-  const setCurrentUser = (user: User) => {
+  const [auth, setAuth] = useState<Boolean>();
+
+  const setCurrentUser = (user: User, token: string) => {
     setUser(user);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "Welcome to DeDe application " + user.name + " " + user.surname,
     });
+
+    console.log(token);
+    if (token !== null) {
+      localStorage.setItem("token", token);
+      setAuth(true);
+      console.log(auth);
+    } else {
+      setAuth(false);
+    }
+
   };
 
   const handleAddCart = (product: Product) => {
@@ -75,7 +90,7 @@ function App(): JSX.Element {
 
   return (
     <Router>
-      <NavBar isAuthenticated={false} totalUnitsInCart={totalUnitsInCart} />
+      <NavBar isAuthenticated={auth} totalUnitsInCart={totalUnitsInCart} />
       <Routes>
         <Route index element={<Home onAdd={handleAddCart} />} />
         <Route

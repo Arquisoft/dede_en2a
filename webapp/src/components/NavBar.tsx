@@ -36,9 +36,12 @@ function UserButton(props: any): JSX.Element {
     );
 }
 
+
 function NavBar(props: any): JSX.Element {
-  const [auth, setAuth] = React.useState(true);
   const [state, setState] = React.useState(false);
+  const [auth, setAuth] = React.useState(true);
+
+  if (auth !== props.isAuthenticated) setAuth(props.isAuthenticated);
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -77,7 +80,7 @@ function NavBar(props: any): JSX.Element {
         </MenuItem>
       </MenuList>
 
-      <UserButton isAuthenticated={props.isAuthenticated} />
+      <UserButton isAuthenticated={auth} />
     </Grid>
   );
 
@@ -125,7 +128,7 @@ function NavBar(props: any): JSX.Element {
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          <UserButton isAuthenticated={props.isAuthenticated} />
+          <UserButton isAuthenticated={auth} />
         </Toolbar>
       </AppBar>
     </Box>

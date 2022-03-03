@@ -19,7 +19,7 @@ import { tokenToString } from "typescript";
 import { CollectionsOutlined } from "@mui/icons-material";
 
 type SignInProps = {
-  setCurrentUser: (user: User) => void;
+  setCurrentUser: (user: User, token: string) => void;
 };
 
 export default function SignIn(props: SignInProps) {
@@ -39,13 +39,9 @@ export default function SignIn(props: SignInProps) {
 
   const signIn = async () => {
     const token = await checkUser(email, password);
-
-    console.log(token);
     if (token) {
       const t: string = JSON.stringify(token);
-      localStorage.setItem("token", t);
-      window.location.href = "/";
-      props.setCurrentUser(await getUser(email));
+      props.setCurrentUser(await getUser(email), t);
     } else {
       setNotificationStatus(true);
       setNotification({

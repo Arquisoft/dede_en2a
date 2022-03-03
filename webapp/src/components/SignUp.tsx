@@ -19,7 +19,7 @@ import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
 
 type SignUpProps = {
-  setCurrentUser: (user: User) => void;
+  setCurrentUser: (user: User, token: string) => void;
 };
 
 
@@ -39,9 +39,7 @@ export default function SignUp(props : SignUpProps) {
     const token = await Api.addUser(newUser);
     if (token) {
       const t : string = JSON.stringify(token)
-      localStorage.setItem("token", t);
-      window.location.href = "/";
-      props.setCurrentUser(await Api.getUser(email));
+      props.setCurrentUser(await Api.getUser(email), t);
     } else {
       setNotificationStatus(true);
       setNotification({
