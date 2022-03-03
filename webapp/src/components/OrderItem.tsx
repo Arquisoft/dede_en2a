@@ -43,10 +43,10 @@ function OrderItem(props: OrderItemProps): JSX.Element {
           </TableRow>               
       </TableCell>
       <TableCell align="center">
-        {props.orders.totalPrice}
+        {props.orders.totalPrice + " €"}
       </TableCell>
       <TableCell align="center">
-        {props.orders.shippingPrice}
+        {props.orders.shippingPrice + " €"}
       </TableCell>
     </StyledTableRow>
   )

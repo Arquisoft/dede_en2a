@@ -44,7 +44,7 @@ function Orders(): JSX.Element {
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">User</StyledTableCell>
-            <StyledTableCell align="center">Product</StyledTableCell>
+            <StyledTableCell >Product</StyledTableCell>
             <StyledTableCell align="center">Price</StyledTableCell>
             <StyledTableCell align="center">Shipping price</StyledTableCell>
           </TableRow>
