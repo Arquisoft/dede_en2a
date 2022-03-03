@@ -57,12 +57,12 @@ export const updateUser: RequestHandler = async (req, res) => {
 };
 
 export const requestToken: RequestHandler = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await userModel.findOne({ email });
+  const query = { email: req.body.email.toString(), password: req.body.password.toString() };
+  const user = await userModel.findOne({ query });
 
   if (user !== null) {
-    if (await user.matchPassword(password)) {
-      res.json(generateToken(user.email));
+    if (await user.matchPassword(query.password)) {
+      res.json(generateToken(query.email));
     } else {
       res.status(412).json();
     }
