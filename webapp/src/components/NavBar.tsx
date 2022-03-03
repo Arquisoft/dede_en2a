@@ -36,6 +36,16 @@ function UserButton(props: any): JSX.Element {
     );
 }
 
+function LogOut(props: any): JSX.Element {
+  if (props.isAuthenticated)
+    return (
+      <Button variant="contained" color="secondary" className="m-1">
+        Log out
+      </Button>
+    );
+    else
+    return (<></>);
+}
 
 function NavBar(props: any): JSX.Element {
   const [state, setState] = React.useState(false);
@@ -81,6 +91,7 @@ function NavBar(props: any): JSX.Element {
       </MenuList>
 
       <UserButton isAuthenticated={auth} />
+      <LogOut isAuthenticated={auth} />
     </Grid>
   );
 
@@ -135,6 +146,7 @@ function NavBar(props: any): JSX.Element {
             </Badge>
           </IconButton>
           <UserButton isAuthenticated={auth} />
+          <LogOut isAuthenticated={auth} />
         </Toolbar>
       </AppBar>
     </Box>

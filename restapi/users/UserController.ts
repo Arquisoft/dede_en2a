@@ -28,8 +28,7 @@ export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const usersaved = await new userModel(req.body).save();
-    localStorage.setItem("token", generateToken(req.body.email));
-    res.json(usersaved);
+    res.json(generateToken(req.body.email));
   } catch (error) {
     res.status(412).json({ message: "The data is not valid" });
   }
@@ -58,13 +57,15 @@ export const updateUser: RequestHandler = async (req, res) => {
 };
 
 export const requestToken: RequestHandler = async (req, res) => {
-  const query = { email: req.body.email.toString(), password: req.body.password.toString() };
+  const query = {
+    email: req.body.email.toString(),
+    password: req.body.password.toString(),
+  };
   const user = await userModel.findOne({ email: query.email });
 
   if (user !== null) {
     if (await user.matchPassword(query.password.toString())) {
-      localStorage.setItem("token", generateToken(query.email));
-      res.status(200).json()
+      res.status(200).json(generateToken(query.email));
     } else {
       res.status(412).json();
     }

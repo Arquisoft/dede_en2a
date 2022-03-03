@@ -13,8 +13,10 @@ export async function addUser(user: User): Promise<boolean> {
       password: user.password,
     }),
   });
-  if (response.status === 200) return true;
-  else return false;
+  if (response.status === 200) {
+    localStorage.setItem("token", JSON.stringify(response.json));
+    return true;
+  } else return false;
 }
 
 export async function checkUser(
@@ -30,8 +32,9 @@ export async function checkUser(
       password: password,
     }),
   });
-  
+
   if (response.status === 200) {
+    localStorage.setItem("token", JSON.stringify(response.json));
     return true;
   } else {
     return false;
