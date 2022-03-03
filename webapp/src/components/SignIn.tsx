@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -7,14 +8,55 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { User, NotificationType } from "../shared/shareddtypes";
 
-export default function SignIn() {
+import { checkUser, getUser } from "../api/api";
+import { tokenToString } from "typescript";
+import { CollectionsOutlined } from "@mui/icons-material";
+
+type SignInProps = {
+  setCurrentUser: (user: User, token: string) => void;
+};
+
+export default function SignIn(props: SignInProps) {
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [redirect, setRedirect] = useState<Boolean>(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // we prevent the default behaviour
     const data: FormData = new FormData(event.currentTarget);
   };
+
+  const signIn = async () => {
+    const token = await checkUser(email, password);
+    if (token) {
+      const t: string = JSON.stringify(token);
+      props.setCurrentUser(await getUser(email), t);
+      setRedirect(true)
+    } else {
+      setNotificationStatus(true);
+      setNotification({
+        severity: "error",
+        message: "Incorrect email or password",
+      });
+    }
+  };
+
+  if (redirect){
+    return <Navigate to = '/'/>
+  }
 
   return (
     <React.Fragment>
@@ -50,6 +92,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <TextField
@@ -61,6 +104,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
 
             <Button
@@ -68,6 +112,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={signIn}
             >
               Sign In
             </Button>
@@ -77,6 +122,22 @@ export default function SignIn() {
             </Link>
           </Box>
         </Box>
+
+        <Snackbar
+          open={notificationStatus}
+          autoHideDuration={3000}
+          onClose={() => {
+            setNotificationStatus(false);
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Alert severity={notification.severity} sx={{ width: "100%" }}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
       </Container>
     </React.Fragment>
   );

@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
+import CssBaseline from "@mui/material/CssBaseline";
 import { CartItem, Product } from "./shared/shareddtypes";
 
 import NavBar from "./components/NavBar";
@@ -11,19 +14,49 @@ import Shopping from "./components/Shopping";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { User, NotificationType } from "./shared/shareddtypes";
 
 import { getProducts } from "./api/api";
 
 import "./App.css";
 
 function App(): JSX.Element {
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
   const [products, setProducts] = useState<Product[]>([]);
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
+  const [user, setUser] = useState<User>();
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
     setProducts(dbProducts);
+  };
+
+  const [auth, setAuth] = useState<Boolean>(false);
+
+  const setCurrentUser = (user: User, token: string) => {
+    setUser(user);
+    setNotificationStatus(true);
+    setNotification({
+      severity: "success",
+      message: "Welcome to DeDe application " + user.name + " " + user.surname,
+    });
+
+    console.log(token);
+    if (token !== null) {
+      localStorage.setItem("token", token);
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
+
   };
 
   const handleAddCart = (product: Product) => {
@@ -91,7 +124,7 @@ function App(): JSX.Element {
 
   return (
     <Router>
-      <NavBar isAuthenticated={false} totalUnitsInCart={totalUnitsInCart} />
+      <NavBar isAuthenticated={auth} totalUnitsInCart={totalUnitsInCart} />
       <Routes>
         <Route
           index
@@ -114,14 +147,33 @@ function App(): JSX.Element {
             />
           }
         />
+        <Route path="checkout" element={<Checkout productsCart = {productsCart.slice()}/>} />
         <Route
-          path="checkout"
-          element={<Checkout productsCart={productsCart.slice()} />}
+          path="sign-in"
+          element={<SignIn setCurrentUser={setCurrentUser} />}
         />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
+        <Route
+          path="sign-up"
+          element={<SignUp setCurrentUser={setCurrentUser} />}
+        />
       </Routes>
       <Footer />
+
+      <Snackbar
+        open={notificationStatus}
+        autoHideDuration={3000}
+        onClose={() => {
+          setNotificationStatus(false);
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <Alert severity={notification.severity} sx={{ width: "100%" }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Router>
   );
 }

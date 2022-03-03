@@ -13,4 +13,6 @@ api.delete('/users/deleteByEmail/:email', UserController.deleteUser)
 
 api.post('/users/update/:email', UserController.updateUser)
 
+api.post('/users/requestToken/', UserController.requestToken)
+
 export default api

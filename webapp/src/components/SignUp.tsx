@@ -13,12 +13,30 @@ import Container from "@mui/material/Container";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
 
-export default function SignUp() {
+type SignUpProps = {
+  setCurrentUser: (user: User, token: string) => void;
+};
+
+
+export default function SignUp(props : SignUpProps) {
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+  
+  const [redirect, setRedirect] = useState<Boolean>(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -31,15 +49,11 @@ export default function SignUp() {
       email: email,
       password: password,
     };
-    const works: Boolean = await Api.addUser(newUser);
-    if (works) {
-      console.log("Signed up");
-      setNotificationStatus(true);
-      setNotification({
-        severity: "success",
-        message: "You sign up correctly!",
-      });
-      window.location.href = "/";
+    const token = await Api.addUser(newUser);
+    if (token) {
+      const t : string = JSON.stringify(token)
+      props.setCurrentUser(await Api.getUser(email), t);
+      setRedirect(true)
     } else {
       setNotificationStatus(true);
       setNotification({
@@ -50,16 +64,9 @@ export default function SignUp() {
     }
   };
 
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [notificationStatus, setNotificationStatus] = useState(false);
-  const [notification, setNotification] = useState<NotificationType>({
-    severity: "success",
-    message: "",
-  });
+  if (redirect){
+    return <Navigate to = '/'/>
+  }
 
   return (
     <React.Fragment>
@@ -157,6 +164,10 @@ export default function SignUp() {
           autoHideDuration={3000}
           onClose={() => {
             setNotificationStatus(false);
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
           }}
         >
           <Alert severity={notification.severity} sx={{ width: "100%" }}>

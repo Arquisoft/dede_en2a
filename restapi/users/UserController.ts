@@ -1,7 +1,10 @@
-import { Application, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { body } from "express-validator";
-import mongoose from "mongoose";
-import { userModel } from "./User";
+import { generateToken } from "../utils/generateToken";
+import { userModel, userSchema } from "./User";
+
+const bcrypt = require("bcryptjs");
+const salt = 10;
 
 export const getUsers: RequestHandler = async (req, res) => {
   try {
@@ -13,7 +16,7 @@ export const getUsers: RequestHandler = async (req, res) => {
 };
 
 export const getUser: RequestHandler = async (req, res) => {
-  const userFound = await userModel.find({ email: req.params.email });
+  const userFound = await userModel.findOne({ email: req.params.email });
   if (userFound) {
     return res.json(userFound);
   } else {
@@ -23,25 +26,11 @@ export const getUser: RequestHandler = async (req, res) => {
 
 export const createUser: RequestHandler = async (req, res) => {
   try {
-    const user = new userModel(req.body);
-    const usersaved = await user.save();
-    res.json(usersaved);
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+    const usersaved = await new userModel(req.body).save();
+    res.json(generateToken(req.body.email));
   } catch (error) {
-    if (error.name === "ValidationError") {
-      // Empty field that must have content since it is required
-      // 412 erorr is usually used for Precondition Failed
-      res.status(412).json({
-        message:
-          "The data introduced is invalid. Please, fill correctly all the fields.",
-      });
-    } else if (error.name === "MongoServerError" && error.code === 11000) {
-      // Duplicated key that must be unique
-      // 409 error is usually used for Conflict
-      res.status(409).json({
-        message:
-          "The email is already register. Use a diffrente one or sign in.",
-      });
-    }
+    res.status(412).json({ message: "The data is not valid" });
   }
 };
 
@@ -64,5 +53,20 @@ export const updateUser: RequestHandler = async (req, res) => {
     res.json(user);
   } catch (error) {
     res.json(error);
+  }
+};
+
+export const requestToken: RequestHandler = async (req, res) => {
+  const query = { email: req.body.email.toString(), password: req.body.password.toString() };
+  const user = await userModel.findOne({ query });
+
+  if (user !== null) {
+    if (await user.matchPassword(query.password)) {
+      res.json(generateToken(query.email));
+    } else {
+      res.status(412).json();
+    }
+  } else {
+    res.status(409).json();
   }
 };
