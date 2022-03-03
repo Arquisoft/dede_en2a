@@ -8,7 +8,8 @@ import { styled } from "@mui/material/styles";
 import { CartItem, Product } from "../shared/shareddtypes";
 
 type ProductListProps = {
-  cartItem: CartItem;
+  product: Product;
+  currentCartAmount: number;
   onAdd: (product: Product) => void;
 };
 
@@ -38,32 +39,32 @@ function ProductBox(props: ProductListProps): JSX.Element {
           <Img
             alt="Image of the product"
             src={require("../images/"
-              .concat(props.cartItem.product.code)
+              .concat(props.product.code)
               .concat(".jpg"))}
           />
         </ButtonBase>
       </Grid>
       <Grid item xs>
         <Typography gutterBottom variant="subtitle1" component="div">
-          {props.cartItem.product.name}
+          {props.product.name}
         </Typography>
       </Grid>
       <Grid item xs>
         <Typography gutterBottom variant="subtitle1" component="div">
-          {props.cartItem.product.price}€
+          {props.product.price}€
         </Typography>
       </Grid>
       <Grid item xs>
         <StockAlert
-          stock={props.cartItem.product.stock}
-          amount={props.cartItem.amount}
+          stock={props.product.stock}
+          amount={props.currentCartAmount}
         />
       </Grid>
       <Grid item xs>
         <Button
           variant="contained"
-          disabled={props.cartItem.product.stock <= props.cartItem.amount}
-          onClick={() => props.onAdd(props.cartItem.product)}
+          disabled={props.product.stock <= props.currentCartAmount}
+          onClick={() => props.onAdd(props.product)}
         >
           Add product
         </Button>

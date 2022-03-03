@@ -9,7 +9,8 @@ import { CartItem, Product } from "../shared/shareddtypes";
 import ProductList from "./ProductList";
 
 type HomeProps = {
-  products: CartItem[];
+  products: Product[];
+  cartProducts: CartItem[];
   onAdd: (product: Product) => void;
 };
 
@@ -34,7 +35,11 @@ function Home(props: HomeProps): JSX.Element {
       >
         Shop
       </Typography>
-      <ProductList products={props.products} OnAddCart={props.onAdd} />
+      <ProductList
+        products={props.products}
+        cartProducts={props.cartProducts}
+        OnAddCart={props.onAdd}
+      />
     </React.Fragment>
   );
 }
