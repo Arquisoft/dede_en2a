@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CartItem, Product } from "./shared/shareddtypes";
 
@@ -56,7 +52,6 @@ function App(): JSX.Element {
     } else {
       setAuth(false);
     }
-
   };
 
   const handleAddCart = (product: Product) => {
@@ -147,7 +142,10 @@ function App(): JSX.Element {
             />
           }
         />
-        <Route path="checkout" element={<Checkout productsCart = {productsCart.slice()}/>} />
+        <Route
+          path="checkout"
+          element={<Checkout productsCart={productsCart.slice()} />}
+        />
         <Route
           path="sign-in"
           element={<SignIn setCurrentUser={setCurrentUser} />}
