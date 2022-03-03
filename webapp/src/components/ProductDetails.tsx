@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Product } from "../shared/shareddtypes";
 
 import { useParams } from "react-router-dom";
-import { getProduct, getProducts } from "../api/api";
+import { styled } from "@mui/material/styles";
+import { getProduct } from "../api/api";
 
 export type ProductProps = {
   product: Product;
@@ -12,6 +13,13 @@ export type ProductProps = {
 type ProductDets = {
   id: string;
 }
+
+const Img = styled("img")({
+  margin: "auto",
+  display: "block",
+  width: "auto",
+  height: "30vh",
+});
 
 function ProductDetails(props: ProductProps): JSX.Element {
 
@@ -49,6 +57,12 @@ function ProductDetails(props: ProductProps): JSX.Element {
         <p> {product.price} </p>
         <h2>Stock:</h2>
         <p> {product.stock} </p>
+          <Img
+            alt="Image of the product"
+            src={require("../images/"
+              .concat(product.code)
+              .concat(".jpg"))}
+          />
       </React.Fragment>
     );
   }
