@@ -1,28 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-
-import { CartItem, Product } from "../shared/shareddtypes";
+import { Product } from "../shared/shareddtypes";
 
 import {useParams} from "react-router-dom";
+import { getProduct, getProducts } from "../api/api";
 
 type ProductProps = {
 
 };
 
+type ProductDets = {
+  id: string;
+}
+
 function ProductDetails(props: ProductProps): JSX.Element {
-  const {id} = useParams(); 
-  return (<h1>Producto {id}</h1>)
+  
+  const {id} = useParams<keyof ProductDets>() as ProductDets; 
+
+  const obtainProduct = async () => {
+    setProduct( await getProduct(id) );
+  };
+
+  const [product, setProduct] = useState<Product>();
+
+  useEffect(() => {
+    obtainProduct();
+  }, []);
+
+  if (typeof product === "undefined") 
+  {
+    return (
+      <React.Fragment>
+          <h1>No Product found with id: {id}</h1>
+      </React.Fragment>
+    );
+  } 
+  else
+  {
+    return (
+      <React.Fragment>
+          <h1>Product with id: {id}</h1>
+          <h2>name: {product.name}</h2>
+          <h2>description: {product.description}</h2>
+      </React.Fragment>
+  );
+  }
+          
 }
 
 export default ProductDetails;
