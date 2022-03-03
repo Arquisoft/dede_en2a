@@ -32,7 +32,7 @@ function App(): JSX.Element {
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
   const [user, setUser] = useState<User>();
 
-  const [auth, setAuth] = useState<Boolean>();
+  const [auth, setAuth] = useState<Boolean>(false);
 
   const setCurrentUser = (user: User, token: string) => {
     setUser(user);
@@ -46,7 +46,6 @@ function App(): JSX.Element {
     if (token !== null) {
       localStorage.setItem("token", token);
       setAuth(true);
-      console.log(auth);
     } else {
       setAuth(false);
     }

@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { User, NotificationType } from "../shared/shareddtypes";
 
 import { checkUser, getUser } from "../api/api";
@@ -32,6 +32,8 @@ export default function SignIn(props: SignInProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [redirect, setRedirect] = useState<Boolean>(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // we prevent the default behaviour
     const data: FormData = new FormData(event.currentTarget);
@@ -42,6 +44,7 @@ export default function SignIn(props: SignInProps) {
     if (token) {
       const t: string = JSON.stringify(token);
       props.setCurrentUser(await getUser(email), t);
+      setRedirect(true)
     } else {
       setNotificationStatus(true);
       setNotification({
@@ -50,6 +53,10 @@ export default function SignIn(props: SignInProps) {
       });
     }
   };
+
+  if (redirect){
+    return <Navigate to = '/'/>
+  }
 
   return (
     <React.Fragment>
