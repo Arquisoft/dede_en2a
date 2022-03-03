@@ -69,6 +69,18 @@ export default function Checkout(props: any) {
         return (
           <Review productsCart={props.productsCart} shippingCosts={costs} />
         );
+      case 2:
+        return (
+          <React.Fragment>
+            <Typography component="h2" variant="h6">
+              It's ordered!
+            </Typography>
+            <Typography>
+              We've received your order and will ship your package as as soon as
+              possible.
+            </Typography>
+          </React.Fragment>
+        );
     }
   };
 
@@ -104,6 +116,7 @@ export default function Checkout(props: any) {
           >
             <Button
               disabled={activeStep === 0}
+              hidden={activeStep === getSteps().length}
               onClick={handleBack}
               variant="outlined"
               className="m-1"
@@ -113,6 +126,7 @@ export default function Checkout(props: any) {
 
             <Button
               disabled={!isCostsCalculated}
+              hidden={activeStep === getSteps().length}
               variant="contained"
               onClick={handleNext}
               className="m-1"
