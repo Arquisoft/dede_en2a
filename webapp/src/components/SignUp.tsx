@@ -19,7 +19,7 @@ import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
 
 type SignUpProps = {
-  setCurrentUser: (user: User, token: string) => void;
+  setCurrentUser: (user: User) => void;
 };
 
 
@@ -49,10 +49,9 @@ export default function SignUp(props : SignUpProps) {
       email: email,
       password: password,
     };
-    const token = await Api.addUser(newUser);
-    if (token) {
-      const t : string = JSON.stringify(token)
-      props.setCurrentUser(await Api.getUser(email), t);
+    const correctSignUp = await Api.addUser(newUser);
+    if (correctSignUp) {
+      props.setCurrentUser(await Api.getUser(email));
       setRedirect(true)
     } else {
       setNotificationStatus(true);
@@ -60,7 +59,6 @@ export default function SignUp(props : SignUpProps) {
         severity: "error",
         message: "Fill all the fields or use another email",
       });
-      console.log("Already someone with that email");
     }
   };
 

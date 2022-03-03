@@ -16,11 +16,11 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
-function UserButton(props: any): JSX.Element {
-  if (props.isAuthenticated)
+function UserButton(): JSX.Element {
+  if (localStorage.getItem("token") !== null)
     return (
       <IconButton size="large" color="inherit" component={Link} to="/">
         <AccountCircle />
@@ -36,12 +36,37 @@ function UserButton(props: any): JSX.Element {
     );
 }
 
+type LogOutFuncProps = {
+  logCurrentUserOut : () => void
+}
 
-function NavBar(props: any): JSX.Element {
+function LogOut(props : LogOutFuncProps): JSX.Element {
+  const logOutUser = () => {
+    localStorage.removeItem("token");
+    props.logCurrentUserOut()
+  };
+
+  if (localStorage.getItem("token") !== null)
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        className="m-1"
+        onClick={logOutUser}
+      >
+        Log out
+      </Button>
+    );
+  else return <></>;
+}
+
+type NavBarProps = {
+  totalUnitsInCart : number,
+  logCurrentUserOut: () => void;
+};
+
+function NavBar(props: NavBarProps): JSX.Element {
   const [state, setState] = React.useState(false);
-  const [auth, setAuth] = React.useState(true);
-
-  if (auth !== props.isAuthenticated) setAuth(props.isAuthenticated);
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -80,7 +105,8 @@ function NavBar(props: any): JSX.Element {
         </MenuItem>
       </MenuList>
 
-      <UserButton isAuthenticated={auth} />
+      <UserButton />
+      <LogOut logCurrentUserOut = {props.logCurrentUserOut}/>
     </Grid>
   );
 
@@ -134,7 +160,8 @@ function NavBar(props: any): JSX.Element {
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          <UserButton isAuthenticated={auth} />
+          <UserButton />
+          <LogOut logCurrentUserOut = {props.logCurrentUserOut} />
         </Toolbar>
       </AppBar>
     </Box>

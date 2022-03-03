@@ -28,30 +28,28 @@ function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
     setProducts(dbProducts);
   };
 
-  const [auth, setAuth] = useState<Boolean>(false);
-
-  const setCurrentUser = (user: User, token: string) => {
+  const setCurrentUser = (user: User) => {
     setUser(user);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "Welcome to DeDe application " + user.name + " " + user.surname,
     });
+  };
 
-    console.log(token);
-    if (token !== null) {
-      localStorage.setItem("token", token);
-      setAuth(true);
-    } else {
-      setAuth(false);
-    }
+  const logCurrentUserOut = () => {
+    setNotificationStatus(true);
+    setNotification({
+      severity: "success",
+      message: "You signed out correctly. See you soon!",
+    });
   };
 
   const handleAddCart = (product: Product) => {
@@ -119,7 +117,10 @@ function App(): JSX.Element {
 
   return (
     <Router>
-      <NavBar isAuthenticated={auth} totalUnitsInCart={totalUnitsInCart} />
+      <NavBar
+        totalUnitsInCart={totalUnitsInCart}
+        logCurrentUserOut={logCurrentUserOut}
+      />
       <Routes>
         <Route
           index
