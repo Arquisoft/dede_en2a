@@ -10,14 +10,33 @@ import Shopping from "./components/Shopping";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { User, NotificationType } from "./shared/shareddtypes";
 
 import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.css";
 
 function App(): JSX.Element {
+  const [notificationStatus, setNotificationStatus] = useState(false);
+  const [notification, setNotification] = useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
+  const [user, setUser] = React.useState<User>();
+
+  const setCurrentUser = (user: User) => {
+    setUser(user);
+    setNotificationStatus(true);
+    setNotification({
+      severity: "success",
+      message: "Welcome to DeDe application " + user.name + " " + user.surname,
+    });
+  };
 
   const handleAddCart = (product: Product) => {
     const products = productsCart.slice();
@@ -70,10 +89,32 @@ function App(): JSX.Element {
           }
         />
         <Route path="checkout" element={<Checkout />} />
-        <Route path="sign-in" element={<SignIn />} />
-        <Route path="sign-up" element={<SignUp />} />
+        <Route
+          path="sign-in"
+          element={<SignIn setCurrentUser={setCurrentUser} />}
+        />
+        <Route
+          path="sign-up"
+          element={<SignUp setCurrentUser={setCurrentUser} />}
+        />
       </Routes>
       <Footer />
+
+      <Snackbar
+        open={notificationStatus}
+        autoHideDuration={3000}
+        onClose={() => {
+          setNotificationStatus(false);
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <Alert severity={notification.severity} sx={{ width: "100%" }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Router>
   );
 }

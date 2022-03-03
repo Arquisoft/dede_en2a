@@ -18,7 +18,12 @@ import { Link } from "react-router-dom";
 import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
 
-export default function SignUp() {
+type SignUpProps = {
+  setCurrentUser: (user: User) => void;
+};
+
+
+export default function SignUp(props : SignUpProps) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -31,15 +36,12 @@ export default function SignUp() {
       email: email,
       password: password,
     };
-    const works: Boolean = await Api.addUser(newUser);
-    if (works) {
-      console.log("Signed up");
-      setNotificationStatus(true);
-      setNotification({
-        severity: "success",
-        message: "You sign up correctly!",
-      });
+    const token = await Api.addUser(newUser);
+    if (token) {
+      const t : string = JSON.stringify(token)
+      localStorage.setItem("token", t);
       window.location.href = "/";
+      props.setCurrentUser(await Api.getUser(email));
     } else {
       setNotificationStatus(true);
       setNotification({

@@ -1,7 +1,10 @@
-import { Application, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { body } from "express-validator";
-import { rmSync } from "fs";
-import { userModel } from "./User";
+import { generateToken } from "../utils/generateToken";
+import { userModel, userSchema } from "./User";
+
+const bcrypt = require("bcryptjs");
+const salt = 10;
 
 export const getUsers: RequestHandler = async (req, res) => {
   try {
@@ -23,11 +26,11 @@ export const getUser: RequestHandler = async (req, res) => {
 
 export const createUser: RequestHandler = async (req, res) => {
   try {
-    const user = new userModel(req.body);
-    const usersaved = await user.save();
-    res.json(usersaved);
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+    const usersaved = await new userModel(req.body).save();
+    res.json(generateToken(req.body.email));
   } catch (error) {
-    res.status(301).json({ message: "The data is not valid" });
+    res.status(412).json({ message: "The data is not valid" });
   }
 };
 
@@ -53,15 +56,17 @@ export const updateUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const signInUser: RequestHandler = async (req, res) => {
-  try {
-    const userFound = await userModel.findOne({ email: req.params.email });
-    if (userFound.password === req.params.password) {
-      res.json(userFound);
+export const requestToken: RequestHandler = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await userModel.findOne({ email });
+
+  if (user !== null) {
+    if (await user.matchPassword(password)) {
+      res.json(generateToken(user.email));
     } else {
-      res.status(412).json({ message: "Incorrect password" });
+      res.status(412).json();
     }
-  } catch (error) {
-    res.status(412).json({ message: "Incorrect email" });
+  } else {
+    res.status(409).json();
   }
 };

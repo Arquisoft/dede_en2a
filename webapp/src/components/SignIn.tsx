@@ -14,9 +14,15 @@ import Alert from "@mui/material/Alert";
 import { Link } from "react-router-dom";
 import { User, NotificationType } from "../shared/shareddtypes";
 
-import { checkSignIn, getUser } from "../api/api";
+import { checkUser, getUser } from "../api/api";
+import { tokenToString } from "typescript";
+import { CollectionsOutlined } from "@mui/icons-material";
 
-export default function SignIn() {
+type SignInProps = {
+  setCurrentUser: (user: User) => void;
+};
+
+export default function SignIn(props: SignInProps) {
   const [notificationStatus, setNotificationStatus] = useState(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
@@ -26,33 +32,27 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [user, setUser] = React.useState<User>();
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // we prevent the default behaviour
     const data: FormData = new FormData(event.currentTarget);
   };
 
   const signIn = async () => {
-    try {
-      const isUser = await checkSignIn(email, password);
+    const token = await checkUser(email, password);
 
-      if (isUser) {
-        setUser(await getUser(email));
-        setNotificationStatus(true);
-        setNotification({
-          severity: "success",
-          message: "You sign in correctly!",
-        });
-        window.location.href = "/";
-      } else {
-        setNotificationStatus(true);
-        setNotification({
-          severity: "error",
-          message: "error",
-        });
-      }
-    } catch (error) {}
+    console.log(token);
+    if (token) {
+      const t: string = JSON.stringify(token);
+      localStorage.setItem("token", t);
+      window.location.href = "/";
+      props.setCurrentUser(await getUser(email));
+    } else {
+      setNotificationStatus(true);
+      setNotification({
+        severity: "error",
+        message: "Incorrect email or password",
+      });
+    }
   };
 
   return (
