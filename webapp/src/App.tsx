@@ -74,7 +74,7 @@ function App(): JSX.Element {
         <Route path="checkout" element={< Checkout />} />
         <Route path="sign-in" element={< SignIn />} />
         <Route path="sign-up" element={< SignUp />} />
-        <Route path="product/:id" element={< ProductDetails product={null as any} />} />
+        <Route path="product/:id" element={< ProductDetails product={null as any } onAdd={handleAddCart} />} />
       </Routes>
       <Footer />
     </Router>
