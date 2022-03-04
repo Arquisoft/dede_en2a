@@ -34,7 +34,6 @@ export default function Checkout(props: any) {
   const [payed, setPayed] = React.useState<Boolean>(false);
 
   const steps = getSteps();
-  
 
   const handleUpdateStock = () => {
     props.productsCart.forEach((cartItem: CartItem) => {

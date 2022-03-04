@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import ReactDOM from "react-dom";
 
 import { CartItem } from "../shared/shareddtypes";
@@ -13,33 +13,35 @@ type BillingProps = {
   onPayed: () => void;
 };
 export default function Billing(props: BillingProps): JSX.Element {
-  const totalPrice = calculateTotal(props.products, props.shippingCosts);
-  const createOrder = (data: any, actions: any) => {
-    console.log(data);
-    return actions.order.create({
-      purchase_units: [
-        {
-          amount: {
-            currency_code: "EUR",
-            value: data,
-            description: "Products bought in DeDe shop",
-          },
-        },
-      ],
-    });
-  };
+  const totalPrice: number = calculateTotal(
+    props.products,
+    props.shippingCosts
+  );
 
-  const onApprove = (data: any, actions: any) => {
+  const handleApprove = () => {
     props.onPayed();
-    return actions.order.capture();
   };
 
   return (
-      <PayPalButtons
-        createOrder={(data: any, actions: any) =>
-          createOrder(totalPrice, actions)
-        }
-        onApprove={(data: any, actions: any) => onApprove(data, actions)}
-      />
+    <PayPalButtons
+      createOrder={(data, actions) => {
+        return actions.order.create({
+          purchase_units: [
+            {
+              description: "Products bought in Dede shop",
+              amount: {
+                value: totalPrice.toString(),
+                currency_code: "EUR",
+              },
+            },
+          ],
+        });
+      }}
+      onApprove={async (data, actions: any) => {
+        let order = await actions.order.capture();
+
+        handleApprove();
+      }}
+    />
   );
 }
