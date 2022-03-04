@@ -42,7 +42,7 @@ export default function Review(props: any) {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {calculateTotal(props.productsCart)}€
+            {calculateTotal(props.productsCart, props.shippingCosts)}€
           </Typography>
         </ListItem>
       </List>

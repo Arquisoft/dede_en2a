@@ -14,9 +14,16 @@ import { CartItem } from "../shared/shareddtypes";
 
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
+import Billing from "./Billing";
+import { flushSync } from "react-dom";
 
 function getSteps() {
-  return ["Shipping address", "Review your order"];
+  return [
+    "Shipping address",
+    "Review your order",
+    "Billing Info",
+    "Order confirmation",
+  ];
 }
 
 export default function Checkout(props: any) {
@@ -24,8 +31,10 @@ export default function Checkout(props: any) {
   const [isCostsCalculated, setCostsCalculated] =
     React.useState<boolean>(false);
   const [costs, setCosts] = React.useState<number>(Number());
+  const [payed, setPayed] = React.useState<Boolean>(false);
 
   const steps = getSteps();
+  
 
   const handleUpdateStock = () => {
     props.productsCart.forEach((cartItem: CartItem) => {
@@ -54,6 +63,11 @@ export default function Checkout(props: any) {
     setCosts(Number());
   };
 
+  const handlePayed = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setPayed(true);
+  };
+
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
@@ -70,6 +84,14 @@ export default function Checkout(props: any) {
           <Review productsCart={props.productsCart} shippingCosts={costs} />
         );
       case 2:
+        return (
+          <Billing
+            products={props.productsCart}
+            shippingCosts={costs}
+            onPayed={handlePayed}
+          />
+        );
+      case 3:
         return (
           <React.Fragment>
             <Typography component="h2" variant="h6">
