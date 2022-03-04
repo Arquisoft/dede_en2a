@@ -109,7 +109,14 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
           </Table>
         </TableContainer>
         <Typography variant="h6" className="m-2">
-          Total Price - {calculateTotal(props.products)}€
+          Total Price -{" "}
+          {
+            calculateTotal(
+              props.products,
+              0
+            ) /*There are no shipping costs yet here*/
+          }
+          €
         </Typography>
       </React.Fragment>
     );
