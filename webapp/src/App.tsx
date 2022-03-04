@@ -16,6 +16,8 @@ import { User, NotificationType } from "./shared/shareddtypes";
 
 import { getProducts } from "./api/api";
 
+import {PayPalScriptProvider} from "@paypal/react-paypal-js";
+
 import "./App.css";
 
 function App(): JSX.Element {
@@ -116,6 +118,13 @@ function App(): JSX.Element {
   }, []);
 
   return (
+    <PayPalScriptProvider
+      options={{
+        "client-id":
+          "Ad1H-xmYNu8WPb6jDwiLjirog2e5jA6dylivOrsS5KJ4R_RXt0HOBe7wJ7fuGvMnMDet9RowUTBDAtnV",
+        currency: "EUR",
+      }}
+    >
     <Router>
       <NavBar
         totalUnitsInCart={totalUnitsInCart}
@@ -174,6 +183,7 @@ function App(): JSX.Element {
         </Alert>
       </Snackbar>
     </Router>
+    </PayPalScriptProvider>
   );
 }
 

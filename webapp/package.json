@@ -8,6 +8,7 @@
     "@inrupt/vocab-common-rdf": "^1.0.3",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.5",
+    "@paypal/react-paypal-js": "^7.6.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "@testing-library/jest-dom": "^5.16.1",

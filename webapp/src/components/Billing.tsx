@@ -5,8 +5,7 @@ import { CartItem } from "../shared/shareddtypes";
 
 import { calculateTotal } from "../helpers/ShoppingCartHelper";
 
-declare var window: any;
-const PayPalButton = window.paypal.Buttons.driver("react", { React, ReactDOM });
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 type BillingProps = {
   products: CartItem[];
@@ -15,7 +14,7 @@ type BillingProps = {
 };
 export default function Billing(props: BillingProps): JSX.Element {
   const totalPrice = calculateTotal(props.products, props.shippingCosts);
-  const createOrder = (data: number, actions: any) => {
+  const createOrder = (data: any, actions: any) => {
     console.log(data);
     return actions.order.create({
       purchase_units: [
@@ -36,11 +35,11 @@ export default function Billing(props: BillingProps): JSX.Element {
   };
 
   return (
-    <PayPalButton
-      createOrder={(data: number, actions: any) =>
-        createOrder(totalPrice, actions)
-      }
-      onApprove={(data: number, actions: any) => onApprove(data, actions)}
-    />
+      <PayPalButtons
+        createOrder={(data: any, actions: any) =>
+          createOrder(totalPrice, actions)
+        }
+        onApprove={(data: any, actions: any) => onApprove(data, actions)}
+      />
   );
 }
