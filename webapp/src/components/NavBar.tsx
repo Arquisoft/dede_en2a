@@ -16,11 +16,11 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 
-function UserButton(props: any): JSX.Element {
-  if (props.isAuthenticated)
+function UserButton(): JSX.Element {
+  if (localStorage.getItem("token") !== null)
     return (
       <IconButton size="large" color="inherit" component={Link} to="/">
         <AccountCircle />
@@ -36,8 +36,36 @@ function UserButton(props: any): JSX.Element {
     );
 }
 
-function NavBar(props: any): JSX.Element {
-  const [auth, setAuth] = React.useState(true);
+type LogOutFuncProps = {
+  logCurrentUserOut : () => void
+}
+
+function LogOut(props : LogOutFuncProps): JSX.Element {
+  const logOutUser = () => {
+    localStorage.removeItem("token");
+    props.logCurrentUserOut()
+  };
+
+  if (localStorage.getItem("token") !== null)
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        className="m-1"
+        onClick={logOutUser}
+      >
+        Log out
+      </Button>
+    );
+  else return <></>;
+}
+
+type NavBarProps = {
+  totalUnitsInCart : number,
+  logCurrentUserOut: () => void;
+};
+
+function NavBar(props: NavBarProps): JSX.Element {
   const [state, setState] = React.useState(false);
 
   const toggleDrawer =
@@ -77,7 +105,8 @@ function NavBar(props: any): JSX.Element {
         </MenuItem>
       </MenuList>
 
-      <UserButton isAuthenticated={props.isAuthenticated} />
+      <UserButton />
+      <LogOut logCurrentUserOut = {props.logCurrentUserOut}/>
     </Grid>
   );
 
@@ -120,12 +149,19 @@ function NavBar(props: any): JSX.Element {
             Dede
           </Typography>
 
-          <IconButton size="large" color="inherit" component={Link} to="/cart">
+          <IconButton
+            size="large"
+            color="inherit"
+            component={Link}
+            to="/cart"
+            sx={{ mr: 2 }}
+          >
             <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          <UserButton isAuthenticated={props.isAuthenticated} />
+          <UserButton />
+          <LogOut logCurrentUserOut = {props.logCurrentUserOut} />
         </Toolbar>
       </AppBar>
     </Box>

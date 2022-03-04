@@ -1,7 +1,4 @@
-import { useState } from "react";
-
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
@@ -10,25 +7,22 @@ import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 
 
-import { Product } from "../shared/shareddtypes";
+import { CartItem, Product } from "../shared/shareddtypes";
 
-type ProductProps = {
+type ProductListProps = {
   product: Product;
-  onAdd: () => void;
+  currentCartAmount: number;
+  onAdd: (product: Product) => void;
 };
 
-function ProductBox(props: any): JSX.Element {
-  const [stockOption, setStockOption] = useState<boolean>(true);
-
+function ProductBox(props: ProductListProps): JSX.Element {
   function StockAlert(props: any): JSX.Element {
-    if (props.stock === 0) {
-      setStockOption(false);
+    if (props.stock <= props.amount) {
+      // to prevent from some issues regarding no stock
       return <Chip label="No stock available!" color="error" />;
-    } else if (props.stock <= 10) {
-      setStockOption(true);
+    } else if (props.stock - props.amount <= 10) {
       return <Chip label="Few units left!" color="warning" />;
     } else {
-      setStockOption(true);
       return <Chip label="Stock available!" color="success" />;
     }
   }
@@ -65,12 +59,15 @@ function ProductBox(props: any): JSX.Element {
         </Typography>
       </Grid>
       <Grid item xs>
-        <StockAlert stock={props.product.stock} />
+        <StockAlert
+          stock={props.product.stock}
+          amount={props.currentCartAmount}
+        />
       </Grid>
       <Grid item xs>
         <Button
           variant="contained"
-          disabled={!stockOption}
+          disabled={props.product.stock <= props.currentCartAmount}
           onClick={() => props.onAdd(props.product)}
         >
           Add product
