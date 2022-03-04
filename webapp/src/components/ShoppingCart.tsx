@@ -23,6 +23,7 @@ type ShoppingCartProps = {
 };
 
 function ShoppingCart(props: ShoppingCartProps): JSX.Element {
+  
   const handleButton = (cartItem: CartItem) => {
     if (cartItem.amount >= cartItem.product.stock) {
       return false;

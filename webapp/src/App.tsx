@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CartItem, Product } from "./shared/shareddtypes";
+import { User, NotificationType } from "./shared/shareddtypes";
 
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -10,12 +11,15 @@ import Shopping from "./components/Shopping";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
+import ProductDetails from "./components/ProductDetails";
+import ProductList from "./components/ProductList";
+
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { User, NotificationType } from "./shared/shareddtypes";
+
 
 import { getProducts } from "./api/api";
-
+import "bootstrap/dist/css/bootstrap.css";
 import {PayPalScriptProvider} from "@paypal/react-paypal-js";
 
 import "./App.css";
@@ -164,6 +168,10 @@ function App(): JSX.Element {
           path="sign-up"
           element={<SignUp setCurrentUser={setCurrentUser} />}
         />
+        <Route 
+          path="product/:id" 
+          element={< ProductDetails product={null as any } onAdd={handleAddCart} />}
+         />
       </Routes>
       <Footer />
 
