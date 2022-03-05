@@ -62,11 +62,12 @@ function Orders(): JSX.Element {
     <TableContainer  component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="customized table">
         <TableHead>
-          <TableRow hover>
+          <TableRow>
             <StyledTableCell align="center">User</StyledTableCell>
             <StyledTableCell >Product</StyledTableCell>
             <StyledTableCell align="center">Price</StyledTableCell>
             <StyledTableCell align="center">Shipping price</StyledTableCell>
+            <StyledTableCell align="center">Status</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -94,26 +95,6 @@ function Orders(): JSX.Element {
         />
     </React.Fragment>
   );
-
-
-  /*return (
-    <React.Fragment>
-      <NavBar />
-      <Typography align="center" variant="h4" color="darkblue"> Your orders</Typography>   
-      <Grid container alignItems="center" className="m-5" columns={4} >
-        <Grid item xs alignItems="center"><span style={{fontSize: "20px",  fontWeight: "bold"}}>User</span></Grid>
-        <Grid item xs alignItems="center"><span style={{fontSize: "20px",  fontWeight: "bold"}}>Products</span></Grid>
-        <Grid item xs alignItems="center"><span style={{fontSize: "20px",  fontWeight: "bold"}}>Total Price</span></Grid>         
-        <Grid item xs alignItems="center"><span style={{fontSize: "20px",  fontWeight: "bold"}}>Shipping Price</span></Grid>
-        {orders.map((order) => (
-          <Grid item xs={5}>
-            <OrderItem orders={order} />
-          </Grid>
-        ))}
-      </Grid>
-    </React.Fragment>
-  );*/
 }
 
 export default Orders;
-
