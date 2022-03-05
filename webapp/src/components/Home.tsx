@@ -1,47 +1,36 @@
-import React, { useState, useEffect } from "react";
-
-import Typography from "@mui/material/Typography";
-
-import { getUsers } from "../api/api";
-import { User } from "../shared/shareddtypes";
-import { CartItem, Product } from "../shared/shareddtypes";
-
-import ProductList from "./ProductList";
+import React, { useState, useEffect } from 'react';
+import Container from '@mui/material/Container';
+import Welcome from '../components/Welcome';
+import  {getUsers} from '../api/api';
+import {User} from '../shared/shareddtypes';
+import {Product} from '../shared/shareddtypes';
+import ProductList from './ProductList';
+import NavBar from './NavBar';
 
 type HomeProps = {
-  products: Product[];
-  cartProducts: CartItem[];
-  onAdd: (product: Product) => void;
-};
-
-function Home(props: HomeProps): JSX.Element {
-  const [users, setUsers] = useState<User[]>([]);
+    onAdd: (product : Product) => void;
+}
+function Home(props: HomeProps) : JSX.Element{
+  const [users,setUsers] = useState<User[]>([]);
+  
 
   const refreshUserList = async () => {
     setUsers(await getUsers());
-  };
+  }
 
-  useEffect(() => {
+  useEffect(()=>{
     refreshUserList();
-  }, []);
+  },[]);
 
   return (
-    <React.Fragment>
-      <Typography
-        component="h1"
-        variant="h4"
-        align="center"
-        sx={{ mb: 4, mt: 4 }}
-      >
-        Shop
-      </Typography>
-      <ProductList
-        products={props.products}
-        cartProducts={props.cartProducts}
-        OnAddCart={props.onAdd}
-      />
-    </React.Fragment>
+    <>
+        <NavBar/>
+        <Container maxWidth="sm">
+            <Welcome message="DeDe Application"/>
+            <ProductList products={[]} OnAddCart={props.onAdd}/>
+        </Container>
+    </>
   );
-}
+};
 
 export default Home;

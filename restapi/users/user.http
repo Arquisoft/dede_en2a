@@ -12,8 +12,8 @@ Content-Type: application/json
 {
     "name": "pablo",
     "surname": "lopez",
-    "email": "palolol@gmail.com",
-    "password": "pepe"
+    "email": "pablol@gmail.com",
+    "password": "bph59woegryjse45"
 }
 
 ###
@@ -21,18 +21,9 @@ DELETE {{url}}/users/deleteByEmail/pablolopez@gmail.com
 
 ###
 POST {{url}}/users/update/sitom@gmail.com
-Content-Type: application/json
 
+Content-Type: application/json
 {
     "name": "sitos",
     "surname": "martinezs"
-}
-
-### 
-POST {{url}}/users/requestToken
-Content-Type: application/json
-
-{
-    "email": "palolol@gmail.com",
-    "password": "pepe"
 }

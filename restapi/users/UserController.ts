@@ -1,75 +1,49 @@
-import { RequestHandler } from "express";
+import { Application, RequestHandler } from "express";
 import { body } from "express-validator";
-import { generateToken } from "../utils/generateToken";
-import { userModel, userSchema } from "./User";
-
-const bcrypt = require("bcryptjs");
-const salt = 10;
+import { userModel } from "./User";
 
 export const getUsers: RequestHandler = async (req, res) => {
-  try {
-    const users = await userModel.find();
-    return res.json(users);
-  } catch (error) {
-    res.json(error);
-  }
-};
+    try {
+        const users = await userModel.find()
+        return res.json(users)
+    } catch (error) {
+        res.json(error)
+    }
+}
 
 export const getUser: RequestHandler = async (req, res) => {
-  const userFound = await userModel.findOne({ email: req.params.email });
-  if (userFound) {
-    return res.json(userFound);
-  } else {
-    return res.status(204).json();
-  }
-};
+    const userFound = await userModel.find({ email: req.params.email });
+    if (userFound) {
+        return res.json(userFound)
+    } else {
+        return res.status(204).json();
+    }
+}
 
 export const createUser: RequestHandler = async (req, res) => {
-  try {
-    req.body.password = await bcrypt.hash(req.body.password, salt);
-    const usersaved = await new userModel(req.body).save();
-    res.json(generateToken(req.body.email));
-  } catch (error) {
-    res.status(412).json({ message: "The data is not valid" });
-  }
-};
+    try {
+        const user = new userModel(req.body)
+        const usersaved = await user.save()
+        res.json(usersaved)
+    } catch (error) {
+        res.status(301).json({ message: 'The data is not valid'})
+    }
+}
 
 export const deleteUser: RequestHandler = async (req, res) => {
-  const userFound = await userModel.deleteOne({ email: req.params.email });
-  if (userFound) {
-    return res.json(userFound);
-  }
-  res.json("deleting a user");
-};
+    const userFound = await userModel.deleteOne({ email: req.params.email });
+    if (userFound) {
+        return res.json(userFound)
+    }
+    res.json('deleting a user')
+}
 
 export const updateUser: RequestHandler = async (req, res) => {
-  try {
-    console.log(req.body);
-    const user = await userModel.findOneAndUpdate(
-      { email: req.params.email },
-      req.body,
-      { new: true }
-    );
-    res.json(user);
-  } catch (error) {
-    res.json(error);
-  }
-};
-
-export const requestToken: RequestHandler = async (req, res) => {
-  const query = {
-    email: req.body.email.toString(),
-    password: req.body.password.toString(),
-  };
-  const user = await userModel.findOne({ email: query.email });
-
-  if (user !== null) {
-    if (await user.matchPassword(query.password.toString())) {
-      res.status(200).json(generateToken(query.email));
-    } else {
-      res.status(412).json();
+    try {
+        console.log(req.body)
+        const user = await userModel.findOneAndUpdate({email: req.params.email}, req.body, {new: true})
+        res.json(user)
+    }catch (error){
+        res.json(error)
     }
-  } else {
-    res.status(409).json();
-  }
-};
+}

@@ -1,11 +1,7 @@
-import type { AlertColor } from "@mui/material/Alert";
-
 export type User = {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-};
+    name:string;
+    email:string;
+  }
 
 export type Product = {
     code: string;
@@ -26,13 +22,3 @@ export type Order = {
     totalPrice: number;
     shippingPrice: number;
 }
-
-export type NotificationType = {
-  severity: AlertColor;
-  message: string;
-};
-
-export type CartItem = {
-  product: Product;
-  amount: number;
-};

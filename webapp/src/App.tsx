@@ -1,211 +1,79 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import "./App.css";
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import './App.css';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import Home from "./components/Home";
-import Shopping from "./components/Shopping";
-import "bootstrap/dist/css/bootstrap.css";
-import Orders from "./components/Orders";
-import { getOrders } from "./api/api";
-import CssBaseline from "@mui/material/CssBaseline";
-import { CartItem, Order, Product } from "./shared/shareddtypes";
-import { User, NotificationType } from "./shared/shareddtypes";
-
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import Checkout from "./components/Checkout";
-import ProductDetails from "./components/ProductDetails";
-import ProductList from "./components/ProductList";
-
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-
-import { getProducts } from "./api/api";
-import "bootstrap/dist/css/bootstrap.css";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-
-import "./App.css";
-import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import Home from './components/Home';
+import Shopping from './components/Shopping';
+import Pay from './components/Pay';
+import { Order, Product, OrderProduct } from './shared/shareddtypes';
+import 'bootstrap/dist/css/bootstrap.css';
+import  Orders  from './components/Orders';
+import { getOrders } from './api/api';
 
 function App(): JSX.Element {
-  const [notificationStatus, setNotificationStatus] = useState(false);
-  const [notification, setNotification] = useState<NotificationType>({
-    severity: "success",
-    message: "",
-  });
 
+  const [productsCart, setProductsCart] = useState<Product[]>([]);
   const [unitProducts, setUnits] = useState<Map<string, number>>(new Map()); //String - product code // Number - Products Units
-  const [orders, setOrders] = useState<Order[]>([]); //([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productsCart, setProductsCart] = useState<CartItem[]>([]);
-  const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [user, setUser] = useState<User | null>(null);
-
-  const createShop = async () => {
-    const dbProducts: Product[] = await getProducts(); // and obtain the products
-    setProducts(dbProducts);
-  };
-
-  const setCurrentUser = (user: User) => {
-    setUser(user);
-    setNotificationStatus(true);
-    setNotification({
-      severity: "success",
-      message: "Welcome to DeDe application " + user.name + " " + user.surname,
-    });
-  };
-
-  const logCurrentUserOut = () => {
-    setNotificationStatus(true);
-    setNotification({
-      severity: "success",
-      message: "You signed out correctly. See you soon!",
-    });
-  };
+  const [orders, setOrders] = useState<Order[]>([]);//([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const handleAddCart = (product: Product) => {
-    let products = productsCart.slice();
-    let found: number = -1;
-    products.forEach((cartItem, index) => {
-      if (cartItem.product.code === product.code) {
-        found = index;
-      }
-    });
-
-    //We check if the product is in the cart. In this case we add 1 to the amount,
-    //otherwise we push the product with amount 1
-    if (found >= 0) {
-      products[found].amount += 1;
+    if (unitProducts.has(product.code)) {
+      unitProducts.set(product.code, unitProducts.get(product.code)! + 1);
     } else {
-      products.push({ product: product, amount: 1 });
+      unitProducts.set(product.code, 1);
+
+      const products = productsCart.slice();
+      products.push(product);
+      setProductsCart(products);
+    }
+    
+    setUnits(unitProducts);
+
+    render();
+  }
+
+  const handleDecrementUnit = (product: Product) =>{
+    unitProducts.set(product.code, unitProducts.get(product.code)! - 1);
+
+    if (unitProducts.get(product.code) == 0){
+      unitProducts.delete(product.code);
+      productsCart.forEach((p, index: number) => {
+        if (p.code == product.code)
+          delete productsCart[index];
+      })
     }
 
-    localStorage.setItem("cart", JSON.stringify(products));
-    setProductsCart(products); // we update the products in the cart
-    setTotalUnitsInCart(totalUnitsInCart + 1);
-  };
+    render();    
+  }
 
-  const handleDecrementUnit = (product: Product) => {
-    let products = productsCart.slice();
-    let found: number = -1;
-    products.forEach((cartItem, index) => {
-      if (cartItem.product.code === product.code) {
-        found = index;
-      }
-    });
+  //const handleGetOrders = async () => {
+    //setOrders(await getOrders());
+  //}
 
-    products[found].amount -= 1;
-    if (products[found].amount === 0) {
-      delete products[found];
-    }
-
-    products = products.filter(Boolean);
-
-    localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
-
-    setProductsCart(products);
-    setTotalUnitsInCart(totalUnitsInCart - 1);
-  };
-
-  useEffect(() => {
-    createShop();
-
-    //Retrive the cart from the session.
-    const sessionCart = localStorage.getItem("cart");
-    if (sessionCart) {
-      let cart: CartItem[] = JSON.parse(sessionCart);
-
-      let units: number = 0;
-      cart.forEach((cartItem) => {
-        units += cartItem.amount;
-      });
-      setTotalUnitsInCart(units);
-      setProductsCart(cart); //Set the cart when the componenet is rendered
-    } else {
-      localStorage.setItem("cart", JSON.stringify([]));
-    }
-  }, []);
+  const render = () =>{
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById('root')
+    );
+  }
 
   return (
-    <PayPalScriptProvider
-      options={{
-        "client-id":
-          "Ad1H-xmYNu8WPb6jDwiLjirog2e5jA6dylivOrsS5KJ4R_RXt0HOBe7wJ7fuGvMnMDet9RowUTBDAtnV",
-        currency: "EUR",
-      }}
-    >
-      <Router>
-        <NavBar
-          totalUnitsInCart={totalUnitsInCart}
-          logCurrentUserOut={logCurrentUserOut}
-        />
-        <Routes>
-          <Route
-            index
-            element={
-              <Home
-                products={products}
-                cartProducts={productsCart}
-                onAdd={handleAddCart}
-              />
-            }
-          />
-          <Route
-            path="cart"
-            element={
-              <Shopping
-                products={productsCart}
-                totalUnitsInCart={totalUnitsInCart}
-                onDecrementUnit={handleDecrementUnit}
-                onIncrementUnit={handleAddCart}
-              />
-            }
-          />
-          <Route
-            path="checkout"
-            element={<Checkout productsCart={productsCart.slice()} />}
-          />
-          <Route
-            path="sign-in"
-            element={<SignIn setCurrentUser={setCurrentUser} />}
-          />
-          <Route
-            path="sign-up"
-            element={<SignUp setCurrentUser={setCurrentUser} />}
-          />
-          <Route path="orders" element={<Orders />} />
-          <Route
-            path="product/:id"
-            element={
-              <ProductDetails product={null as any} onAdd={handleAddCart} />
-            }
-          />
-        </Routes>
-        <Footer />
-
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
-      </Router>
-    </PayPalScriptProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home onAdd={handleAddCart} />} />
+        <Route index element={<Home onAdd={handleAddCart} />} />
+        <Route path="cart" element={<Shopping products={productsCart} units={unitProducts} onDecrementUnit={handleDecrementUnit} onIncrementUnit={handleAddCart}/>} />
+        <Route path="pay" element={<Pay />} />
+        <Route path='orders' element={<Orders />} />
+      </Routes>
+    </Router>
   );
 }
 

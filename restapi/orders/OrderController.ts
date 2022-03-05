@@ -28,14 +28,7 @@ export const createOrder: RequestHandler = async (req, res) => {
         const ordersaved = await order.save()
         res.json(ordersaved)
     } catch (error) {
-        if (error.name === "ValidationError") {
-            // Empty field that must have content since it is required
-            // 412 erorr is usually used for Precondition Failed
-            res.status(412).json({
-              message:
-                "The data introduced is invalid. Please, fill correctly all the fields.",
-            });
-          }
+        res.status(301).json({ message: 'The data is not valid'})
     }
 }
 
