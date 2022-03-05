@@ -1,66 +1,132 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import {Product} from '../shared/shareddtypes';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
-import { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
-import {getProduct} from '../api/api';
+import React from "react";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
+
+import { calculateTotal } from "../helpers/ShoppingCartHelper";
+import { CartItem, Product } from "../shared/shareddtypes";
 
 type ShoppingCartProps = {
-    products: Product[];
-    units: Map<string, number>;
-    onIncrementUnit: (product: Product) => void;
-    onDecrementUnit: (product: Product) => void;
-}
+  products: CartItem[];
+  totalUnitsInCart: number;
+  onIncrementUnit: (product: Product) => void;
+  onDecrementUnit: (product: Product) => void;
+};
 
-function calculateTotal(products : Product[], units : Map<string, number>) : number{
-    let total:number = 0;
-    products.forEach((product: Product) =>{
-        let unit = units.get(product.code)!;
-        total += unit * product.price;
-    })
-    return total;
-}
-function ShoppingCart(props: ShoppingCartProps) : JSX.Element {
+function ShoppingCart(props: ShoppingCartProps): JSX.Element {
+  
+  const handleButton = (cartItem: CartItem) => {
+    if (cartItem.amount >= cartItem.product.stock) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
-    const [productsCart, setProducts] = useState<Product[]>(props.products);
-    const [unitsProduct, setUnitsProducts] = useState<Map<string, number>>(props.units);
+  const Img = styled("img")({
+    display: "block",
+    width: "25%",
+  });
 
-    const handleButton = (product: Product) =>{
-        if (unitsProduct.get(product.code)! >= product.stock){
-            return false;
-        } else{
-            return true;
-        }
-    }  
-
+  if (props.totalUnitsInCart > 0)
     return (
-        <>
-            <h2>Shopping Cart</h2>
-            <List>
-                {productsCart.map((product, i) =>{
-                    return (
-                        <>
-                        <ListItem key={product.code}>
-                            <img className="m-2" src={require('../images/'.concat(product.code).concat('.jpg'))} width="100px"></img>
-                            <p className="font-weight-bold">{product.name}</p>
-                            <div style={{float: "right"}}>
-                                <Badge className="m-2" bg="primary">{unitsProduct.get(product.code)}</Badge>
-                                <Button onClick={() => props.onIncrementUnit(product)} disabled={!handleButton(product)} className="m-1" variant="success">+</Button>
-                                <Button onClick={() => props.onDecrementUnit(product)} className="m-1" variant="danger">-</Button>
-                            </div>
-                        </ListItem>
-                        </>
-                    )
-                })}
-            </List>
-            <h3>Total Price - {calculateTotal(productsCart, unitsProduct)} €</h3>
-        </>
-    )
+      <React.Fragment>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell> Product </TableCell>
+                <TableCell> Quantity </TableCell>
+                <TableCell> Price per unit </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {props.products.map((cartItem: CartItem) => {
+                if (cartItem.amount > 0)
+                  return (
+                    <TableRow key={cartItem.product.code}>
+                      <TableCell>
+                        <Stack
+                          direction={{ xs: "column", sm: "row" }}
+                          spacing={{ xs: 1, sm: 2, md: 4 }}
+                          justifyContent="flex-start"
+                          alignItems="center"
+                        >
+                          <Img
+                            alt="Imagen del producto en el carrito"
+                            src={require("../images/"
+                              .concat(cartItem.product.code)
+                              .concat(".jpg"))}
+                          />
+                          {cartItem.product.name}
+                        </Stack>
+                      </TableCell>
+                      <TableCell>
+                        <Stack
+                          direction={{ xs: "column", sm: "row" }}
+                          justifyContent="space-evenly"
+                          alignItems="center"
+                        >
+                          <Button
+                            onClick={() =>
+                              props.onDecrementUnit(cartItem.product)
+                            }
+                            className="m-1"
+                          >
+                            -
+                          </Button>
+                          <Typography component="div">
+                            {cartItem.amount}
+                          </Typography>
+                          <Button
+                            onClick={() =>
+                              props.onIncrementUnit(cartItem.product)
+                            }
+                            disabled={!handleButton(cartItem)}
+                            className="m-1"
+                          >
+                            +
+                          </Button>
+                        </Stack>
+                      </TableCell>
+                      <TableCell>
+                        <Typography component="div">
+                          {cartItem.product.price}€
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Typography variant="h6" className="m-2">
+          Total Price -{" "}
+          {
+            calculateTotal(
+              props.products,
+              0
+            ) /*There are no shipping costs yet here*/
+          }
+          €
+        </Typography>
+      </React.Fragment>
+    );
+  else
+    return (
+      <Typography variant="h6" className="m-2">
+        Shopping cart is empty :(
+      </Typography>
+    );
 }
 
 export default ShoppingCart;
