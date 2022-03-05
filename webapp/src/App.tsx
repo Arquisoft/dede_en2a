@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import { CartItem, Product } from "./shared/shareddtypes";
+import { CartItem, Product, Order } from "./shared/shareddtypes";
 import { User, NotificationType } from "./shared/shareddtypes";
 
 import NavBar from "./components/NavBar";
@@ -13,6 +13,7 @@ import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
 import ProductDetails from "./components/ProductDetails";
 import ProductList from "./components/ProductList";
+import Orders from "../components/Orders";
 
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -35,6 +36,7 @@ function App(): JSX.Element {
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
   const [user, setUser] = useState<User | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);//([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
@@ -172,6 +174,7 @@ function App(): JSX.Element {
           path="product/:id" 
           element={< ProductDetails product={null as any } onAdd={handleAddCart} />}
          />
+        <Route path='orders' element={<Orders />} />
       </Routes>
       <Footer />
 

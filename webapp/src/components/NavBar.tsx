@@ -103,6 +103,10 @@ function NavBar(props: NavBarProps): JSX.Element {
           </ListItemIcon>
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
+
+         <MenuItem component={Link} to="/orders">
+          <Typography variant="inherit">Orders</Typography>
+        </MenuItem>
       </MenuList>
 
       <UserButton />
