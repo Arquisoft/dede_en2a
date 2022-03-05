@@ -25,22 +25,23 @@ function OrderItem(props: OrderItemProps): JSX.Element {
 
   const productsHtml: String[] = [];
 
+
   return(
-    <StyledTableRow>
+    <StyledTableRow hover>
       <TableCell align="center">
-      {props.orders.userId}      
+        {props.orders.userId}
       </TableCell>
       <TableCell align="center">
         <TableRow>
-            {props.orders.products.map((product : OrderProduct) => {
+          {props.orders.products.map((product: OrderProduct) => {
             return "Code: " + product.code;
-            })}
-          </TableRow>
-          <TableRow>
-            {props.orders.products.map((product : OrderProduct) => {
-            return  "Amount: " + product.amount ;
-            })} 
-          </TableRow>               
+          })}
+        </TableRow>
+        <TableRow>
+          {props.orders.products.map((product: OrderProduct) => {
+            return "Amount: " + product.amount;
+          })}
+        </TableRow>
       </TableCell>
       <TableCell align="center">
         {props.orders.totalPrice + " €"}

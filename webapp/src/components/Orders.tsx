@@ -8,7 +8,8 @@ import OrderItem from "./OrderItem";
 
 import { Order } from "../shared/shareddtypes";
 import { getOrders } from "../api/api";
-import { Table, TableContainer, TableHead, TableCell, TableRow, TableBody, Paper, tableCellClasses, styled } from "@mui/material";
+import { Table, TableContainer, TableHead, TableCell, TableRow, TableBody, Paper, tableCellClasses, styled, TablePagination } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -24,6 +25,22 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 function Orders(): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 2));
+    setPage(0);
+  };  
 
   const refreshOrderList = async () => {
     setOrders(await getOrders());
@@ -32,6 +49,9 @@ function Orders(): JSX.Element {
   useEffect(() => {
     refreshOrderList();
   });
+
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, orders.length - page * rowsPerPage);
 
   return(
     <React.Fragment>
@@ -42,7 +62,7 @@ function Orders(): JSX.Element {
     <TableContainer  component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="customized table">
         <TableHead>
-          <TableRow>
+          <TableRow hover>
             <StyledTableCell align="center">User</StyledTableCell>
             <StyledTableCell >Product</StyledTableCell>
             <StyledTableCell align="center">Price</StyledTableCell>
@@ -50,14 +70,31 @@ function Orders(): JSX.Element {
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((order) => (
+          {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
             <OrderItem orders={order} /> 
           ))}
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
         </TableBody>
+        
       </Table>
+      
     </TableContainer>
+    <TablePagination
+          component="div"
+          count={orders.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          //rowsPerPageOptions={[2, 5, 10, 15]}
+        />
     </React.Fragment>
   );
+
 
   /*return (
     <React.Fragment>
@@ -79,3 +116,4 @@ function Orders(): JSX.Element {
 }
 
 export default Orders;
+
