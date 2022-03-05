@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+
 
 import { CartItem, Product } from "../shared/shareddtypes";
 
@@ -32,10 +34,12 @@ function ProductBox(props: ProductListProps): JSX.Element {
     height: "30vh",
   });
 
+  let navigate = useNavigate();
+
   return (
     <Grid container alignItems="center" direction="column" rowSpacing="5">
       <Grid item>
-        <ButtonBase>
+        <ButtonBase onClick={() => navigate("product/" + props.product.code )}>
           <Img
             alt="Image of the product"
             src={require("../images/"

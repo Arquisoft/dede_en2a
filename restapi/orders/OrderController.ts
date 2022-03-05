@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { Application, RequestHandler } from "express";
 import { body } from "express-validator";
 import { orderModel } from "./Order";
@@ -5,6 +6,7 @@ import { orderModel } from "./Order";
 export const getOrders: RequestHandler = async (req, res) => {
     try {
         const orders = await orderModel.find()
+        console.log(orders)
         return res.json(orders)
     } catch (error) {
         res.json(error)

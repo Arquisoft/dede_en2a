@@ -11,7 +11,7 @@ export const getProducts: RequestHandler = async (req, res) => {
 };
 
 export const getProduct: RequestHandler = async (req, res) => {
-  const productFound = await productModel.find({ code: req.params.code });
+  const productFound = await productModel.findOne({ code: req.params.code });
   if (productFound) {
     return res.json(productFound);
   } else {

@@ -13,10 +13,10 @@ import Alert from "@mui/material/Alert";
 
 import { Link, Navigate } from "react-router-dom";
 import { User, NotificationType } from "../shared/shareddtypes";
+import * as Checker from "../helpers/CheckFieldsHelper";
 
 import { checkUser, getUser } from "../api/api";
-import { tokenToString } from "typescript";
-import { CollectionsOutlined } from "@mui/icons-material";
+import { send } from "process";
 
 type SignInProps = {
   setCurrentUser: (user: User) => void;
@@ -39,22 +39,33 @@ export default function SignIn(props: SignInProps) {
     const data: FormData = new FormData(event.currentTarget);
   };
 
+  const checkFields = () => {
+    if (Checker.checkTextField(email))
+      if (Checker.checkTextField(password)) signIn();
+      else sendErrorNotification("Password is empty");
+    else sendErrorNotification("Email is empty");
+  };
+
   const signIn = async () => {
     const correctSingIn = await checkUser(email, password);
     if (correctSingIn) {
       props.setCurrentUser(await getUser(email));
-      setRedirect(true)
+      setRedirect(true);
     } else {
-      setNotificationStatus(true);
-      setNotification({
-        severity: "error",
-        message: "Incorrect email or password",
-      });
+      sendErrorNotification("Incorrect email or password");
     }
   };
 
-  if (redirect){
-    return <Navigate to = '/'/>
+  const sendErrorNotification = (msg: string) => {
+    setNotificationStatus(true);
+    setNotification({
+      severity: "error",
+      message: msg,
+    });
+  };
+
+  if (redirect) {
+    return <Navigate to="/" />;
   }
 
   return (
@@ -111,7 +122,7 @@ export default function SignIn(props: SignInProps) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={signIn}
+              onClick={checkFields}
             >
               Sign In
             </Button>

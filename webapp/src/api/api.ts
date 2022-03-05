@@ -1,5 +1,5 @@
-import { User } from "../shared/shareddtypes";
-import { Product } from "../shared/shareddtypes";
+import {Order, User} from '../shared/shareddtypes';
+import {Product} from '../shared/shareddtypes';
 
 export async function addUser(user: User): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
@@ -80,4 +80,11 @@ export async function updateProduct(product: Product) {
       stock: product.stock,
     }),
   });
+}
+
+
+export async function getOrders():Promise<Order[]>{
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
+  let response = await fetch(apiEndPoint+'/orders/list');
+  return response.json();
 }

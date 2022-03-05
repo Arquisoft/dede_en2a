@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import { CartItem, Product } from "./shared/shareddtypes";
+import { CartItem, Product, Order } from "./shared/shareddtypes";
+import { User, NotificationType } from "./shared/shareddtypes";
 
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -10,11 +11,16 @@ import Shopping from "./components/Shopping";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
+import ProductDetails from "./components/ProductDetails";
+import ProductList from "./components/ProductList";
+import Orders from "./components/Orders";
+
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { User, NotificationType } from "./shared/shareddtypes";
 
 import { getProducts } from "./api/api";
+import "bootstrap/dist/css/bootstrap.css";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "./App.css";
 
@@ -29,6 +35,7 @@ function App(): JSX.Element {
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
   const [user, setUser] = useState<User | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]); //([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
@@ -116,64 +123,79 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <Router>
-      <NavBar
-        totalUnitsInCart={totalUnitsInCart}
-        logCurrentUserOut={logCurrentUserOut}
-      />
-      <Routes>
-        <Route
-          index
-          element={
-            <Home
-              products={products}
-              cartProducts={productsCart}
-              onAdd={handleAddCart}
-            />
-          }
+    <PayPalScriptProvider
+      options={{
+        "client-id":
+          "Ad1H-xmYNu8WPb6jDwiLjirog2e5jA6dylivOrsS5KJ4R_RXt0HOBe7wJ7fuGvMnMDet9RowUTBDAtnV",
+        currency: "EUR",
+      }}
+    >
+      <Router>
+        <NavBar
+          totalUnitsInCart={totalUnitsInCart}
+          logCurrentUserOut={logCurrentUserOut}
         />
-        <Route
-          path="cart"
-          element={
-            <Shopping
-              products={productsCart}
-              totalUnitsInCart={totalUnitsInCart}
-              onDecrementUnit={handleDecrementUnit}
-              onIncrementUnit={handleAddCart}
-            />
-          }
-        />
-        <Route
-          path="checkout"
-          element={<Checkout productsCart={productsCart.slice()} />}
-        />
-        <Route
-          path="sign-in"
-          element={<SignIn setCurrentUser={setCurrentUser} />}
-        />
-        <Route
-          path="sign-up"
-          element={<SignUp setCurrentUser={setCurrentUser} />}
-        />
-      </Routes>
-      <Footer />
+        <Routes>
+          <Route
+            index
+            element={
+              <Home
+                products={products}
+                cartProducts={productsCart}
+                onAdd={handleAddCart}
+              />
+            }
+          />
+          <Route
+            path="cart"
+            element={
+              <Shopping
+                products={productsCart}
+                totalUnitsInCart={totalUnitsInCart}
+                onDecrementUnit={handleDecrementUnit}
+                onIncrementUnit={handleAddCart}
+              />
+            }
+          />
+          <Route
+            path="checkout"
+            element={<Checkout productsCart={productsCart.slice()} />}
+          />
+          <Route
+            path="sign-in"
+            element={<SignIn setCurrentUser={setCurrentUser} />}
+          />
+          <Route
+            path="sign-up"
+            element={<SignUp setCurrentUser={setCurrentUser} />}
+          />
+          <Route
+            path="product/:id"
+            element={
+              <ProductDetails product={null as any} onAdd={handleAddCart} />
+            }
+          />
+          <Route path="orders" element={<Orders />} />
+        </Routes>
+        <Footer />
 
-      <Snackbar
-        open={notificationStatus}
-        autoHideDuration={3000}
-        onClose={() => {
-          setNotificationStatus(false);
-        }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <Alert severity={notification.severity} sx={{ width: "100%" }}>
-          {notification.message}
-        </Alert>
-      </Snackbar>
-    </Router>
+        <Snackbar
+          open={notificationStatus}
+          autoHideDuration={3000}
+          onClose={() => {
+            setNotificationStatus(false);
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Alert severity={notification.severity} sx={{ width: "100%" }}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
+      </Router>
+    </PayPalScriptProvider>
   );
 }
 
