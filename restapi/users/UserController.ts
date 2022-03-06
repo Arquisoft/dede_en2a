@@ -45,7 +45,6 @@ export const createUser: RequestHandler = async (req, res) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const usersaved = await new userModel(req.body).save();
     sendVerificationEmail(usersaved.email);
-    console.log(uuidv4());
     res.json(generateToken(req.body.email));
   } catch (error) {
     res.status(412).json({ message: "The data is not valid" });
@@ -167,7 +166,7 @@ export const requestToken: RequestHandler = async (req, res) => {
   const user = await userModel.findOne({ email: query.email });
 
   if (user !== null) {
-    if (await user.matchPassword(query.password.toString())) {
+    if (await user.matchPassword(query.password.toString()) && user.verified) {
       res.status(200).json(generateToken(query.email));
     } else {
       res.status(412).json();

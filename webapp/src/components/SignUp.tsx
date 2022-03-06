@@ -66,8 +66,13 @@ export default function SignUp(props: SignUpProps) {
     };
     const correctSignUp = await Api.addUser(newUser);
     if (correctSignUp) {
-      props.setCurrentUser(await Api.getUser(email));
-      setRedirect(true);
+      /*props.setCurrentUser(await Api.getUser(email));
+      setRedirect(true);*/
+      setNotificationStatus(true);
+      setNotification({
+        severity: "success",
+        message: "Please check your email",
+      });
     } else {
       sendErrorNotification("Use a different email or sign in.");
     }
