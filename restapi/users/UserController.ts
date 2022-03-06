@@ -18,8 +18,8 @@ let transporter = nodemailer.createTransport({
     user: process.env.AUTH_EMAIL,
     pass: process.env.AUTH_PASS,
   },
-  secure: false, // Sensitive
-  requireTLS: false, // Sensitive
+  secure: true,
+  requireTLS: true,
 });
 
 export const getUsers: RequestHandler = async (req, res) => {
