@@ -26,13 +26,20 @@ export type CartItem = {
 };
 
 export type OrderProduct = {
-    code: string;
-    amount: number;
+  code: string;
+  amount: number;
 };
 
 export type Order = {
-    userId: string;
-    products: [OrderProduct];
-    totalPrice: number;
-    shippingPrice: number;
+  userId: string;
+  products: [OrderProduct];
+  totalPrice: number;
+  shippingPrice: number;
+};
+
+export type Review = {
+  userEmail: string;
+  productCode: string;
+  rating: number;
+  comment: string;
 };
