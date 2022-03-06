@@ -70,7 +70,6 @@ const sendVerificationEmail: Function = async (email: string) => {
       '"}>here<a/> to proceed</p>',
   };
 
-  //const hashString = await bcrypt.hash(uniqueString, salt);
   const newUserVerification = new userVerificationModel({
     email: email,
     uniqueString: uniqueString,
@@ -90,7 +89,7 @@ export const verifyUser: RequestHandler = async (req, res) => {
     .catch((error: Error) => {
       let message =
         "An error ocurred within the application. Please contact support.";
-      res.redirect("/users/notVerified/");
+      res.redirect("/users/notVerified/" + message);
     });
 
   // records exists
@@ -99,9 +98,9 @@ export const verifyUser: RequestHandler = async (req, res) => {
       // record expired - need to erase from database: 1. UserVerificationDoc 2. UserDoc
       await userVerificationModel.deleteOne({ email: userToVerify.email });
       await userModel.deleteOne({ email: userToVerify.email }).then(() => {
-        /*let message = "The link has expired. Please sign up again";
-        res.redirect("/users/verified/error=true&message=${" + message + "}");*/
-        res.redirect("/users/notVerified/");
+        let message = "The link has expired. Please sign up again";
+        //res.redirect("/users/verified/error=true&message=${" + message + "}");
+        res.redirect("/users/notVerified/" + message);
       });
     } else {
       const dbUniqueString = userToVerify.uniqueString;
@@ -118,13 +117,13 @@ export const verifyUser: RequestHandler = async (req, res) => {
           });
       } else {
         let message = "An internal error happen.";
-        res.redirect("/users/notVerified/");
+        res.redirect("/users/notVerified/" + message);
       }
     }
   } else {
     let message =
       "That account doesn't exist or has been already verified. Please sign up or sign in.";
-    res.redirect("/users/notVerified/");
+    res.redirect("/users/notVerified/" + message);
   }
 };
 
