@@ -45,6 +45,7 @@ export const createUser: RequestHandler = async (req, res) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const usersaved = await new userModel(req.body).save();
     sendVerificationEmail(usersaved.email);
+    console.log(uuidv4());
     res.json(generateToken(req.body.email));
   } catch (error) {
     res.status(412).json({ message: "The data is not valid" });
@@ -53,7 +54,7 @@ export const createUser: RequestHandler = async (req, res) => {
 
 const sendVerificationEmail: Function = async (email: String) => {
   const currentUrl = "http://localhost:5000";
-  const uniqueString = uuidv4() + email;
+  const uniqueString = uuidv4();
 
   const mailOptions = {
     from: process.env.AUTH_EMAIL,
@@ -73,7 +74,7 @@ const sendVerificationEmail: Function = async (email: String) => {
   const hashString = await bcrypt.hash(uniqueString, salt);
   const newUserVerification = new userVerificationModel({
     email: email,
-    uniqueString: hashString,
+    uniqueString: uniqueString,
     expiresAt: Date.now() + 21600000,
   });
 
@@ -90,10 +91,9 @@ export const verifyUser: RequestHandler = async (req, res) => {
     .catch((error: Error) => {
       let message =
         "An error ocurred within the application. Please contact support.";
-      res.redirect("/users/verified/error=true&message=${" + message + "}");
+        res.redirect("/users/notVerified/");
     });
 
-    
   // records exists
   if (userToVerify !== null) {
     if (userToVerify.expiresAt < Date.now()) {
@@ -101,43 +101,40 @@ export const verifyUser: RequestHandler = async (req, res) => {
       await userVerificationModel.deleteOne({ email: userToVerify.email });
       await userModel.deleteOne({ email: userToVerify.email }).then(() => {
         let message = "The link has expired. Please sign up again";
-        res.redirect("/users/verified/error=true&message=${" + message + "}");
+        //res.redirect("/users/verified/error=true&message=${" + message + "}");
+        res.redirect("/users/notVerified/");
       });
     } else {
-      const hashedUniqueString = userToVerify.uniqueString;
+      const dbUniqueString = userToVerify.uniqueString;
 
-//aqui falla
-
-      bcrypt
-        .compare(hashedUniqueString, req.params.uniqueString)
-        .then((result: boolean) => {
-          if (result) {
-            userModel
-              .updateOne({ email: userToVerify.email }, { verified: true })
+      if (dbUniqueString === req.params.uniqueString) {
+        await userModel
+          .updateOne({ email: userToVerify.email }, { verified: true })
+          .then(() => {
+            userVerificationModel
+              .deleteOne({ email: userToVerify.email })
               .then(() => {
-                userVerificationModel
-                  .deleteOne({ email: userToVerify.email })
-                  .then(() => {
-                    res.sendFile(path.join(__dirname, "./../views/verified.html"));
-                  });
+                res.sendFile(path.join(__dirname, "./../views/verified.html"));
               });
-          } else {
-            let message = "An internal error happen.";
-            res.redirect(
-              "/users/verified/error=true&message=${" + message + "}"
-            );
-          }
-        });
+          });
+      } else {
+        let message = "An internal error happen.";
+        res.redirect("/users/notVerified/");
+      }
     }
   } else {
     let message =
       "That account doesn't exist or has been already verified. Please sign up or sign in.";
-    res.redirect("/users/verified/error=true&message=${" + message + "}");
+    res.redirect("/users/notVerified/");
   }
 };
 
 export const verified: RequestHandler = async (req, res) => {
   res.sendFile(path.join(__dirname, "./../views/verified.html"));
+};
+
+export const notVerified: RequestHandler = async (req, res) => {
+  res.sendFile(path.join(__dirname, "./../views/notVerified.html"));
 };
 
 export const deleteUser: RequestHandler = async (req, res) => {
