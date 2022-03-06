@@ -1,8 +1,6 @@
 require("dotenv").config();
 
-import { Verify } from "crypto";
 import { RequestHandler } from "express";
-import { body } from "express-validator";
 import { generateToken } from "../utils/generateToken";
 import { userModel, userSchema } from "./User";
 import { userVerificationModel } from "./UserVerification";
@@ -20,6 +18,8 @@ let transporter = nodemailer.createTransport({
     user: process.env.AUTH_EMAIL,
     pass: process.env.AUTH_PASS,
   },
+  secure: false, // Sensitive
+  requireTLS: false, // Sensitive
 });
 
 export const getUsers: RequestHandler = async (req, res) => {
@@ -51,7 +51,7 @@ export const createUser: RequestHandler = async (req, res) => {
   }
 };
 
-const sendVerificationEmail: Function = async (email: String) => {
+const sendVerificationEmail: Function = async (email: string) => {
   const currentUrl = "http://localhost:5000";
   const uniqueString = uuidv4();
 
@@ -70,7 +70,7 @@ const sendVerificationEmail: Function = async (email: String) => {
       '"}>here<a/> to proceed</p>',
   };
 
-  const hashString = await bcrypt.hash(uniqueString, salt);
+  //const hashString = await bcrypt.hash(uniqueString, salt);
   const newUserVerification = new userVerificationModel({
     email: email,
     uniqueString: uniqueString,
@@ -90,7 +90,7 @@ export const verifyUser: RequestHandler = async (req, res) => {
     .catch((error: Error) => {
       let message =
         "An error ocurred within the application. Please contact support.";
-        res.redirect("/users/notVerified/");
+      res.redirect("/users/notVerified/");
     });
 
   // records exists
@@ -99,8 +99,8 @@ export const verifyUser: RequestHandler = async (req, res) => {
       // record expired - need to erase from database: 1. UserVerificationDoc 2. UserDoc
       await userVerificationModel.deleteOne({ email: userToVerify.email });
       await userModel.deleteOne({ email: userToVerify.email }).then(() => {
-        let message = "The link has expired. Please sign up again";
-        //res.redirect("/users/verified/error=true&message=${" + message + "}");
+        /*let message = "The link has expired. Please sign up again";
+        res.redirect("/users/verified/error=true&message=${" + message + "}");*/
         res.redirect("/users/notVerified/");
       });
     } else {
@@ -166,7 +166,10 @@ export const requestToken: RequestHandler = async (req, res) => {
   const user = await userModel.findOne({ email: query.email });
 
   if (user !== null) {
-    if (await user.matchPassword(query.password.toString()) && user.verified) {
+    if (
+      (await user.matchPassword(query.password.toString())) &&
+      user.verified
+    ) {
       res.status(200).json(generateToken(query.email));
     } else {
       res.status(412).json();
