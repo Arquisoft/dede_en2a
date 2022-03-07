@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Product } from "../shared/shareddtypes";
+import { Product, Review } from "../shared/shareddtypes";
 
 import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
@@ -11,6 +11,10 @@ import Grid from "@mui/material/Grid";
 import Rating from "@mui/material/Rating";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
+import ProductComment from "./ProductComment";
+
+import { getReviewsByCode } from "../api/api";
+import ProductCommentList from "./ProductCommentList";
 
 export type ProductProps = {
   product: Product;
@@ -19,7 +23,7 @@ export type ProductProps = {
 
 type ProductDets = {
   id: string;
-}
+};
 
 const Img = styled("img")({
   margin: "auto",
@@ -29,7 +33,6 @@ const Img = styled("img")({
 });
 
 function ProductDetails(props: ProductProps): JSX.Element {
-
   const [stockOption, setStockOption] = useState<boolean>(true);
 
   function StockAlert(props: any): JSX.Element {
@@ -52,20 +55,24 @@ function ProductDetails(props: ProductProps): JSX.Element {
     //TODO
   }
 
-
   const { id } = useParams<keyof ProductDets>() as ProductDets;
 
   const obtainProduct = async () => {
-    if (props.product == null)
-      setProduct(await getProduct(id));
-    else
-      setProduct(props.product);
+    if (props.product == null) setProduct(await getProduct(id));
+    else setProduct(props.product);
+  };
+
+  const obtainReviews = async (code: string) => {
+    setReviews(await getReviewsByCode(code));
   };
 
   const [product, setProduct] = useState<Product>();
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     obtainProduct();
+    obtainReviews(id + "");
+    console.log(1)
   }, []);
 
   if (typeof product === "undefined") {
@@ -74,63 +81,59 @@ function ProductDetails(props: ProductProps): JSX.Element {
         <h1>No Product found with id: {id}</h1>
       </React.Fragment>
     );
-  }
-  else {
+  } else {
     return (
-      <React.Fragment><Grid
-        container
-        spacing={0}
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: '30vh' }}
-      >
-        <Grid xs>
-          <Img
-            alt="Image of the product"
-            src={require("../images/"
-              .concat(product.code)
-              .concat(".jpg"))}
-          />
+      <React.Fragment>
+        <Grid
+          container
+          spacing={0}
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: "30vh" }}
+        >
+          <Grid xs>
+            <Img
+              alt="Image of the product"
+              src={require("../images/".concat(product.code).concat(".jpg"))}
+            />
+          </Grid>
+
+          <Grid xs direction={"column"}>
+            <h1> {product.name} </h1>
+            <Rating
+              name="hover-feedback"
+              value={2}
+              precision={0.5}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+            />
+            <Card sx={{ maxWidth: 500 }}>
+              <Typography>{product.description}</Typography>
+            </Card>
+            <h2> {product.price}€ </h2>
+
+            <StockAlert stock={product.stock} />
+            <br />
+            <Button
+              variant="contained"
+              disabled={!stockOption}
+              onClick={() => props.onAdd(product)}
+              sx={{ my: 1 }}
+            >
+              Add product to cart
+            </Button>
+          </Grid>
+
+          <ProductCommentList reviews={reviews}></ProductCommentList>
         </Grid>
-
-        <Grid xs direction={"column"}>
-          <h1> {product.name} </h1>
-          <Rating
-            name="hover-feedback"
-            value={2}
-            precision={0.5}
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
-          />
-          <Card sx={{ maxWidth: 500 }}>
-            <Typography>
-              {product.description}
-            </Typography>
-          </Card>
-          <h2> {product.price}€ </h2>
-
-          <StockAlert stock={product.stock} />
-          <br />
-          <Button
-            variant="contained"
-            disabled={!stockOption}
-            onClick={() => props.onAdd(product)}
-            sx={{ my: 1 }}
-          >
-            Add product to cart
-          </Button>
-
-        </Grid>
-      </Grid>
       </React.Fragment>
     );
   }
-
 }
 
 export default ProductDetails;

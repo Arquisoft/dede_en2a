@@ -1,4 +1,4 @@
-import {Order, User} from '../shared/shareddtypes';
+import {Order, Review, User} from '../shared/shareddtypes';
 import {Product} from '../shared/shareddtypes';
 
 export async function addUser(user: User): Promise<boolean> {
@@ -86,5 +86,11 @@ export async function updateProduct(product: Product) {
 export async function getOrders():Promise<Order[]>{
   const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
   let response = await fetch(apiEndPoint+'/orders/list');
+  return response.json();
+}
+
+export async function getReviewsByCode(code : string):Promise<Review[]>{
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
+  let response = await fetch(apiEndPoint+'/reviews/listByCode/' + code);
   return response.json();
 }
