@@ -4,17 +4,28 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@inrupt/solid-client": "^1.19.0",
+    "@inrupt/vocab-common-rdf": "^1.0.3",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.5",
+    "@paypal/react-paypal-js": "^7.6.0",
+    "@react-navigation/native": "^6.0.8",
+    "@react-navigation/native-stack": "^6.5.0",
+    "@mui/x-data-grid": "^5.5.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/node": "^16.11.14",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
+    "bootstrap": "^5.1.3",
+    "email-validator": "^2.0.4",
     "express": "^4.17.2",
+    "password-validator": "^5.2.1",
     "react": "^17.0.2",
+    "react-bootstrap": "^2.1.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1",
     "typescript": "^4.5.4",
     "web-vitals": "^2.1.2"
   },
@@ -53,9 +64,9 @@
     "jest-cucumber": "^3.0.1",
     "jest-puppeteer": "^6.0.3",
     "puppeteer": "^13.0.1",
+    "react-scripts": "5.0.0",
     "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.1.2",
-    "ts-node-dev": "^1.1.8",
-    "react-scripts": "5.0.0"
+    "ts-node-dev": "^1.1.8"
   }
 }

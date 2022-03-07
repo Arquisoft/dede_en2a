@@ -1,0 +1,29 @@
+@url = http://localhost:5000
+
+GET {{url}}/products/list
+
+###
+GET {{url}}/products/findByCode/1
+
+###
+POST  {{url}}/products/create
+Content-Type: application/json
+
+{
+    "code": "1347",
+    "name": "Camiseta Real Sporting Jony",
+    "price": 10.99,
+    "description": "Ni de coña chaval",
+    "stock": 5
+}
+
+###
+DELETE {{url}}/products/delete/1
+
+###
+POST {{url}}/products/update/1347
+Content-Type: application/json
+
+{
+    "name": "Camiseta del Sporting chacho"
+}
