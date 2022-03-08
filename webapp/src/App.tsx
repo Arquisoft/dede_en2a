@@ -159,7 +159,9 @@ function App(): JSX.Element {
           />
           <Route
             path="checkout"
-            element={<Checkout productsCart={productsCart.slice()} />}
+            element={
+              <Checkout productsCart={productsCart.slice()} user={user} />
+            }
           />
           <Route
             path="sign-in"
