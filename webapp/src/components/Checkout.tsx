@@ -52,6 +52,7 @@ export default function Checkout(props: any) {
     if (activeStep === steps.length - 1) {
       handleUpdateStock();
       saveOrder(props.productsCart, costs, props.user);
+      props.deleteCart();
 
       // redirect to home...
       setFinish(true);
