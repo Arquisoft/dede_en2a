@@ -32,6 +32,18 @@ const Img = styled("img")({
   height: "30vh",
 });
 
+function getReviewMean(reviews:Review[]) {
+  let mean:number = 0;
+
+  reviews.forEach((review) => {
+    mean += review.rating;
+  });
+
+  mean /= reviews.length;
+
+  return mean;
+}
+
 function ProductDetails(props: ProductProps): JSX.Element {
   const [stockOption, setStockOption] = useState<boolean>(true);
 
@@ -103,7 +115,7 @@ function ProductDetails(props: ProductProps): JSX.Element {
             <h1> {product.name} </h1>
             <Rating
               name="hover-feedback"
-              value={2}
+              value={getReviewMean(reviews)}
               precision={0.5}
               onChange={(event, newValue) => {
                 setValue(newValue);
