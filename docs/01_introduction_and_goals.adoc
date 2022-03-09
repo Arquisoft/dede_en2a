@@ -32,10 +32,19 @@ Keep these excerpts as short as possible. Balance readability of this document w
 
 The functional requirements that the application will have:
 
-* Users will be able to select and order products to buy.
-* Users will be able to see the delivery costs of their orders.
-* Users will be able to visualize all the orders they have made.
-* The information of the users will be obtain from the users' pods.
+* The users will be able to select products to buy. Also they will be able to search for a specific product or filter them.
+
+* Once the user has selected the products:
+**They will be able to see the shopping cart and modify the units of each product.
+**The system will calculate the shipping costs using different carrier APIs depending on the user's address.
+**The user will be able to see the final cost of the order and select the payment method complete the order.
+**The system will simulate the order shipping and will notify the user the different states.
+
+* The user will be able to see the orders done.
+* The user will be able to see reviews of the products.
+
+* The application will be implemented using the React framework and TypeScript.
+* The application should be accesible and deployed using a continuos integration system.
 
 === Quality Goals
 
