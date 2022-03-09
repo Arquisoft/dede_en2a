@@ -35,10 +35,10 @@ The functional requirements that the application will have:
 * The users will be able to select products to buy. Also they will be able to search for a specific product or filter them.
 
 * Once the user has selected the products:
-**They will be able to see the shopping cart and modify the units of each product.
-**The system will calculate the shipping costs using different carrier APIs depending on the user's address.
-**The user will be able to see the final cost of the order and select the payment method complete the order.
-**The system will simulate the order shipping and will notify the user the different states.
+** They will be able to see the shopping cart and modify the units of each product.
+** The system will calculate the shipping costs using different carrier APIs depending on the user's address.
+** The user will be able to see the final cost of the order and select the payment method complete the order.
+** The system will simulate the order shipping and will notify the user the different states.
 
 * The user will be able to see the orders done.
 * The user will be able to see reviews of the products.
