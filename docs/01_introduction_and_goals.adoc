@@ -43,6 +43,8 @@ The functional requirements that the application will have:
 * The user will be able to see the orders done.
 * The user will be able to see reviews of the products.
 
+* The application will be implemented using the React framework and TypeScript.
+* The application should be accesible and deployed using a continuos integration system.
 
 === Quality Goals
 
