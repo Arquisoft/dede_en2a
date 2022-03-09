@@ -1,5 +1,5 @@
-import {Order, Review, User} from '../shared/shareddtypes';
-import {Product} from '../shared/shareddtypes';
+import { Order, Review, User } from "../shared/shareddtypes";
+import { Product } from "../shared/shareddtypes";
 
 export async function addUser(user: User): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
@@ -82,15 +82,24 @@ export async function updateProduct(product: Product) {
   });
 }
 
+export async function createOrder(body: any) {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  console.log(body);
+  let response = await fetch(apiEndPoint + "/orders/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body,
+  });
+}
 
-export async function getOrders():Promise<Order[]>{
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
-  let response = await fetch(apiEndPoint+'/orders/list');
+export async function getOrders(): Promise<Order[]> {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(apiEndPoint + "/orders/list");
   return response.json();
 }
 
-export async function getReviewsByCode(code : string):Promise<Review[]>{
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
-  let response = await fetch(apiEndPoint+'/reviews/listByCode/' + code);
+export async function getReviewsByCode(code: string): Promise<Review[]> {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
   return response.json();
 }

@@ -31,8 +31,8 @@ export type OrderProduct = {
 };
 
 export type Order = {
-  userId: string;
-  products: [OrderProduct];
+  userEmail: string;
+  products: OrderProduct[];
   totalPrice: number;
   shippingPrice: number;
 };

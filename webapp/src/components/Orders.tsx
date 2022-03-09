@@ -58,7 +58,7 @@ function Orders(): JSX.Element {
 
   useEffect(() => {
     refreshOrderList();
-  });
+  }, []);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, orders.length - page * rowsPerPage);
