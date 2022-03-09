@@ -72,7 +72,7 @@ function ProductDetails(props: ProductProps): JSX.Element {
   useEffect(() => {
     obtainProduct();
     obtainReviews(id + "");
-    console.log(1)
+    console.log(1);
   }, []);
 
   if (typeof product === "undefined") {

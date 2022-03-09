@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-
-import NavBar from "./NavBar";
-import OrderItem from "./OrderItem";
-
-import { Order } from "../shared/shareddtypes";
-import { getOrders } from "../api/api";
 import {
   Table,
   TableContainer,
@@ -15,12 +7,17 @@ import {
   TableCell,
   TableRow,
   TableBody,
-  Paper,
   tableCellClasses,
   styled,
   TablePagination,
+  Typography,
+  Stack,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+
+import OrderItem from "./OrderItem";
+
+import { Order } from "../shared/shareddtypes";
+import { getOrdersForUser } from "../api/api";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,7 +50,7 @@ function Orders(): JSX.Element {
   };
 
   const refreshOrderList = async () => {
-    setOrders(await getOrders());
+    setOrders(await getOrdersForUser("palolol@gmail.com"));
   };
 
   useEffect(() => {
@@ -64,13 +61,11 @@ function Orders(): JSX.Element {
     rowsPerPage - Math.min(rowsPerPage, orders.length - page * rowsPerPage);
 
   return (
-    <React.Fragment>
-      <Typography align="center" variant="h4" color="black">
-        {" "}
+    <Stack sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+      <Typography component="h1" variant="h4" align="center">
         Your orders
       </Typography>
-      <br></br>
-      <TableContainer component={Paper}>
+      <TableContainer sx={{ mt: 2 }}>
         <Table sx={{ minWidth: 500 }} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -104,7 +99,7 @@ function Orders(): JSX.Element {
         onRowsPerPageChange={handleChangeRowsPerPage}
         //rowsPerPageOptions={[2, 5, 10, 15]}
       />
-    </React.Fragment>
+    </Stack>
   );
 }
 
