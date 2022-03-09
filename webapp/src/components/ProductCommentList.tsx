@@ -19,10 +19,7 @@ function ProductCommentList(props: ProductListProps): JSX.Element {
       };*/
 
     return (
-        <React.Fragment>
             <Paper
-                variant="outlined"
-                elevation={8}
                 style={{margin: "3vh 5vw", padding: "1em"}}>
                 <h2>User opinions about this product!</h2>
                 <Grid container columns={50} rowSpacing={5} className="mt-2 mb-2">
@@ -33,7 +30,6 @@ function ProductCommentList(props: ProductListProps): JSX.Element {
                     ))}
                 </Grid>
             </Paper>
-        </React.Fragment>
     );
 }
 
