@@ -14,7 +14,7 @@ export async function addUser(user: User): Promise<boolean> {
     }),
   });
   if (response.status === 200) {
-    localStorage.setItem("token", JSON.stringify(response.json));
+    //localStorage.setItem("token", JSON.stringify(response.json));
     return true;
   } else return false;
 }
