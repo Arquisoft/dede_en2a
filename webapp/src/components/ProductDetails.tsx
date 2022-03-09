@@ -145,7 +145,7 @@ function ProductDetails(props: ProductProps): JSX.Element {
                                 <Paper style={{margin: "2vh 2vw", padding: ".5em"}}>
                                     <Img
                                         alt="Image of the product"
-                                        src={require("../images/".concat(product.code).concat(".jpg"))}
+                                        src={require("../images/".concat(product.code).concat(".png"))}
                                     />
                                 </Paper>
                             </Grid>
