@@ -20,7 +20,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.0",
     "mongoose": "^6.2.2",
-    "prom-client": "^14.0.1"
+    "nodemailer": "^6.7.2",
+    "prom-client": "^14.0.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

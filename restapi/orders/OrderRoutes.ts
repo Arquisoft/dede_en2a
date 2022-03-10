@@ -1,16 +1,16 @@
-import express, { Request, Response, Router } from 'express';
-import * as OrderController from './OrderController';
+import express, { Request, Response, Router } from "express";
+import * as OrderController from "./OrderController";
 
-const api:Router = express.Router()
+const api: Router = express.Router();
 
-api.get('/orders/list', OrderController.getOrders)
+api.get("/orders/list", OrderController.getOrders);
 
-api.get('/orders/findByUserId/:userId', OrderController.getUserOrders)
+api.get("/orders/findByUserEmail/:userEmail", OrderController.getUserOrders);
 
-api.post('/orders/create', OrderController.createOrder)
+api.post("/orders/create", OrderController.createOrder);
 
-api.delete('/orders/deleteByOrderId/:id', OrderController.deleteOrder)
+api.delete("/orders/deleteByOrderId/:id", OrderController.deleteOrder);
 
 //api.post('/orders/update', OrderController.updateOrder)
 
-export default api
+export default api;

@@ -103,6 +103,12 @@ function App(): JSX.Element {
     setTotalUnitsInCart(totalUnitsInCart - 1);
   };
 
+  const handleDeleteCart = () => {
+    setProductsCart([]);
+    setTotalUnitsInCart(0);
+    localStorage.setItem("cart", JSON.stringify([]));
+  };
+
   useEffect(() => {
     createShop();
 
@@ -159,7 +165,13 @@ function App(): JSX.Element {
           />
           <Route
             path="checkout"
-            element={<Checkout productsCart={productsCart.slice()} />}
+            element={
+              <Checkout
+                productsCart={productsCart.slice()}
+                user={user}
+                deleteCart={handleDeleteCart}
+              />
+            }
           />
           <Route
             path="sign-in"
