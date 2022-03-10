@@ -70,7 +70,6 @@ export default function ReviewDialog(props: ReviewDialogProps) {
 
     React.useEffect(() => {
         setOpen(props.show > 0);
-        console.log(props.show)
     }, [props.show]);
 
     React.useEffect(() => {

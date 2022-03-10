@@ -59,7 +59,6 @@ export default function ShareDialog(props:ShareDialogProps) {
 
     React.useEffect(() => {
         setOpen(props.show > 0);
-        console.log(props.show)
     }, [props.show]);
 
 
@@ -72,9 +71,6 @@ export default function ShareDialog(props:ShareDialogProps) {
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Open dialog
-            </Button>
             <BootstrapDialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"

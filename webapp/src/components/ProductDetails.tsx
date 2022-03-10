@@ -87,7 +87,6 @@ function ProductDetails(props: ProductProps): JSX.Element {
     useEffect(() => {
         obtainProduct();
         obtainReviews(id + "");
-        console.log(1)
     }, []);
 
     const addProductToCart = () => {
