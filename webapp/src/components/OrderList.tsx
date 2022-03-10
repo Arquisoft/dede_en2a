@@ -66,7 +66,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
       <TableCell align="center">
         <StatusMessage isOrderReceived={props.order.isOrderReceived} />
       </TableCell>
-      <TableCell>
+      <TableCell align="center">
         <Button
           variant="contained"
           color="secondary"
