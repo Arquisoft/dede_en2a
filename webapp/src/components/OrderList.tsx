@@ -10,8 +10,7 @@ import {
   TableBody,
   Typography,
   Container,
-  Checkbox,
-  FormControlLabel,
+  Stack,
   Button,
 } from "@mui/material";
 
@@ -29,6 +28,33 @@ type OrderTableProps = {
   orders: Order[];
 };
 
+function StatusMessage(props: any) {
+  if (props.isOrderReceived)
+    return (
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+      >
+        <CheckBoxIcon color="success" />
+        <Typography>Received</Typography>
+      </Stack>
+    );
+  else
+    return (
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+      >
+        <LocalShippingIcon color="primary" />
+        <Typography>Shipping</Typography>
+      </Stack>
+    );
+}
+
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
 
@@ -38,17 +64,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
       <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
       <TableCell align="center">
-        <FormControlLabel
-          disabled
-          control={
-            <Checkbox
-              icon={<LocalShippingIcon />}
-              checkedIcon={<CheckBoxIcon />}
-              checked={props.order.isOrderReceived}
-            />
-          }
-          label={props.order.isOrderReceived ? "Received" : "Shipping"}
-        />
+        <StatusMessage isOrderReceived={props.order.isOrderReceived} />
       </TableCell>
       <TableCell>
         <Button
