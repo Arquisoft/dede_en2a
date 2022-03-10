@@ -1,4 +1,4 @@
-import {Box, Grid, Paper, Rating, Typography, Divider} from "@mui/material";
+import {Box, Grid, Paper, Rating, Typography, Divider, Card} from "@mui/material";
 import React from "react";
 import {Review} from "../shared/shareddtypes";
 
@@ -8,10 +8,8 @@ type ProductCommentProps = {
 
 function ProductComment(props: ProductCommentProps): JSX.Element {
     return (
-        <React.Fragment>
             <Paper
-                variant="outlined"
-                elevation={1}
+                elevation={3}
                 style={{margin: "1vh 2vw", padding: "1em"}}>
                 <Grid
                     spacing={0}
@@ -41,7 +39,6 @@ function ProductComment(props: ProductCommentProps): JSX.Element {
                     </Grid>
                 </Grid>
             </Paper>
-        </React.Fragment>
     );
 }
 

@@ -65,7 +65,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                             alt="Imagen del producto en el carrito"
                             src={require("../images/"
                               .concat(cartItem.product.code)
-                              .concat(".jpg"))}
+                              .concat(".png"))}
                           />
                           {cartItem.product.name}
                         </Stack>
