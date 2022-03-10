@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { CartItem, User, Order, OrderProduct } from "../shared/shareddtypes";
 import { createOrder } from "../api/api";
-import { createUUID } from "./UtilHelper";
 
 export function calculateTotal(
   products: CartItem[],
@@ -27,7 +28,7 @@ export function saveOrder(
   });
 
   let order: Order = {
-    orderCode: createUUID(),
+    orderCode: uuidv4(),
     userEmail: user.email,
     products: orderProducts,
     totalPrice: productCosts,
