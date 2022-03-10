@@ -5,6 +5,8 @@ const api: Router = express.Router();
 
 api.get("/orders/list", OrderController.getOrders);
 
+api.get("/orders/findByOrderCode/:orderCode", OrderController.getOrder);
+
 api.get("/orders/findByUserEmail/:userEmail", OrderController.getUserOrders);
 
 api.post("/orders/create", OrderController.createOrder);

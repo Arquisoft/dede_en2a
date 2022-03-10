@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
 import { CartItem, Product, Order } from "./shared/shareddtypes";
 import { User, NotificationType } from "./shared/shareddtypes";
 
@@ -12,8 +11,8 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
 import ProductDetails from "./components/ProductDetails";
-import ProductList from "./components/ProductList";
-import Orders from "./components/Orders";
+import OrderDetails from "./components/OrderDetails";
+import OrderList from "./components/OrderList";
 
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -152,6 +151,14 @@ function App(): JSX.Element {
               />
             }
           />
+
+          <Route
+            path="product/:id"
+            element={
+              <ProductDetails product={null as any} onAdd={handleAddCart} />
+            }
+          />
+
           <Route
             path="cart"
             element={
@@ -163,6 +170,7 @@ function App(): JSX.Element {
               />
             }
           />
+
           <Route
             path="checkout"
             element={
@@ -173,6 +181,7 @@ function App(): JSX.Element {
               />
             }
           />
+
           <Route
             path="sign-in"
             element={<SignIn setCurrentUser={setCurrentUser} />}
@@ -181,13 +190,12 @@ function App(): JSX.Element {
             path="sign-up"
             element={<SignUp setCurrentUser={setCurrentUser} />}
           />
+
           <Route
-            path="product/:id"
-            element={
-              <ProductDetails product={null as any} onAdd={handleAddCart} />
-            }
+            path="orders"
+            element={<OrderList userEmail={user?.email} />}
           />
-          <Route path="orders" element={<Orders />} />
+          <Route path="/order/:code" element={<OrderDetails />} />
         </Routes>
         <Footer />
 

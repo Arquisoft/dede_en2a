@@ -1,6 +1,4 @@
-import { Console } from "console";
-import { Application, RequestHandler } from "express";
-import { body } from "express-validator";
+import { RequestHandler } from "express";
 import { orderModel } from "./Order";
 
 export const getOrders: RequestHandler = async (req, res) => {
@@ -10,6 +8,17 @@ export const getOrders: RequestHandler = async (req, res) => {
     return res.json(orders);
   } catch (error) {
     res.json(error);
+  }
+};
+
+export const getOrder: RequestHandler = async (req, res) => {
+  const orderFound = await orderModel.findOne({
+    orderCode: req.params.orderCode,
+  });
+  if (orderFound) {
+    return res.json(orderFound);
+  } else {
+    return res.status(204).json();
   }
 };
 
@@ -48,7 +57,7 @@ export const deleteOrder: RequestHandler = async (req, res) => {
   }
 };
 
-export const updatOrder: RequestHandler = async (req, res) => {
+export const updateOrder: RequestHandler = async (req, res) => {
   try {
   } catch (error) {
     res.json(error);

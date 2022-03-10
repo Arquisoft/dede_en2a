@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Table,
@@ -8,12 +9,14 @@ import {
   TableRow,
   TableBody,
   Typography,
-  Stack,
+  Container,
   Checkbox,
   FormControlLabel,
+  Button,
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 import { Order } from "../shared/shareddtypes";
 import { getOrdersForUser } from "../api/api";
@@ -27,6 +30,8 @@ type OrderTableProps = {
 };
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
+  let navigate = useNavigate();
+
   return (
     <TableRow hover>
       <TableCell align="center">{props.order.orderCode}</TableCell>
@@ -35,11 +40,26 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
       <TableCell align="center">
         <FormControlLabel
           disabled
-          control={<Checkbox icon={<LocalShippingIcon />} />}
-          label="Received"
+          control={
+            <Checkbox
+              icon={<LocalShippingIcon />}
+              checkedIcon={<CheckBoxIcon />}
+              checked={props.order.isOrderReceived}
+            />
+          }
+          label={props.order.isOrderReceived ? "Received" : "Shipping"}
         />
       </TableCell>
-      <TableCell></TableCell>
+      <TableCell>
+        <Button
+          variant="contained"
+          color="secondary"
+          className="m-1"
+          onClick={() => navigate("/order/" + props.order.orderCode)}
+        >
+          See details
+        </Button>
+      </TableCell>
     </TableRow>
   );
 }
@@ -76,24 +96,24 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
 }
 
-function Orders(): JSX.Element {
+function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser("palolol@gmail.com"));
+    setOrders(await getOrdersForUser(props.userEmail));
   };
 
   useEffect(() => {
     refreshOrderList();
-  }, []);
+  });
 
   return (
-    <Stack sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+    <Container component="main" sx={{ mb: 4, mt: 4 }}>
       <Typography component="h1" variant="h4" align="center">
         Your orders
       </Typography>
       <OrderTable orders={orders}></OrderTable>
-    </Stack>
+    </Container>
   );
 }
 

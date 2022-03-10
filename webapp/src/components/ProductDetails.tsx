@@ -15,8 +15,6 @@ import {
   Rating,
   Breadcrumbs,
   Link,
-  createTheme,
-  ThemeProvider,
 } from "@mui/material";
 
 export type ProductProps = {

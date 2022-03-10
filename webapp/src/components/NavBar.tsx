@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link } from "react-router-dom";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,9 +22,7 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 
-import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
-import { preProcessFile } from "typescript";
 
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
@@ -66,7 +66,7 @@ function UserButton(props: any): JSX.Element {
   if (localStorage.getItem("token") !== null)
     return (
       <Box sx={{ flexGrow: 0 }}>
-        <Tooltip title="Open settings">
+        <Tooltip title="User management options">
           <IconButton onClick={handleOpenUserMenu} size="large" color="inherit">
             <AccountCircle />
           </IconButton>
@@ -203,6 +203,7 @@ function NavBar(props: NavBarProps): JSX.Element {
             component={Link}
             to="/cart"
             sx={{ mr: 2 }}
+            style={{ color: "inherit", textDecoration: "inherit" }}
           >
             <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />

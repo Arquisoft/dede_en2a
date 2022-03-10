@@ -98,6 +98,14 @@ export async function getOrders(): Promise<Order[]> {
   return response.json();
 }
 
+export async function getOrder(orderCode: string): Promise<Order> {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(
+    apiEndPoint + "/orders/findByOrderCode/" + orderCode
+  );
+  return response.json();
+}
+
 export async function getOrdersForUser(userEmail: string): Promise<Order[]> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   let response = await fetch(
