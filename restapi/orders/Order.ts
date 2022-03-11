@@ -5,6 +5,10 @@ import { orderProduct } from "./OrderProduct";
 
 const orderSchema = new Schema(
   {
+    orderCode: {
+      type: String,
+      required: true,
+    },
     userEmail: {
       type: String,
       required: true,
@@ -18,6 +22,10 @@ const orderSchema = new Schema(
     },
     shippingPrice: {
       type: Number,
+      required: true,
+    },
+    isOrderReceived: {
+      type: Boolean,
       required: true,
     },
   },

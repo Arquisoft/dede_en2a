@@ -6,8 +6,7 @@ import Button from "@mui/material/Button";
 import {styled} from "@mui/material/styles";
 import {useNavigate} from "react-router-dom";
 
-
-import {Product} from "../shared/shareddtypes";
+import { Product } from "../shared/shareddtypes";
 
 type ProductListProps = {
   product: Product;
@@ -39,7 +38,7 @@ function ProductBox(props: ProductListProps): JSX.Element {
   return (
     <Grid container alignItems="center" direction="column" rowSpacing="5">
       <Grid item>
-        <ButtonBase onClick={() => navigate("product/" + props.product.code )}>
+        <ButtonBase onClick={() => navigate("product/" + props.product.code)}>
           <Img
             alt="Image of the product"
             src={require("../images/"

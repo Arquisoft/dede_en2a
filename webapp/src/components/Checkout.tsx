@@ -54,7 +54,6 @@ export default function Checkout(props: any) {
       saveOrder(props.productsCart, costs, props.user);
       props.deleteCart();
 
-      // redirect to home...
       setFinish(true);
     }
   };

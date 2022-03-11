@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { CartItem, User, Order, OrderProduct } from "../shared/shareddtypes";
 import { createOrder } from "../api/api";
 
@@ -26,10 +28,12 @@ export function saveOrder(
   });
 
   let order: Order = {
+    orderCode: uuidv4(),
     userEmail: user.email,
     products: orderProducts,
     totalPrice: productCosts,
     shippingPrice: shippingCosts,
+    isOrderReceived: false,
   };
 
   createOrder(JSON.stringify(order));

@@ -16,7 +16,8 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
 import ProductDetails from "./components/ProductDetails";
-import Orders from "./components/Orders";
+import OrderDetails from "./components/OrderDetails";
+import OrderList from "./components/OrderList";
 
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -270,9 +271,13 @@ function App(): JSX.Element {
                 <ProductDetails product={null as any} onAdd={handleAddCart} />
               }
             />
-            <Route path="orders" element={<Orders />} />
-          </Routes>
-          <Footer />
+          <Route
+            path="orders"
+            element={<OrderList userEmail={user?.email} />}
+          />
+          <Route path="/order/:code" element={<OrderDetails />} />
+        </Routes>
+        <Footer />
 
           <Snackbar
             open={notificationStatus}
