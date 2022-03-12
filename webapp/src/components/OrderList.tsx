@@ -12,13 +12,17 @@ import {
   Container,
   Stack,
   Button,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-import { Order } from "../shared/shareddtypes";
-import { getOrdersForUser } from "../api/api";
+
+import { Order, OrderProduct, User } from "../shared/shareddtypes";
+import { getOrdersForUser, getUser } from "../api/api";
+import { Autorenew } from "@mui/icons-material";
 
 type OrderTableItemProps = {
   order: Order;
@@ -80,6 +84,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   );
 }
 
+
 function OrderTable(props: OrderTableProps): JSX.Element {
   if (props.orders.length > 0)
     return (
@@ -114,21 +119,33 @@ function OrderTable(props: OrderTableProps): JSX.Element {
 
 function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [user, setUser] = useState<User>();
+
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser(props.userEmail));
+    setOrders(await getOrdersForUser(props.userEmail)); //props.userEmail
+    setUser(await getUser(props.userEmail));
   };
+  
 
   useEffect(() => {
     refreshOrderList();
   });
 
+
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
       <Typography component="h1" variant="h4" align="center">
-        Your orders
+        Your orders {user?.name}
+        <IconButton edge="end">
+          <Tooltip title="Refresh orders" arrow>
+            <Autorenew onClick={refreshOrderList}></Autorenew>
+          </Tooltip>          
+        </IconButton>
+
       </Typography>
       <OrderTable orders={orders}></OrderTable>
+      
     </Container>
   );
 }
