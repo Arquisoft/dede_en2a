@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link } from "react-router-dom";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,20 +13,94 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Tooltip from "@mui/material/Tooltip";
+import Menu from "@mui/material/Menu";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 
-import { Link, Navigate } from "react-router-dom";
 import { Grid } from "@mui/material";
+import MUISwitch from "./ThemeSlider";
 
-function UserButton(): JSX.Element {
+type LogOutFuncProps = {
+  logCurrentUserOut: () => void;
+  handleCloseUserMenu: () => void;
+};
+
+function LogOut(props: LogOutFuncProps): JSX.Element {
+  const logOutUser = () => {
+    localStorage.removeItem("token");
+    props.logCurrentUserOut();
+    props.handleCloseUserMenu();
+  };
+
+  return (
+    <React.Fragment>
+      {localStorage.getItem("token") !== null && (
+        <MenuItem onClick={logOutUser}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Log-out</Typography>
+        </MenuItem>
+      )}
+    </React.Fragment>
+  );
+}
+
+function UserButton(props: any): JSX.Element {
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   if (localStorage.getItem("token") !== null)
     return (
-      <IconButton size="large" color="inherit" component={Link} to="/">
-        <AccountCircle />
-      </IconButton>
+      <Box sx={{ flexGrow: 0 }}>
+        <Tooltip title="User management options">
+          <IconButton onClick={handleOpenUserMenu} size="large" color="inherit">
+            <AccountCircle />
+          </IconButton>
+        </Tooltip>
+
+        <Menu
+          sx={{ mt: "45px" }}
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          <MenuItem component={Link} to="/orders" onClick={handleCloseUserMenu}>
+            <ListItemIcon>
+              <MoveToInboxIcon fontSize="small" />
+            </ListItemIcon>
+            <Typography variant="inherit">Orders</Typography>
+          </MenuItem>
+
+          <LogOut
+            logCurrentUserOut={props.logCurrentUserOut}
+            handleCloseUserMenu={handleCloseUserMenu}
+          />
+        </Menu>
+      </Box>
     );
   else
     return (
@@ -36,33 +112,11 @@ function UserButton(): JSX.Element {
     );
 }
 
-type LogOutFuncProps = {
-  logCurrentUserOut : () => void
-}
-
-function LogOut(props : LogOutFuncProps): JSX.Element {
-  const logOutUser = () => {
-    localStorage.removeItem("token");
-    props.logCurrentUserOut()
-  };
-
-  if (localStorage.getItem("token") !== null)
-    return (
-      <Button
-        variant="contained"
-        color="secondary"
-        className="m-1"
-        onClick={logOutUser}
-      >
-        Log out
-      </Button>
-    );
-  else return <></>;
-}
-
 type NavBarProps = {
-  totalUnitsInCart : number,
+  totalUnitsInCart: number;
   logCurrentUserOut: () => void;
+  changeTheme: Function;
+  initialState: boolean;
 };
 
 function NavBar(props: NavBarProps): JSX.Element {
@@ -103,14 +157,7 @@ function NavBar(props: NavBarProps): JSX.Element {
           </ListItemIcon>
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
-
-         <MenuItem component={Link} to="/orders">
-          <Typography variant="inherit">Orders</Typography>
-        </MenuItem>
       </MenuList>
-
-      <UserButton />
-      <LogOut logCurrentUserOut = {props.logCurrentUserOut}/>
     </Grid>
   );
 
@@ -153,6 +200,15 @@ function NavBar(props: NavBarProps): JSX.Element {
             Dede
           </Typography>
 
+          <Button onClick={() => props.changeTheme()}>
+            <MUISwitch
+              onChange={(e) => {
+                props.changeTheme();
+              }}
+              checked={props.initialState}
+            />
+          </Button>
+
           <IconButton
             size="large"
             color="inherit"
@@ -165,7 +221,6 @@ function NavBar(props: NavBarProps): JSX.Element {
             </Badge>
           </IconButton>
           <UserButton />
-          <LogOut logCurrentUserOut = {props.logCurrentUserOut} />
         </Toolbar>
       </AppBar>
     </Box>

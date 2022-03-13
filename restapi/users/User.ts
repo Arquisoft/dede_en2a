@@ -31,6 +31,10 @@ export const userSchema = new Schema(
       required: true,
       trim: true,
     },
+    verified: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     versionKey: false,

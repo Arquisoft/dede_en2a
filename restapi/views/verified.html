@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Verified</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body></body>
+  <script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const error = urlParams.get("error");
+    const message = urlParams.get("message");
+
+    const bodyContent =`<div style="background-color: #065f46">
+      <h2>Email has been verified</h2>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="85"
+        height="85"
+        fill="currentColor"
+        class="bi bi-check-circle-fill animated swing"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+        />
+      </svg>
+      <h3>You can now log in</h3>
+
+      <p>@DeDe</p>
+    </div>`
+      ;
+
+    document.body.style.backgroundColor = error ? "#7F1D1D" : "#064e3b";
+    document.body.innerHTML = bodyContent;
+  </script>
+</html>

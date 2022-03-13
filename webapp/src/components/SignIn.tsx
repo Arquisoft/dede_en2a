@@ -52,7 +52,7 @@ export default function SignIn(props: SignInProps) {
       props.setCurrentUser(await getUser(email));
       setRedirect(true);
     } else {
-      sendErrorNotification("Incorrect email or password");
+      sendErrorNotification("Invalid email or password");
     }
   };
 
