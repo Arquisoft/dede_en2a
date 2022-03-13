@@ -14,6 +14,7 @@ import {
   Button,
   IconButton,
   Tooltip,
+  TablePagination,
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -86,6 +87,30 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
 
 
 function OrderTable(props: OrderTableProps): JSX.Element {
+  
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+    ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    
+    setPage(0);
+  };  
+
+  //setRowsPerPage(parseInt(event.target.value, 2));
+
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
+
+
   if (props.orders.length > 0)
     return (
       <React.Fragment>
@@ -101,12 +126,26 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.orders.map((order: Order) => {
+              {props.orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order: Order) => {
                 return <OrderTableItem order={order} />;
               })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={5} />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          component="div"
+          count={props.orders.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5]}
+        />
       </React.Fragment>
     );
   else
@@ -123,8 +162,8 @@ function Orders(props: any): JSX.Element {
 
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser(props.userEmail)); //props.userEmail
-    setUser(await getUser(props.userEmail));
+    setOrders(await getOrdersForUser("palolol@gmail.com")); //props.userEmail
+    setUser(await getUser("palolol@gmail.com"));
   };
   
 
