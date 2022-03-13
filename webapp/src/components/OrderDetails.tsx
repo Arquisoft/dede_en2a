@@ -41,7 +41,6 @@ function OrderListItem(props: any): JSX.Element {
     return (
       <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
         <Img 
-            alt="Imagen del producto en el carrito"
             src={require("../images/"
             .concat(props.code)
             .concat(".png"))}

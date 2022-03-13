@@ -15,6 +15,8 @@ import {
   IconButton,
   Tooltip,
   TablePagination,
+  styled,
+  tableCellClasses,
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -86,6 +88,19 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
 }
 
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    //backgroundColor: theme.palette.common.dark,
+    backgroundColor: theme.palette.info.main,
+    color: theme.palette.common.white,
+    fontSize: 22,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+
 function OrderTable(props: OrderTableProps): JSX.Element {
   
   const [page, setPage] = React.useState(0);
@@ -118,11 +133,11 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <TableCell align="center"> Order </TableCell>
-                <TableCell align="center"> Price </TableCell>
-                <TableCell align="center"> Shipping price </TableCell>
-                <TableCell align="center"> Status </TableCell>
-                <TableCell align="center"> Show details </TableCell>
+                <StyledTableCell align="center"> Order </StyledTableCell>
+                <StyledTableCell align="center"> Price </StyledTableCell>
+                <StyledTableCell align="center"> Shipping price </StyledTableCell>
+                <StyledTableCell align="center"> Status </StyledTableCell>
+                <StyledTableCell align="center"> Show details </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -160,15 +175,19 @@ function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User>();
 
-
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser("palolol@gmail.com")); //props.userEmail
-    setUser(await getUser("palolol@gmail.com"));
+    setOrders(await getOrdersForUser(props.userEmail));
+    setUser(await getUser(props.userEmail));
   };
-  
 
+  const refreshUser = async() => {
+    setUser(await getUser(props.userEmail));
+  }
+
+  
   useEffect(() => {
     refreshOrderList();
+    refreshUser();
   });
 
 
@@ -183,8 +202,7 @@ function Orders(props: any): JSX.Element {
         </IconButton>
 
       </Typography>
-      <OrderTable orders={orders}></OrderTable>
-      
+      <OrderTable orders={orders}></OrderTable>      
     </Container>
   );
 }
