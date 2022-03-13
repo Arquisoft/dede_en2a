@@ -12,13 +12,20 @@ import {
   Container,
   Stack,
   Button,
+  IconButton,
+  Tooltip,
+  TablePagination,
+  styled,
+  tableCellClasses,
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-import { Order } from "../shared/shareddtypes";
-import { getOrdersForUser } from "../api/api";
+
+import { Order, OrderProduct, User } from "../shared/shareddtypes";
+import { getOrdersForUser, getUser } from "../api/api";
+import { Autorenew } from "@mui/icons-material";
 
 type OrderTableItemProps = {
   order: Order;
@@ -80,7 +87,45 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   );
 }
 
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    //backgroundColor: theme.palette.common.dark,
+    backgroundColor: theme.palette.info.main,
+    color: theme.palette.common.white,
+    fontSize: 22,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+
 function OrderTable(props: OrderTableProps): JSX.Element {
+  
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+    ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    
+    setPage(0);
+  };  
+
+  //setRowsPerPage(parseInt(event.target.value, 2));
+
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
+
+
   if (props.orders.length > 0)
     return (
       <React.Fragment>
@@ -88,20 +133,34 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <TableCell align="center"> Order </TableCell>
-                <TableCell align="center"> Price </TableCell>
-                <TableCell align="center"> Shipping price </TableCell>
-                <TableCell align="center"> Status </TableCell>
-                <TableCell align="center"> Show details </TableCell>
+                <StyledTableCell align="center"> Order </StyledTableCell>
+                <StyledTableCell align="center"> Price </StyledTableCell>
+                <StyledTableCell align="center"> Shipping price </StyledTableCell>
+                <StyledTableCell align="center"> Status </StyledTableCell>
+                <StyledTableCell align="center"> Show details </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.orders.map((order: Order) => {
+              {props.orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order: Order) => {
                 return <OrderTableItem order={order} />;
               })}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={5} />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          component="div"
+          count={props.orders.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5]}
+        />
       </React.Fragment>
     );
   else
@@ -114,21 +173,36 @@ function OrderTable(props: OrderTableProps): JSX.Element {
 
 function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [user, setUser] = useState<User>();
 
   const refreshOrderList = async () => {
     setOrders(await getOrdersForUser(props.userEmail));
+    setUser(await getUser(props.userEmail));
   };
 
+  const refreshUser = async() => {
+    setUser(await getUser(props.userEmail));
+  }
+
+  
   useEffect(() => {
     refreshOrderList();
+    refreshUser();
   });
+
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
       <Typography component="h1" variant="h4" align="center">
-        Your orders
+        Your orders {user?.name}
+        <IconButton edge="end">
+          <Tooltip title="Refresh orders" arrow>
+            <Autorenew onClick={refreshOrderList}></Autorenew>
+          </Tooltip>          
+        </IconButton>
+
       </Typography>
-      <OrderTable orders={orders}></OrderTable>
+      <OrderTable orders={orders}></OrderTable>      
     </Container>
   );
 }

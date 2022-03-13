@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import { styled } from "@mui/material/styles";
 
 import { Order, OrderProduct, Product } from "../shared/shareddtypes";
 
@@ -15,6 +16,12 @@ import { getOrder, getProduct } from "../api/api";
 
 function OrderListItem(props: any): JSX.Element {
   const [product, setProduct] = useState<Product>();
+
+  const Img = styled("img")({
+    display: "block",
+    width: "30%",
+
+  });
 
   const obtainProduct = async () => {
     setProduct(await getProduct(props.code));
@@ -33,6 +40,11 @@ function OrderListItem(props: any): JSX.Element {
   else
     return (
       <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
+        <Img 
+            src={require("../images/"
+            .concat(props.code)
+            .concat(".png"))}
+        />
         <Typography mr={4}>{props.amount}</Typography>
         <ListItemText primary={product.name} secondary={product.description} />
         <Typography>{product.price}€</Typography>
