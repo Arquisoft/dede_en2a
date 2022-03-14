@@ -220,7 +220,7 @@ function NavBar(props: NavBarProps): JSX.Element {
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          <UserButton />
+          <UserButton logCurrentUserOut={props.logCurrentUserOut}/>
         </Toolbar>
       </AppBar>
     </Box>
