@@ -10,7 +10,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
-import { Order, OrderProduct, Product } from "../shared/shareddtypes";
+import { Order, Product } from "../shared/shareddtypes";
 
 import { getOrder, getProduct } from "../api/api";
 
@@ -62,8 +62,8 @@ function OrderList(props: any): JSX.Element {
   else
     return (
       <List>
-        {props.order.products.map((product: OrderProduct) => (
-          <OrderListItem code={product.code} amount={product.amount} />
+        {props.order.products.map((product: Product) => (
+          <OrderListItem code={product.code} amount={product.stock} />
         ))}
       </List>
     );

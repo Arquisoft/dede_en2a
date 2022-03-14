@@ -25,17 +25,15 @@ export type CartItem = {
   amount: number;
 };
 
-export type OrderProduct = {
-  code: string;
-  amount: number;
-};
-
 export type Order = {
   orderCode: string;
   userEmail: string;
-  products: OrderProduct[];
-  totalPrice: number;
+  userAddress: string,
+  products: Product[];
+  date: Date,
+  subtotalPrice: number,
   shippingPrice: number;
+  totalPrice: number;
   isOrderReceived: boolean;
 };
 

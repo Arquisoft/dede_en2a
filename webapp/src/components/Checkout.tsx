@@ -49,7 +49,7 @@ export default function Checkout(props: any) {
     // when we click FINISH button ==> update the stock
     if (activeStep === steps.length - 1) {
       handleUpdateStock();
-      saveOrder(props.productsCart, costs, props.userEmail);
+      saveOrder(props.productsCart, costs, props.userEmail, "Get address not implemented yet");
       props.deleteCart();
 
       // We have finished the process...
