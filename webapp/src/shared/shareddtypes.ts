@@ -31,10 +31,12 @@ export type OrderProduct = {
 };
 
 export type Order = {
-  userId: string;
-  products: [OrderProduct];
+  orderCode: string;
+  userEmail: string;
+  products: OrderProduct[];
   totalPrice: number;
   shippingPrice: number;
+  isOrderReceived: boolean;
 };
 
 export type Review = {

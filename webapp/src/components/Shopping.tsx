@@ -20,46 +20,44 @@ type ShoppingProps = {
 
 function Shopping(props: ShoppingProps): JSX.Element {
   return (
-    <React.Fragment>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+    <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Paper
+        variant="outlined"
+        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+      >
+        <Typography component="h1" variant="h4" align="center">
+          Shopping cart
+        </Typography>
+        <ShoppingCart
+          products={props.products}
+          totalUnitsInCart={props.totalUnitsInCart}
+          onIncrementUnit={props.onIncrementUnit}
+          onDecrementUnit={props.onDecrementUnit}
+        />
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          sx={{ mt: 2 }}
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <Typography component="h1" variant="h4" align="center">
-            Shopping cart
-          </Typography>
-          <ShoppingCart
-            products={props.products}
-            totalUnitsInCart={props.totalUnitsInCart}
-            onIncrementUnit={props.onIncrementUnit}
-            onDecrementUnit={props.onDecrementUnit}
-          />
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            sx={{ mt: 2 }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" className="m-1">
-                Continue shopping
-              </Button>
-            </Link>
-
-            <Button
-              variant="contained"
-              disabled={props.products.length === 0}
-              component={Link}
-              to="/checkout"
-              className="m-1"
-            >
-              Proceed to checkout
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button variant="outlined" className="m-1">
+              Continue shopping
             </Button>
-          </Stack>
-        </Paper>
-      </Container>
-    </React.Fragment>
+          </Link>
+
+          <Button
+            variant="contained"
+            disabled={props.products.length === 0}
+            component={Link}
+            to="/checkout"
+            className="m-1"
+          >
+            Proceed to checkout
+          </Button>
+        </Stack>
+      </Paper>
+    </Container>
   );
 }
 
