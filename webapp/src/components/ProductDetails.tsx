@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-
-import { Product, Review } from "../shared/shareddtypes";
-
 import { useParams } from "react-router-dom";
-import { getProduct, getReviewsByCode } from "../api/api";
-import ProductCommentList from "./ProductCommentList";
+
 import {
   Paper,
   Typography,
@@ -16,6 +12,11 @@ import {
   Breadcrumbs,
   Link,
 } from "@mui/material";
+
+import { getProduct, getReviewsByCode } from "../api/api";
+import { Product, Review } from "../shared/shareddtypes";
+
+import ProductCommentList from "./ProductCommentList";
 
 export type ProductProps = {
   product: Product;
@@ -46,7 +47,7 @@ function getReviewMean(reviews: Review[]) {
   return mean;
 }
 
-function ProductDetails(props: ProductProps): JSX.Element {
+export default function ProductDetails(props: ProductProps): JSX.Element {
   const [stockOption, setStockOption] = useState<boolean>(true);
 
   function StockAlert(props: any): JSX.Element {
@@ -180,5 +181,3 @@ function ProductDetails(props: ProductProps): JSX.Element {
     );
   }
 }
-
-export default ProductDetails;

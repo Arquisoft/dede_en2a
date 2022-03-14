@@ -1,11 +1,7 @@
-import { useState } from "react";
-import ReactDOM from "react-dom";
-
 import { CartItem } from "../shared/shareddtypes";
-
 import { calculateTotal } from "../helpers/ShoppingCartHelper";
 
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 type BillingProps = {
   products: CartItem[];
@@ -39,7 +35,6 @@ export default function Billing(props: BillingProps): JSX.Element {
       }}
       onApprove={async (data, actions: any) => {
         let order = await actions.order.capture();
-
         handleApprove();
       }}
     />

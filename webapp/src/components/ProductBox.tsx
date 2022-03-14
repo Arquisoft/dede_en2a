@@ -3,8 +3,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
-import {styled} from "@mui/material/styles";
-import {useNavigate} from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 import { Product } from "../shared/shareddtypes";
 
@@ -14,7 +14,7 @@ type ProductListProps = {
   onAdd: (product: Product) => void;
 };
 
-function ProductBox(props: ProductListProps): JSX.Element {
+export default function ProductBox(props: ProductListProps): JSX.Element {
   function StockAlert(props: any): JSX.Element {
     if (props.stock <= props.amount) {
       // to prevent from some issues regarding no stock
@@ -75,5 +75,3 @@ function ProductBox(props: ProductListProps): JSX.Element {
     </Grid>
   );
 }
-
-export default ProductBox;
