@@ -138,7 +138,7 @@ function ProductDetails(props: ProductProps): JSX.Element {
                     alt="Image of the product"
                     src={require("../images/"
                       .concat(product.code)
-                      .concat(".jpg"))}
+                      .concat(".png"))}
                   />
                 </Paper>
               </Grid>

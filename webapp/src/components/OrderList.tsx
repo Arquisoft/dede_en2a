@@ -22,7 +22,6 @@ import {
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-
 import { Order, OrderProduct, User } from "../shared/shareddtypes";
 import { getOrdersForUser, getUser } from "../api/api";
 import { Autorenew } from "@mui/icons-material";
@@ -87,7 +86,6 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   );
 }
 
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     //backgroundColor: theme.palette.common.dark,
@@ -100,31 +98,28 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-
 function OrderTable(props: OrderTableProps): JSX.Element {
-  
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-    ) => {
+    newPage: number
+  ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    
     setPage(0);
-  };  
+  };
 
   //setRowsPerPage(parseInt(event.target.value, 2));
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
-
+    rowsPerPage -
+    Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
 
   if (props.orders.length > 0)
     return (
@@ -135,15 +130,20 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               <TableRow>
                 <StyledTableCell align="center"> Order </StyledTableCell>
                 <StyledTableCell align="center"> Price </StyledTableCell>
-                <StyledTableCell align="center"> Shipping price </StyledTableCell>
+                <StyledTableCell align="center">
+                  {" "}
+                  Shipping price{" "}
+                </StyledTableCell>
                 <StyledTableCell align="center"> Status </StyledTableCell>
                 <StyledTableCell align="center"> Show details </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order: Order) => {
-                return <OrderTableItem order={order} />;
-              })}
+              {props.orders
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((order: Order) => {
+                  return <OrderTableItem order={order} />;
+                })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={5} />
@@ -180,16 +180,14 @@ function Orders(props: any): JSX.Element {
     setUser(await getUser(props.userEmail));
   };
 
-  const refreshUser = async() => {
+  const refreshUser = async () => {
     setUser(await getUser(props.userEmail));
-  }
+  };
 
-  
   useEffect(() => {
     refreshOrderList();
     refreshUser();
-  });
-
+  }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
@@ -198,11 +196,10 @@ function Orders(props: any): JSX.Element {
         <IconButton edge="end">
           <Tooltip title="Refresh orders" arrow>
             <Autorenew onClick={refreshOrderList}></Autorenew>
-          </Tooltip>          
+          </Tooltip>
         </IconButton>
-
       </Typography>
-      <OrderTable orders={orders}></OrderTable>      
+      <OrderTable orders={orders}></OrderTable>
     </Container>
   );
 }
