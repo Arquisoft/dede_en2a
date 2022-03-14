@@ -1,6 +1,6 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
+import {styled} from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,10 +8,10 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import {TextField, Grid, Alert, Snackbar} from "@mui/material";
+import {Alert, Grid, Snackbar, TextField} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
         padding: theme.spacing(2)
     },
@@ -27,10 +27,10 @@ export interface DialogTitleProps {
 }
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
-    const { children, onClose, ...other } = props;
+    const {children, onClose, ...other} = props;
 
     return (
-        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        <DialogTitle sx={{m: 0, p: 2}} {...other}>
             {children}
             {onClose ? (
                 <IconButton
@@ -43,7 +43,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
                         color: (theme) => theme.palette.grey[500]
                     }}
                 >
-                    <CloseIcon />
+                    <CloseIcon/>
                 </IconButton>
             ) : null}
         </DialogTitle>
@@ -54,7 +54,7 @@ type ShareDialogProps = {
     show: number;
 }
 
-export default function ShareDialog(props:ShareDialogProps) {
+export default function ShareDialog(props: ShareDialogProps) {
     const [open, setOpen] = React.useState(false);
     const [show, showInfo] = React.useState(false);
 
@@ -66,9 +66,6 @@ export default function ShareDialog(props:ShareDialogProps) {
         setOpen(props.show > 0);
     }, [props.show]);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
     const handleClose = () => {
         setOpen(false);
     };
@@ -87,7 +84,7 @@ export default function ShareDialog(props:ShareDialogProps) {
                     Share Item
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
-                    <Typography gutterBottom style={{ margin: "-1vh 1vw 3vh" }}>
+                    <Typography gutterBottom style={{margin: "-1vh 1vw 3vh"}}>
                         You can share this product with your friend with the following link!
                     </Typography>
                     <Grid
@@ -96,14 +93,15 @@ export default function ShareDialog(props:ShareDialogProps) {
                         alignItems="center"
                         justifyContent="center"
                     >
-                        <TextField aria-readonly value={window.location.href} multiline label="link to product" style={{width:"90%"}}/>
-                        <br />
+                        <TextField aria-readonly value={window.location.href} multiline label="link to product"
+                                   style={{width: "90%"}}/>
+                        <br/>
                         <Button
                             onClick={() => {
                                 navigator.clipboard.writeText(window.location.href);
                                 showInfo(true);
                             }}
-                            startIcon={<ContentCopyIcon />}
+                            startIcon={<ContentCopyIcon/>}
                             variant={"contained"}
                         >
                             Copy to clipboard

@@ -23,13 +23,6 @@ type ShoppingCartProps = {
 };
 
 function ShoppingCart(props: ShoppingCartProps): JSX.Element {
-  const handleButton = (cartItem: CartItem) => {
-    if (cartItem.amount >= cartItem.product.stock) {
-      return false;
-    } else {
-      return true;
-    }
-  };
 
     const handleButton = (cartItem: CartItem) => {
         if (cartItem.amount >= cartItem.product.stock) {
@@ -72,7 +65,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                                                         alt="Imagen del producto en el carrito"
                                                         src={require("../images/"
                                                             .concat(cartItem.product.code)
-                                                            .concat(".jpg"))}
+                                                            .concat(".png"))}
                                                     />
                                                     {cartItem.product.name}
                                                 </Stack>
