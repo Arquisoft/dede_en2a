@@ -8,7 +8,7 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { TextField, Grid } from "@mui/material";
+import {TextField, Grid, Alert, Snackbar} from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -56,11 +56,15 @@ type ShareDialogProps = {
 
 export default function ShareDialog(props:ShareDialogProps) {
     const [open, setOpen] = React.useState(false);
+    const [show, showInfo] = React.useState(false);
+
+    const handleCloseInfo = () => {
+        showInfo(false);
+    };
 
     React.useEffect(() => {
         setOpen(props.show > 0);
     }, [props.show]);
-
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -97,6 +101,7 @@ export default function ShareDialog(props:ShareDialogProps) {
                         <Button
                             onClick={() => {
                                 navigator.clipboard.writeText(window.location.href);
+                                showInfo(true);
                             }}
                             startIcon={<ContentCopyIcon />}
                             variant={"contained"}
@@ -111,6 +116,23 @@ export default function ShareDialog(props:ShareDialogProps) {
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
+            <Snackbar open={show} autoHideDuration={6000} onClose={handleCloseInfo}>
+                <Alert
+                    severity="info"
+                    action={
+                        <IconButton
+                            size="small"
+                            aria-label="close"
+                            color="inherit"
+                            onClick={handleCloseInfo}
+                        >
+                            <CloseIcon fontSize="small"/>
+                        </IconButton>
+                    }
+                >
+                    Link copied to clipboard
+                </Alert>
+            </Snackbar>
         </React.Fragment>
     );
 }

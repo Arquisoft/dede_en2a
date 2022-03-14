@@ -94,3 +94,27 @@ export async function getReviewsByCode(code : string):Promise<Review[]>{
   let response = await fetch(apiEndPoint+'/reviews/listByCode/' + code);
   return response.json();
 }
+
+export async function getReviewsByCodeAndEmail(code : string, email : string):Promise<Review[]>{
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
+  let response = await fetch(apiEndPoint+'/reviews/listByCodeAndEmail/' + code + "/" + email);
+  return response.json();
+}
+
+export async function addReview(review: Review): Promise<boolean> {
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
+  let response = await fetch(apiEndPoint + "/reviews/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      rating : review.rating,
+      comment : review.comment,
+      userEmail : review.userEmail,
+      productCode : review.productCode,
+    }),
+  });
+  if (response.status === 200) {
+    localStorage.setItem("token", JSON.stringify(response.json));
+    return true;
+  } else return false;
+}

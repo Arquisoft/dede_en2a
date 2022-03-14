@@ -12,6 +12,9 @@ import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
 import {Alert, Divider, Grid, Snackbar, TextField} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import {AlertColor} from "@mui/material/Alert";
+import {Product, Review} from "../shared/shareddtypes";
+import {getReviewsByCodeAndEmail, addReview} from "../api/api";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
@@ -56,6 +59,7 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired
 };
 type ReviewDialogProps = {
+    product: Product;
     initialValue?: number
     show: number
     stars: number
@@ -67,6 +71,10 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     const [btnDisabled, setBtnDisabled] = React.useState(false);
     const [rating, setRating] = React.useState(0);
     const [comment, setComment] = React.useState("");
+
+    const [infoMessage, setInfoMessage] = React.useState("");
+    const [infoType, setInfoType] = React.useState<AlertColor>("success");
+
 
     React.useEffect(() => {
         setOpen(props.show > 0);
@@ -88,9 +96,40 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     const handleCloseInfo = () => {
         showInfo(false);
     };
-    const handleConfirm = () => {
-        setOpen(false);
+
+    const showMessage = (infoType : AlertColor, infoMessage : string) => {
+        setInfoMessage(infoMessage);
+        setInfoType(infoType);
         showInfo(true);
+    }
+
+    const handleConfirm = async () => {
+        setOpen(false);
+
+        let userEmail = localStorage.getItem("user.email");
+
+        if ( userEmail == null) {
+            showMessage("error", "You must log in first!");
+        } else
+        if ((await getReviewsByCodeAndEmail(props.product.code, userEmail)).length > 0) {
+            showMessage("error", "You have already reviewed this product!");
+        } else {
+            let createdReview : Review = {
+                rating: rating,
+                comment: comment,
+                userEmail: userEmail,
+                productCode: props.product.code
+            };
+            let addStatus : boolean = await addReview(createdReview);
+
+            if (addStatus) {
+                showMessage("success", "Review added correctly!");
+                window.location.reload();
+            } else {
+                showMessage("error", "There was an error creating your review!");
+            }
+        }
+
     };
 
     return (
@@ -146,7 +185,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             </BootstrapDialog>
             <Snackbar open={show} autoHideDuration={6000} onClose={handleCloseInfo}>
                 <Alert
-                    severity="success"
+                    severity={infoType}
                     action={
                         <IconButton
                             size="small"
@@ -158,7 +197,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
                         </IconButton>
                     }
                 >
-                    Rating added
+                    {infoMessage}
                 </Alert>
             </Snackbar>
         </React.Fragment>

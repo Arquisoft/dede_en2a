@@ -162,6 +162,10 @@ function ProductDetails(props: ProductProps): JSX.Element {
 
                             <Grid xs direction={"column"}>
                                 <h1> {product.name} </h1>
+                                <Button
+                                    variant="text"
+                                    onClick={openDialog}
+                                    sx={{my: 1}}>
                                 <Rating
                                     name="hover-feedback"
                                     value={getReviewMean(reviews)}
@@ -172,6 +176,7 @@ function ProductDetails(props: ProductProps): JSX.Element {
                                         }
                                     }}
                                 />
+                                </Button>
                                 <Paper style={{margin: "4vh 2vw", padding: ".5em"}}>
                                     <Typography>{product.description}</Typography>
                                 </Paper>
@@ -191,7 +196,7 @@ function ProductDetails(props: ProductProps): JSX.Element {
                         </Grid>
                     </Paper>
                     <ProductCommentList reviews={reviews}></ProductCommentList>
-                    <ReviewDialog show={dialogOpen} stars={starsSelected}/>
+                    <ReviewDialog product = {product} show={dialogOpen} stars={starsSelected}/>
                     <ShareDialog show={shareDialogOpen}/>
                 </Grid>
 
