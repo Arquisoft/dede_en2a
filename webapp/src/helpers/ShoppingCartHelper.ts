@@ -19,7 +19,7 @@ export function calculateTotal(
 export function saveOrder(
   products: CartItem[],
   shippingCosts: number,
-  user: User
+  userEmail: string
 ) {
   let productCosts: number = calculateTotal(products, 0);
   var orderProducts: OrderProduct[] = [];
@@ -29,7 +29,7 @@ export function saveOrder(
 
   let order: Order = {
     orderCode: uuidv4(),
-    userEmail: user.email,
+    userEmail: userEmail,
     products: orderProducts,
     totalPrice: productCosts,
     shippingPrice: shippingCosts,

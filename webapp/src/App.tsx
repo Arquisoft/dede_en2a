@@ -22,7 +22,7 @@ import OrderList from "./components/OrderList";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { getProducts } from "./api/api";
+import { getProducts, getUser } from "./api/api";
 import "bootstrap/dist/css/bootstrap.css";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -56,7 +56,6 @@ function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [user, setUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<Order[]>([]); //([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const createShop = async () => {
@@ -66,7 +65,6 @@ function App(): JSX.Element {
 
   const setCurrentUser = (user: User) => {
     localStorage.setItem("user.email", user.email);
-    setUser(user);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
@@ -194,10 +192,8 @@ function App(): JSX.Element {
 
   if (localStorage.getItem("theme") === null) {
     localStorage.setItem("theme", String(initialTheme));
-    console.log("none -> " + initialTheme);
   } else {
     initialTheme = localStorage.getItem("theme") == "true";
-    console.log("already -> " + initialTheme);
   }
 
   const [mode, setMode] = React.useState<PaletteMode>(
@@ -255,7 +251,7 @@ function App(): JSX.Element {
               element={
                 <Checkout
                   productsCart={productsCart.slice()}
-                  user={user}
+                  userEmail={localStorage.getItem("user.email")}
                   deleteCart={handleDeleteCart}
                 />
               }
@@ -276,7 +272,7 @@ function App(): JSX.Element {
             />
           <Route
             path="orders"
-            element={<OrderList userEmail={user?.email} />}
+            element={<OrderList userEmail={localStorage.getItem("user.email")} />}
           />
           <Route path="/order/:code" element={<OrderDetails />} />
         </Routes>
