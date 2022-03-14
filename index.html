@@ -465,7 +465,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#section-solution-strategy">4. Solution Strategy</a>
 <ul class="sectlevel2">
 <li><a href="#_4_1_technology_decisions">4.1. 4.1 Technology Decisions</a></li>
-<li><a href="#_top_level_decompostition">4.2. Top-level Decompostition</a></li>
+<li><a href="#_4_2_top_level_decompostition">4.2. 4.2 Top-level Decompostition</a></li>
 <li><a href="#_approaches_to_achieve_top_quality_goals">4.3. Approaches to achieve top quality goals</a></li>
 <li><a href="#_organizational_decisions">4.4. Organizational decisions</a></li>
 </ul>
@@ -498,7 +498,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_concept_n">8.3. <em>&lt;Concept n&gt;</em></a></li>
 </ul>
 </li>
-<li><a href="#section-design-decisions">9. Design Decisions</a></li>
+<li><a href="#section-design-decisions">9. Design Decisions</a>
+<ul class="sectlevel2">
+<li><a href="#_accepted_decisions">9.1. Accepted decisions</a></li>
+<li><a href="#_deprecated_decisions">9.2. Deprecated decisions</a></li>
+</ul>
+</li>
 <li><a href="#section-quality-scenarios">10. Quality Requirements</a>
 <ul class="sectlevel2">
 <li><a href="#_quality_tree">10.1. Quality Tree</a></li>
@@ -600,16 +605,38 @@ If requirements documents exist this overview should refer to these documents.</
 <div class="ulist">
 <ul>
 <li>
-<p>Users will be able to select and order products to buy.</p>
+<p>The users will be able to select products to buy. Also they will be able to search for a specific product or filter them.</p>
 </li>
 <li>
-<p>Users will be able to see the delivery costs of their orders.</p>
+<p>Once the user has selected the products:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>They will be able to see the shopping cart and modify the units of each product.</p>
 </li>
 <li>
-<p>Users will be able to visualize all the orders they have made.</p>
+<p>The system will calculate the shipping costs using different carrier APIs depending on the user&#8217;s address.</p>
 </li>
 <li>
-<p>The information of the users will be obtain from the users' pods.</p>
+<p>The user will be able to see the final cost of the order and select the payment method complete the order.</p>
+</li>
+<li>
+<p>The system will simulate the order shipping and will notify the user the different states.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The user will be able to see the orders done.</p>
+</li>
+<li>
+<p>The user will be able to see reviews of the products.</p>
+</li>
+<li>
+<p>The application will be implemented using the React framework and TypeScript.</p>
+</li>
+<li>
+<p>The application should be accesible and deployed using a continuos integration system.</p>
 </li>
 </ul>
 </div>
@@ -636,6 +663,12 @@ If requirements documents exist this overview should refer to these documents.</
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Privacy</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">"Your data, your choice"</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The only way for us to ensure privacy is allowing users to know what we do with their data. This is only possible if the source code is available for anyone to read it. More in more, we will allow users to use their data as they please, not as we do.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">High</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Performance</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"80% of the effects come from 20% of the causes"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We will aim for the application to load in less than 1.5 seconds; indeed, 47% of the internet users expect a site to load in 2 seconds or less, so we are focusing in doing it better than the average.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">High</p></td>
 </tr>
 <tr>
@@ -720,18 +753,23 @@ These stakeholders determine the extent and the level of detail of your work and
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Students</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lorenzo La Rocca, Álvaro Rodríguez González, Pablo Lopez Amado, Andrés Martínez Rodríguez, Ángel Iglesias Préstamo, Noelia Iglesias Cuesta</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lorenzo La Rocca, Álvaro Rodríguez González, Pablo Lopez Amado, Andrés Martínez Rodríguez, Ángel Iglesias Préstamo and Noelia Iglesias Cuesta</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Main developers of the application. They will develop the whole application and hence they will improve their teamwork capacity and coding skills.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Teachers</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gallo, Pablo González González</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gallo and Pablo González González</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">They will supervise students work, make sure they are going in the right direction and help them if necessary.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Users</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Anyone that uses the application</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Users will be the ones using the application so they have to find it easy to use, intuitive and practical.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Empathy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Empathy.co is the commerce Search &amp; Discovery platform built for trust with over 150 Developers and Search Engineers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">They are interested in the project, especially in the part that deals with SOLID Pods because they are used and are important in their working area. Also to offer students business practices</p></td>
 </tr>
 </tbody>
 </table>
@@ -742,26 +780,6 @@ These stakeholders determine the extent and the level of detail of your work and
 <div class="sect1">
 <h2 id="section-architecture-constraints">2. Architecture Constraints</h2>
 <div class="sectionbody">
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<div class="title">Contents</div>
-<p>Any requirement that constrains software architects in their freedom of design and implementation decisions or decision about the development process. These constraints sometimes go beyond individual systems and are valid for whole organizations and companies.</p>
-</div>
-<div class="paragraph">
-<div class="title">Motivation</div>
-<p>Architects should know exactly where they are free in their design decisions and where they must adhere to constraints.
-Constraints must always be dealt with; they may be negotiable, though.</p>
-</div>
-<div class="paragraph">
-<div class="title">Form</div>
-<p>Simple tables of constraints with explanations.
-If needed you can subdivide them into
-technical constraints, organizational and political constraints and
-conventions (e.g. programming or versioning guidelines, documentation or naming conventions)</p>
-</div>
-</div>
-</div>
 <div class="sect2">
 <h3 id="_table_1_technical_constraints">2.1. Table 1. Technical Constraints</h3>
 <table class="tableblock frame-all grid-all stretch">
@@ -777,20 +795,24 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">React</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The React Framework will be used to implement the application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>React</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The <em>React Framework</em> will be used to implement the <em>frontend</em> side of the application</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Typescript</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The programming language to be used to implement the application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Typescript</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We are using TS as the programming language for the whole project: both <em>front</em> and <em>backend</em></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Solid</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Solid Specifications are required to preserve customer&#8217;s privacy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Solid</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Solid</em> specifications are required to preserve customer&#8217;s privacy</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Github</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The version control is managed through GitHub, Git Bash. It provides tools for organizing and sharing the work.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Github</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The version control is managed through <em>Git</em> and the repository is hosted in <em>Github</em>. Not only that, but also <em>Github</em> allows us communicating and organizing the project</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Continuous integration system</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>TBD</em></p></td>
 </tr>
 </tbody>
 </table>
@@ -810,32 +832,33 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">App development</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">There is a due date to develop and finish the app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Team size</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The team is made out of six people, in case someone leaves we will a bit compromised</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Team</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The team creating the project is built up by 6 members</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Testing</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Testing</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Different scenarios will be taken into account to test a correct behaviour of the app</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Meetings</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">We will discuss the organization of the tasks to do in a meeting at each laboratory class</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Meetings</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We will discuss the organization of the tasks to do in a meeting at each laboratory class. In case we need to arrange an extraordinary meeting we will have to fix our schedules as we do not have the same timetables</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Experience</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Team members have different experience when working with the diverse technologies going to be used</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Experience</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Team members have different experience when working with the diverse technologies going to be used. However is the first time we are creating a <em>real life</em> project</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Team Work</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">It is the first time for every member of the group working together to develop an application</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Team Work</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It is the first time for every member of the group working together to develop an application. More in more, some of us did not even met before</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Coordination</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Coordination</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A good coordination must be carried out by each component of the group to accomplish all the objectives proposed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Due dates</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For sure we have to stick to some deadlines for us to deliver our project. This depends on the evaluation of the subject:
+First delivery due by <em>February 22, 2022</em>, while the second is by <em>March 14, 2022</em>. The third will be <em>April 04, 2022</em> and lastly <em>May 03, 2022</em>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -855,24 +878,28 @@ conventions (e.g. programming or versioning guidelines, documentation or naming 
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Language</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The application must be navigable by any person that knows English.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Language</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any person speaking <em>English</em> must be able to interact with the application and successfully complete any task in it: <em>i.e</em> calculating the shipping costs of a certain product to be delivered to a destination</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Clean Code</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The code conforming the application must be well done and clean, so it is easier to understand and work with.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Clean Code</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The code conforming the application must be well written and clean, so it is easier to understand and work with (<em>maintainability</em> in mind)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Documentation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The documentation must be created by following <a href="https://arc42.org/">Arc42</a> Structure, so it is clear, simple and effective.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Documentation</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The documentation must be created by following the <a href="https://arc42.org/">Arc42</a> method: so it is clear, simple and effective</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accessibility</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The application must be easy to navigate through so any user interested on using it can do it easily.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Accessibility</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The application must be easy to navigate through so any user interested on using it can do it easily. Regardless any disability</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Programming Language Conventions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">We should follow the conventions of every programming language that we shall use. (Solid, Typescript, Java&#8230;&#8203;)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Programming Language conventions</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We should follow the conventions of the programming languages we are using. Some of those are the <a href="https://jsdoc.app/"><em>JavaScript</em></a> conventions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Solid</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The application must follow the <a href="https://github.com/solid/solid-spec"><em>Solid</em></a> specifications</p></td>
 </tr>
 </tbody>
 </table>
@@ -1041,21 +1068,25 @@ together with a mapping table showing the relationships between channels and inp
 <div class="paragraph">
 <p>In order to develop the application and satisfy the constraint we decided this technologies:</p>
 </div>
-<div class="paragraph arc42help">
-<p>Database: we chose to use MongoDB during our last meeting on the 14-02-2022.</p>
-</div>
-<div class="paragraph">
-<p>Solid: lets people store their data securely in decentralized data stores called Pods.</p>
-</div>
-<div class="paragraph">
-<p>React: is a JavaScript library for creating user interfaces for web applications which is easy to learn.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Database</strong>: we chose to use MongoDB during our last meeting on the 14-02-2022.</p>
+</li>
+<li>
+<p><strong>Solid</strong>: lets people store their data securely in decentralized data stores called Pods.</p>
+</li>
+<li>
+<p><strong>React</strong>: is a JavaScript library for creating user interfaces for web applications which is easy to learn.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_top_level_decompostition">4.2. Top-level Decompostition</h3>
+<h3 id="_4_2_top_level_decompostition">4.2. 4.2 Top-level Decompostition</h3>
 <div class="sect3">
-<h4 id="_ides">4.2.1. IDEs</h4>
+<h4 id="_4_2_1_ides">4.2.1. 4.2.1 IDEs</h4>
 <div class="paragraph">
 <p>Our choice is Visual Studio Code mainly because is available for many platforms such as Windows/Ios/Linux and via plugins it supports many coding languages and documentation. Git is integrated for version control.</p>
 </div>
@@ -1143,8 +1174,10 @@ together with a mapping table showing the relationships between channels and inp
 
 </div>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/level1.jpg" alt="arc42"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/level1.png" alt="level1" width="452" height="91">
+</div>
 </div>
 <div class="dlist">
 <dl>
@@ -1194,9 +1227,10 @@ All the data that belongs to the user is stored safely in their POD&#8217;s.</p>
 
 </div>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/level2.jpg" alt="arc42"></span>
-:imagesdir: ./images</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/level2.png" alt="level2" width="547" height="261">
+</div>
 </div>
 <div class="dlist">
 <dl>
@@ -1241,9 +1275,10 @@ All the data that belongs to the user is stored safely in their POD&#8217;s.</p>
 
 </div>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/level3.jpg" alt="arc42"></span>
-:imagesdir: ./images</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/level3.png" alt="level3" width="1403" height="454">
+</div>
 </div>
 <div class="dlist">
 <dl>
@@ -1626,44 +1661,8 @@ on this list.</p>
 <div class="sect1">
 <h2 id="section-design-decisions">9. Design Decisions</h2>
 <div class="sectionbody">
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<div class="title">Contents</div>
-<p>Important, expensive, large scale or risky architecture decisions including rationals.
-With "decisions" we mean selecting one alternative based on given criteria.</p>
-</div>
-<div class="paragraph">
-<p>Please use your judgement to decide whether an architectural decision should be documented
-here in this central section or whether you better document it locally
-(e.g. within the white box template of one building block).</p>
-</div>
-<div class="paragraph">
-<p>Avoid redundancy. Refer to section 4, where you already captured the most important decisions of your architecture.</p>
-</div>
-<div class="paragraph">
-<div class="title">Motivation</div>
-<p>Stakeholders of your system should be able to comprehend and retrace your decisions.</p>
-</div>
-<div class="paragraph">
-<div class="title">Form</div>
-<p>Various options:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>List or table, ordered by importance and consequences or:</p>
-</li>
-<li>
-<p>more detailed in form of separate sections per decision</p>
-</li>
-<li>
-<p>ADR (architecture decision record) for every important decision</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
+<div class="sect2">
+<h3 id="_accepted_decisions">9.1. Accepted decisions</h3>
 <div class="paragraph">
 <p>Those are the different decisions we have taken for developing our project. They are ordered by importance:</p>
 </div>
@@ -1684,32 +1683,96 @@ here in this central section or whether you better document it locally
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Typescript</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Solves one of the hardes inconveniences of using JavaScript: dynamic binding. This project is increasing its popularity among developers: probably the future of the web.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Typescript</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solves one of the hardest inconveniences of using JavaScript: dynamic binding. This project is increasing its popularity among developers: probably the future of the web.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">None of us has ever used this programming languange. Indeed, we are not experts in JavaScript neither.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">This decision was not taken by us, we were told to use it in the project&#8217;s assignment.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">React</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>React</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Aimed for simplifying the Frontend development process. Well documented. Developed by one of the biggest tech-companies: Facebook.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not only we are not experts in TypeScript, but we aren&#8217;t familiarized with this library neither.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">This decision was not taken by us, we were told to use it in the project&#8217;s assignment.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MongoDB</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>MongoDB</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NoSQL database that is easy to work-with and integrate using TypeScript. Plenty of resources online.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transactions are not supported. Stores data by using high memory resources.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%233%3A-DB-to-be-used">ADR #3</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Visual Studio Code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Node.js</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">However, we will use it in other courses: SDI, so it will become easier with the time. More in more, we need a backend framework allowing us to code faster. Becoming a trend this days. Highly used in companies outside.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We have to learn it from scratch: we have never worked with it. We are not as familiarized with JavaScript.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%236%3A-Backend-framework">ADR #6</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Express</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Express is easy to use, minimalistic and works well with the technology stack we have chosen: MERN.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It&#8217;s the first time we are working with Express.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%235%3A-REST-API">ADR #5</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>mongoose</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Makes working with MongoDB and JS way easier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We have never used it.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%238%3A-MongoDB-API-for-JS">ADR #8</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Visual Studio Code</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Extremely easy to use. Lightweight and highly customizable. Available for many operating systems. Another advantage is the fact that is widely used in real-world project.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">We need to install a bunch of plugins for us to be able to develop the project in a more comfortabe way. More in more, we have to agree which of them we are using, so that everyone has the same UE (user experience).</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%232%3A-IDE">ADR #2</a></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>plantuml</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Works just fine with <em>Asciidoc</em>. We can share diagrams in a minimalistic way: few lines of code; images are way heavier.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not as easy to use as a graphical application.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%237%3A-Diagrams-tool">ADR #7</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Prettier</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We all write code in a different manner, having a tool that manages the formatting is way too handy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom formattings are not allowed unless you tell the plug-in to do it</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%239%3A-Code-formatter">ADR #9</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_deprecated_decisions">9.2. Deprecated decisions</h3>
+<div class="paragraph">
+<p>Some decisions we made during the development of the project, but that were reconsidered:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 22.2223%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Architectural decision</th>
+<th class="tableblock halign-left valign-top">Advantages</th>
+<th class="tableblock halign-left valign-top">Disadvantages</th>
+<th class="tableblock halign-left valign-top">Why we reconsidered it</th>
+<th class="tableblock halign-left valign-top">Link to the ADR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Java</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Using this Language that we all have been using for so long we can be assured that there will not be any of the mistakes that comes with learning a new language..</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Its popularity is decreasing with the time. Nowadays other stacks are more popular; such as those that are based on JavaScript.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">We believe using one and only language will be more handy than using several: one for the frontend and one for the backend.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%231%3A-Backend-Programming-Language">ADR #1</a></p></td>
+</tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
