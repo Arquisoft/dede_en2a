@@ -97,6 +97,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
         obtainReviews(id + "");
     }, []);
 
+<<<<<<< ratingV2
     const addProductToCart = () => {
         if (product != undefined) {
             props.onAdd(product);
@@ -206,6 +207,108 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                     <ProductCommentList reviews={reviews}></ProductCommentList>
                     <ReviewDialog product = {product} show={dialogOpen} stars={starsSelected}/>
                     <ShareDialog show={shareDialogOpen}/>
+=======
+  const { id } = useParams<keyof ProductDets>() as ProductDets;
+
+  const obtainProduct = async () => {
+    if (props.product == null) setProduct(await getProduct(id));
+    else setProduct(props.product);
+  };
+
+  const obtainReviews = async (code: string) => {
+    setReviews(await getReviewsByCode(code));
+  };
+
+  const [product, setProduct] = useState<Product>();
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    obtainProduct();
+    obtainReviews(id + "");
+    console.log(1);
+  }, []);
+
+  if (typeof product === "undefined") {
+    return (
+      <React.Fragment>
+        <Breadcrumbs aria-label="breadcrumb" style={{ margin: "2vh 2vw" }}>
+          <Link underline="hover" color="inherit" href="/">
+            DEDE
+          </Link>
+          <Link underline="hover" color="inherit" href="/shopping/">
+            Shopping
+          </Link>
+          <Typography color="text.primary">Product not found :(</Typography>
+        </Breadcrumbs>
+
+        <h1>No Product found with id: {id}</h1>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <Breadcrumbs aria-label="breadcrumb" style={{ margin: "2vh 2vw" }}>
+          <Link underline="hover" color="inherit" href="/">
+            DEDE
+          </Link>
+          <Link underline="hover" color="inherit" href="/shopping/">
+            Shopping
+          </Link>
+          <Typography color="text.primary">{product.name}</Typography>
+        </Breadcrumbs>
+        <Grid>
+          <Paper
+            variant="outlined"
+            elevation={8}
+            style={{ margin: "3vh 5vw", padding: "1em" }}
+          >
+            <Grid
+              container
+              spacing={0}
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              style={{ minHeight: "30vh", margin: "2vh", marginBottom: "4vh" }}
+            >
+              <Grid xs>
+                <Paper style={{ margin: "2vh 2vw", padding: ".5em" }}>
+                  <Img
+                    alt="Image of the product"
+                    src={require("../images/"
+                      .concat(product.code)
+                      .concat(".png"))}
+                  />
+                </Paper>
+              </Grid>
+
+              <Grid xs direction={"column"}>
+                <h1> {product.name} </h1>
+                <Rating
+                  name="hover-feedback"
+                  value={getReviewMean(reviews)}
+                  precision={0.5}
+                  onChange={(event, newValue) => {
+                    setValue(newValue);
+                  }}
+                  onChangeActive={(event, newHover) => {
+                    setHover(newHover);
+                  }}
+                />
+                <Paper style={{ margin: "4vh 2vw", padding: ".5em" }}>
+                  <Typography>{product.description}</Typography>
+                </Paper>
+                <h2> {product.price}€ </h2>
+                <Grid style={{ margin: "4vh 0 0 0" }}>
+                  <StockAlert stock={product.stock} /> <br />
+                  <Button
+                    variant="contained"
+                    disabled={!stockOption}
+                    onClick={() => props.onAdd(product)}
+                    sx={{ my: 1 }}
+                  >
+                    Add product to cart
+                  </Button>
+>>>>>>> develop
                 </Grid>
 
                 <ProductSpeedDial
