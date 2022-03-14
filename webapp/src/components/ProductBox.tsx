@@ -3,8 +3,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
-import {styled} from "@mui/material/styles";
-import {useNavigate} from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 import { Product } from "../shared/shareddtypes";
 
