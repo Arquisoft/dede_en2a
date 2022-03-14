@@ -51,6 +51,11 @@ Those are the different decisions we have taken for developing our project. They
 | Works just fine with _Asciidoc_. We can share diagrams in a minimalistic way: few lines of code; images are way heavier.
 | Not as easy to use as a graphical application.
 | https://github.com/Arquisoft/dede_en2a/wiki/ADR-%237%3A-Diagrams-tool[ADR #7]
+
+| *Prettier*
+| We all write code in a different manner, having a tool that manages the formatting is way too handy
+| Custom formattings are not allowed unless you tell the plug-in to do it
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%239%3A-Code-formatter[ADR #9]
 |===
 
 === Deprecated decisions
