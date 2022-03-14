@@ -39,3 +39,14 @@ export const createReview: RequestHandler = async (req, res) => {
     res.status(412).json({ message: "The data is not valid " + error });
   }
 };
+export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {
+  try {
+    const reviews = await reviewModel.find({
+      productCode: req.params.productCode,
+      userEmail: req.params.email
+    });
+    return res.json(reviews);
+  } catch (error) {
+    res.json(error);
+  }
+};
