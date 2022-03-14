@@ -27,7 +27,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "./App.css";
-import {LocalSee} from "@mui/icons-material";
 import {
   createTheme,
   CssBaseline,
@@ -35,16 +34,7 @@ import {
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
-import {
-  amber,
-  blue,
-  blueGrey,
-  deepOrange,
-  grey,
-  indigo,
-  lightBlue,
-  yellow,
-} from "@mui/material/colors";
+import { grey, lightBlue } from "@mui/material/colors";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -56,7 +46,6 @@ function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [user, setUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<Order[]>([]); //([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const createShop = async () => {
@@ -66,7 +55,6 @@ function App(): JSX.Element {
 
   const setCurrentUser = (user: User) => {
     localStorage.setItem("user.email", user.email);
-    setUser(user);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
@@ -194,10 +182,8 @@ function App(): JSX.Element {
 
   if (localStorage.getItem("theme") === null) {
     localStorage.setItem("theme", String(initialTheme));
-    console.log("none -> " + initialTheme);
   } else {
     initialTheme = localStorage.getItem("theme") == "true";
-    console.log("already -> " + initialTheme);
   }
 
   const [mode, setMode] = React.useState<PaletteMode>(
@@ -255,7 +241,7 @@ function App(): JSX.Element {
               element={
                 <Checkout
                   productsCart={productsCart.slice()}
-                  user={user}
+                  userEmail={localStorage.getItem("user.email")}
                   deleteCart={handleDeleteCart}
                 />
               }
@@ -274,13 +260,15 @@ function App(): JSX.Element {
                 <ProductDetails product={null as any} onAdd={handleAddCart} />
               }
             />
-          <Route
-            path="orders"
-            element={<OrderList userEmail={user?.email} />}
-          />
-          <Route path="/order/:code" element={<OrderDetails />} />
-        </Routes>
-        <Footer />
+            <Route
+              path="orders"
+              element={
+                <OrderList userEmail={localStorage.getItem("user.email")} />
+              }
+            />
+            <Route path="/order/:code" element={<OrderDetails />} />
+          </Routes>
+          <Footer />
 
           <Snackbar
             open={notificationStatus}

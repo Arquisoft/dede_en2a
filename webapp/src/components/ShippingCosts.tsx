@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 
 import {
@@ -25,6 +26,7 @@ import {
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
   const [map, setMap] = React.useState<string>();
+  const [loading, setLoading] = React.useState(false);
 
   const solidPodAddress = async () => {
     let profileDocumentURI = webId.split("#")[0]; // we are just interested in the card
@@ -36,10 +38,15 @@ export default function ShippingCosts(props: any): JSX.Element {
   };
 
   const shippingCosts = async (street_address: string) => {
+    setLoading(true); // we start with the loading process
+
     let destCoords: string = await getCoordinatesFromAddress(street_address);
     props.handleCostsCalculated(true);
     props.handleCosts(await calculateShippingCosts(destCoords));
-    setMap(await showMapRoute(destCoords));
+
+    showMapRoute(destCoords)
+      .then((response) => setMap(response))
+      .finally(() => setLoading(false)); // loading process must be finished
   };
 
   const calculateCosts = async () => {
@@ -77,7 +84,8 @@ export default function ShippingCosts(props: any): JSX.Element {
       >
         Calculate Shipping Costs
       </Button>
-      {props.isCostsCalculated && (
+      {loading && <LinearProgress />}
+      {props.isCostsCalculated && !loading && (
         <Box component="div">
           <Divider sx={{ mt: 2, mb: 2 }}>DELIVERY</Divider>
           <Img src={map} alt="Image of the delivery process" />

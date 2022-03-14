@@ -1,6 +1,6 @@
 import * as React from "react";
-
 import { Navigate } from "react-router-dom";
+
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
@@ -12,12 +12,11 @@ import Typography from "@mui/material/Typography";
 
 import { updateProduct } from "../api/api";
 import { CartItem } from "../shared/shareddtypes";
+import { saveOrder } from "../helpers/ShoppingCartHelper";
 
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 import Billing from "./Billing";
-
-import { saveOrder } from "../helpers/ShoppingCartHelper";
 
 function getSteps() {
   return [
@@ -33,7 +32,6 @@ export default function Checkout(props: any) {
   const [isCostsCalculated, setCostsCalculated] =
     React.useState<boolean>(false);
   const [costs, setCosts] = React.useState<number>(Number());
-  const [finish, setFinish] = React.useState<Boolean>(false);
 
   const steps = getSteps();
 
@@ -51,26 +49,27 @@ export default function Checkout(props: any) {
     // when we click FINISH button ==> update the stock
     if (activeStep === steps.length - 1) {
       handleUpdateStock();
-      saveOrder(props.productsCart, costs, props.user);
+      saveOrder(props.productsCart, costs, props.userEmail);
       props.deleteCart();
 
-      setFinish(true);
+      // We have finished the process...
+      <Navigate to="/" />;
     }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    setCostsCalculated(false);
-    setCosts(Number());
+
+    if (activeStep === 1) {
+      // if we came back to the beginning
+      setCostsCalculated(false);
+      setCosts(Number());
+    }
   };
 
   const handlePayed = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
-  if (finish) {
-    return <Navigate to="/" />;
-  }
 
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
