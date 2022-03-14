@@ -32,7 +32,6 @@ export default function Checkout(props: any) {
   const [isCostsCalculated, setCostsCalculated] =
     React.useState<boolean>(false);
   const [costs, setCosts] = React.useState<number>(Number());
-  const [finish, setFinish] = React.useState<Boolean>(false);
 
   const steps = getSteps();
 
@@ -54,19 +53,18 @@ export default function Checkout(props: any) {
       props.deleteCart();
 
       // We have finished the process...
-      setFinish(true);
-    }
-
-    if (finish) {
-      // Go home when finishing
-      return <Navigate to="/" />;
+      <Navigate to="/" />;
     }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    setCostsCalculated(false);
-    setCosts(Number());
+
+    if (activeStep === 1) {
+      // if we came back to the beginning
+      setCostsCalculated(false);
+      setCosts(Number());
+    }
   };
 
   const handlePayed = () => {
