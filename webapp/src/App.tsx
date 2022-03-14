@@ -27,6 +27,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "./App.css";
+import {LocalSee} from "@mui/icons-material";
 import {
   createTheme,
   CssBaseline,
@@ -64,6 +65,7 @@ function App(): JSX.Element {
   };
 
   const setCurrentUser = (user: User) => {
+    localStorage.setItem("user.email", user.email);
     setUser(user);
     setNotificationStatus(true);
     setNotification({
@@ -73,6 +75,7 @@ function App(): JSX.Element {
   };
 
   const logCurrentUserOut = () => {
+    localStorage.removeItem("user.email");
     setNotificationStatus(true);
     setNotification({
       severity: "success",
