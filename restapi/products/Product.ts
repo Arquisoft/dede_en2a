@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { model, Schema } = mongoose
 
 
-const product = new Schema({
+export const product = new Schema({
     code: {
         type: String,
         required: true,
