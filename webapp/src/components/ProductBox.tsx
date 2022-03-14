@@ -36,9 +36,15 @@ export default function ProductBox(props: ProductListProps): JSX.Element {
   let navigate = useNavigate();
 
   return (
-    <Grid container alignItems="center" direction="column" rowSpacing="5">
+    <Grid
+      container
+      alignItems="center"
+      direction="column"
+      rowSpacing="5"
+      sx={{ my: 2 }}
+    >
       <Grid item>
-        <ButtonBase onClick={() => navigate("product/" + props.product.code)}>
+        <ButtonBase onClick={() => navigate("/product/" + props.product.code)}>
           <Img
             alt="Image of the product"
             src={require("../images/"

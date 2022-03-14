@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
@@ -36,64 +37,66 @@ function Pricing() {
   ];
 
   return (
-    <Grid container spacing={3} alignItems="flex-end">
-      {tiers.map((tier) => (
-        <Grid item key={tier.title} xs={12} md={4}>
-          <Card>
-            <CardHeader
-              title={tier.title}
-              subheader={tier.subheader}
-              titleTypographyProps={{ align: "center" }}
-              action={tier.title === "Pro" ? <StarIcon /> : null}
-              subheaderTypographyProps={{
-                align: "center",
-              }}
-              sx={{
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? theme.palette.grey[200]
-                    : theme.palette.grey[700],
-              }}
-            />
-            <CardContent>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "baseline",
-                  mb: 2,
+    <Container maxWidth="md" component="main" sx={{ pt: 4 }}>
+      <Grid container spacing={3} alignItems="center">
+        {tiers.map((tier) => (
+          <Grid item key={tier.title} xs={12} md={4}>
+            <Card>
+              <CardHeader
+                title={tier.title}
+                subheader={tier.subheader}
+                titleTypographyProps={{ align: "center" }}
+                action={tier.title === "Pro" ? <StarIcon /> : null}
+                subheaderTypographyProps={{
+                  align: "center",
                 }}
-              >
-                <Typography component="h2" variant="h3" color="text.primary">
-                  ${tier.price}
-                </Typography>
-                <Typography variant="h6" color="text.secondary"></Typography>
-              </Box>
-            </CardContent>
-            <CardActions>
-              <Button
-                fullWidth
-                variant={tier.buttonVariant as "outlined" | "contained"}
-              >
-                {tier.buttonText}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+                sx={{
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.grey[200]
+                      : theme.palette.grey[700],
+                }}
+              />
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "baseline",
+                    mb: 2,
+                  }}
+                >
+                  <Typography component="h2" variant="h3" color="text.primary">
+                    ${tier.price}
+                  </Typography>
+                  <Typography variant="h6" color="text.secondary"></Typography>
+                </Box>
+              </CardContent>
+              <CardActions>
+                <Button
+                  fullWidth
+                  variant={tier.buttonVariant as "outlined" | "contained"}
+                >
+                  {tier.buttonText}
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 }
 
 function Hero() {
   return (
-    <Box
+    <Stack
       sx={{
         bgcolor: "background.paper",
-        pt: 8,
-        pb: 6,
+        height: "90vh",
       }}
       component="main"
+      justifyContent="center"
     >
       <Container maxWidth="sm">
         <Typography
@@ -128,15 +131,15 @@ function Hero() {
           </Button>
         </Stack>
       </Container>
-    </Box>
+    </Stack>
   );
 }
 
 export default function Home() {
   return (
-    <Stack spacing={2}>
+    <React.Fragment>
       <Hero />
       <Pricing />
-    </Stack>
+    </React.Fragment>
   );
 }

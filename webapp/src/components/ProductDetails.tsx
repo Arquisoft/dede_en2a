@@ -114,8 +114,8 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
           <Link underline="hover" color="inherit" href="/">
             DEDE
           </Link>
-          <Link underline="hover" color="inherit" href="/shopping/">
-            Shopping
+          <Link underline="hover" color="inherit" href="/shop">
+            Shop
           </Link>
           <Typography color="text.primary">{product.name}</Typography>
         </Breadcrumbs>
