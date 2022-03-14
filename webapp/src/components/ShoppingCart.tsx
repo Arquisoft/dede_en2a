@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
@@ -7,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
-import ShoppingCart from "./ShoppingCart";
+import ShoppingCartTable from "./ShoppingCartTable";
 
 import { CartItem, Product } from "../shared/shareddtypes";
 
@@ -18,7 +17,7 @@ type ShoppingProps = {
   onDecrementUnit: (product: Product) => void;
 };
 
-function Shopping(props: ShoppingProps): JSX.Element {
+export default function ShoppingCart(props: ShoppingProps): JSX.Element {
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
       <Paper
@@ -28,7 +27,7 @@ function Shopping(props: ShoppingProps): JSX.Element {
         <Typography component="h1" variant="h4" align="center">
           Shopping cart
         </Typography>
-        <ShoppingCart
+        <ShoppingCartTable
           products={props.products}
           totalUnitsInCart={props.totalUnitsInCart}
           onIncrementUnit={props.onIncrementUnit}
@@ -60,5 +59,3 @@ function Shopping(props: ShoppingProps): JSX.Element {
     </Container>
   );
 }
-
-export default Shopping;

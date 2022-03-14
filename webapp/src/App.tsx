@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import Home from "./components/Home";
 import Shop from "./components/Shop";
 import ShoppingCart from "./components/ShoppingCart";
 import SignIn from "./components/SignIn";
@@ -217,8 +218,9 @@ function App(): JSX.Element {
             initialState={mode === "dark"}
           />
           <Routes>
+            <Route index element={<Home />} />
             <Route
-              index
+              path="shop"
               element={
                 <Shop
                   products={products}
