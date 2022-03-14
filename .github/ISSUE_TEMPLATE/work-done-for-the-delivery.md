@@ -13,10 +13,6 @@ I have done the following tasks:
 
 1. xxx 
 
-### What I reviewed
-
-1. xxx 
-
 ### Other
 
 1. xxx
