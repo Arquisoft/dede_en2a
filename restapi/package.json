@@ -17,6 +17,7 @@
     "express-async-handler": "^1.2.0",
     "express-prom-bundle": "^6.4.1",
     "express-validator": "^6.14.0",
+    "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.0",
     "mongoose": "^6.2.2",
