@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -21,6 +20,7 @@ import Menu from "@mui/material/Menu";
 import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import StoreIcon from "@mui/icons-material/Store";
 
 import { Grid } from "@mui/material";
 import MUISwitch from "./ThemeSlider";
@@ -119,7 +119,7 @@ type NavBarProps = {
   initialState: boolean;
 };
 
-function NavBar(props: NavBarProps): JSX.Element {
+export default function NavBar(props: NavBarProps): JSX.Element {
   const [state, setState] = React.useState(false);
 
   const toggleDrawer =
@@ -151,7 +151,14 @@ function NavBar(props: NavBarProps): JSX.Element {
           <Typography variant="inherit">Home</Typography>
         </MenuItem>
 
-        <MenuItem component={Link} to="/cart">
+        <MenuItem component={Link} to="shop">
+          <ListItemIcon>
+            <StoreIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Shop</Typography>
+        </MenuItem>
+
+        <MenuItem component={Link} to="cart">
           <ListItemIcon>
             <ShoppingCartIcon fontSize="small" />
           </ListItemIcon>
@@ -213,7 +220,7 @@ function NavBar(props: NavBarProps): JSX.Element {
             size="large"
             color="inherit"
             component={Link}
-            to="/cart"
+            to="cart"
             sx={{ mr: 2 }}
           >
             <Badge badgeContent={props.totalUnitsInCart} color="error">
@@ -226,5 +233,3 @@ function NavBar(props: NavBarProps): JSX.Element {
     </Box>
   );
 }
-
-export default NavBar;

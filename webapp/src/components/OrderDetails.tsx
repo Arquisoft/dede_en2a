@@ -20,7 +20,6 @@ function OrderListItem(props: any): JSX.Element {
   const Img = styled("img")({
     display: "block",
     width: "30%",
-
   });
 
   const obtainProduct = async () => {
@@ -40,11 +39,7 @@ function OrderListItem(props: any): JSX.Element {
   else
     return (
       <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
-        <Img 
-            src={require("../images/"
-            .concat(props.code)
-            .concat(".png"))}
-        />
+        <Img src={require("../images/".concat(props.code).concat(".png"))} />
         <Typography mr={4}>{props.amount}</Typography>
         <ListItemText primary={product.name} secondary={product.description} />
         <Typography>{product.price}€</Typography>

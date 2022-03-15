@@ -3,8 +3,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
-import {styled} from "@mui/material/styles";
-import {useNavigate} from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 import { Product } from "../shared/shareddtypes";
 
@@ -14,7 +14,7 @@ type ProductListProps = {
   onAdd: (product: Product) => void;
 };
 
-function ProductBox(props: ProductListProps): JSX.Element {
+export default function ProductBox(props: ProductListProps): JSX.Element {
   function StockAlert(props: any): JSX.Element {
     if (props.stock <= props.amount) {
       // to prevent from some issues regarding no stock
@@ -36,9 +36,15 @@ function ProductBox(props: ProductListProps): JSX.Element {
   let navigate = useNavigate();
 
   return (
-    <Grid container alignItems="center" direction="column" rowSpacing="5">
+    <Grid
+      container
+      alignItems="center"
+      direction="column"
+      rowSpacing="5"
+      sx={{ my: 2 }}
+    >
       <Grid item>
-        <ButtonBase onClick={() => navigate("product/" + props.product.code)}>
+        <ButtonBase onClick={() => navigate("/product/" + props.product.code)}>
           <Img
             alt="Image of the product"
             src={require("../images/"
@@ -75,5 +81,3 @@ function ProductBox(props: ProductListProps): JSX.Element {
     </Grid>
   );
 }
-
-export default ProductBox;

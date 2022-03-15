@@ -1,128 +1,61 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 
-import { calculateTotal } from "../helpers/ShoppingCartHelper";
+import ShoppingCartTable from "./ShoppingCartTable";
+
 import { CartItem, Product } from "../shared/shareddtypes";
 
-type ShoppingCartProps = {
+type ShoppingProps = {
   products: CartItem[];
   totalUnitsInCart: number;
   onIncrementUnit: (product: Product) => void;
   onDecrementUnit: (product: Product) => void;
 };
 
-function ShoppingCart(props: ShoppingCartProps): JSX.Element {
-  const handleButton = (cartItem: CartItem) => {
-    if (cartItem.amount >= cartItem.product.stock) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const Img = styled("img")({
-    display: "block",
-    width: "25%",
-  });
-
-  if (props.totalUnitsInCart > 0)
-    return (
-      <React.Fragment>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell> Product </TableCell>
-                <TableCell> Quantity </TableCell>
-                <TableCell> Price per unit </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {props.products.map((cartItem: CartItem) => {
-                if (cartItem.amount > 0)
-                  return (
-                    <TableRow key={cartItem.product.code}>
-                      <TableCell>
-                        <Stack
-                          direction={{ xs: "column", sm: "row" }}
-                          spacing={{ xs: 1, sm: 2, md: 4 }}
-                          justifyContent="flex-start"
-                          alignItems="center"
-                        >
-                          <Img
-                            alt="Imagen del producto en el carrito"
-                            src={require("../images/"
-                              .concat(cartItem.product.code)
-                              .concat(".png"))}
-                          />
-                          {cartItem.product.name}
-                        </Stack>
-                      </TableCell>
-                      <TableCell>
-                        <Stack
-                          direction={{ xs: "column", sm: "row" }}
-                          justifyContent="space-evenly"
-                          alignItems="center"
-                        >
-                          <Button
-                            onClick={() =>
-                              props.onDecrementUnit(cartItem.product)
-                            }
-                            className="m-1"
-                          >
-                            -
-                          </Button>
-                          <Typography component="div">
-                            {cartItem.amount}
-                          </Typography>
-                          <Button
-                            onClick={() =>
-                              props.onIncrementUnit(cartItem.product)
-                            }
-                            disabled={!handleButton(cartItem)}
-                            className="m-1"
-                          >
-                            +
-                          </Button>
-                        </Stack>
-                      </TableCell>
-                      <TableCell>
-                        <Typography component="div">
-                          {cartItem.product.price}€
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Typography variant="h6" className="m-2">
-          Total Price -{" "}
-          {
-            calculateTotal(props.products, 0) // There are no shipping costs yet here
-          }
-          €
+export default function ShoppingCart(props: ShoppingProps): JSX.Element {
+  return (
+    <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Paper
+        variant="outlined"
+        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+      >
+        <Typography component="h1" variant="h4" align="center">
+          Shopping cart
         </Typography>
-      </React.Fragment>
-    );
-  else
-    return (
-      <Typography variant="h6" className="m-2">
-        Shopping cart is empty :(
-      </Typography>
-    );
-}
+        <ShoppingCartTable
+          products={props.products}
+          totalUnitsInCart={props.totalUnitsInCart}
+          onIncrementUnit={props.onIncrementUnit}
+          onDecrementUnit={props.onDecrementUnit}
+        />
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          sx={{ mt: 2 }}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button variant="outlined" className="m-1">
+              Continue shopping
+            </Button>
+          </Link>
 
-export default ShoppingCart;
+          <Button
+            variant="contained"
+            disabled={props.products.length === 0}
+            component={Link}
+            to="/checkout"
+            className="m-1"
+          >
+            Proceed to checkout
+          </Button>
+        </Stack>
+      </Paper>
+    </Container>
+  );
+}
