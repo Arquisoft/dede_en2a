@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import {
-  CartItem,
-  NotificationType,
-  Order,
-  Product,
-  User,
-} from "./shared/shareddtypes";
 
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
-import Shopping from "./components/Shopping";
+import Shop from "./components/Shop";
+import ShoppingCart from "./components/ShoppingCart";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Checkout from "./components/Checkout";
@@ -19,32 +13,33 @@ import ProductDetails from "./components/ProductDetails";
 import OrderDetails from "./components/OrderDetails";
 import OrderList from "./components/OrderList";
 
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-
-import { getProducts } from "./api/api";
-import "bootstrap/dist/css/bootstrap.css";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-
 import "./App.css";
-import { LocalSee } from "@mui/icons-material";
+import "bootstrap/dist/css/bootstrap.css";
+
 import {
   createTheme,
   CssBaseline,
   PaletteMode,
   ThemeProvider,
   useMediaQuery,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import { grey, lightBlue } from "@mui/material/colors";
+
+import { getProducts } from "./api/api";
 import {
-  amber,
-  blue,
-  blueGrey,
-  deepOrange,
-  grey,
-  indigo,
-  lightBlue,
-  yellow,
-} from "@mui/material/colors";
+  CartItem,
+  NotificationType,
+  Product,
+  User,
+} from "./shared/shareddtypes";
+
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
+import "bootstrap/dist/css/bootstrap.css";
+
+import "./App.css";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -57,7 +52,6 @@ function App(): JSX.Element {
   const [productsCart, setProductsCart] = useState<CartItem[]>([]);
   const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
   const [user, setUser] = useState<User | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]); //([{userId:'12', shippingPrice: 23,  totalPrice: 43}]);
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
@@ -66,7 +60,6 @@ function App(): JSX.Element {
 
   const setCurrentUser = (user: User) => {
     localStorage.setItem("user.email", user.email);
-    setUser(user);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
@@ -194,9 +187,8 @@ function App(): JSX.Element {
 
   if (localStorage.getItem("theme") === null) {
     localStorage.setItem("theme", String(initialTheme));
-    console.log("none -> " + initialTheme);
   } else {
-    initialTheme = localStorage.getItem("theme") == "true";
+    initialTheme = localStorage.getItem("theme") === "true";
     console.log("already -> " + initialTheme);
   }
 
@@ -216,8 +208,7 @@ function App(): JSX.Element {
       <CssBaseline />
       <PayPalScriptProvider
         options={{
-          "client-id":
-            "Ad1H-xmYNu8WPb6jDwiLjirog2e5jA6dylivOrsS5KJ4R_RXt0HOBe7wJ7fuGvMnMDet9RowUTBDAtnV",
+          "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID!,
           currency: "EUR",
         }}
       >
@@ -229,10 +220,11 @@ function App(): JSX.Element {
             initialState={mode === "dark"}
           />
           <Routes>
+            <Route index element={<Home />} />
             <Route
-              index
+              path="shop"
               element={
-                <Home
+                <Shop
                   products={products}
                   cartProducts={productsCart}
                   onAdd={handleAddCart}
@@ -242,7 +234,7 @@ function App(): JSX.Element {
             <Route
               path="cart"
               element={
-                <Shopping
+                <ShoppingCart
                   products={productsCart}
                   totalUnitsInCart={totalUnitsInCart}
                   onDecrementUnit={handleDecrementUnit}
@@ -255,7 +247,7 @@ function App(): JSX.Element {
               element={
                 <Checkout
                   productsCart={productsCart.slice()}
-                  user={user}
+                  userEmail={localStorage.getItem("user.email")}
                   deleteCart={handleDeleteCart}
                 />
               }
@@ -276,7 +268,9 @@ function App(): JSX.Element {
             />
             <Route
               path="orders"
-              element={<OrderList userEmail={user?.email} />}
+              element={
+                <OrderList userEmail={localStorage.getItem("user.email")} />
+              }
             />
             <Route path="/order/:code" element={<OrderDetails />} />
           </Routes>

@@ -1,47 +1,145 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import CardHeader from "@mui/material/CardHeader";
+import StarIcon from "@mui/icons-material/StarBorder";
 
-import { getUsers } from "../api/api";
-import { User } from "../shared/shareddtypes";
-import { CartItem, Product } from "../shared/shareddtypes";
-
-import ProductList from "./ProductList";
-
-type HomeProps = {
-  products: Product[];
-  cartProducts: CartItem[];
-  onAdd: (product: Product) => void;
-};
-
-function Home(props: HomeProps): JSX.Element {
-  const [users, setUsers] = useState<User[]>([]);
-
-  const refreshUserList = async () => {
-    setUsers(await getUsers());
-  };
-
-  useEffect(() => {
-    refreshUserList();
-  }, []);
+function Pricing() {
+  const tiers = [
+    {
+      title: "Free",
+      price: "0",
+      buttonText: "Sign up for free",
+      buttonVariant: "outlined",
+    },
+    {
+      title: "Pro",
+      subheader: "Most popular",
+      price: "15",
+      buttonText: "Get started",
+      buttonVariant: "contained",
+    },
+    {
+      title: "Enterprise",
+      price: "30",
+      buttonText: "Contact us",
+      buttonVariant: "outlined",
+    },
+  ];
 
   return (
-    <React.Fragment>
-      <Typography
-        component="h1"
-        variant="h4"
-        align="center"
-        sx={{ mb: 4, mt: 4 }}
-      >
-        Shop
-      </Typography>
-      <ProductList
-        products={props.products}
-        cartProducts={props.cartProducts}
-        OnAddCart={props.onAdd}
-      />
-    </React.Fragment>
+    <Container maxWidth="md" component="main" sx={{ pt: 4 }}>
+      <Grid container spacing={3} alignItems="center">
+        {tiers.map((tier) => (
+          <Grid item key={tier.title} xs={12} md={4}>
+            <Card>
+              <CardHeader
+                title={tier.title}
+                subheader={tier.subheader}
+                titleTypographyProps={{ align: "center" }}
+                action={tier.title === "Pro" ? <StarIcon /> : null}
+                subheaderTypographyProps={{
+                  align: "center",
+                }}
+                sx={{
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.grey[200]
+                      : theme.palette.grey[700],
+                }}
+              />
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "baseline",
+                    mb: 2,
+                  }}
+                >
+                  <Typography component="h2" variant="h3" color="text.primary">
+                    ${tier.price}
+                  </Typography>
+                  <Typography variant="h6" color="text.secondary"></Typography>
+                </Box>
+              </CardContent>
+              <CardActions>
+                <Button
+                  fullWidth
+                  variant={tier.buttonVariant as "outlined" | "contained"}
+                >
+                  {tier.buttonText}
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 }
 
-export default Home;
+function Hero() {
+  return (
+    <Stack
+      sx={{
+        bgcolor: "background.paper",
+        height: "90vh",
+      }}
+      component="main"
+      justifyContent="center"
+    >
+      <Container maxWidth="sm">
+        <Typography
+          component="h1"
+          variant="h2"
+          align="center"
+          color="text.primary"
+          gutterBottom
+        >
+          Welcome to DeDe
+        </Typography>
+        <Typography
+          variant="h5"
+          align="center"
+          color="text.secondary"
+          paragraph
+        >
+          We are creating an app for you to order the products you want - as in
+          any other site - with privacy in mind
+        </Typography>
+        <Stack
+          sx={{ pt: 4 }}
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+        >
+          <Button variant="contained" component={Link} to="shop">
+            Start shopping
+          </Button>
+          <Button variant="outlined" component={Link} to="sign-up">
+            Create an account
+          </Button>
+        </Stack>
+      </Container>
+    </Stack>
+  );
+}
+
+export default function Home() {
+  return (
+    <React.Fragment>
+      <Hero />
+      <Pricing />
+    </React.Fragment>
+  );
+}

@@ -22,7 +22,7 @@ import {
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-import { Order, OrderProduct, User } from "../shared/shareddtypes";
+import { Order, User } from "../shared/shareddtypes";
 import { getOrdersForUser, getUser } from "../api/api";
 import { Autorenew } from "@mui/icons-material";
 
@@ -88,7 +88,6 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    //backgroundColor: theme.palette.common.dark,
     backgroundColor: theme.palette.info.main,
     color: theme.palette.common.white,
     fontSize: 22,
@@ -192,7 +191,7 @@ function Orders(props: any): JSX.Element {
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
       <Typography component="h1" variant="h4" align="center">
-        Your orders {user?.name}
+        Your orders, {user?.name}
         <IconButton edge="end">
           <Tooltip title="Refresh orders" arrow>
             <Autorenew onClick={refreshOrderList}></Autorenew>
