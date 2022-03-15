@@ -43,15 +43,13 @@ import "./App.css";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productsCart, setProductsCart] = useState<CartItem[]>([]);
+  const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",
   });
-
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productsCart, setProductsCart] = useState<CartItem[]>([]);
-  const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [user, setUser] = useState<User | null>(null);
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
