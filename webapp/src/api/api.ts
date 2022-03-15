@@ -8,7 +8,6 @@ export async function addUser(user: User): Promise<boolean> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       name: user.name,
-      surname: user.surname,
       email: user.email,
       password: user.password,
     }),
@@ -120,10 +119,14 @@ export async function getReviewsByCode(code: string): Promise<Review[]> {
   return response.json();
 }
 
-
-export async function getReviewsByCodeAndEmail(code : string, email : string):Promise<Review[]>{
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
-  let response = await fetch(apiEndPoint+'/reviews/listByCodeAndEmail/' + code + "/" + email);
+export async function getReviewsByCodeAndEmail(
+  code: string,
+  email: string
+): Promise<Review[]> {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(
+    apiEndPoint + "/reviews/listByCodeAndEmail/" + code + "/" + email
+  );
   return response.json();
 }
 
@@ -133,10 +136,10 @@ export async function addReview(review: Review): Promise<boolean> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      rating : review.rating,
-      comment : review.comment,
-      userEmail : review.userEmail,
-      productCode : review.productCode,
+      rating: review.rating,
+      comment: review.comment,
+      userEmail: review.userEmail,
+      productCode: review.productCode,
     }),
   });
   if (response.status === 200) {

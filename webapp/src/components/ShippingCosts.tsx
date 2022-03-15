@@ -8,31 +8,19 @@ import Divider from "@mui/material/Divider";
 import { styled } from "@mui/material/styles";
 
 import {
-  getSolidDataset,
-  getThing,
-  getStringNoLocale,
-  Thing,
-} from "@inrupt/solid-client";
-
-import { VCARD } from "@inrupt/vocab-common-rdf";
-
-import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
 } from "../helpers/ComputeDistanceHelper";
+import { getAddressFromPod } from "../helpers/SolidHelper";
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
   const [map, setMap] = React.useState<string>();
 
-  const solidPodAddress = async () => {
-    let profileDocumentURI = webId.split("#")[0]; // we are just interested in the card
-    let myDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
-    let profile = getThing(myDataset, webId); // we obtain the thing we are looking for from the dataset
-
-    // we obtain the property we are looking for and return it
-    return getStringNoLocale(profile as Thing, VCARD.street_address) as string;
+  const calculateCosts = async () => {
+    let street_address = await getAddressFromPod(webId); // we obtain the address from the solid pod
+    shippingCosts(street_address); // we compute the address given the pod
   };
 
   const shippingCosts = async (street_address: string) => {
@@ -40,11 +28,6 @@ export default function ShippingCosts(props: any): JSX.Element {
     props.handleCostsCalculated(true);
     props.handleCosts(await calculateShippingCosts(destCoords));
     setMap(await showMapRoute(destCoords));
-  };
-
-  const calculateCosts = async () => {
-    let street_address = await solidPodAddress(); // we obtain the address from the solid pod
-    shippingCosts(street_address); // we compute the address given the pod
   };
 
   const Img = styled("img")({

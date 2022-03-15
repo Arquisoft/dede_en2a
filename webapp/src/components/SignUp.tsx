@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,8 +13,8 @@ import Container from "@mui/material/Container";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { Link, Navigate } from "react-router-dom";
 import * as Checker from "../helpers/CheckFieldsHelper";
+import { getNameFromPod, getEmailsFromPod } from "../helpers/SolidHelper";
 
 import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
@@ -24,46 +24,56 @@ type SignUpProps = {
 };
 
 export default function SignUp(props: SignUpProps) {
+  const [webId, setWebId] = useState("");
   const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
+  const [emails, setEmails] = useState<string[]>([]);
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
-
   const [notificationStatus, setNotificationStatus] = useState(false);
+  const [redirect, setRedirect] = useState<Boolean>(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",
   });
-
-  const [redirect, setRedirect] = useState<Boolean>(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
   };
 
-  const checkFields = () => {
-    if (Checker.checkTextField(name) && Checker.checkTextField(surname))
-      if (Checker.checkEmail(email))
-        if (Checker.checkPasswords(password, repPassword))
-          if (Checker.checkPassword(password)) signUp();
-          else
-            sendErrorNotification(
-              "Password must have: Length 6, lowercase, uppercase and digits"
-            );
-        else sendErrorNotification("Passwords must match");
-      else sendErrorNotification("Invalid email format");
-    else sendErrorNotification("Invalid name or surname");
+  const checkFields = async () => {
+    // We check that the provided WebID is correct
+    if (!Checker.checkTextField(webId))
+      sendErrorNotification("A valid WebID must be provided");
+
+    // We check that the passwords match
+    if (!Checker.checkPasswords(password, repPassword))
+      sendErrorNotification("Passwords must match");
+
+    // We check that the password is correct
+    if (Checker.checkPassword(password)) validateRetrievedFields();
+    else
+      sendErrorNotification(
+        "Passwords must have: Length 6, lowercase, uppercase and digits"
+      );
+  };
+
+  const validateRetrievedFields = async () => {
+    // We store the retrieved name from the pod
+    setName(await getNameFromPod(webId));
+
+    // We store the retrieved emails from the pod
+    setEmails(await getEmailsFromPod(webId));
+    console.log(emails);
   };
 
   const signUp = async () => {
     const newUser: User = {
-      name: name,
-      surname: surname,
-      email: email,
+      name: await getNameFromPod(webId),
+      email: "",
       password: password,
     };
+
     const correctSignUp = await Api.addUser(newUser);
     if (correctSignUp) {
       /*props.setCurrentUser(await Api.getUser(email));
@@ -115,38 +125,15 @@ export default function SignUp(props: SignUpProps) {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  onChange={(e) => setName(e.target.value)}
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(e) => setSurname(e.target.value)}
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
+                  id="webId"
+                  label="Web ID"
+                  name="webId"
+                  onChange={(e) => setWebId(e.target.value)}
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
