@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getProduct, getReviewsByCode } from "../api/api";
+import ProductCommentList from "./ProductCommentList";
+import ProductSpeedDial from "./ProductSpeedDial";
+import ReviewDialog from "./ReviewDialog";
+import ShareDialog from "./ShareDialog";
 
 import {
   Paper,
@@ -63,14 +68,6 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     }
   }
 
-  function setValue(value: number | null) {
-    //TODO
-  }
-
-  function setHover(value: number) {
-    //TODO
-  }
-
   const { id } = useParams<keyof ProductDets>() as ProductDets;
 
   const obtainProduct = async () => {
@@ -84,12 +81,28 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
 
   const [product, setProduct] = useState<Product>();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [dialogOpen, setDialogOpen] = useState<number>(0);
+  const [shareDialogOpen, setShareDialogOpen] = useState<number>(0);
+  const [starsSelected, setSelectedStars] = useState<number>(0);
+
+  const openDialog = () => {
+    setDialogOpen(dialogOpen + 1);
+  };
+
+  const openShareDialog = () => {
+    setShareDialogOpen(shareDialogOpen + 1);
+  };
 
   useEffect(() => {
     obtainProduct();
     obtainReviews(id + "");
-    console.log(1);
   }, []);
+
+  const addProductToCart = () => {
+    if (product != undefined) {
+      props.onAdd(product);
+    }
+  };
 
   if (typeof product === "undefined") {
     return (
@@ -127,36 +140,30 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
           >
             <Grid
               container
-              spacing={0}
               direction="row"
               alignItems="center"
               justifyContent="center"
               style={{ minHeight: "30vh", margin: "2vh", marginBottom: "4vh" }}
             >
-              <Grid xs>
-                <Paper style={{ margin: "2vh 2vw", padding: ".5em" }}>
-                  <Img
-                    alt="Image of the product"
-                    src={require("../images/"
-                      .concat(product.code)
-                      .concat(".jpg"))}
-                  />
-                </Paper>
-              </Grid>
+              <Img
+                alt="Image of the product"
+                src={require("../images/".concat(product.code).concat(".png"))}
+              />
 
               <Grid xs direction={"column"}>
                 <h1> {product.name} </h1>
-                <Rating
-                  name="hover-feedback"
-                  value={getReviewMean(reviews)}
-                  precision={0.5}
-                  onChange={(event, newValue) => {
-                    setValue(newValue);
-                  }}
-                  onChangeActive={(event, newHover) => {
-                    setHover(newHover);
-                  }}
-                />
+                <Button variant="text" onClick={openDialog} sx={{ my: 1 }}>
+                  <Rating
+                    name="hover-feedback"
+                    value={getReviewMean(reviews)}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      if (newValue != null) {
+                        setSelectedStars(newValue);
+                      }
+                    }}
+                  />
+                </Button>
                 <Paper style={{ margin: "4vh 2vw", padding: ".5em" }}>
                   <Typography>{product.description}</Typography>
                 </Paper>
@@ -166,7 +173,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                   <Button
                     variant="contained"
                     disabled={!stockOption}
-                    onClick={() => props.onAdd(product)}
+                    onClick={addProductToCart}
                     sx={{ my: 1 }}
                   >
                     Add product to cart
@@ -176,7 +183,19 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
             </Grid>
           </Paper>
           <ProductCommentList reviews={reviews}></ProductCommentList>
+          <ReviewDialog
+            product={product}
+            show={dialogOpen}
+            stars={starsSelected}
+          />
+          <ShareDialog show={shareDialogOpen} />
         </Grid>
+
+        <ProductSpeedDial
+          addToCart={addProductToCart}
+          review={openDialog}
+          share={openShareDialog}
+        />
       </React.Fragment>
     );
   }

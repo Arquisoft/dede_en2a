@@ -24,9 +24,14 @@ export default function ProductCommentList(
   return (
     <Paper style={{ margin: "3vh 5vw", padding: "1em" }}>
       <h2>User opinions about this product!</h2>
-      <Grid container columns={50} rowSpacing={5} className="mt-2 mb-2">
+      <Grid container rowSpacing={5} className="mt-2 mb-2">
         {props.reviews.map((review: Review) => (
-          <Grid item xs={25} key={(review.userEmail, review.productCode)}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            key={(review.userEmail, review.productCode)}
+          >
             <ProductComment review={review} />
           </Grid>
         ))}

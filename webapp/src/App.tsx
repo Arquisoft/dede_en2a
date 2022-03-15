@@ -56,7 +56,7 @@ function App(): JSX.Element {
   };
 
   const setCurrentUser = (user: User) => {
-    setUser(user);
+    localStorage.setItem("user.email", user.email);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
@@ -65,6 +65,7 @@ function App(): JSX.Element {
   };
 
   const logCurrentUserOut = () => {
+    localStorage.removeItem("user.email");
     setNotificationStatus(true);
     setNotification({
       severity: "success",
@@ -183,7 +184,6 @@ function App(): JSX.Element {
 
   if (localStorage.getItem("theme") === null) {
     localStorage.setItem("theme", String(initialTheme));
-    console.log("none -> " + initialTheme);
   } else {
     initialTheme = localStorage.getItem("theme") === "true";
     console.log("already -> " + initialTheme);
@@ -245,7 +245,7 @@ function App(): JSX.Element {
               element={
                 <Checkout
                   productsCart={productsCart.slice()}
-                  user={user}
+                  userEmail={localStorage.getItem("user.email")}
                   deleteCart={handleDeleteCart}
                 />
               }
@@ -266,7 +266,9 @@ function App(): JSX.Element {
             />
             <Route
               path="orders"
-              element={<OrderList userEmail={user?.email} />}
+              element={
+                <OrderList userEmail={localStorage.getItem("user.email")} />
+              }
             />
             <Route path="/order/:code" element={<OrderDetails />} />
           </Routes>

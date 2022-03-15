@@ -186,7 +186,7 @@ function Orders(props: any): JSX.Element {
   useEffect(() => {
     refreshOrderList();
     refreshUser();
-  });
+  }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>

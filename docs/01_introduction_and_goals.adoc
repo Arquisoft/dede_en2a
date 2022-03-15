@@ -32,10 +32,19 @@ Keep these excerpts as short as possible. Balance readability of this document w
 
 The functional requirements that the application will have:
 
-* Users will be able to select and order products to buy.
-* Users will be able to see the delivery costs of their orders.
-* Users will be able to visualize all the orders they have made.
-* The information of the users will be obtain from the users' pods.
+* The users will be able to select products to buy. Also they will be able to search for a specific product or filter them.
+
+* Once the user has selected the products:
+** They will be able to see the shopping cart and modify the units of each product.
+** The system will calculate the shipping costs using different carrier APIs depending on the user's address.
+** The user will be able to see the final cost of the order and select the payment method complete the order.
+** The system will simulate the order shipping and will notify the user the different states.
+
+* The user will be able to see the orders done.
+* The user will be able to see reviews of the products.
+
+* The application will be implemented using the React framework and TypeScript.
+* The application should be accesible and deployed using a continuos integration system.
 
 === Quality Goals
 
@@ -49,6 +58,11 @@ The functional requirements that the application will have:
 |*Privacy*
 |"Your data, your choice"
 |The only way for us to ensure privacy is allowing users to know what we do with their data. This is only possible if the source code is available for anyone to read it. More in more, we will allow users to use their data as they please, not as we do.
+|High
+
+|*Performance*
+|"80% of the effects come from 20% of the causes"
+|We will aim for the application to load in less than 1.5 seconds; indeed, 47% of the internet users expect a site to load in 2 seconds or less, so we are focusing in doing it better than the average. 
 |High
 
 |*Usability*
@@ -97,7 +111,8 @@ Table with role names, person names, and their expectations with respect to the 
 [options="header",cols="1,2,2"]
 |===
 |Role/Name|Contact|Expectations
-| Students | Lorenzo La Rocca, Álvaro Rodríguez González, Pablo Lopez Amado, Andrés Martínez Rodríguez, Ángel Iglesias Préstamo, Noelia Iglesias Cuesta | Main developers of the application. They will develop the whole application and hence they will improve their teamwork capacity and coding skills.
-| Teachers | José Emilio Labra Gallo, Pablo González González | They will supervise students work, make sure they are going in the right direction and help them if necessary.
-| Users | | Users will be the ones using the application so they have to find it easy to use, intuitive and practical.
+| Students | Lorenzo La Rocca, Álvaro Rodríguez González, Pablo Lopez Amado, Andrés Martínez Rodríguez, Ángel Iglesias Préstamo and Noelia Iglesias Cuesta | Main developers of the application. They will develop the whole application and hence they will improve their teamwork capacity and coding skills.
+| Teachers | José Emilio Labra Gallo and Pablo González González | They will supervise students work, make sure they are going in the right direction and help them if necessary.
+| Users | Anyone that uses the application | Users will be the ones using the application so they have to find it easy to use, intuitive and practical.
+| Empathy | Empathy.co is the commerce Search & Discovery platform built for trust with over 150 Developers and Search Engineers | They are interested in the project, especially in the part that deals with SOLID Pods because they are used and are important in their working area. Also to offer students business practices
 |===

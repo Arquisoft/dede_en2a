@@ -2,7 +2,6 @@ import { Card } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
 import { CartItem, Product } from "../shared/shareddtypes";
-
 import ProductBox from "./ProductBox";
 
 type ProductListProps = {
@@ -23,10 +22,10 @@ export default function ProductList(props: ProductListProps): JSX.Element {
   };
 
   return (
-    <Grid container columns={50} rowSpacing={5} className="mt-2 mb-2">
+    <Grid container spacing={4} sx={{ p: 2 }}>
       {props.products.map((product: Product) => (
-        <Grid item xs={25} key={product.code}>
-          <Card style={{ margin: "1vh 8vw", padding: "1vh 1vw" }}>
+        <Grid item xs={12} md={6} lg={3} key={product.code}>
+          <Card sx={{ py: 2 }}>
             <ProductBox
               product={product}
               currentCartAmount={getCurrentCartAmount(product)}

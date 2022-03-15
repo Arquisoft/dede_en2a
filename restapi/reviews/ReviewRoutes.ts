@@ -11,4 +11,6 @@ api.get('/reviews/listByCode/:productCode', ReviewController.getReviewsByProduct
 
 api.post('/reviews/create', ReviewController.createReview)
 
+api.get('/reviews/listByCodeAndEmail/:productCode/:email', ReviewController.getReviewsByProductAndUser)
+
 export default api

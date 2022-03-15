@@ -16,14 +16,15 @@ export default function ProductComment(
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            flexWrap: "wrap",
           }}
         >
-          <Grid item sx={{ m: 2 }}>
-            <Typography variant="h5" component="h6">
+          <Grid item sx={{ m: 1 }}>
+            <Typography variant="h6" component="h6">
               {props.review.userEmail}
             </Typography>
           </Grid>
-          <Grid item sx={{ m: 2 }}>
+          <Grid item sx={{ m: 1 }}>
             <Rating
               name="read-only"
               value={props.review.rating}

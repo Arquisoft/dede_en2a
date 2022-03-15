@@ -11,6 +11,8 @@ import apiOrders from "./orders/OrderRoutes";
 import apiCarts from "./carts/CartRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
 
+let helmet = require("helmet");
+
 const app: Application = express();
 
 const mongoose = require("mongoose");
@@ -34,6 +36,8 @@ app.use(apiProduct);
 app.use(apiOrders);
 app.use(apiCarts);
 app.use(apiReviews);
+
+app.use(helmet.hidePoweredBy());
 
 app
   .listen(process.env.PORT, (): void => {
