@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   CartItem,
+  CartItemForDB,
+  CartForDB,
   NotificationType,
   Order,
   Product,
@@ -22,7 +24,7 @@ import OrderList from "./components/OrderList";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { getProducts } from "./api/api";
+import { getProducts, saveCart, deleteCart } from "./api/api";
 import "bootstrap/dist/css/bootstrap.css";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -60,15 +62,35 @@ function App(): JSX.Element {
       severity: "success",
       message: "Welcome to DeDe application " + user.name + " " + user.surname,
     });
+    // TODO -- load user cart from DB and store it locally
   };
 
   const logCurrentUserOut = () => {
+    saveCartToDB();
     localStorage.removeItem("user.email");
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "You signed out correctly. See you soon!",
     });
+  };
+
+  const saveCartToDB = () => {
+    deleteCart(localStorage.getItem("user.email") + "");
+
+    var itemsForDB: CartItemForDB[] = [];
+    productsCart.forEach((cartItem) => {
+      itemsForDB.push({
+        productCode: cartItem.product.code,
+        amount: cartItem.amount,
+      });
+    });
+    const cart: CartForDB = {
+      userEmail: localStorage.getItem("user.email") + "",
+      products: itemsForDB,
+    };
+    saveCart(JSON.stringify(cart));
+    handleDeleteCart();
   };
 
   const handleAddCart = (product: Product) => {

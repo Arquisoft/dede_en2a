@@ -1,21 +1,26 @@
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
 
-import { orderProduct } from "../orders/OrderProduct";
+const cartItem = new Schema({
+  productCode: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+});
 
 const cartSchema = new Schema(
   {
-    userId: {
+    userEmail: {
       type: String,
       required: true,
       unique: true,
     },
     products: {
-      type: [orderProduct],
-    },
-    totalPrice: {
-      type: Number,
-      required: true,
+      type: [cartItem],
     },
   },
   {

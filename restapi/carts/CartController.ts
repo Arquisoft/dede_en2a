@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import { cartModel } from "./Cart";
 
 export const getUserCart: RequestHandler = async (req, res) => {
-    const userCart = await cartModel.find({ userId: req.params.userId });
+    const userCart = await cartModel.find({ userEmail: req.params.userEmail });
     if (userCart) {
         return res.json(userCart)
     } else {
@@ -17,12 +17,12 @@ export const createCart: RequestHandler = async (req, res) => {
         const cartSaved = await cart.save()
         res.json(cartSaved)
     } catch (error) {
-        res.status(301).json({ message: 'The data is not valid or that user already has a cart active'})
+        res.status(301).json(" Something went wrong")
     }
 }
 
 export const deleteCart: RequestHandler = async (req, res) => {
-    const cart = await cartModel.findOneAndDelete({userId: req.params.userId});
+    const cart = await cartModel.findOneAndDelete({userEmail: req.params.userEmail});
     if (cart) {
         return res.json(cart)
     }else{

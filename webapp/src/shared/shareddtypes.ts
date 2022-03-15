@@ -43,3 +43,13 @@ export type Review = {
   rating: number;
   comment: string;
 };
+
+export type CartItemForDB = {
+  productCode: String
+  amount: number;
+};
+
+export type CartForDB = {
+  userEmail: string;
+  products: CartItemForDB[]
+}
