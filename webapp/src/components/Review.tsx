@@ -25,24 +25,33 @@ export default function Review(props: any) {
                   primary={cartItem.product.name}
                   secondary={cartItem.product.description}
                 />
-                <Typography>{cartItem.product.price}€</Typography>
+                <Typography>{cartItem.product.price} €</Typography>
               </ListItem>
             )
         )}
 
+        <Divider />
+
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Shipping costs" />
+          <ListItemText primary="Subtotal:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {props.shippingCosts}€
+            {calculateTotal(props.productsCart, 0)} €
+          </Typography>
+        </ListItem>
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Shipping costs:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {props.shippingCosts} €
           </Typography>
         </ListItem>
 
         <Divider />
 
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="Total:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {calculateTotal(props.productsCart, props.shippingCosts)}€
+            {calculateTotal(props.productsCart, props.shippingCosts)} €
           </Typography>
         </ListItem>
       </List>
