@@ -31,7 +31,7 @@ function calculateCoordinates(address: String) {
     .get(
       "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
         address +
-        ".json?access_token=pk.eyJ1IjoiYWx2YW1pZ2UiLCJhIjoiY2wwOGM2MmVhMDBiMTNjcGhjNWx2NmE4cCJ9.UvE6niHt0R9W3uj-41Gl8g"
+        ".json?access_token=" + process.env.REACT_APP_MAPBOX_KEY
     )
     .then((response: any) => {
       return response.data;
@@ -50,7 +50,7 @@ function getDistanceDriving(destCoords: String) {
         fromCoords +
         "&wp.1=" +
         destCoords +
-        "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-"
+        "&key=" + process.env.REACT_APP_BING_KEY
     )
     .then((response: any) => {
       return response.data.resourceSets[0].resources[0].travelDistance;
@@ -66,7 +66,7 @@ function getRouteImage(destCoords: String) {
         fromCoords +
         "&wp.1=" +
         destCoords +
-        "&key=Agy2F1agPvcOjRbB9CegxxYVgRrdDCBXI4eCjQ4yg6XAtdi9IStkytVunOwu7x4-",
+        "&key=" + process.env.REACT_APP_BING_KEY,
       { responseType: "blob" }
     )
     .then((response: any) => {
