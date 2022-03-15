@@ -205,8 +205,7 @@ function App(): JSX.Element {
       <CssBaseline />
       <PayPalScriptProvider
         options={{
-          "client-id":
-            "Ad1H-xmYNu8WPb6jDwiLjirog2e5jA6dylivOrsS5KJ4R_RXt0HOBe7wJ7fuGvMnMDet9RowUTBDAtnV",
+          "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID!,
           currency: "EUR",
         }}
       >
