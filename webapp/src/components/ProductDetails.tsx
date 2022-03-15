@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import { getProduct, getReviewsByCode } from "../api/api";
+import { Product, Review } from "../shared/shareddtypes";
+
 import ProductCommentList from "./ProductCommentList";
 import ProductSpeedDial from "./ProductSpeedDial";
 import ReviewDialog from "./ReviewDialog";
@@ -17,11 +20,6 @@ import {
   Breadcrumbs,
   Link,
 } from "@mui/material";
-
-import { getProduct, getReviewsByCode } from "../api/api";
-import { Product, Review } from "../shared/shareddtypes";
-
-import ProductCommentList from "./ProductCommentList";
 
 export type ProductProps = {
   product: Product;
