@@ -22,6 +22,7 @@ import {
   Breadcrumbs,
   Stack,
   Divider,
+  LinearProgress,
   Link,
 } from "@mui/material";
 
@@ -59,21 +60,22 @@ function ShopBreadcrumbs(props: any) {
 }
 
 export default function ProductDetails(props: ProductProps): JSX.Element {
+  const { id } = useParams<keyof ProductDets>() as ProductDets;
+
   const [product, setProduct] = useState<Product>();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [dialogOpen, setDialogOpen] = useState(0);
   const [shareDialogOpen, setShareDialogOpen] = useState(0);
   const [starsSelected, setSelectedStars] = useState(0);
   const [currentCartAmount, setCurrentCartAmount] = useState(0);
+  const [loading, setLoading] = React.useState(false);
 
-  const { id } = useParams<keyof ProductDets>() as ProductDets;
-
-  const obtainProduct = async () => {
+  const obtainProductDetails = async (code: string) => {
+    // We obtain the product
     if (props.product == null) setProduct(await getProduct(id));
     else setProduct(props.product);
-  };
 
-  const obtainReviews = async (code: string) => {
+    // And then set the reviews
     setReviews(await getReviewsByCode(code));
   };
 
@@ -85,23 +87,49 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     setShareDialogOpen(shareDialogOpen + 1);
   };
 
-  useEffect(() => {
-    obtainProduct();
-    obtainReviews(id + "");
-
-    // In case we have obtained a product
-    if (product !== undefined)
-      setCurrentCartAmount(getCurrentCartAmount(product, props.cartItems));
-  }, []);
-
   const addProductToCart = () => {
     if (product !== undefined) {
       props.onAdd(product);
     }
   };
 
+  useEffect(() => {
+    setLoading(true);
+    obtainProductDetails(id + "").finally(() => setLoading(false));
+
+    // In case we have obtained a product
+    if (product !== undefined)
+      setCurrentCartAmount(getCurrentCartAmount(product, props.cartItems));
+  }, []);
+
+  // In case we are retrieving the elements from the db...
+
   if (typeof product === "undefined") {
-    return <ShopBreadcrumbs product={id} />;
+    if (loading) return <LinearProgress />;
+
+    return (
+      <React.Fragment>
+        <ShopBreadcrumbs product={id} />
+
+        <Typography component="h1" variant="h4" align="center">
+          Product not Found!
+        </Typography>
+
+        <Img
+          src={require("../images/not-found.png")}
+          alt="Product not found image"
+          sx={{ width: "50%", p: 2, m: "auto" }}
+        />
+
+        <Grid container justifyContent="center">
+          <Button variant="contained">
+            <Link underline="none" color="inherit" href="/">
+              Take me home
+            </Link>
+          </Button>
+        </Grid>
+      </React.Fragment>
+    );
   } else {
     return (
       <React.Fragment>
