@@ -25,17 +25,15 @@ export type CartItem = {
   amount: number;
 };
 
-export type OrderProduct = {
-  code: string;
-  amount: number;
-};
-
 export type Order = {
   orderCode: string;
   userEmail: string;
-  products: OrderProduct[];
-  totalPrice: number;
+  userAddress: string,
+  products: Product[];
+  date: Date,
+  subtotalPrice: number,
   shippingPrice: number;
+  totalPrice: number;
   isOrderReceived: boolean;
 };
 
@@ -45,3 +43,13 @@ export type Review = {
   rating: number;
   comment: string;
 };
+
+export type CartItemForDB = {
+  productCode: String
+  amount: number;
+};
+
+export type CartForDB = {
+  userEmail: string;
+  products: CartItemForDB[]
+}
