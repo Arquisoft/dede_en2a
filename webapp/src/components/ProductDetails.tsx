@@ -20,6 +20,8 @@ import {
   styled,
   Rating,
   Breadcrumbs,
+  Stack,
+  Divider,
   Link,
 } from "@mui/material";
 
@@ -34,10 +36,9 @@ type ProductDets = {
 };
 
 const Img = styled("img")({
-  margin: "auto",
+  margin: "0",
   display: "block",
-  width: "auto",
-  height: "50vh",
+  width: "100%",
   objectFit: "cover",
 });
 
@@ -116,50 +117,68 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
               direction="row"
               alignItems="center"
               justifyContent="center"
-              style={{ minHeight: "30vh", margin: "2vh", marginBottom: "4vh" }}
+              spacing={2}
+              sx={{ p: 2 }}
             >
-              <Img
-                alt="Image of the product"
-                src={require("../images/".concat(product.code).concat(".png"))}
-              />
+              <Grid item xs={12} md={6}>
+                <Img
+                  alt="Image of the product"
+                  src={require("../images/"
+                    .concat(product.code)
+                    .concat(".png"))}
+                />
+              </Grid>
 
-              <Grid direction={"column"}>
+              <Grid item xs={12} md={6} direction={"column"}>
                 <Typography component="h1" variant="h5">
                   {product.name}
                 </Typography>
 
-                <Button variant="text" onClick={openDialog} sx={{ my: 1 }}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <Rating
                     name="hover-feedback"
                     value={getReviewMean(reviews)}
                     precision={0.5}
+                    onClick={openDialog}
                     onChange={(event, newValue) => {
-                      if (newValue != null) {
-                        setSelectedStars(newValue);
-                      }
+                      if (newValue != null) setSelectedStars(newValue);
                     }}
                   />
-                </Button>
-                <Paper style={{ margin: "4vh 2vw", padding: ".5em" }}>
-                  <Typography>{product.description}</Typography>
-                </Paper>
-                <Typography component="h2" variant="h6">
-                  {product.price}€
-                </Typography>
-                <Grid style={{ margin: "4vh 0 0 0" }}>
+
+                  <Typography>{reviews.length} Reviews</Typography>
+                </Stack>
+
+                <Divider sx={{ m: 1 }} />
+
+                <Typography>{product.description}</Typography>
+
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ m: 1 }}
+                >
+                  <Typography component="h2" variant="h5">
+                    {product.price}€
+                  </Typography>
                   <StockAlert
                     stock={product.stock}
                     amount={currentCartAmount}
                   />
-                  <Button
-                    variant="contained"
-                    disabled={product.stock <= currentCartAmount}
-                    onClick={addProductToCart}
-                    sx={{ my: 1 }}
-                  >
-                    Add product to cart
-                  </Button>
-                </Grid>
+                </Stack>
+
+                <Button
+                  variant="contained"
+                  disabled={product.stock <= currentCartAmount}
+                  onClick={addProductToCart}
+                  sx={{ my: 1, width: "100%" }}
+                >
+                  Add product to cart
+                </Button>
               </Grid>
             </Grid>
           </Paper>

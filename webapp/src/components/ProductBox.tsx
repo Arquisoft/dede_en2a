@@ -60,15 +60,14 @@ export default function ProductBox(props: ProductListProps): JSX.Element {
           amount={props.currentCartAmount}
         />
       </Grid>
-      <Grid item xs>
-        <Button
-          variant="contained"
-          disabled={props.product.stock <= props.currentCartAmount}
-          onClick={() => props.onAdd(props.product)}
-        >
-          Add product
-        </Button>
-      </Grid>
+      <Button
+        variant="contained"
+        disabled={props.product.stock <= props.currentCartAmount}
+        onClick={() => props.onAdd(props.product)}
+        sx={{ m: 1 }}
+      >
+        Add product
+      </Button>
     </Grid>
   );
 }
