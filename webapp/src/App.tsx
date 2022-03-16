@@ -62,11 +62,9 @@ function App(): JSX.Element {
       severity: "success",
       message: "Welcome to DeDe application " + user.name + " " + user.surname,
     });
-    // TODO -- load user cart from DB and store it locally
   };
 
   const logCurrentUserOut = () => {
-    saveCartToDB();
     localStorage.removeItem("user.email");
     localStorage.removeItem("token")
     setNotificationStatus(true);
@@ -74,24 +72,6 @@ function App(): JSX.Element {
       severity: "success",
       message: "You signed out correctly. See you soon!",
     });
-  };
-
-  const saveCartToDB = () => {
-    deleteCart(localStorage.getItem("user.email") + "");
-
-    var itemsForDB: CartItemForDB[] = [];
-    productsCart.forEach((cartItem) => {
-      itemsForDB.push({
-        productCode: cartItem.product.code,
-        amount: cartItem.amount,
-      });
-    });
-    const cart: CartForDB = {
-      userEmail: localStorage.getItem("user.email") + "",
-      products: itemsForDB,
-    };
-    saveCart(JSON.stringify(cart));
-    handleDeleteCart();
   };
 
   const handleAddCart = (product: Product) => {
