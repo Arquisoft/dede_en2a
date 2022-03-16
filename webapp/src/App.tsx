@@ -261,7 +261,11 @@ function App(): JSX.Element {
             <Route
               path="product/:id"
               element={
-                <ProductDetails product={null as any} onAdd={handleAddCart} />
+                <ProductDetails
+                  product={null as any}
+                  cartItems={productsCart}
+                  onAdd={handleAddCart}
+                />
               }
             />
             <Route

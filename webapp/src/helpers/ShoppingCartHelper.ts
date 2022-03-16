@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { CartItem, User, Order, OrderProduct } from "../shared/shareddtypes";
 import { createOrder } from "../api/api";
+import { CartItem, Order, OrderProduct, Product } from "../shared/shareddtypes";
 
 export function calculateTotal(
   products: CartItem[],
@@ -37,4 +37,17 @@ export function saveOrder(
   };
 
   createOrder(JSON.stringify(order));
+}
+
+export function getCurrentCartAmount(
+  product: Product,
+  cartProducts: CartItem[]
+) {
+  let currentAmount: number = 0;
+  cartProducts.forEach((cartItem: CartItem) => {
+    if (product.code === cartItem.product.code) {
+      currentAmount = cartItem.amount;
+    }
+  });
+  return currentAmount;
 }

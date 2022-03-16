@@ -1,7 +1,9 @@
 import { Card } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
+import { getCurrentCartAmount } from "../helpers/ShoppingCartHelper";
 import { CartItem, Product } from "../shared/shareddtypes";
+
 import ProductBox from "./ProductBox";
 
 type ProductListProps = {
@@ -11,16 +13,6 @@ type ProductListProps = {
 };
 
 export default function ProductList(props: ProductListProps): JSX.Element {
-  const getCurrentCartAmount = (product: Product) => {
-    let currentAmount: number = 0;
-    props.cartProducts.forEach((cartItem: CartItem) => {
-      if (product.code === cartItem.product.code) {
-        currentAmount = cartItem.amount;
-      }
-    });
-    return currentAmount;
-  };
-
   return (
     <Grid container spacing={4} sx={{ p: 2 }}>
       {props.products.map((product: Product) => (
@@ -28,7 +20,10 @@ export default function ProductList(props: ProductListProps): JSX.Element {
           <Card sx={{ py: 2 }}>
             <ProductBox
               product={product}
-              currentCartAmount={getCurrentCartAmount(product)}
+              currentCartAmount={getCurrentCartAmount(
+                product,
+                props.cartProducts
+              )}
               onAdd={(productToAdd: Product) => props.OnAddCart(productToAdd)}
             />
           </Card>
