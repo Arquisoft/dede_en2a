@@ -112,7 +112,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
         <ShopBreadcrumbs product={id} />
 
         <Typography component="h1" variant="h4" align="center">
-          Product not Found!
+          Product not found 🔍
         </Typography>
 
         <Img

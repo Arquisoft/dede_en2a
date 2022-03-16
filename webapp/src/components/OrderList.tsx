@@ -13,18 +13,21 @@ import {
   Stack,
   Button,
   IconButton,
+  Divider,
   Tooltip,
   TablePagination,
   styled,
   tableCellClasses,
 } from "@mui/material";
 
+import { Autorenew } from "@mui/icons-material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 import { Order, User } from "../shared/shareddtypes";
 import { getOrdersForUser, getUser } from "../api/api";
-import { Autorenew } from "@mui/icons-material";
+
+import FeaturedProducts from "./FeaturedProducts";
 
 type OrderTableItemProps = {
   order: Order;
@@ -33,6 +36,37 @@ type OrderTableItemProps = {
 type OrderTableProps = {
   orders: Order[];
 };
+
+function OrderHeader(props: any) {
+  function AutorenewOrders() {
+    return (
+      <IconButton edge="end">
+        <Tooltip title="Refresh orders" arrow>
+          <Autorenew onClick={props.refreshOrderList}></Autorenew>
+        </Tooltip>
+      </IconButton>
+    );
+  }
+
+  if (props.isOrder)
+    return (
+      <Stack direction="row" spacing={1} justifyContent="center">
+        <Typography component="h1" variant="h4" align="center">
+          Your orders, {props.name}
+        </Typography>
+        <AutorenewOrders />
+      </Stack>
+    );
+  else
+    return (
+      <Stack direction="row" spacing={1} justifyContent="center">
+        <Typography component="h1" variant="h4" align="center">
+          No orders have been made
+        </Typography>
+        <AutorenewOrders />
+      </Stack>
+    );
+}
 
 function StatusMessage(props: any) {
   if (props.isOrderReceived)
@@ -114,8 +148,6 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     setPage(0);
   };
 
-  //setRowsPerPage(parseInt(event.target.value, 2));
-
   const emptyRows =
     rowsPerPage -
     Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
@@ -127,14 +159,11 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell align="center"> Order </StyledTableCell>
-                <StyledTableCell align="center"> Price </StyledTableCell>
-                <StyledTableCell align="center">
-                  {" "}
-                  Shipping price{" "}
-                </StyledTableCell>
-                <StyledTableCell align="center"> Status </StyledTableCell>
-                <StyledTableCell align="center"> Show details </StyledTableCell>
+                <StyledTableCell align="center">Order</StyledTableCell>
+                <StyledTableCell align="center">Price</StyledTableCell>
+                <StyledTableCell align="center">Shipping price</StyledTableCell>
+                <StyledTableCell align="center">Status</StyledTableCell>
+                <StyledTableCell align="center">Show details</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -164,9 +193,11 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
   else
     return (
-      <Typography variant="h6" className="m-2">
-        No orders have been made :(
-      </Typography>
+      <React.Fragment>
+        <Divider sx={{ m: 2 }}>Just in case</Divider>
+
+        <FeaturedProducts />
+      </React.Fragment>
     );
 }
 
@@ -190,15 +221,12 @@ function Orders(props: any): JSX.Element {
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <Typography component="h1" variant="h4" align="center">
-        Your orders, {user?.name}
-        <IconButton edge="end">
-          <Tooltip title="Refresh orders" arrow>
-            <Autorenew onClick={refreshOrderList}></Autorenew>
-          </Tooltip>
-        </IconButton>
-      </Typography>
-      <OrderTable orders={orders}></OrderTable>
+      <OrderHeader
+        isOrder={orders.length > 0}
+        refreshOrderList={refreshOrderList}
+        name={user?.name}
+      />
+      <OrderTable orders={orders} />
     </Container>
   );
 }

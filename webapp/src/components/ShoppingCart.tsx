@@ -7,8 +7,12 @@ import {
   Container,
   Paper,
   styled,
+  Divider,
 } from "@mui/material";
 
+import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
+
+import FeaturedProducts from "./FeaturedProducts";
 import ShoppingCartTable from "./ShoppingCartTable";
 
 import { CartItem, Product } from "../shared/shareddtypes";
@@ -74,8 +78,14 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
     );
   else
     return (
-      <Typography variant="h6" className="m-2">
-        Shopping cart is empty :(
-      </Typography>
+      <Container component="main" sx={{ mb: 4, mt: 4 }}>
+        <Typography component="h1" variant="h4" align="center">
+          Shopping cart is empty 🤨
+        </Typography>
+
+        <Divider sx={{ m: 2 }}>Just in case</Divider>
+
+        <FeaturedProducts />
+      </Container>
     );
 }
