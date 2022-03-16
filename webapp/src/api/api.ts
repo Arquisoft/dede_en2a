@@ -33,10 +33,10 @@ export async function saveCart(body: any) {
   });
 }
 
-export async function deleteCart(userEmail: string) : Promise<Boolean> {
+export async function deleteCart(userEmail: string): Promise<Boolean> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   await fetch(apiEndPoint + "/carts/deleteUserCart/" + userEmail, {
-    method: "POST"
+    method: "POST",
   });
   return true;
 }
@@ -56,7 +56,7 @@ export async function checkUser(
   });
 
   if (response.status === 200) {
-    localStorage.setItem("token", JSON.stringify(response.json));
+    localStorage.setItem("token", await response.json());
     return true;
   } else {
     return false;
@@ -166,7 +166,6 @@ export async function addReview(review: Review): Promise<boolean> {
     }),
   });
   if (response.status === 200) {
-    localStorage.setItem("token", JSON.stringify(response.json));
     return true;
   } else return false;
 }

@@ -68,6 +68,7 @@ function App(): JSX.Element {
   const logCurrentUserOut = () => {
     saveCartToDB();
     localStorage.removeItem("user.email");
+    localStorage.removeItem("token")
     setNotificationStatus(true);
     setNotification({
       severity: "success",
