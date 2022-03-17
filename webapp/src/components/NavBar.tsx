@@ -219,7 +219,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
             color="inherit"
             component={Link}
             to="cart"
-            sx={{ mr: 2 }}
+            sx={{ mx: 1 }}
           >
             <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />

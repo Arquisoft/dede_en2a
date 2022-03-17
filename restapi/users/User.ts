@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
-const bcrypt = require('bcryptjs')
+const bcrypt = require("bcryptjs");
 
 /* 
 Crea el esquema de usuario para que todos los usuario sigan el mismo formato
@@ -15,7 +15,7 @@ export const userSchema = new Schema(
       required: true,
       trim: true,
     },
-    surname: {
+    webId: {
       type: String,
       required: true,
       trim: true,
@@ -33,8 +33,8 @@ export const userSchema = new Schema(
     },
     verified: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   {
     versionKey: false,
@@ -42,9 +42,9 @@ export const userSchema = new Schema(
   }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword : String){
-  return await bcrypt.compare(enteredPassword, this.password)
-}
+userSchema.methods.matchPassword = async function (enteredPassword: String) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 /*
 Exporta el modelo de creacion de un usario

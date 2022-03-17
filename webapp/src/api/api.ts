@@ -8,6 +8,7 @@ export async function addUser(user: User): Promise<boolean> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       name: user.name,
+      webId: user.webId,
       email: user.email,
       password: user.password,
     }),

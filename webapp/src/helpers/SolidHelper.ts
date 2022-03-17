@@ -2,8 +2,9 @@ import {
   getSolidDataset,
   getThing,
   getStringNoLocale,
-  getStringNoLocaleAll,
+  getUrlAll,
   Thing,
+  getUrl,
 } from "@inrupt/solid-client";
 
 import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
@@ -26,5 +27,13 @@ export async function getNameFromPod(webId: string) {
 }
 
 export async function getEmailsFromPod(webId: string) {
-  return getStringNoLocaleAll(await getProfile(webId), VCARD.hasEmail);
+  let emailURLs = getUrlAll(await getProfile(webId), VCARD.hasEmail);
+  let emails: string[] = [];
+
+  for (let emailURL of emailURLs) {
+    let email = getUrl(await getProfile(emailURL), VCARD.value);
+    if (email) emails.push(email.toString().replace("mailto:", "")); // we remove the mailto: part
+  }
+
+  return emails;
 }

@@ -7,11 +7,18 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 import * as Checker from "../helpers/CheckFieldsHelper";
 import { getNameFromPod, getEmailsFromPod } from "../helpers/SolidHelper";
@@ -27,6 +34,8 @@ export default function SignUp(props: SignUpProps) {
   const [webId, setWebId] = useState("");
   const [name, setName] = useState("");
   const [emails, setEmails] = useState<string[]>([]);
+  const [value, setValue] = React.useState<string>("");
+  const [buttonMessage, setButtonMessage] = useState("Verify my fields");
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -35,6 +44,10 @@ export default function SignUp(props: SignUpProps) {
     severity: "success",
     message: "",
   });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((event.target as HTMLInputElement).value);
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,17 +73,22 @@ export default function SignUp(props: SignUpProps) {
 
   const validateRetrievedFields = async () => {
     // We store the retrieved name from the pod
-    setName(await getNameFromPod(webId));
+    let name = await getNameFromPod(webId);
+    setName(name);
 
     // We store the retrieved emails from the pod
-    setEmails(await getEmailsFromPod(webId));
-    console.log(emails);
+    let retrievedEmails = await getEmailsFromPod(webId);
+    retrievedEmails.map((email) => emails.push(email));
+
+    // We change this page to allow user to (choose the email
+    setButtonMessage("Sign up");
   };
 
   const signUp = async () => {
     const newUser: User = {
       name: await getNameFromPod(webId),
-      email: "",
+      webId: webId,
+      email: value,
       password: password,
     };
 
@@ -86,6 +104,11 @@ export default function SignUp(props: SignUpProps) {
     } else {
       sendErrorNotification("Use a different email or sign in.");
     }
+  };
+
+  const handleNext = () => {
+    if (emails.length > 0) return signUp();
+    else return checkFields();
   };
 
   const sendErrorNotification = (msg: string) => {
@@ -128,6 +151,7 @@ export default function SignUp(props: SignUpProps) {
               <Grid item xs={12}>
                 <TextField
                   required
+                  disabled={emails.length > 0}
                   fullWidth
                   id="webId"
                   label="Web ID"
@@ -136,9 +160,30 @@ export default function SignUp(props: SignUpProps) {
                   autoFocus
                 />
               </Grid>
+              {emails.length > 0 && (
+                <Grid item xs={12}>
+                  <FormControl>
+                    <RadioGroup value={value} onChange={handleChange}>
+                      {emails.map((email: string) => (
+                        <FormControlLabel
+                          control={
+                            <Radio
+                              icon={<MailOutlineIcon />}
+                              checkedIcon={<MarkEmailReadIcon />}
+                            />
+                          }
+                          value={email}
+                          label={email}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField
                   required
+                  disabled={emails.length > 0}
                   fullWidth
                   name="password"
                   label="Password"
@@ -151,6 +196,7 @@ export default function SignUp(props: SignUpProps) {
               <Grid item xs={12}>
                 <TextField
                   required
+                  disabled={emails.length > 0}
                   fullWidth
                   name="repPassword"
                   label="Repeat password"
@@ -166,9 +212,9 @@ export default function SignUp(props: SignUpProps) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={checkFields}
+              onClick={handleNext}
             >
-              Sign Up
+              {buttonMessage}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
