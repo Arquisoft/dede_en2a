@@ -7,10 +7,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -23,6 +19,8 @@ import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import * as Checker from "../helpers/CheckFieldsHelper";
 import { getNameFromPod, getEmailsFromPod } from "../helpers/SolidHelper";
 
+import WebIdRadioGroup from "./WebIdRadioGroup";
+
 import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
 
@@ -34,7 +32,7 @@ export default function SignUp(props: SignUpProps) {
   const [webId, setWebId] = useState("");
   const [name, setName] = useState("");
   const [emails, setEmails] = useState<string[]>([]);
-  const [value, setValue] = React.useState<string>("");
+  const [value, setValue] = useState<string>("");
   const [buttonMessage, setButtonMessage] = useState("Verify my fields");
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
@@ -44,10 +42,6 @@ export default function SignUp(props: SignUpProps) {
     severity: "success",
     message: "",
   });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -86,7 +80,7 @@ export default function SignUp(props: SignUpProps) {
 
   const signUp = async () => {
     const newUser: User = {
-      name: await getNameFromPod(webId),
+      name: name,
       webId: webId,
       email: value,
       password: password,
@@ -161,24 +155,13 @@ export default function SignUp(props: SignUpProps) {
                 />
               </Grid>
               {emails.length > 0 && (
-                <Grid item xs={12}>
-                  <FormControl>
-                    <RadioGroup value={value} onChange={handleChange}>
-                      {emails.map((email: string) => (
-                        <FormControlLabel
-                          control={
-                            <Radio
-                              icon={<MailOutlineIcon />}
-                              checkedIcon={<MarkEmailReadIcon />}
-                            />
-                          }
-                          value={email}
-                          label={email}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
+                <WebIdRadioGroup
+                  value={value}
+                  setValue={setValue}
+                  radioItems={emails}
+                  icon={<MailOutlineIcon />}
+                  checkIcon={<MarkEmailReadIcon />}
+                />
               )}
               <Grid item xs={12}>
                 <TextField

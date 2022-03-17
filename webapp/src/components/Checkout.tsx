@@ -80,6 +80,7 @@ export default function Checkout(props: any) {
             costs={costs}
             handleCostsCalculated={setCostsCalculated}
             isCostsCalculated={isCostsCalculated}
+            userEmail={props.userEmail}
           />
         );
       case 1:

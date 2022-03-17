@@ -15,13 +15,6 @@ async function getProfile(webId: string): Promise<Thing> {
   return getThing(myDataset, webId) as Thing; // we obtain the thing we are looking for from the dataset
 }
 
-export async function getAddressFromPod(webId: string) {
-  return getStringNoLocale(
-    await getProfile(webId),
-    VCARD.street_address
-  ) as string;
-}
-
 export async function getNameFromPod(webId: string) {
   return getStringNoLocale(await getProfile(webId), FOAF.name) as string;
 }
@@ -36,4 +29,19 @@ export async function getEmailsFromPod(webId: string) {
   }
 
   return emails;
+}
+
+export async function getAddressesFromPod(webId: string) {
+  let addressURLs = getUrlAll(await getProfile(webId), VCARD.hasAddress);
+  let addresses: string[] = [];
+
+  for (let addressURL of addressURLs) {
+    let address = getStringNoLocale(
+      await getProfile(addressURL),
+      VCARD.street_address
+    );
+    if (address) addresses.push(address);
+  }
+
+  return addresses;
 }

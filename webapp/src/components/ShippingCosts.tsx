@@ -8,21 +8,77 @@ import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 
+import ApartmentIcon from "@mui/icons-material/Apartment";
+
+import { User } from "../shared/shareddtypes";
+import { getUser } from "../api/api";
+
+import WebIdRadioGroup from "./WebIdRadioGroup";
+
 import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
 } from "../helpers/ComputeDistanceHelper";
-import { getAddressFromPod } from "../helpers/SolidHelper";
+import { getAddressesFromPod } from "../helpers/SolidHelper";
+
+function WebIdTextField(props: any) {
+  if (props.webId)
+    return (
+      <React.Fragment>
+        <Typography variant="h6" gutterBottom>
+          Your WebId has been loaded from your account 😉
+        </Typography>
+      </React.Fragment>
+    );
+  else
+    return (
+      <React.Fragment>
+        <Typography variant="h6" gutterBottom>
+          Shipping address
+        </Typography>
+        <TextField
+          name="address"
+          required
+          fullWidth
+          id="address"
+          label="WebID"
+          onChange={(e) => props.setWebId(e.target.value)}
+          autoFocus
+        />
+      </React.Fragment>
+    );
+}
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
+  const [addresses, setAddress] = React.useState<string[]>([]);
+  const [value, setValue] = React.useState<string>("");
+  const [user, setUser] = React.useState<User>();
   const [map, setMap] = React.useState<string>();
   const [loading, setLoading] = React.useState(false);
 
+  const obtainAddresses = async (webId: string) => {
+    let retrievedAddresses = await getAddressesFromPod(webId);
+    retrievedAddresses.map((address) => addresses.push(address));
+  };
+
+  const refreshUser = async () => {
+    if (!user) setUser(await getUser(props.userEmail));
+  };
+
+  React.useEffect(() => {
+    refreshUser();
+
+    // We check if a user is logged in, if so we store the webId
+    if (user) {
+      setWebId(user.webId);
+      obtainAddresses(user.webId);
+    }
+  }, []);
+
   const calculateCosts = async () => {
-    let street_address = await getAddressFromPod(webId); // we obtain the address from the solid pod
-    shippingCosts(street_address); // we compute the address given the pod
+    shippingCosts(value); // we compute the address given the pod
   };
 
   const shippingCosts = async (street_address: string) => {
@@ -46,18 +102,16 @@ export default function ShippingCosts(props: any): JSX.Element {
 
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Shipping address
-      </Typography>
-      <TextField
-        name="address"
-        required
-        fullWidth
-        id="address"
-        label="WebID"
-        onChange={(e) => setWebId(e.target.value)}
-        autoFocus
-      />
+      <WebIdTextField webId={webId} setWebId={setWebId} />
+      {addresses.length > 0 && (
+        <WebIdRadioGroup
+          value={value}
+          setValue={setValue}
+          radioItems={addresses}
+          icon={<ApartmentIcon />}
+          checkIcon={<ApartmentIcon />}
+        />
+      )}
       <Button
         type="button"
         fullWidth
