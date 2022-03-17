@@ -1,25 +1,7 @@
 import { RequestHandler } from "express";
-import { body } from "express-validator";
 import { verifyToken } from "../utils/generateToken";
 import { reviewModel, reviewSchema } from "./Review";
 
-export const getAllReviews: RequestHandler = async (req, res) => {
-  try {
-    const reviews = await reviewModel.find();
-    return res.json(reviews);
-  } catch (error) {
-    res.json(error);
-  }
-};
-
-export const getReviewsByUser: RequestHandler = async (req, res) => {
-  try {
-    const reviews = await reviewModel.find({ userEmail: req.params.email });
-    return res.json(reviews);
-  } catch (error) {
-    res.json(error);
-  }
-};
 
 export const getReviewsByProduct: RequestHandler = async (req, res) => {
   try {

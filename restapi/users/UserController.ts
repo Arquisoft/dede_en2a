@@ -22,15 +22,6 @@ let transporter = nodemailer.createTransport({
   requireTLS: true,
 });
 
-export const getUsers: RequestHandler = async (req, res) => {
-  try {
-    const users = await userModel.find();
-    return res.json(users);
-  } catch (error) {
-    res.json(error);
-  }
-};
-
 export const getUser: RequestHandler = async (req, res) => {
   const userFound = await userModel.findOne({ email: req.params.email });
   if (userFound) {
@@ -133,28 +124,6 @@ export const verified: RequestHandler = async (req, res) => {
 
 export const notVerified: RequestHandler = async (req, res) => {
   res.sendFile(path.join(__dirname, "./../views/notVerified.html"));
-};
-
-export const deleteUser: RequestHandler = async (req, res) => {
-  const userFound = await userModel.deleteOne({ email: req.params.email });
-  if (userFound) {
-    return res.json(userFound);
-  }
-  res.json("deleting a user");
-};
-
-export const updateUser: RequestHandler = async (req, res) => {
-  try {
-    console.log(req.body);
-    const user = await userModel.findOneAndUpdate(
-      { email: req.params.email },
-      req.body,
-      { new: true }
-    );
-    res.json(user);
-  } catch (error) {
-    res.json(error);
-  }
 };
 
 export const requestToken: RequestHandler = async (req, res) => {
