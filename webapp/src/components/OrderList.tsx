@@ -101,8 +101,9 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   return (
     <TableRow hover>
       <TableCell align="center">{props.order.orderCode}</TableCell>
-      <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
+      <TableCell align="center">{props.order.subtotalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
+      <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
       <TableCell align="center">
         <StatusMessage isOrderReceived={props.order.isOrderReceived} />
       </TableCell>
@@ -159,11 +160,23 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
+
                 <StyledTableCell align="center">Order</StyledTableCell>
                 <StyledTableCell align="center">Price</StyledTableCell>
                 <StyledTableCell align="center">Shipping price</StyledTableCell>
                 <StyledTableCell align="center">Status</StyledTableCell>
                 <StyledTableCell align="center">Show details</StyledTableCell>
+
+
+
+
+  
+
+
+
+
+
+
               </TableRow>
             </TableHead>
             <TableBody>

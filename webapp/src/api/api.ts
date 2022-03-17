@@ -1,5 +1,11 @@
-import { Order, Review, User } from "../shared/shareddtypes";
-import { Product } from "../shared/shareddtypes";
+import {
+  Order,
+  Review,
+  User,
+  Product,
+  CartForDB,
+  CartItemForDB,
+} from "../shared/shareddtypes";
 
 export async function addUser(user: User): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
@@ -14,9 +20,25 @@ export async function addUser(user: User): Promise<boolean> {
     }),
   });
   if (response.status === 200) {
-    //localStorage.setItem("token", JSON.stringify(response.json));
     return true;
   } else return false;
+}
+
+export async function saveCart(body: any) {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(apiEndPoint + "/carts/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body,
+  });
+}
+
+export async function deleteCart(userEmail: string): Promise<Boolean> {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  await fetch(apiEndPoint + "/carts/deleteUserCart/" + userEmail, {
+    method: "POST",
+  });
+  return true;
 }
 
 export async function checkUser(
@@ -34,7 +56,7 @@ export async function checkUser(
   });
 
   if (response.status === 200) {
-    localStorage.setItem("token", JSON.stringify(response.json));
+    localStorage.setItem("token", await response.json());
     return true;
   } else {
     return false;
@@ -144,7 +166,6 @@ export async function addReview(review: Review): Promise<boolean> {
     }),
   });
   if (response.status === 200) {
-    localStorage.setItem("token", JSON.stringify(response.json));
     return true;
   } else return false;
 }

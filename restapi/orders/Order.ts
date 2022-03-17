@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
 
-import { orderProduct } from "./OrderProduct";
+import { product } from "../products/Product";
 
 const orderSchema = new Schema(
   {
@@ -13,14 +13,27 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
-    products: {
-      type: [orderProduct],
+    userAddress:{
+      type: String,
+      required: true
     },
-    totalPrice: {
+    products: {
+      type: [product],
+      required: true
+    },
+    date: {
+      type: Date,
+      required: true
+    },
+    subtotalPrice: {
       type: Number,
       required: true,
     },
     shippingPrice: {
+      type: Number,
+      required: true,
+    },
+    totalPrice: {
       type: Number,
       required: true,
     },

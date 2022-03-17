@@ -1,7 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
 
+
 import { createOrder } from "../api/api";
-import { CartItem, Order, OrderProduct, Product } from "../shared/shareddtypes";
+
+
+import { CartItem, User, Order, Product } from "../shared/shareddtypes";
+import { createOrder } from "../api/api";
+import { DateRange } from "@mui/icons-material";
+
 
 export function calculateTotal(
   products: CartItem[],
@@ -19,20 +25,25 @@ export function calculateTotal(
 export function saveOrder(
   products: CartItem[],
   shippingCosts: number,
-  userEmail: string
+  userEmail: string,
+  userAddress : string
 ) {
   let productCosts: number = calculateTotal(products, 0);
-  var orderProducts: OrderProduct[] = [];
+  var orderProducts: Product[] = [];
   products.forEach((item) => {
-    orderProducts.push({ code: item.product.code, amount: item.amount });
+    item.product.stock = item.amount
+    orderProducts.push(item.product);
   });
 
   let order: Order = {
     orderCode: uuidv4(),
     userEmail: userEmail,
+    userAddress: userAddress,
     products: orderProducts,
-    totalPrice: productCosts,
+    date: new Date(),
+    subtotalPrice: productCosts,
     shippingPrice: shippingCosts,
+    totalPrice: productCosts + shippingCosts,
     isOrderReceived: false,
   };
 

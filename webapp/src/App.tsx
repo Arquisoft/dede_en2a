@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  CartItem,
+  NotificationType,
+  Order,
+  Product,
+  User,
+} from "./shared/shareddtypes";
 
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -13,8 +20,19 @@ import ProductDetails from "./components/ProductDetails";
 import OrderDetails from "./components/OrderDetails";
 import OrderList from "./components/OrderList";
 
-import "./App.css";
+
+
+
+
+
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+
+import { getProducts } from "./api/api";
 import "bootstrap/dist/css/bootstrap.css";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
+import "./App.css";
 
 import {
   createTheme,
@@ -67,6 +85,7 @@ function App(): JSX.Element {
 
   const logCurrentUserOut = () => {
     localStorage.removeItem("user.email");
+    localStorage.removeItem("token")
     setNotificationStatus(true);
     setNotification({
       severity: "success",
