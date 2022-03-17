@@ -160,7 +160,7 @@ export default function SignUp(props: SignUpProps) {
                   setValue={setValue}
                   radioItems={emails}
                   icon={<MailOutlineIcon />}
-                  checkIcon={<MarkEmailReadIcon />}
+                  checkedIcon={<MarkEmailReadIcon />}
                 />
               )}
               <Grid item xs={12}>

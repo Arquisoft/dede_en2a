@@ -54,17 +54,18 @@ export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
   const [addresses, setAddress] = React.useState<string[]>([]);
   const [value, setValue] = React.useState<string>("");
+  const [buttonMessage, setButtonMessage] = React.useState("Verify my address");
   const [user, setUser] = React.useState<User>();
   const [map, setMap] = React.useState<string>();
   const [loading, setLoading] = React.useState(false);
 
-  const obtainAddresses = async (webId: string) => {
+  const refreshAddresses = async () => {
     let retrievedAddresses = await getAddressesFromPod(webId);
     retrievedAddresses.map((address) => addresses.push(address));
   };
 
   const refreshUser = async () => {
-    if (!user) setUser(await getUser(props.userEmail));
+    setUser(await getUser(props.userEmail));
   };
 
   React.useEffect(() => {
@@ -73,9 +74,15 @@ export default function ShippingCosts(props: any): JSX.Element {
     // We check if a user is logged in, if so we store the webId
     if (user) {
       setWebId(user.webId);
-      obtainAddresses(user.webId);
     }
-  }, []);
+
+    if (addresses.length > 0) setButtonMessage("Calculate shipping costs");
+  });
+
+  const handleNext = () => {
+    if (addresses.length > 0) return calculateCosts();
+    else return refreshAddresses();
+  };
 
   const calculateCosts = async () => {
     shippingCosts(value); // we compute the address given the pod
@@ -109,17 +116,18 @@ export default function ShippingCosts(props: any): JSX.Element {
           setValue={setValue}
           radioItems={addresses}
           icon={<ApartmentIcon />}
-          checkIcon={<ApartmentIcon />}
+          checkedIcon={<ApartmentIcon />}
         />
       )}
       <Button
         type="button"
         fullWidth
         variant="contained"
+        disabled={addresses.length > 0 && !value}
         sx={{ mt: 3, mb: 2 }}
-        onClick={calculateCosts}
+        onClick={handleNext}
       >
-        Calculate Shipping Costs
+        {buttonMessage}
       </Button>
       {loading && <LinearProgress />}
       {props.isCostsCalculated && !loading && (
