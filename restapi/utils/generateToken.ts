@@ -7,7 +7,6 @@ export const generateToken = (email: String) => {
 };
 
 export const verifyToken = (token: String, email: String) => {
-  console.log(token + " -- " + email);
   try {
     var decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (decoded.email === email) return true;

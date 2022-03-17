@@ -1,11 +1,4 @@
-import {
-  Order,
-  Review,
-  User,
-  Product,
-  CartForDB,
-  CartItemForDB,
-} from "../shared/shareddtypes";
+import { Order, Review, User, Product } from "../shared/shareddtypes";
 
 export async function addUser(user: User): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
@@ -22,23 +15,6 @@ export async function addUser(user: User): Promise<boolean> {
   if (response.status === 200) {
     return true;
   } else return false;
-}
-
-export async function saveCart(body: any) {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/carts/create", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: body,
-  });
-}
-
-export async function deleteCart(userEmail: string): Promise<Boolean> {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/carts/deleteUserCart/" + userEmail, {
-    method: "POST",
-  });
-  return true;
 }
 
 export async function checkUser(
@@ -114,30 +90,32 @@ export async function createOrder(body: any) {
   });
 }
 
-export async function getOrders(): Promise<Order[]> {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/orders/list");
-  return response.json();
-}
-
 export async function getOrder(orderCode: string): Promise<Order> {
+  var headers = {};
+  headers = {
+    token: localStorage.getItem("token"),
+    email: localStorage.getItem("user.email"),
+  };
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   let response = await fetch(
-    apiEndPoint + "/orders/findByOrderCode/" + orderCode
+    apiEndPoint + "/orders/findByOrderCode/" + orderCode,
+    { method: "GET", headers: headers }
   );
   return response.json();
 }
 
 export async function getOrdersForUser(userEmail: string): Promise<Order[]> {
-  var headers = {}
+  var headers = {};
   headers = {
-    token: localStorage.getItem("token")
-  }
+    token: localStorage.getItem("token"),
+    email: localStorage.getItem("user.email"), //userEmail
+  };
 
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(
-    apiEndPoint + "/orders/findByUserEmail/" + userEmail, {method: 'GET', headers: headers}
-  );
+  let response = await fetch(apiEndPoint + "/orders", {
+    method: "GET",
+    headers: headers,
+  });
   return response.json();
 }
 
@@ -162,7 +140,10 @@ export async function addReview(review: Review): Promise<boolean> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/reviews/create", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token") + "",
+    },
     body: JSON.stringify({
       rating: review.rating,
       comment: review.comment,

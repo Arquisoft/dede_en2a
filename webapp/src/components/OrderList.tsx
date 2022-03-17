@@ -178,7 +178,6 @@ function Orders(props: any): JSX.Element {
 
   const refreshOrderList = async () => {
     setOrders(await getOrdersForUser(props.userEmail));
-    setUser(await getUser(props.userEmail));
   };
 
   const refreshUser = async () => {
