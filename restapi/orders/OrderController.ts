@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { orderModel } from "./Order";
+import { verifyToken } from "../utils/generateToken";
 
 export const getOrders: RequestHandler = async (req, res) => {
   try {
@@ -23,11 +24,18 @@ export const getOrder: RequestHandler = async (req, res) => {
 };
 
 export const getUserOrders: RequestHandler = async (req, res) => {
-  const orderFound = await orderModel.find({ userEmail: req.params.userEmail });
-  if (orderFound) {
-    return res.json(orderFound);
-  } else {
-    return res.status(204).json();
+  const isVerified = verifyToken(req.headers.token + "", req.params.userEmail);
+  if (isVerified) {
+    const orderFound = await orderModel.find({
+      userEmail: req.params.userEmail,
+    });
+    if (orderFound) {
+      return res.json(orderFound);
+    } else {
+      return res.status(204).json();
+    }
+  }else{
+    return res.status(203).json();
   }
 };
 

@@ -129,9 +129,14 @@ export async function getOrder(orderCode: string): Promise<Order> {
 }
 
 export async function getOrdersForUser(userEmail: string): Promise<Order[]> {
+  var headers = {}
+  headers = {
+    token: localStorage.getItem("token")
+  }
+
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   let response = await fetch(
-    apiEndPoint + "/orders/findByUserEmail/" + userEmail
+    apiEndPoint + "/orders/findByUserEmail/" + userEmail, {method: 'GET', headers: headers}
   );
   return response.json();
 }
