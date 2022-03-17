@@ -82,11 +82,14 @@ export async function updateProduct(product: Product) {
 
 export async function createOrder(body: any) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  console.log(body);
   let response = await fetch(apiEndPoint + "/orders/create", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: body,
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token") + "",
+      email: localStorage.getItem("user.email") + "",
+    },
+    body: body
   });
 }
 
@@ -104,11 +107,11 @@ export async function getOrder(orderCode: string): Promise<Order> {
   return response.json();
 }
 
-export async function getOrdersForUser(userEmail: string): Promise<Order[]> {
+export async function getOrdersForUser(): Promise<Order[]> {
   var headers = {};
   headers = {
     token: localStorage.getItem("token"),
-    email: localStorage.getItem("user.email"), //userEmail
+    email: localStorage.getItem("user.email")
   };
 
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";

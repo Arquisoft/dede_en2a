@@ -9,7 +9,5 @@ api.get("/orders/findByOrderCode/:orderCode", OrderController.getOrder);
 
 api.post("/orders/create", OrderController.createOrder);
 
-api.delete("/orders/deleteByOrderId/:id", OrderController.deleteOrder);
-
 
 export default api;
