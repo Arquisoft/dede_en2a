@@ -40,20 +40,8 @@ import {
   PaletteMode,
   ThemeProvider,
   useMediaQuery,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { grey, lightBlue } from "@mui/material/colors";
-
-import { getProducts } from "./api/api";
-import {
-  CartItem,
-  NotificationType,
-  Product,
-  User,
-} from "./shared/shareddtypes";
-
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "bootstrap/dist/css/bootstrap.css";
 

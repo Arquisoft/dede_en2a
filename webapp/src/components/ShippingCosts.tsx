@@ -44,7 +44,7 @@ function WebIdTextField(props: any) {
           id="address"
           label="WebID"
           onChange={(e) => props.setWebId(e.target.value)}
-          autoFocus
+          //autoFocus
         />
       </React.Fragment>
     );
@@ -77,7 +77,7 @@ export default function ShippingCosts(props: any): JSX.Element {
     }
 
     if (addresses.length > 0) setButtonMessage("Calculate shipping costs");
-  });
+  }, []);
 
   const handleNext = () => {
     if (addresses.length > 0) return calculateCosts();
