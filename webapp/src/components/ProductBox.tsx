@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom";
 
-import Grid from "@mui/material/Grid";
-import ButtonBase from "@mui/material/ButtonBase";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import CardActionArea from "@mui/material/CardActionArea";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 
 import StockAlert from "./StockAlert";
 
@@ -17,57 +21,56 @@ type ProductListProps = {
 };
 
 export default function ProductBox(props: ProductListProps): JSX.Element {
-  const Img = styled("img")({
-    margin: "auto",
-    display: "block",
-    width: "100%",
-    height: "30vh",
-  });
-
   let navigate = useNavigate();
 
   return (
-    <Grid
-      container
-      alignItems="center"
-      direction="column"
-      rowSpacing="5"
-      sx={{ my: 2 }}
-    >
-      <Grid item>
-        <ButtonBase onClick={() => navigate("/product/" + props.product.code)}>
-          <Img
-            alt="Image of the product"
-            src={require("../images/"
-              .concat(props.product.code)
-              .concat(".png"))}
-          />
-        </ButtonBase>
-      </Grid>
-      <Grid item xs>
-        <Typography gutterBottom variant="subtitle1" component="div">
+    <Card>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="250"
+          image={require("../images/"
+            .concat(props.product.code)
+            .concat(".png"))}
+          alt={props.product.description}
+          onClick={() => navigate("/product/" + props.product.code)}
+        />
+      </CardActionArea>
+      <CardContent>
+        <Typography variant="subtitle1" component="div">
           {props.product.name}
         </Typography>
-      </Grid>
-      <Grid item xs>
-        <Typography gutterBottom variant="subtitle1" component="div">
-          {props.product.price}€
+
+        <Typography variant="subtitle2" component="div">
+          {props.product.description}
         </Typography>
-      </Grid>
-      <Grid item xs>
-        <StockAlert
-          stock={props.product.stock}
-          amount={props.currentCartAmount}
-        />
-      </Grid>
-      <Button
-        variant="contained"
-        disabled={props.product.stock <= props.currentCartAmount}
-        onClick={() => props.onAdd(props.product)}
-        sx={{ m: 1 }}
-      >
-        Add product
-      </Button>
-    </Grid>
+
+        <Divider sx={{ m: 2 }} />
+
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography variant="h5" component="div">
+            {props.product.price}€
+          </Typography>
+          <StockAlert
+            stock={props.product.stock}
+            amount={props.currentCartAmount}
+          />
+        </Stack>
+      </CardContent>
+      <CardActions>
+        <Button
+          variant="contained"
+          disabled={props.product.stock <= props.currentCartAmount}
+          onClick={() => props.onAdd(props.product)}
+          sx={{ m: 1, width: "100%" }}
+        >
+          Add product
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
