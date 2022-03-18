@@ -207,27 +207,25 @@ export default function NavBar(props: NavBarProps): JSX.Element {
             Dede
           </Typography>
 
-          <Button onClick={() => props.changeTheme()}>
-            <MUISwitch
-              onChange={(e) => {
-                props.changeTheme();
-              }}
-              checked={props.initialState}
-            />
-          </Button>
+          <MUISwitch
+            onChange={(e) => {
+              props.changeTheme();
+            }}
+            checked={props.initialState}
+          />
 
           <IconButton
             size="large"
             color="inherit"
             component={Link}
             to="cart"
-            sx={{ mr: 2 }}
+            sx={{ mx: 1 }}
           >
             <Badge badgeContent={props.totalUnitsInCart} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          <UserButton logCurrentUserOut={props.logCurrentUserOut}/>
+          <UserButton logCurrentUserOut={props.logCurrentUserOut} />
         </Toolbar>
       </AppBar>
     </Box>

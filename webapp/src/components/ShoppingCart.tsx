@@ -1,8 +1,16 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-import { Typography, Stack, Button, styled } from "@mui/material";
+import {
+  Typography,
+  Stack,
+  Button,
+  Container,
+  Paper,
+  styled,
+  Divider,
+} from "@mui/material";
 
+import FeaturedProducts from "./FeaturedProducts";
 import ShoppingCartTable from "./ShoppingCartTable";
 
 import { CartItem, Product } from "../shared/shareddtypes";
@@ -27,41 +35,55 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
 
   if (props.totalUnitsInCart > 0)
     return (
-      <React.Fragment>
-        <ShoppingCartTable
-          products={props.products}
-          totalUnitsInCart={props.totalUnitsInCart}
-          onIncrementUnit={props.onIncrementUnit}
-          onDecrementUnit={props.onDecrementUnit}
-        />
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          sx={{ mt: 2 }}
-          justifyContent="space-between"
-          alignItems="center"
+      <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+        <Paper
+          variant="outlined"
+          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
         >
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <Button variant="outlined" className="m-1">
-              Continue shopping
-            </Button>
-          </Link>
-
-          <Button
-            variant="contained"
-            disabled={props.products.length === 0}
-            component={Link}
-            to="/checkout"
-            className="m-1"
+          <Typography component="h1" variant="h4" align="center">
+            Shopping cart
+          </Typography>
+          <ShoppingCartTable
+            products={props.products}
+            totalUnitsInCart={props.totalUnitsInCart}
+            onIncrementUnit={props.onIncrementUnit}
+            onDecrementUnit={props.onDecrementUnit}
+          />
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            sx={{ mt: 2 }}
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Proceed to checkout
-          </Button>
-        </Stack>
-      </React.Fragment>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <Button variant="outlined" className="m-1">
+                Continue shopping
+              </Button>
+            </Link>
+
+            <Button
+              variant="contained"
+              disabled={props.products.length === 0}
+              component={Link}
+              to="/checkout"
+              className="m-1"
+            >
+              Proceed to checkout
+            </Button>
+          </Stack>
+        </Paper>
+      </Container>
     );
   else
     return (
-      <Typography variant="h6" className="m-2">
-        Shopping cart is empty :(
-      </Typography>
+      <Container component="main" sx={{ mb: 4, mt: 4 }}>
+        <Typography component="h1" variant="h4" align="center">
+          Shopping cart is empty 🤨
+        </Typography>
+
+        <Divider sx={{ m: 2 }}>Just in case</Divider>
+
+        <FeaturedProducts />
+      </Container>
     );
 }

@@ -2,97 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import CardHeader from "@mui/material/CardHeader";
-import StarIcon from "@mui/icons-material/StarBorder";
 
-function Pricing() {
-  const tiers = [
-    {
-      title: "Free",
-      price: "0",
-      buttonText: "Sign up for free",
-      buttonVariant: "outlined",
-    },
-    {
-      title: "Pro",
-      subheader: "Most popular",
-      price: "15",
-      buttonText: "Get started",
-      buttonVariant: "contained",
-    },
-    {
-      title: "Enterprise",
-      price: "30",
-      buttonText: "Contact us",
-      buttonVariant: "outlined",
-    },
-  ];
-
-  return (
-    <Container maxWidth="md" component="main" sx={{ pt: 4 }}>
-      <Grid container spacing={3} alignItems="center">
-        {tiers.map((tier) => (
-          <Grid item key={tier.title} xs={12} md={4}>
-            <Card>
-              <CardHeader
-                title={tier.title}
-                subheader={tier.subheader}
-                titleTypographyProps={{ align: "center" }}
-                action={tier.title === "Pro" ? <StarIcon /> : null}
-                subheaderTypographyProps={{
-                  align: "center",
-                }}
-                sx={{
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === "light"
-                      ? theme.palette.grey[200]
-                      : theme.palette.grey[700],
-                }}
-              />
-              <CardContent>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "baseline",
-                    mb: 2,
-                  }}
-                >
-                  <Typography component="h2" variant="h3" color="text.primary">
-                    ${tier.price}
-                  </Typography>
-                  <Typography variant="h6" color="text.secondary"></Typography>
-                </Box>
-              </CardContent>
-              <CardActions>
-                <Button
-                  fullWidth
-                  variant={tier.buttonVariant as "outlined" | "contained"}
-                >
-                  {tier.buttonText}
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
-  );
-}
+import FeaturedProducts from "./FeaturedProducts";
 
 function Hero() {
   return (
     <Stack
       sx={{
         bgcolor: "background.paper",
+        width: "100%",
         height: "90vh",
       }}
       component="main"
@@ -137,9 +58,9 @@ function Hero() {
 
 export default function Home() {
   return (
-    <React.Fragment>
+    <Stack spacing={2} alignItems="center">
       <Hero />
-      <Pricing />
-    </React.Fragment>
+      <FeaturedProducts />
+    </Stack>
   );
 }

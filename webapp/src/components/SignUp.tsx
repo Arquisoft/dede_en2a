@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,8 +13,13 @@ import Container from "@mui/material/Container";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { Link, Navigate } from "react-router-dom";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+
 import * as Checker from "../helpers/CheckFieldsHelper";
+import { getNameFromPod, getEmailsFromPod } from "../helpers/SolidHelper";
+
+import WebIdRadioGroup from "./WebIdRadioGroup";
 
 import * as Api from "../api/api";
 import { User, NotificationType } from "../shared/shareddtypes";
@@ -24,50 +29,65 @@ type SignUpProps = {
 };
 
 export default function SignUp(props: SignUpProps) {
+  const [webId, setWebId] = useState("");
   const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
+  const [emails] = useState<string[]>([]);
+  const [value, setValue] = useState<string>("");
+  const [buttonMessage, setButtonMessage] = useState("Verify my fields");
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
-
   const [notificationStatus, setNotificationStatus] = useState(false);
+  const [redirect, setRedirect] = useState<Boolean>(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",
   });
 
-  const [redirect, setRedirect] = useState<Boolean>(false);
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
   };
 
-  const checkFields = () => {
-    if (Checker.checkTextField(name) && Checker.checkTextField(surname))
-      if (Checker.checkEmail(email))
-        if (Checker.checkPasswords(password, repPassword))
-          if (Checker.checkPassword(password)) signUp();
-          else
-            sendErrorNotification(
-              "Password must have: Length 6, lowercase, uppercase and digits"
-            );
-        else sendErrorNotification("Passwords must match");
-      else sendErrorNotification("Invalid email format");
-    else sendErrorNotification("Invalid name or surname");
+  const checkFields = async () => {
+    // We check that the provided WebID is correct
+    if (!Checker.checkTextField(webId))
+      sendErrorNotification("A valid WebID must be provided");
+
+    // We check that the passwords match
+    if (!Checker.checkPasswords(password, repPassword))
+      sendErrorNotification("Passwords must match");
+
+    // We check that the password is correct
+    if (Checker.checkPassword(password)) validateRetrievedFields();
+    else
+      sendErrorNotification(
+        "Passwords must have: Length 6, lowercase, uppercase and digits"
+      );
+  };
+
+  const validateRetrievedFields = async () => {
+    // We store the retrieved name from the pod
+    let retrievedName = await getNameFromPod(webId);
+    setName(retrievedName);
+
+    // We store the retrieved emails from the pod
+    let retrievedEmails = await getEmailsFromPod(webId);
+    retrievedEmails.forEach((email) => emails.push(email));
+
+    // We change this page to allow user to (choose the email
+    setButtonMessage("Sign up");
   };
 
   const signUp = async () => {
     const newUser: User = {
       name: name,
-      surname: surname,
-      email: email,
+      webId: webId,
+      email: value,
       password: password,
     };
+
     const correctSignUp = await Api.addUser(newUser);
     if (correctSignUp) {
-      /*props.setCurrentUser(await Api.getUser(email));
-      setRedirect(true);*/
+      setRedirect(true);
       setNotificationStatus(true);
       setNotification({
         severity: "success",
@@ -76,6 +96,11 @@ export default function SignUp(props: SignUpProps) {
     } else {
       sendErrorNotification("Use a different email or sign in.");
     }
+  };
+
+  const handleNext = () => {
+    if (emails.length > 0) return signUp();
+    else return checkFields();
   };
 
   const sendErrorNotification = (msg: string) => {
@@ -115,43 +140,31 @@ export default function SignUp(props: SignUpProps) {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
                   required
+                  disabled={emails.length > 0}
                   fullWidth
-                  id="firstName"
-                  label="First Name"
-                  onChange={(e) => setName(e.target.value)}
+                  id="webId"
+                  label="Web ID"
+                  name="webId"
+                  onChange={(e) => setWebId(e.target.value)}
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(e) => setSurname(e.target.value)}
+              {emails.length > 0 && (
+                <WebIdRadioGroup
+                  value={value}
+                  setValue={setValue}
+                  radioItems={emails}
+                  icon={<MailOutlineIcon />}
+                  checkedIcon={<MarkEmailReadIcon />}
                 />
-              </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField
                   required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
+                  disabled={emails.length > 0}
                   fullWidth
                   name="password"
                   label="Password"
@@ -164,6 +177,7 @@ export default function SignUp(props: SignUpProps) {
               <Grid item xs={12}>
                 <TextField
                   required
+                  disabled={emails.length > 0}
                   fullWidth
                   name="repPassword"
                   label="Repeat password"
@@ -179,9 +193,9 @@ export default function SignUp(props: SignUpProps) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={checkFields}
+              onClick={handleNext}
             >
-              Sign Up
+              {buttonMessage}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

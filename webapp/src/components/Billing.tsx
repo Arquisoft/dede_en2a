@@ -8,6 +8,7 @@ type BillingProps = {
   shippingCosts: number;
   onPayed: () => void;
 };
+
 export default function Billing(props: BillingProps): JSX.Element {
   const totalPrice: number = calculateTotal(
     props.products,

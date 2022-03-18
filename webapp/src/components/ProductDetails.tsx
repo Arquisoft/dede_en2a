@@ -2,27 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { getProduct, getReviewsByCode } from "../api/api";
-import { Product, Review } from "../shared/shareddtypes";
+import { getReviewMean } from "../helpers/ReviewHelper";
+import { getCurrentCartAmount } from "../helpers/ShoppingCartHelper";
+import { Product, Review, CartItem } from "../shared/shareddtypes";
 
 import ProductCommentList from "./ProductCommentList";
 import ProductSpeedDial from "./ProductSpeedDial";
 import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";
+import StockAlert from "./StockAlert";
 
 import {
   Paper,
   Typography,
   Grid,
   Button,
-  Chip,
   styled,
   Rating,
   Breadcrumbs,
+  Stack,
+  Divider,
+  LinearProgress,
   Link,
 } from "@mui/material";
 
 export type ProductProps = {
   product: Product;
+  cartItems: CartItem[];
   onAdd: (product: Product) => void;
 };
 
@@ -31,57 +37,47 @@ type ProductDets = {
 };
 
 const Img = styled("img")({
-  margin: "auto",
+  margin: "0",
   display: "block",
-  width: "auto",
-  height: "50vh",
+  width: "100%",
   objectFit: "cover",
 });
 
-function getReviewMean(reviews: Review[]) {
-  let mean: number = 0;
-
-  reviews.forEach((review) => {
-    mean += review.rating;
-  });
-
-  mean /= reviews.length;
-
-  return mean;
+function ShopBreadcrumbs(props: any) {
+  return (
+    <React.Fragment>
+      <Breadcrumbs aria-label="breadcrumb" style={{ margin: "2vh 2vw" }}>
+        <Link underline="hover" color="inherit" href="/">
+          DeDe
+        </Link>
+        <Link underline="hover" color="inherit" href="/shop/">
+          Shop
+        </Link>
+        <Typography color="text.primary">{props.product}</Typography>
+      </Breadcrumbs>
+    </React.Fragment>
+  );
 }
 
 export default function ProductDetails(props: ProductProps): JSX.Element {
-  const [stockOption, setStockOption] = useState<boolean>(true);
-
-  function StockAlert(props: any): JSX.Element {
-    if (props.stock === 0) {
-      setStockOption(false);
-      return <Chip label="No stock available!" color="error" />;
-    } else if (props.stock <= 10) {
-      setStockOption(true);
-      return <Chip label="Few units left!" color="warning" />;
-    } else {
-      setStockOption(true);
-      return <Chip label="Stock available!" color="success" />;
-    }
-  }
-
   const { id } = useParams<keyof ProductDets>() as ProductDets;
-
-  const obtainProduct = async () => {
-    if (props.product == null) setProduct(await getProduct(id));
-    else setProduct(props.product);
-  };
-
-  const obtainReviews = async (code: string) => {
-    setReviews(await getReviewsByCode(code));
-  };
 
   const [product, setProduct] = useState<Product>();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [dialogOpen, setDialogOpen] = useState<number>(0);
-  const [shareDialogOpen, setShareDialogOpen] = useState<number>(0);
-  const [starsSelected, setSelectedStars] = useState<number>(0);
+  const [dialogOpen, setDialogOpen] = useState(0);
+  const [shareDialogOpen, setShareDialogOpen] = useState(0);
+  const [starsSelected, setSelectedStars] = useState(0);
+  const [currentCartAmount, setCurrentCartAmount] = useState(0);
+  const [loading, setLoading] = React.useState(false);
+
+  const obtainProductDetails = async (code: string) => {
+    // We obtain the product
+    if (props.product == null) setProduct(await getProduct(id));
+    else setProduct(props.product);
+
+    // And then set the reviews
+    setReviews(await getReviewsByCode(code));
+  };
 
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
@@ -91,45 +87,53 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     setShareDialogOpen(shareDialogOpen + 1);
   };
 
-  useEffect(() => {
-    obtainProduct();
-    obtainReviews(id + "");
-  }, []);
-
   const addProductToCart = () => {
-    if (product != undefined) {
+    if (product !== undefined) {
       props.onAdd(product);
     }
   };
 
+  useEffect(() => {
+    setLoading(true);
+    obtainProductDetails(id + "").finally(() => setLoading(false));
+
+    // In case we have obtained a product
+    if (product !== undefined)
+      setCurrentCartAmount(getCurrentCartAmount(product, props.cartItems));
+  }, []);
+
+  // In case we are retrieving the elements from the db...
+
   if (typeof product === "undefined") {
+    if (loading) return <LinearProgress />;
+
     return (
       <React.Fragment>
-        <Breadcrumbs aria-label="breadcrumb" style={{ margin: "2vh 2vw" }}>
-          <Link underline="hover" color="inherit" href="/">
-            DEDE
-          </Link>
-          <Link underline="hover" color="inherit" href="/shopping/">
-            Shopping
-          </Link>
-          <Typography color="text.primary">Product not found :(</Typography>
-        </Breadcrumbs>
+        <ShopBreadcrumbs product={id} />
 
-        <h1>No Product found with id: {id}</h1>
+        <Typography component="h1" variant="h4" align="center">
+          Product not found 🔍
+        </Typography>
+
+        <Img
+          src={require("../images/not-found.png")}
+          alt="Product not found image"
+          sx={{ width: "50%", p: 2, m: "auto" }}
+        />
+
+        <Grid container justifyContent="center">
+          <Button variant="contained">
+            <Link underline="none" color="inherit" href="/">
+              Take me home
+            </Link>
+          </Button>
+        </Grid>
       </React.Fragment>
     );
   } else {
     return (
       <React.Fragment>
-        <Breadcrumbs aria-label="breadcrumb" style={{ margin: "2vh 2vw" }}>
-          <Link underline="hover" color="inherit" href="/">
-            DEDE
-          </Link>
-          <Link underline="hover" color="inherit" href="/shop">
-            Shop
-          </Link>
-          <Typography color="text.primary">{product.name}</Typography>
-        </Breadcrumbs>
+        <ShopBreadcrumbs product={product.name} />
         <Grid>
           <Paper
             variant="outlined"
@@ -141,42 +145,68 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
               direction="row"
               alignItems="center"
               justifyContent="center"
-              style={{ minHeight: "30vh", margin: "2vh", marginBottom: "4vh" }}
+              spacing={2}
+              sx={{ p: 2 }}
             >
-              <Img
-                alt="Image of the product"
-                src={require("../images/".concat(product.code).concat(".png"))}
-              />
+              <Grid item xs={12} md={6}>
+                <Img
+                  alt="Image of the product"
+                  src={require("../images/"
+                    .concat(product.code)
+                    .concat(".png"))}
+                />
+              </Grid>
 
-              <Grid xs direction={"column"}>
-                <h1> {product.name} </h1>
-                <Button variant="text" onClick={openDialog} sx={{ my: 1 }}>
+              <Grid item xs={12} md={6} direction={"column"}>
+                <Typography component="h1" variant="h5">
+                  {product.name}
+                </Typography>
+
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <Rating
                     name="hover-feedback"
                     value={getReviewMean(reviews)}
                     precision={0.5}
+                    onClick={openDialog}
                     onChange={(event, newValue) => {
-                      if (newValue != null) {
-                        setSelectedStars(newValue);
-                      }
+                      if (newValue != null) setSelectedStars(newValue);
                     }}
                   />
+
+                  <Typography>{reviews.length} Reviews</Typography>
+                </Stack>
+
+                <Divider sx={{ m: 1 }} />
+
+                <Typography>{product.description}</Typography>
+
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ m: 1 }}
+                >
+                  <Typography component="h2" variant="h5">
+                    {product.price}€
+                  </Typography>
+                  <StockAlert
+                    stock={product.stock}
+                    amount={currentCartAmount}
+                  />
+                </Stack>
+
+                <Button
+                  variant="contained"
+                  disabled={product.stock <= currentCartAmount}
+                  onClick={addProductToCart}
+                  sx={{ my: 1, width: "100%" }}
+                >
+                  Add product to cart
                 </Button>
-                <Paper style={{ margin: "4vh 2vw", padding: ".5em" }}>
-                  <Typography>{product.description}</Typography>
-                </Paper>
-                <h2> {product.price}€ </h2>
-                <Grid style={{ margin: "4vh 0 0 0" }}>
-                  <StockAlert stock={product.stock} /> <br />
-                  <Button
-                    variant="contained"
-                    disabled={!stockOption}
-                    onClick={addProductToCart}
-                    sx={{ my: 1 }}
-                  >
-                    Add product to cart
-                  </Button>
-                </Grid>
               </Grid>
             </Grid>
           </Paper>

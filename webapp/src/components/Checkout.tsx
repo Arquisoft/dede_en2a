@@ -29,9 +29,9 @@ function getSteps() {
 
 export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [costs, setCosts] = React.useState<number>(Number());
   const [isCostsCalculated, setCostsCalculated] =
     React.useState<boolean>(false);
-  const [costs, setCosts] = React.useState<number>(Number());
 
   const steps = getSteps();
 
@@ -89,6 +89,7 @@ export default function Checkout(props: any) {
             costs={costs}
             handleCostsCalculated={setCostsCalculated}
             isCostsCalculated={isCostsCalculated}
+            userEmail={props.userEmail}
           />
         );
       case 1:

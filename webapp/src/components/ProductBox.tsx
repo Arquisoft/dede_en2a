@@ -1,10 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 import Grid from "@mui/material/Grid";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+
+import StockAlert from "./StockAlert";
 
 import { Product } from "../shared/shareddtypes";
 
@@ -15,17 +17,6 @@ type ProductListProps = {
 };
 
 export default function ProductBox(props: ProductListProps): JSX.Element {
-  function StockAlert(props: any): JSX.Element {
-    if (props.stock <= props.amount) {
-      // to prevent from some issues regarding no stock
-      return <Chip label="No stock available!" color="error" />;
-    } else if (props.stock - props.amount <= 10) {
-      return <Chip label="Few units left!" color="warning" />;
-    } else {
-      return <Chip label="Stock available!" color="success" />;
-    }
-  }
-
   const Img = styled("img")({
     margin: "auto",
     display: "block",
@@ -69,15 +60,14 @@ export default function ProductBox(props: ProductListProps): JSX.Element {
           amount={props.currentCartAmount}
         />
       </Grid>
-      <Grid item xs>
-        <Button
-          variant="contained"
-          disabled={props.product.stock <= props.currentCartAmount}
-          onClick={() => props.onAdd(props.product)}
-        >
-          Add product
-        </Button>
-      </Grid>
+      <Button
+        variant="contained"
+        disabled={props.product.stock <= props.currentCartAmount}
+        onClick={() => props.onAdd(props.product)}
+        sx={{ m: 1 }}
+      >
+        Add product
+      </Button>
     </Grid>
   );
 }

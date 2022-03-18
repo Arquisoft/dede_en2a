@@ -2,7 +2,7 @@ import type { AlertColor } from "@mui/material/Alert";
 
 export type User = {
   name: string;
-  surname: string;
+  webId: string;
   email: string;
   password: string;
 };

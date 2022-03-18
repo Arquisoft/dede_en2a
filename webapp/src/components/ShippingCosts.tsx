@@ -8,33 +8,84 @@ import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 
-import {
-  getSolidDataset,
-  getThing,
-  getStringNoLocale,
-  Thing,
-} from "@inrupt/solid-client";
+import ApartmentIcon from "@mui/icons-material/Apartment";
 
-import { VCARD } from "@inrupt/vocab-common-rdf";
+import { User } from "../shared/shareddtypes";
+import { getUser } from "../api/api";
+
+import WebIdRadioGroup from "./WebIdRadioGroup";
 
 import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
 } from "../helpers/ComputeDistanceHelper";
+import { getAddressesFromPod } from "../helpers/SolidHelper";
+
+function WebIdTextField(props: any) {
+  if (props.webId)
+    return (
+      <React.Fragment>
+        <Typography variant="h6" gutterBottom>
+          Your WebId has been loaded from your account 😉
+        </Typography>
+      </React.Fragment>
+    );
+  else
+    return (
+      <React.Fragment>
+        <Typography variant="h6" gutterBottom>
+          Shipping address
+        </Typography>
+        <TextField
+          name="address"
+          required
+          fullWidth
+          id="address"
+          label="WebID"
+          onChange={(e) => props.setWebId(e.target.value)}
+          //autoFocus
+        />
+      </React.Fragment>
+    );
+}
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
+  const [addresses] = React.useState<string[]>([]);
+  const [value, setValue] = React.useState<string>("");
+  const [buttonMessage, setButtonMessage] = React.useState("Verify my address");
+  const [user, setUser] = React.useState<User>();
   const [map, setMap] = React.useState<string>();
   const [loading, setLoading] = React.useState(false);
 
-  const solidPodAddress = async () => {
-    let profileDocumentURI = webId.split("#")[0]; // we are just interested in the card
-    let myDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
-    let profile = getThing(myDataset, webId); // we obtain the thing we are looking for from the dataset
+  const refreshAddresses = async () => {
+    let retrievedAddresses = await getAddressesFromPod(webId);
+    retrievedAddresses.forEach((address) => addresses.push(address));
+  };
 
-    // we obtain the property we are looking for and return it
-    return getStringNoLocale(profile as Thing, VCARD.street_address) as string;
+  const refreshUser = async () => {
+    setUser(await getUser(props.userEmail));
+  };
+
+  React.useEffect(() => {
+    refreshUser();
+
+    // We check if a user is logged in, if so we store the webId
+    if (user) {
+      setWebId(user.webId);
+    }
+
+    if (addresses.length > 0) setButtonMessage("Calculate shipping costs");
+  }, []);
+
+  const handleNext = () => {
+    if (addresses.length > 0) return calculateCosts();
+    else return refreshAddresses();
+  };
+
+  const calculateCosts = async () => {
+    shippingCosts(value); // we compute the address given the pod
   };
 
   const shippingCosts = async (street_address: string) => {
@@ -49,11 +100,6 @@ export default function ShippingCosts(props: any): JSX.Element {
       .finally(() => setLoading(false)); // loading process must be finished
   };
 
-  const calculateCosts = async () => {
-    let street_address = await solidPodAddress(); // we obtain the address from the solid pod
-    shippingCosts(street_address); // we compute the address given the pod
-  };
-
   const Img = styled("img")({
     margin: "auto",
     display: "block",
@@ -63,26 +109,25 @@ export default function ShippingCosts(props: any): JSX.Element {
 
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Shipping address
-      </Typography>
-      <TextField
-        name="address"
-        required
-        fullWidth
-        id="address"
-        label="WebID"
-        onChange={(e) => setWebId(e.target.value)}
-        autoFocus
-      />
+      <WebIdTextField webId={webId} setWebId={setWebId} />
+      {addresses.length > 0 && (
+        <WebIdRadioGroup
+          value={value}
+          setValue={setValue}
+          radioItems={addresses}
+          icon={<ApartmentIcon />}
+          checkedIcon={<ApartmentIcon />}
+        />
+      )}
       <Button
         type="button"
         fullWidth
         variant="contained"
+        disabled={addresses.length > 0 && !value}
         sx={{ mt: 3, mb: 2 }}
-        onClick={calculateCosts}
+        onClick={handleNext}
       >
-        Calculate Shipping Costs
+        {buttonMessage}
       </Button>
       {loading && <LinearProgress />}
       {props.isCostsCalculated && !loading && (
