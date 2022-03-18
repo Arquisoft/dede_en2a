@@ -177,8 +177,7 @@ function Orders(props: any): JSX.Element {
   const [user, setUser] = useState<User>();
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser(props.userEmail));
-    setUser(await getUser(props.userEmail));
+    setOrders(await getOrdersForUser());
   };
 
   const refreshUser = async () => {

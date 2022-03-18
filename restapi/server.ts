@@ -8,7 +8,6 @@ import morgan from "morgan";
 import apiUser from "./users/UserRoutes";
 import apiProduct from "./products/ProductRoutes";
 import apiOrders from "./orders/OrderRoutes";
-import apiCarts from "./carts/CartRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
 
 let helmet = require("helmet");
@@ -34,7 +33,6 @@ app.use(morgan("dev"));
 app.use(apiUser);
 app.use(apiProduct);
 app.use(apiOrders);
-app.use(apiCarts);
 app.use(apiReviews);
 
 app.use(helmet.hidePoweredBy());
