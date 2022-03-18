@@ -44,7 +44,7 @@ function WebIdTextField(props: any) {
           id="address"
           label="WebID"
           onChange={(e) => props.setWebId(e.target.value)}
-          autoFocus
+          //autoFocus
         />
       </React.Fragment>
     );
