@@ -28,7 +28,7 @@ function OrderListItem(props: any): JSX.Element {
 
   useEffect(() => {
     obtainProduct();
-  });
+  }, []);
 
   if (typeof product === "undefined")
     return (
