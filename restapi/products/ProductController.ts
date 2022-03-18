@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 
 export const getProducts: RequestHandler = async (req, res) => {
@@ -54,17 +55,24 @@ export const deleteProduct: RequestHandler = async (req, res) => {
   }
 };
 
-// I don't know why the req.body is empty !!!
 export const updateProduct: RequestHandler = async (req, res) => {
-  try {
-    console.log(req.body);
-    const product = await productModel.findOneAndUpdate(
-      { code: req.params.code },
-      req.body,
-      { new: true }
-    );
-    res.json(product);
-  } catch (error) {
-    res.json(error);
+  const isVerified = verifyToken(
+    req.headers.token + "",
+    req.headers.email + ""
+  );
+  if (isVerified) {
+    try {
+      console.log(req.body);
+      const product = await productModel.findOneAndUpdate(
+        { code: req.params.code },
+        req.body,
+        { new: true }
+      );
+      res.json(product);
+    } catch (error) {
+      res.json(error);
+    }
+  } else {
+    res.status(203).json();
   }
 };

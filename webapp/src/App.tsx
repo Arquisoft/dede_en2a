@@ -20,17 +20,12 @@ import ProductDetails from "./components/ProductDetails";
 import OrderDetails from "./components/OrderDetails";
 import OrderList from "./components/OrderList";
 
-
-
-
-
-
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 import { getProducts } from "./api/api";
+
 import "bootstrap/dist/css/bootstrap.css";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "./App.css";
 
@@ -73,7 +68,7 @@ function App(): JSX.Element {
 
   const logCurrentUserOut = () => {
     localStorage.removeItem("user.email");
-    localStorage.removeItem("token")
+    localStorage.removeItem("token");
     setNotificationStatus(true);
     setNotification({
       severity: "success",

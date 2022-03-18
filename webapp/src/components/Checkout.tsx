@@ -47,19 +47,23 @@ export default function Checkout(props: any) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     // when we click FINISH button ==> update the stock
-    if (activeStep === steps.length - 1) {
-      handleUpdateStock();
-      saveOrder(
-        props.productsCart,
-        costs,
-        props.userEmail,
-        "Get address not implemented yet"
-      );
-      props.deleteCart();
-
-      // We have finished the process...
-      <Navigate to="/" />;
+    if (activeStep === steps.length - 2) {
+      saveOrderToDB();
     }
+  };
+
+  const saveOrderToDB = () => {
+    handleUpdateStock();
+    saveOrder(
+      props.productsCart,
+      costs,
+      props.userEmail,
+      "Get address not implemented yet"
+    );
+    props.deleteCart();
+
+    // We have finished the process...
+    <Navigate to="/" />;
   };
 
   const handleBack = () => {
@@ -147,7 +151,7 @@ export default function Checkout(props: any) {
           >
             <Button
               disabled={activeStep === 0}
-              hidden={activeStep === getSteps().length}
+              hidden={activeStep === getSteps().length - 1}
               onClick={handleBack}
               variant="outlined"
               className="m-1"
