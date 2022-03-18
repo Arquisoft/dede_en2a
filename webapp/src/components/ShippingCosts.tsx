@@ -77,7 +77,7 @@ export default function ShippingCosts(props: any): JSX.Element {
     }
 
     if (addresses.length > 0) setButtonMessage("Calculate shipping costs");
-  }, [refreshUser, user, addresses.length]);
+  }, []);
 
   const handleNext = () => {
     if (addresses.length > 0) return calculateCosts();
