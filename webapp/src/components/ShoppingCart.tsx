@@ -10,8 +10,6 @@ import {
   Divider,
 } from "@mui/material";
 
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-
 import FeaturedProducts from "./FeaturedProducts";
 import ShoppingCartTable from "./ShoppingCartTable";
 

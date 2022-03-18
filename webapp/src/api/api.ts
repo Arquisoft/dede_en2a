@@ -61,7 +61,7 @@ export async function getProduct(productCode: string): Promise<Product> {
 
 export async function updateProduct(product: Product) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/products/" + product.code, {
+  await fetch(apiEndPoint + "/products/" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -79,7 +79,7 @@ export async function updateProduct(product: Product) {
 
 export async function createOrder(body: any) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/orders", {
+  await fetch(apiEndPoint + "/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

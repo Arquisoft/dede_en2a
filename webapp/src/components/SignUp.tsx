@@ -31,7 +31,7 @@ type SignUpProps = {
 export default function SignUp(props: SignUpProps) {
   const [webId, setWebId] = useState("");
   const [name, setName] = useState("");
-  const [emails, setEmails] = useState<string[]>([]);
+  const [emails] = useState<string[]>([]);
   const [value, setValue] = useState<string>("");
   const [buttonMessage, setButtonMessage] = useState("Verify my fields");
   const [password, setPassword] = useState("");
@@ -45,7 +45,7 @@ export default function SignUp(props: SignUpProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    new FormData(event.currentTarget);
   };
 
   const checkFields = async () => {
@@ -72,7 +72,7 @@ export default function SignUp(props: SignUpProps) {
 
     // We store the retrieved emails from the pod
     let retrievedEmails = await getEmailsFromPod(webId);
-    retrievedEmails.map((email) => emails.push(email));
+    retrievedEmails.forEach((email) => emails.push(email));
 
     // We change this page to allow user to (choose the email
     setButtonMessage("Sign up");
@@ -88,8 +88,8 @@ export default function SignUp(props: SignUpProps) {
 
     const correctSignUp = await Api.addUser(newUser);
     if (correctSignUp) {
-      /*props.setCurrentUser(await Api.getUser(email));
-      setRedirect(true);*/
+      //props.setCurrentUser(await Api.getUser(email));
+      setRedirect(true);
       setNotificationStatus(true);
       setNotification({
         severity: "success",

@@ -99,7 +99,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
 
   return (
-    <TableRow hover>
+    <TableRow hover key={props.order.orderCode}>
       <TableCell align="center">{props.order.orderCode}</TableCell>
       <TableCell align="center">{props.order.subtotalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
@@ -134,7 +134,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 function OrderTable(props: OrderTableProps): JSX.Element {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage] = React.useState(5);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -160,23 +160,12 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-
                 <StyledTableCell align="center">Order</StyledTableCell>
                 <StyledTableCell align="center">Price</StyledTableCell>
+                <StyledTableCell align="center">Subtotal</StyledTableCell>
                 <StyledTableCell align="center">Shipping price</StyledTableCell>
                 <StyledTableCell align="center">Status</StyledTableCell>
                 <StyledTableCell align="center">Show details</StyledTableCell>
-
-
-
-
-  
-
-
-
-
-
-
               </TableRow>
             </TableHead>
             <TableBody>

@@ -52,7 +52,7 @@ function WebIdTextField(props: any) {
 
 export default function ShippingCosts(props: any): JSX.Element {
   const [webId, setWebId] = React.useState("");
-  const [addresses, setAddress] = React.useState<string[]>([]);
+  const [addresses] = React.useState<string[]>([]);
   const [value, setValue] = React.useState<string>("");
   const [buttonMessage, setButtonMessage] = React.useState("Verify my address");
   const [user, setUser] = React.useState<User>();
@@ -61,7 +61,7 @@ export default function ShippingCosts(props: any): JSX.Element {
 
   const refreshAddresses = async () => {
     let retrievedAddresses = await getAddressesFromPod(webId);
-    retrievedAddresses.map((address) => addresses.push(address));
+    retrievedAddresses.forEach((address) => addresses.push(address));
   };
 
   const refreshUser = async () => {
@@ -77,7 +77,7 @@ export default function ShippingCosts(props: any): JSX.Element {
     }
 
     if (addresses.length > 0) setButtonMessage("Calculate shipping costs");
-  });
+  }, [refreshUser, user, addresses.length]);
 
   const handleNext = () => {
     if (addresses.length > 0) return calculateCosts();

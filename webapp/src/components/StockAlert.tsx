@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Chip } from "@mui/material";
 
 export default function StockAlert(props: any): JSX.Element {

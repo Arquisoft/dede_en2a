@@ -20,6 +20,7 @@ export default function WebIdRadioGroup(props: any) {
               }
               value={radioItem}
               label={radioItem}
+              key={radioItem}
             />
           ))}
         </RadioGroup>
