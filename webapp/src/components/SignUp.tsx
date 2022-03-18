@@ -45,7 +45,6 @@ export default function SignUp(props: SignUpProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    new FormData(event.currentTarget);
   };
 
   const checkFields = async () => {
@@ -67,8 +66,8 @@ export default function SignUp(props: SignUpProps) {
 
   const validateRetrievedFields = async () => {
     // We store the retrieved name from the pod
-    let name = await getNameFromPod(webId);
-    setName(name);
+    let retrievedName = await getNameFromPod(webId);
+    setName(retrievedName);
 
     // We store the retrieved emails from the pod
     let retrievedEmails = await getEmailsFromPod(webId);
@@ -88,7 +87,6 @@ export default function SignUp(props: SignUpProps) {
 
     const correctSignUp = await Api.addUser(newUser);
     if (correctSignUp) {
-      //props.setCurrentUser(await Api.getUser(email));
       setRedirect(true);
       setNotificationStatus(true);
       setNotification({
