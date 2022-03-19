@@ -34,8 +34,7 @@ Contained Building Blocks::
 |Name| Description
 |User | Client of the application which will interact with it
 |Dede | System developed to be used by the users. Through it information in the PODs will be taken.  
-|Pods provider | Has the aim to access each user personal pod
-|User pod | Where the user's information is saved with total security 
+|Pod's service| Has the aim to access each user personal pod
 |===
 
 
@@ -86,38 +85,37 @@ Actor Juan
 
 Component Interface{
     Component vi as "Views"{
-       Component lo as "Log in"
-       Component re as "Register"
+       Component lo as "Sign in"
+       Component re as "Sign up"
+       Component out as "Log out"
        Component ho as "Home"
-       Component loc as "Location"
-       Component no as "Notifications"
-       Component my as "My deliveries"
-       Component ac as "Account"
-       Component out as "Sign out"
+       Component my as "Orders"
        Component sh as "Shopping cart"
+       Component ck as "Check out"
     }    
 }
 
 Component DataAccess{
        Component sol as "Solid"
        Component res as "RestApi"
+       Component pay as "PayPal Api"
 }
 
 Component pod as "Pod's service"
 Database db as "MongoDB"
 Juan -right->Interface: interacts
-lo -down-> sol
+
 re -down-> sol
-ho -down-> sol
-loc -down-> sol
-no -down-> sol
-my -down-> sol
-ac -down-> sol
-out -down-> sol
-sh -down->sol
+ck -down-> sol
+
+ck -down-> pay
+
 lo -down-> res
+re -down-> res 
 my -down-> res
-ac -down-> res
+my -down-> res
+ho -down-> res
+sh -down-> res
 
 sol <-down-> pod:acceses
 res <-down-> db:data
@@ -132,12 +130,10 @@ Contained Building Blocks::
 |===
 |Name| Description
 |Views | Parts of the application which the user is going to interact with during experience with the system
-|Log in |  Here the user will log in into their personal account if they have previously created one
-|Register | Allows the client to create a new account for the application
-|Home |  Initial screen for the application
-|Location | Shows the current location of the user that is using the app
-|Notifications | The notification will make the client to be up to date with their deliveries  
-|My deliveries | Here the user can find any information related with their deliveries, like their state or their location 
+|Sign in |  Here the user will log in into their personal account if they have previously created one
+|Sign up | Allows the client to create a new account for the application
+|Log out | It signs out the application from the last user.
+|Home |  Initial screen for the application 
+|Orders | Here the user can find any information related with their deliveries, like their state or details
 |Account | In this part the client is going to be able to perform any operation in their account like introducing new data or removing it
-|Sign out | It signs out the application from the last user.
 |===
