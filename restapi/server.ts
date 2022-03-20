@@ -10,6 +10,8 @@ import apiProduct from "./products/ProductRoutes";
 import apiOrders from "./orders/OrderRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
 
+const path = require("path");
+
 let helmet = require("helmet");
 
 const app: Application = express();
@@ -37,6 +39,9 @@ app.use(apiReviews);
 
 app.use(helmet.hidePoweredBy());
 
+app.use('/uploads', express.static(path.resolve('uploads')))
+app.set('view engine', 'ejs');
+
 app
   .listen(process.env.PORT, (): void => {
     console.log("Restapi listening on " + process.env.PORT);
@@ -56,3 +61,5 @@ mongoose
   .catch((err: Error) => {
     console.error(err);
   });
+
+  mongoose.ge

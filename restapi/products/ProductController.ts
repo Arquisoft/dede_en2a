@@ -23,6 +23,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 export const createProduct: RequestHandler = async (req, res) => {
   try {
     const product = new productModel(req.body);
+    product.imagePath = req.file?.path;
     const productSaved = await product.save();
     res.json(productSaved);
   } catch (error) {
@@ -75,4 +76,14 @@ export const updateProduct: RequestHandler = async (req, res) => {
   } else {
     res.status(203).json();
   }
+};
+
+export const uploadPhoto: RequestHandler = async (req, res) => {
+  console.log(req.body);
+  return res.json();
+};
+
+export const getPhoto: RequestHandler = async (req, res) => {
+  const photo = await productModel.findOne({ code: req.params.code })  
+  return res.json(photo.imagePath);
 };
