@@ -5,6 +5,9 @@ import Typography from "@mui/material/Typography";
 import { CartItem, Product } from "../shared/shareddtypes";
 
 import ProductList from "./ProductList";
+import { alpha, styled, TextField } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+
 
 type HomeProps = {
   products: Product[];
@@ -12,9 +15,19 @@ type HomeProps = {
   onAdd: (product: Product) => void;
 };
 
+const Search = styled('div')({
+  marginLeft: "30px",
+});
+
 function Home(props: HomeProps): JSX.Element {
+
+  const [searchTerm, setSearchTerm] = useState("");
+  let productos : Product[] = [];
+  
+
   return (
     <React.Fragment>
+      <div>
       <Typography
         component="h1"
         variant="h4"
@@ -23,10 +36,21 @@ function Home(props: HomeProps): JSX.Element {
       >
         Shop
       </Typography>
+      <Search>
+        <TextField type="text" id="search" label="Search..." variant="standard" onChange={event => {setSearchTerm(event.target.value)}}/>
+      </Search>
+      </div>
+      {props.products.filter((val) => {
+        if(searchTerm == ""){
+          productos = props.products;
+        }else if(val.name.toLowerCase().includes(searchTerm.toLowerCase())){
+          productos.push(val);
+        }
+      })}
       <ProductList
-        products={props.products}
-        cartProducts={props.cartProducts}
-        OnAddCart={props.onAdd}
+          products={productos}
+          cartProducts={props.cartProducts}
+          OnAddCart={props.onAdd}
       />
     </React.Fragment>
   );
