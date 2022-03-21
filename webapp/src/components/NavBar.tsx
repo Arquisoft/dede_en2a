@@ -21,6 +21,7 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import StoreIcon from "@mui/icons-material/Store";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { Grid } from "@mui/material";
 import MUISwitch from "./ThemeSlider";
@@ -163,6 +164,13 @@ export default function NavBar(props: NavBarProps): JSX.Element {
             <ShoppingCartIcon fontSize="small" />
           </ListItemIcon>
           <Typography variant="inherit">Cart</Typography>
+        </MenuItem>
+
+        <MenuItem component={Link} to="addProduct">
+          <ListItemIcon>
+            <AddCircleOutlineIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Add product</Typography>
         </MenuItem>
       </MenuList>
     </Grid>

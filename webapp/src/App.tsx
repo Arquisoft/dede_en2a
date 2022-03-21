@@ -36,6 +36,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
+import UploadImage from "./components/UploadImage";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -184,7 +185,6 @@ function App(): JSX.Element {
     localStorage.setItem("theme", String(initialTheme));
   } else {
     initialTheme = localStorage.getItem("theme") === "true";
-    console.log("already -> " + initialTheme);
   }
 
   const [mode, setMode] = React.useState<PaletteMode>(
@@ -254,6 +254,10 @@ function App(): JSX.Element {
             <Route
               path="sign-up"
               element={<SignUp setCurrentUser={setCurrentUser} />}
+            />
+            <Route
+              path="addProduct"
+              element={<UploadImage/>}
             />
             <Route
               path="product/:id"
