@@ -23,8 +23,8 @@ export const getProduct: RequestHandler = async (req, res) => {
 
 export const createProduct: RequestHandler = async (req, res) => {
   try {
-    const product = new productModel(req.body);
-    product.imagePath = path.basename(req.file?.path + "");
+    let product = new productModel(req.body);
+    product.image = path.basename(req.file?.path + "");
     const productSaved = await product.save();
     res.json(productSaved);
   } catch (error) {
