@@ -11,8 +11,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
 import { getProduct, getOrder } from "../../api/api";
-import { Order,Product } from "../../shared/shareddtypes";
-
+import { Order, Product } from "../../shared/shareddtypes";
+import { checkImageExists } from "../../helpers/ImageHelper";
 
 type OrderListItemProps = {
   product: Product;
@@ -43,7 +43,7 @@ function OrderListItem(props: OrderListItemProps): JSX.Element {
   else {
     return (
       <ListItem key={product.code} sx={{ py: 1, px: 0 }}>
-        <Img src={checkImageExists(product.image)} />
+        <Img alt="Image of the product" src={checkImageExists(product.image)} />
         <Typography mr={4}>{product.stock}</Typography>
         <ListItemText primary={product.name} secondary={product.description} />
         <Typography>{product.price}€</Typography>
@@ -100,7 +100,3 @@ export default function OrderDetails(): JSX.Element {
     </Container>
   );
 }
-function checkImageExists(image: any): string | undefined {
-  throw new Error("Function not implemented.");
-}
-
