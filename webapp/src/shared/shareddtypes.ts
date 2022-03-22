@@ -13,7 +13,7 @@ export type Product = {
   description: string;
   price: number;
   stock: number;
-  imagePath: string;
+  image: string;
 };
 
 export type NotificationType = {

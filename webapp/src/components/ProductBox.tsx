@@ -39,8 +39,7 @@ export default function ProductBox(props: ProductListProps): JSX.Element {
           <Img
             alt="Image of the product"
             src={require("../images/"
-              .concat(props.product.code)
-              .concat(".png"))}
+              .concat(props.product.image))}
           />
         </ButtonBase>
       </Grid>

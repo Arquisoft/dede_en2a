@@ -28,7 +28,7 @@ export const product = new Schema(
       required: true,
       trim: true,
     },
-    imagePath: {
+    image: {
       type: String,
       required: false,
     },

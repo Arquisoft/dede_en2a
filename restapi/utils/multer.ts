@@ -3,7 +3,7 @@ import multer from "multer";
 const storage = multer.diskStorage({
   destination: "../webapp/src/images",
   filename: (req, file, cb) => {
-    cb(null, file.originalname); //+ path.extname(file.originalname).toLowerCase()
+    cb(null, file.originalname.toLowerCase()); //+ path.extname(file.originalname).toLowerCase()
   },
 });
 

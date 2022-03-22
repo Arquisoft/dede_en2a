@@ -19,6 +19,7 @@ export default function FeaturedProducts() {
       code: "1234",
       title: "AMONG US™ T-shirt",
       price: "12.95",
+      image:"1234.png",
       buttonVariant: "outlined",
     },
     {
@@ -26,12 +27,14 @@ export default function FeaturedProducts() {
       title: "AMONG US™ T-shirt",
       subheader: "Most popular",
       price: "12.95",
+      image:"1234.png",
       buttonVariant: "contained",
     },
     {
       code: "1234",
       title: "AMONG US™ T-shirt",
       price: "12.95",
+      image:"1234.png",
       buttonVariant: "outlined",
     },
   ];
@@ -81,7 +84,7 @@ export default function FeaturedProducts() {
               <CardContent>
                 <Img
                   alt="Image of the product"
-                  src={require("../images/".concat(tier.code).concat(".png"))}
+                  src={require("../images/".concat(tier.image))}
                 />
               </CardContent>
               <CardActions>

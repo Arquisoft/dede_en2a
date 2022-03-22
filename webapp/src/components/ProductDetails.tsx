@@ -151,9 +151,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
               <Grid item xs={12} md={6}>
                 <Img
                   alt="Image of the product"
-                  src={require("../images/"
-                    .concat(product.code)
-                    .concat(".png"))}
+                  src={require("../images/".concat(product.image))}
                 />
               </Grid>
 
