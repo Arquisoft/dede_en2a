@@ -23,16 +23,6 @@ type ShoppingCartProps = {
 };
 
 export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
-  const handleButton = (cartItem: CartItem) => {
-    if (cartItem.amount >= cartItem.product.stock) return false;
-    else return true;
-  };
-
-  const Img = styled("img")({
-    display: "block",
-    width: "25%",
-  });
-
   if (props.totalUnitsInCart > 0)
     return (
       <Container component="main" maxWidth="md" sx={{ mb: 4 }}>

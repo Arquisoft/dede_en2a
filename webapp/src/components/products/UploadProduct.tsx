@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Box, Snackbar, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { Button } from "react-bootstrap";
@@ -8,7 +8,6 @@ import {
   checkNumericField,
   checkTextField,
 } from "../../helpers/CheckFieldsHelper";
-import React from "react";
 import { NotificationType } from "../../shared/shareddtypes";
 
 export default function UploadImage(props: any): JSX.Element {
@@ -39,18 +38,17 @@ export default function UploadImage(props: any): JSX.Element {
   };
 
   const checkFields = () => {
-    if (file !== "")
-      if (checkNumericField(Number(code)))
-        if (checkTextField(name))
-          if (checkTextField(description))
-            if (checkNumericField(Number(price)))
-              if (checkNumericField(Number(stock))) handleSumbit();
-              else sendErrorNotification("Incorret stock");
-            else sendErrorNotification("Incorret price");
-          else sendErrorNotification("Incorret description");
-        else sendErrorNotification("Incorret name");
-      else sendErrorNotification("Incorret code");
-    else sendErrorNotification("Incorret file");
+    if (file === "") return sendErrorNotification("Incorret file");
+    if (!checkNumericField(Number(code)))
+      return sendErrorNotification("Incorret code");
+    if (!checkTextField(name)) return sendErrorNotification("Incorret name");
+    if (!checkTextField(description))
+      return sendErrorNotification("Incorret description");
+    if (!checkNumericField(Number(price)))
+      return sendErrorNotification("Incorret price");
+    if (!checkNumericField(Number(stock)))
+      return sendErrorNotification("Incorret stock");
+    handleSumbit();
   };
 
   const handleSumbit = async () => {
@@ -71,6 +69,7 @@ export default function UploadImage(props: any): JSX.Element {
       severity: "error",
       message: msg,
     });
+    return false;
   };
 
   return (

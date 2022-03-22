@@ -37,7 +37,7 @@ export default function SignUp(props: SignUpProps) {
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
   const [notificationStatus, setNotificationStatus] = useState(false);
-  const [redirect, setRedirect] = useState<Boolean>(false);
+  const [redirect, setRedirect] = useState<boolean>(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",

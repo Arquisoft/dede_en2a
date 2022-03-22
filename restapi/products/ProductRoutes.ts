@@ -15,8 +15,6 @@ api.delete("/products/delete/:code", ProdctController.deleteProduct);
 
 api.post("/products/:code", ProdctController.updateProduct);
 
-//api.post("/photos", multer.single("image"), ProdctController.uploadPhoto);
-
 api.get("/photos/:code", ProdctController.getPhoto);
 
 export default api;

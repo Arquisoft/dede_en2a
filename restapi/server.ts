@@ -61,5 +61,3 @@ mongoose
   .catch((err: Error) => {
     console.error(err);
   });
-
-  mongoose.ge

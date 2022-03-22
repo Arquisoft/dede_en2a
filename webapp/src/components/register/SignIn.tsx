@@ -16,7 +16,6 @@ import { User, NotificationType } from "../../shared/shareddtypes";
 import * as Checker from "../../helpers/CheckFieldsHelper";
 
 import { checkUser, getUser } from "../../api/api";
-import { send } from "process";
 
 type SignInProps = {
   setCurrentUser: (user: User) => void;
@@ -32,11 +31,10 @@ export default function SignIn(props: SignInProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [redirect, setRedirect] = useState<Boolean>(false);
+  const [redirect, setRedirect] = useState<boolean>(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // we prevent the default behaviour
-    const data: FormData = new FormData(event.currentTarget);
+    event.preventDefault();
   };
 
   const checkFields = () => {

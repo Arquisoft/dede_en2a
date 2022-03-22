@@ -35,7 +35,7 @@ export default function Billing(props: BillingProps): JSX.Element {
         });
       }}
       onApprove={async (data, actions: any) => {
-        let order = await actions.order.capture();
+        await actions.order.capture();
         handleApprove();
       }}
     />

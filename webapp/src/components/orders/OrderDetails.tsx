@@ -10,45 +10,43 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
-import { Order, Product } from "../../shared/shareddtypes";
+import { getProduct, getOrder } from "../../api/api";
+import { Order,Product } from "../../shared/shareddtypes";
 
-import { getOrder, getProduct } from "../../api/api";
-import { checkImageExists } from "../../helpers/ImageHelper";
 
 type OrderListItemProps = {
   product: Product;
 };
 
 function OrderListItem(props: OrderListItemProps): JSX.Element {
-  //const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product>();
 
   const Img = styled("img")({
     display: "block",
     width: "30%",
   });
 
-  /*const obtainProduct = async () => {
+  const obtainProduct = async () => {
     setProduct(await getProduct(props.product.code));
   };
 
   useEffect(() => {
     obtainProduct();
-  }, []);*/
+  }, []);
 
-  if (typeof props.product === "undefined")
+  if (typeof product === "undefined")
     return (
-      <ListItem key={props.product} sx={{ py: 1, px: 0 }}>
+      <ListItem key={product} sx={{ py: 1, px: 0 }}>
         <Typography mr={4}> Product could not be found! </Typography>
       </ListItem>
     );
   else {
-    console.log(props);
     return (
-      <ListItem key={props.product.code} sx={{ py: 1, px: 0 }}>
-        <Img src={checkImageExists(props.product.image)} />
-        <Typography mr={4}>{props.product.stock}</Typography>
-        <ListItemText primary={props.product.name} secondary={props.product.description} />
-        <Typography>{props.product.price}€</Typography>
+      <ListItem key={product.code} sx={{ py: 1, px: 0 }}>
+        <Img src={checkImageExists(product.image)} />
+        <Typography mr={4}>{product.stock}</Typography>
+        <ListItemText primary={product.name} secondary={product.description} />
+        <Typography>{product.price}€</Typography>
       </ListItem>
     );
   }
@@ -102,3 +100,7 @@ export default function OrderDetails(): JSX.Element {
     </Container>
   );
 }
+function checkImageExists(image: any): string | undefined {
+  throw new Error("Function not implemented.");
+}
+
