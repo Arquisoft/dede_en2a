@@ -13,6 +13,8 @@ import StarIcon from "@mui/icons-material/StarBorder";
 
 import { styled } from "@mui/material/styles";
 
+import { checkImageExists } from "../helpers/ImageHelper";
+
 export default function FeaturedProducts() {
   const tiers = [
     {
@@ -84,7 +86,7 @@ export default function FeaturedProducts() {
               <CardContent>
                 <Img
                   alt="Image of the product"
-                  src={require("../images/".concat(tier.image))}
+                  src={checkImageExists(tier.image)}
                 />
               </CardContent>
               <CardActions>

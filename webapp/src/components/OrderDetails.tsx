@@ -13,38 +13,45 @@ import { styled } from "@mui/material/styles";
 import { Order, Product } from "../shared/shareddtypes";
 
 import { getOrder, getProduct } from "../api/api";
+import { checkImageExists } from "../helpers/ImageHelper";
 
-function OrderListItem(props: any): JSX.Element {
-  const [product, setProduct] = useState<Product>();
+type OrderListItemProps = {
+  product: Product;
+};
+
+function OrderListItem(props: OrderListItemProps): JSX.Element {
+  //const [product, setProduct] = useState<Product>();
 
   const Img = styled("img")({
     display: "block",
     width: "30%",
   });
 
-  const obtainProduct = async () => {
-    setProduct(await getProduct(props.code));
+  /*const obtainProduct = async () => {
+    setProduct(await getProduct(props.product.code));
   };
 
   useEffect(() => {
     obtainProduct();
-  }, []);
+  }, []);*/
 
-  if (typeof product === "undefined")
+  if (typeof props.product === "undefined")
     return (
-      <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
+      <ListItem key={props.product} sx={{ py: 1, px: 0 }}>
         <Typography mr={4}> Product could not be found! </Typography>
       </ListItem>
     );
-  else
+  else {
+    console.log(props);
     return (
-      <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
-        <Img src={require("../images/".concat(props.code).concat(".png"))} />
-        <Typography mr={4}>{props.amount}</Typography>
-        <ListItemText primary={product.name} secondary={product.description} />
-        <Typography>{product.price}€</Typography>
+      <ListItem key={props.product.code} sx={{ py: 1, px: 0 }}>
+        <Img src={checkImageExists(props.product.image)} />
+        <Typography mr={4}>{props.product.stock}</Typography>
+        <ListItemText primary={props.product.name} secondary={props.product.description} />
+        <Typography>{props.product.price}€</Typography>
       </ListItem>
     );
+  }
 }
 
 function OrderList(props: any): JSX.Element {
@@ -58,7 +65,7 @@ function OrderList(props: any): JSX.Element {
     return (
       <List>
         {props.order.products.map((product: Product) => (
-          <OrderListItem code={product.code} amount={product.stock} />
+          <OrderListItem product={product} />
         ))}
       </List>
     );

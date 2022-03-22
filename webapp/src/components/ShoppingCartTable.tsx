@@ -13,6 +13,7 @@ import { styled } from "@mui/material/styles";
 
 import { calculateTotal } from "../helpers/ShoppingCartHelper";
 import { CartItem, Product } from "../shared/shareddtypes";
+import { checkImageExists } from "../helpers/ImageHelper";
 
 type ShoppingCartProps = {
   products: CartItem[];
@@ -61,9 +62,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                         >
                           <Img
                             alt="Imagen del producto en el carrito"
-                            src={require("../images/".concat(
-                              cartItem.product.image
-                            ))}
+                            src={checkImageExists(cartItem.product.image)}
                           />
                           {cartItem.product.name}
                         </Stack>

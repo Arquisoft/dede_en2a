@@ -9,6 +9,7 @@ import { styled } from "@mui/material/styles";
 import StockAlert from "./StockAlert";
 
 import { Product } from "../shared/shareddtypes";
+import { checkImageExists } from "../helpers/ImageHelper";
 
 type ProductListProps = {
   product: Product;
@@ -38,8 +39,7 @@ export default function ProductBox(props: ProductListProps): JSX.Element {
         <ButtonBase onClick={() => navigate("/product/" + props.product.code)}>
           <Img
             alt="Image of the product"
-            src={require("../images/"
-              .concat(props.product.image))}
+            src={checkImageExists(props.product.image)}
           />
         </ButtonBase>
       </Grid>
