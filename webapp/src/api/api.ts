@@ -85,7 +85,7 @@ export async function createProduct(image: any, body: any) {
   }
 
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/products", {
+  let response = await fetch(apiEndPoint + "/products", {
     method: "POST",
    /* headers: {
       "Content-Type": "multipart/form-data",
@@ -94,6 +94,12 @@ export async function createProduct(image: any, body: any) {
     },*/
     body: data,
   });
+
+  if (response.status === 200) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
