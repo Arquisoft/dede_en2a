@@ -3,13 +3,13 @@ import { Box, Snackbar, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { Button } from "react-bootstrap";
 
-import { createProduct } from "../api/api";
+import { createProduct } from "../../api/api";
 import {
   checkNumericField,
   checkTextField,
-} from "../helpers/CheckFieldsHelper";
+} from "../../helpers/CheckFieldsHelper";
 import React from "react";
-import { NotificationType } from "../shared/shareddtypes";
+import { NotificationType } from "../../shared/shareddtypes";
 
 export default function UploadImage(props: any): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);

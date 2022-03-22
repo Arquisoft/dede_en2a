@@ -6,10 +6,10 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
-import StockAlert from "./StockAlert";
+import StockAlert from "../StockAlert";
 
-import { Product } from "../shared/shareddtypes";
-import { checkImageExists } from "../helpers/ImageHelper";
+import { Product } from "../../shared/shareddtypes";
+import { checkImageExists } from "../../helpers/ImageHelper";
 
 type ProductListProps = {
   product: Product;

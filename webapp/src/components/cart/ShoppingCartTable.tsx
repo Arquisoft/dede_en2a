@@ -11,9 +11,9 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 
-import { calculateTotal } from "../helpers/ShoppingCartHelper";
-import { CartItem, Product } from "../shared/shareddtypes";
-import { checkImageExists } from "../helpers/ImageHelper";
+import { calculateTotal } from "../../helpers/ShoppingCartHelper";
+import { CartItem, Product } from "../../shared/shareddtypes";
+import { checkImageExists } from "../../helpers/ImageHelper";
 
 type ShoppingCartProps = {
   products: CartItem[];

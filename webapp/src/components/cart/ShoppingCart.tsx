@@ -10,10 +10,10 @@ import {
   Divider,
 } from "@mui/material";
 
-import FeaturedProducts from "./FeaturedProducts";
-import ShoppingCartTable from "./ShoppingCartTable";
+import FeaturedProducts from "../FeaturedProducts";
 
-import { CartItem, Product } from "../shared/shareddtypes";
+import { CartItem, Product } from "../../shared/shareddtypes";
+import ShoppingCartTable from "./ShoppingCartTable";
 
 type ShoppingCartProps = {
   products: CartItem[];

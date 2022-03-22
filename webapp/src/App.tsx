@@ -5,13 +5,13 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
-import ShoppingCart from "./components/ShoppingCart";
-import SignIn from "./components/SignIn";
-import SignUp from "./components/SignUp";
-import Checkout from "./components/Checkout";
-import ProductDetails from "./components/ProductDetails";
-import OrderDetails from "./components/OrderDetails";
-import OrderList from "./components/OrderList";
+import ShoppingCart from "./components/cart/ShoppingCart";
+import SignIn from "./components/register/SignIn";
+import SignUp from "./components/register/SignUp";
+import Checkout from "./components/cart/Checkout";
+import ProductDetails from "./components/products/ProductDetails";
+import OrderDetails from "./components/orders/OrderDetails";
+import OrderList from "./components/orders/OrderList";
 
 import {
   createTheme,
@@ -36,7 +36,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
-import UploadImage from "./components/UploadImage";
+import UploadImage from "./components/products/UploadProduct";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);

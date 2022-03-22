@@ -16,8 +16,8 @@ import { Alert, Divider, Grid, Snackbar, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { AlertColor } from "@mui/material/Alert";
 
-import { Product, Review } from "../shared/shareddtypes";
-import { getReviewsByCodeAndEmail, addReview } from "../api/api";
+import { Product, Review } from "../../shared/shareddtypes";
+import { getReviewsByCodeAndEmail, addReview } from "../../api/api";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {

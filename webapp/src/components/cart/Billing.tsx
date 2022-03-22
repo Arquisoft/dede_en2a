@@ -1,5 +1,5 @@
-import { CartItem } from "../shared/shareddtypes";
-import { calculateTotal } from "../helpers/ShoppingCartHelper";
+import { CartItem } from "../../shared/shareddtypes";
+import { calculateTotal } from "../../helpers/ShoppingCartHelper";
 
 import { PayPalButtons } from "@paypal/react-paypal-js";
 

@@ -24,10 +24,10 @@ import { Autorenew } from "@mui/icons-material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-import { Order, User } from "../shared/shareddtypes";
-import { getOrdersForUser, getUser } from "../api/api";
+import { Order, User } from "../../shared/shareddtypes";
+import { getOrdersForUser, getUser } from "../../api/api";
 
-import FeaturedProducts from "./FeaturedProducts";
+import FeaturedProducts from "../FeaturedProducts";
 
 type OrderTableItemProps = {
   order: Order;

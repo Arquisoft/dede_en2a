@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 
 import { CartItem, Product } from "../shared/shareddtypes";
 
-import ProductList from "./ProductList";
+import ProductList from "./products/ProductList";
 
 type HomeProps = {
   products: Product[];

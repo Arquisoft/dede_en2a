@@ -10,10 +10,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
-import { Order, Product } from "../shared/shareddtypes";
+import { Order, Product } from "../../shared/shareddtypes";
 
-import { getOrder, getProduct } from "../api/api";
-import { checkImageExists } from "../helpers/ImageHelper";
+import { getOrder, getProduct } from "../../api/api";
+import { checkImageExists } from "../../helpers/ImageHelper";
 
 type OrderListItemProps = {
   product: Product;

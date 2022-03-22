@@ -12,10 +12,10 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 import { Link, Navigate } from "react-router-dom";
-import { User, NotificationType } from "../shared/shareddtypes";
-import * as Checker from "../helpers/CheckFieldsHelper";
+import { User, NotificationType } from "../../shared/shareddtypes";
+import * as Checker from "../../helpers/CheckFieldsHelper";
 
-import { checkUser, getUser } from "../api/api";
+import { checkUser, getUser } from "../../api/api";
 import { send } from "process";
 
 type SignInProps = {

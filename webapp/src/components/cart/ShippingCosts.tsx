@@ -10,17 +10,17 @@ import { styled } from "@mui/material/styles";
 
 import ApartmentIcon from "@mui/icons-material/Apartment";
 
-import { User } from "../shared/shareddtypes";
-import { getUser } from "../api/api";
+import { User } from "../../shared/shareddtypes";
+import { getUser } from "../../api/api";
 
-import WebIdRadioGroup from "./WebIdRadioGroup";
+import WebIdRadioGroup from "../WebIdRadioGroup";
 
 import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
-} from "../helpers/ComputeDistanceHelper";
-import { getAddressesFromPod } from "../helpers/SolidHelper";
+} from "../../helpers/ComputeDistanceHelper";
+import { getAddressesFromPod } from "../../helpers/SolidHelper";
 
 function WebIdTextField(props: any) {
   if (props.webId)

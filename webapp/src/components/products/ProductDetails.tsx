@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getProduct, getReviewsByCode } from "../api/api";
-import { getReviewMean } from "../helpers/ReviewHelper";
-import { getCurrentCartAmount } from "../helpers/ShoppingCartHelper";
-import { Product, Review, CartItem } from "../shared/shareddtypes";
+import { getProduct, getReviewsByCode } from "../../api/api";
+import { getReviewMean } from "../../helpers/ReviewHelper";
+import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
+import { Product, Review, CartItem } from "../../shared/shareddtypes";
 
 import ProductCommentList from "./ProductCommentList";
-import ProductSpeedDial from "./ProductSpeedDial";
-import ReviewDialog from "./ReviewDialog";
-import ShareDialog from "./ShareDialog";
-import StockAlert from "./StockAlert";
+import StockAlert from "../StockAlert";
 
 import {
   Paper,
@@ -25,7 +22,10 @@ import {
   LinearProgress,
   Link,
 } from "@mui/material";
-import { checkImageExists } from "../helpers/ImageHelper";
+import { checkImageExists } from "../../helpers/ImageHelper";
+import ProductSpeedDial from "./ProductSpeedDial";
+import ReviewDialog from "./ReviewDialog";
+import ShareDialog from "./ShareDialog";
 
 export type ProductProps = {
   product: Product;
@@ -117,7 +117,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
         </Typography>
 
         <Img
-          src={require("../images/not-found.png")}
+          src={checkImageExists("")}
           alt="Product not found image"
           sx={{ width: "50%", p: 2, m: "auto" }}
         />
