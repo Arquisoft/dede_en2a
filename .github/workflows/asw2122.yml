@@ -32,17 +32,17 @@ jobs:
       - run: npm test
       - uses: codecov/codecov-action@v2
   #e2e-tests:
-    #needs: [unit-test-webapp, unit-test-restapi]
-    #runs-on: ubuntu-latest
-    #steps:
-     # - uses: actions/checkout@v2
-      #- uses: actions/setup-node@v2
-      #  with:
-       #   node-version: 16
-      #- run: npm --prefix webapp install
-      #- run: npm --prefix restapi install
-      #- run: npm --prefix webapp run build
-      #- run: npm --prefix webapp run test:e2e
+  #needs: [unit-test-webapp, unit-test-restapi]
+  #runs-on: ubuntu-latest
+  #steps:
+  # - uses: actions/checkout@v2
+  #- uses: actions/setup-node@v2
+  #  with:
+  #   node-version: 16
+  #- run: npm --prefix webapp install
+  #- run: npm --prefix restapi install
+  #- run: npm --prefix webapp run build
+  #- run: npm --prefix webapp run test:e2e
   docker-push-webapp:
     name: Push webapp Docker Image to GitHub Packages
     runs-on: ubuntu-latest
@@ -88,7 +88,7 @@ jobs:
           user: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           command: |
-            wget https://raw.githubusercontent.com/pglez82/asw2122_0/master/docker-compose-deploy.yml -O docker-compose.yml
+            wget https://raw.githubusercontent.com/Arquisoft/dede_en2a/master/docker-compose.yml -O docker-compose.yml
             docker-compose stop
             docker-compose rm -f
             docker-compose pull   

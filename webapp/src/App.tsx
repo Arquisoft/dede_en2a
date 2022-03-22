@@ -27,7 +27,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "./App.css";
-import {LocalSee} from "@mui/icons-material";
+import { LocalSee } from "@mui/icons-material";
 import {
   createTheme,
   CssBaseline,
@@ -274,13 +274,13 @@ function App(): JSX.Element {
                 <ProductDetails product={null as any} onAdd={handleAddCart} />
               }
             />
-          <Route
-            path="orders"
-            element={<OrderList userEmail={user?.email} />}
-          />
-          <Route path="/order/:code" element={<OrderDetails />} />
-        </Routes>
-        <Footer />
+            <Route
+              path="orders"
+              element={<OrderList userEmail={user?.email} />}
+            />
+            <Route path="/order/:code" element={<OrderDetails />} />
+          </Routes>
+          <Footer />
 
           <Snackbar
             open={notificationStatus}
