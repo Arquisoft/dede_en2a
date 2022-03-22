@@ -18,10 +18,10 @@ import { checkImageExists } from "../helpers/ImageHelper";
 export default function FeaturedProducts() {
   const tiers = [
     {
-      code: "1234",
-      title: "AMONG US™ T-shirt",
+      code: "1235",
+      title: "AMONGUS™ T-shirt",
       price: "12.95",
-      image:"1234.png",
+      image:"1236.png",
       buttonVariant: "outlined",
     },
     {
@@ -33,10 +33,10 @@ export default function FeaturedProducts() {
       buttonVariant: "contained",
     },
     {
-      code: "1234",
-      title: "AMONG US™ T-shirt",
+      code: "1237",
+      title: "AMONG US T-shirt",
       price: "12.95",
-      image:"1234.png",
+      image:"1237.png",
       buttonVariant: "outlined",
     },
   ];
