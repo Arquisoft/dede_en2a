@@ -161,9 +161,9 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             <TableHead>
               <TableRow>
                 <StyledTableCell align="center">Order</StyledTableCell>
-                <StyledTableCell align="center">Price</StyledTableCell>
                 <StyledTableCell align="center">Subtotal</StyledTableCell>
                 <StyledTableCell align="center">Shipping price</StyledTableCell>
+                <StyledTableCell align="center">Price</StyledTableCell>
                 <StyledTableCell align="center">Status</StyledTableCell>
                 <StyledTableCell align="center">Show details</StyledTableCell>
               </TableRow>
