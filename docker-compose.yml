@@ -7,13 +7,6 @@ services:
     build: ./restapi
     ports:
       - "5000:5000"
-    enviroment:
-      - PORT=${{ secrets.PORT }}
-      - MONGO_DB_URI=${{ secrets.MONGO_DB_URI }}
-      - NODE_ENV=${{ secrets.NODE_ENV }}
-      - JWT_SECRET=${{ secrets.JWT_SECRET }}
-      - AUTH_EMAIL=${{ secrets.AUTH_EMAIL }}
-      - AUTH_PASS=${{ secrets.AUTH_PASS }}
   webapp:
     build: ./webapp
     ports:
