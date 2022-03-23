@@ -5,6 +5,7 @@ export type User = {
   webId: string;
   email: string;
   password: string;
+  role: string;
 };
 
 export type Product = {
