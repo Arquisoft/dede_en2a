@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Rating, Typography, Divider } from "@mui/material";
 
-import { Review } from "../shared/shareddtypes";
+import { Review } from "../../shared/shareddtypes";
 
 type ProductCommentProps = {
   review: Review;

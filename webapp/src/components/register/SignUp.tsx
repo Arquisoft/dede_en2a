@@ -16,13 +16,13 @@ import Alert from "@mui/material/Alert";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
-import * as Checker from "../helpers/CheckFieldsHelper";
-import { getNameFromPod, getEmailsFromPod } from "../helpers/SolidHelper";
+import * as Checker from "../../helpers/CheckFieldsHelper";
+import { getNameFromPod, getEmailsFromPod } from "../../helpers/SolidHelper";
 
-import WebIdRadioGroup from "./WebIdRadioGroup";
+import WebIdRadioGroup from "../WebIdRadioGroup";
 
-import * as Api from "../api/api";
-import { User, NotificationType } from "../shared/shareddtypes";
+import * as Api from "../../api/api";
+import { User, NotificationType } from "../../shared/shareddtypes";
 
 type SignUpProps = {
   setCurrentUser: (user: User) => void;
@@ -37,7 +37,7 @@ export default function SignUp(props: SignUpProps) {
   const [password, setPassword] = useState("");
   const [repPassword, setRepPassword] = useState("");
   const [notificationStatus, setNotificationStatus] = useState(false);
-  const [redirect, setRedirect] = useState<Boolean>(false);
+  const [redirect, setRedirect] = useState<boolean>(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",

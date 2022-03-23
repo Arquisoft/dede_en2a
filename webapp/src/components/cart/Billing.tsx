@@ -1,5 +1,5 @@
-import { CartItem } from "../shared/shareddtypes";
-import { calculateTotal } from "../helpers/ShoppingCartHelper";
+import { CartItem } from "../../shared/shareddtypes";
+import { calculateTotal } from "../../helpers/ShoppingCartHelper";
 
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -35,7 +35,7 @@ export default function Billing(props: BillingProps): JSX.Element {
         });
       }}
       onApprove={async (data, actions: any) => {
-        let order = await actions.order.capture();
+        await actions.order.capture();
         handleApprove();
       }}
     />

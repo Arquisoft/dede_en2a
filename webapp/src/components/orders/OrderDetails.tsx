@@ -10,11 +10,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
-import { Order, Product } from "../shared/shareddtypes";
+import { getProduct, getOrder } from "../../api/api";
+import { Order, Product } from "../../shared/shareddtypes";
+import { checkImageExists } from "../../helpers/ImageHelper";
 
-import { getOrder, getProduct } from "../api/api";
+type OrderListItemProps = {
+  product: Product;
+};
 
-function OrderListItem(props: any): JSX.Element {
+function OrderListItem(props: OrderListItemProps): JSX.Element {
   const [product, setProduct] = useState<Product>();
 
   const Img = styled("img")({
@@ -23,7 +27,7 @@ function OrderListItem(props: any): JSX.Element {
   });
 
   const obtainProduct = async () => {
-    setProduct(await getProduct(props.code));
+    setProduct(await getProduct(props.product.code));
   };
 
   useEffect(() => {
@@ -32,19 +36,20 @@ function OrderListItem(props: any): JSX.Element {
 
   if (typeof product === "undefined")
     return (
-      <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
+      <ListItem key={product} sx={{ py: 1, px: 0 }}>
         <Typography mr={4}> Product could not be found! </Typography>
       </ListItem>
     );
-  else
+  else {
     return (
-      <ListItem key={props.code} sx={{ py: 1, px: 0 }}>
-        <Img src={require("../images/".concat(props.code).concat(".png"))} />
-        <Typography mr={4}>{props.amount}</Typography>
+      <ListItem key={product.code} sx={{ py: 1, px: 0 }}>
+        <Img alt="Image of the product" src={checkImageExists(product.image)} />
+        <Typography mr={4}>{product.stock}</Typography>
         <ListItemText primary={product.name} secondary={product.description} />
         <Typography>{product.price}€</Typography>
       </ListItem>
     );
+  }
 }
 
 function OrderList(props: any): JSX.Element {
@@ -58,7 +63,7 @@ function OrderList(props: any): JSX.Element {
     return (
       <List>
         {props.order.products.map((product: Product) => (
-          <OrderListItem code={product.code} amount={product.stock} />
+          <OrderListItem product={product} />
         ))}
       </List>
     );

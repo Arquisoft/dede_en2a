@@ -12,12 +12,12 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
-import { Alert, Divider, Grid, Snackbar, TextField } from "@mui/material";
+import { Alert, Divider, Snackbar, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { AlertColor } from "@mui/material/Alert";
 
-import { Product, Review } from "../shared/shareddtypes";
-import { getReviewsByCodeAndEmail, addReview } from "../api/api";
+import { Product, Review } from "../../shared/shareddtypes";
+import { getReviewsByCodeAndEmail, addReview } from "../../api/api";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -87,10 +87,6 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     setOpen(props.show > 0);
   }, [props.stars]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-    setBtnDisabled(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -98,9 +94,9 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     showInfo(false);
   };
 
-  const showMessage = (infoType: AlertColor, infoMessage: string) => {
-    setInfoMessage(infoMessage);
-    setInfoType(infoType);
+  const showMessage = (infotype: AlertColor, infomessage: string) => {
+    setInfoMessage(infomessage);
+    setInfoType(infotype);
     showInfo(true);
   };
 

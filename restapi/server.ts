@@ -10,6 +10,8 @@ import apiProduct from "./products/ProductRoutes";
 import apiOrders from "./orders/OrderRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
 
+const path = require("path");
+
 let helmet = require("helmet");
 
 const app: Application = express();
@@ -36,6 +38,9 @@ app.use(apiOrders);
 app.use(apiReviews);
 
 app.use(helmet.hidePoweredBy());
+
+app.use('/uploads', express.static(path.resolve('uploads')))
+app.set('view engine', 'ejs');
 
 app
   .listen(process.env.PORT, (): void => {

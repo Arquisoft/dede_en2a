@@ -4,9 +4,7 @@ import Typography from "@mui/material/Typography";
 
 import { CartItem, Product } from "../shared/shareddtypes";
 
-import ProductList from "./ProductList";
-import { alpha, styled, TextField } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import ProductList from "./products/ProductList";
 
 
 type HomeProps = {

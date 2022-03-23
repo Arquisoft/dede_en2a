@@ -24,3 +24,8 @@ export const checkTextField = (text: string) => {
   if (text.trim() !== "") return true;
   else return false;
 };
+
+export const checkNumericField = (number: number) => {
+  if (number > 0) return true;
+  else return false;
+};

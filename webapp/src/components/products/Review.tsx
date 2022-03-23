@@ -6,8 +6,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 
-import { calculateTotal } from "../helpers/ShoppingCartHelper";
-import { CartItem } from "../shared/shareddtypes";
+import { calculateTotal } from "../../helpers/ShoppingCartHelper";
+import { CartItem } from "../../shared/shareddtypes";
 
 export default function Review(props: any) {
   return (

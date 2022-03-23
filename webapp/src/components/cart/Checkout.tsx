@@ -10,12 +10,12 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import { updateProduct } from "../api/api";
-import { CartItem } from "../shared/shareddtypes";
-import { saveOrder } from "../helpers/ShoppingCartHelper";
+import { updateProduct } from "../../api/api";
+import { CartItem } from "../../shared/shareddtypes";
+import { saveOrder } from "../../helpers/ShoppingCartHelper";
 
 import ShippingCosts from "./ShippingCosts";
-import Review from "./Review";
+import Review from "../products/Review";
 import Billing from "./Billing";
 
 function getSteps() {
