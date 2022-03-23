@@ -37,6 +37,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import UploadImage from "./components/products/UploadProduct";
+import DeleteProduct from "./components/products/DeleteProduct";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -258,6 +259,10 @@ function App(): JSX.Element {
             <Route
               path="addProduct"
               element={<UploadImage/>}
+            />
+            <Route
+              path="deleteProduct"
+              element={<DeleteProduct products={products}/>}
             />
             <Route
               path="product/:id"

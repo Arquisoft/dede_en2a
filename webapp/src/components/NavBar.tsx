@@ -22,6 +22,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import StoreIcon from "@mui/icons-material/Store";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { Grid } from "@mui/material";
 import MUISwitch from "./ThemeSlider";
@@ -171,6 +172,13 @@ export default function NavBar(props: NavBarProps): JSX.Element {
             <AddCircleOutlineIcon fontSize="small" />
           </ListItemIcon>
           <Typography variant="inherit">Add product</Typography>
+        </MenuItem>
+
+        <MenuItem component={Link} to="deleteProduct">
+          <ListItemIcon>
+            <DeleteForeverIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Delete product</Typography>
         </MenuItem>
       </MenuList>
     </Grid>
