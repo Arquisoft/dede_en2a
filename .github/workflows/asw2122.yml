@@ -47,17 +47,17 @@ jobs:
     name: Push webapp Docker Image to GitHub Packages
     runs-on: ubuntu-latest
     needs: [unit-test-webapp, unit-test-restapi]
+    env:
+      API_URI: http://${{ secrets.DEPLOY_HOST }}:5000/
+      MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
+      BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
+      PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@3.04
-        env:
-          API_URI: http://${{ secrets.DEPLOY_HOST }}:5000/
-          MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
-          BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
-          PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
         with:
-          name: arquisoft/dede_en2a/webapp
+          name: arquisoft/dede_en_02a/webapp
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
@@ -71,7 +71,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@3.04
         with:
-          name: arquisoft/dede_en2a/restapi
+          name: arquisoft/dede_en_02a/restapi
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
