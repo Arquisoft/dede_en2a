@@ -10,7 +10,11 @@ import {
 } from "../../helpers/CheckFieldsHelper";
 import { NotificationType } from "../../shared/shareddtypes";
 
-export default function UploadImage(props: any): JSX.Element {
+type UploadProductProps = {
+  createShop: () => void;
+};
+
+export default function UploadImage(props: UploadProductProps): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
@@ -59,8 +63,10 @@ export default function UploadImage(props: any): JSX.Element {
       price: Number(price),
       stock: Number(stock),
     });
-    if (created) emptyFields();
-    else sendErrorNotification("That product code already exists, change it");
+    if (created) {
+      emptyFields();
+      props.createShop();
+    } else sendErrorNotification("That product code already exists, change it");
   };
 
   const sendErrorNotification = (msg: string) => {
@@ -77,7 +83,7 @@ export default function UploadImage(props: any): JSX.Element {
       <Box component="main" width="auto" height="auto">
         <Box>
           <div>
-            <h1 style={{ margin: 8 }}>Upload an Image</h1>
+            <h1 style={{ margin: 8 }}>Upload a product</h1>
 
             <TextField
               id="outlined-full-width"
@@ -141,7 +147,11 @@ export default function UploadImage(props: any): JSX.Element {
               margin="normal"
               type="number"
               variant="outlined"
-              onChange={(event) => setPrice(event.target.value)}
+              onChange={(event) => {
+                if (parseInt(event.target.value) < 0) setPrice(0 + "");
+                else setPrice(parseFloat(event.target.value).toString());
+              }}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             />
 
             <TextField
@@ -154,7 +164,11 @@ export default function UploadImage(props: any): JSX.Element {
               required
               margin="normal"
               variant="outlined"
-              onChange={(event) => setStock(event.target.value)}
+              onChange={(event) => {
+                if (parseInt(event.target.value) < 0) setStock(0 + "");
+                else setStock(parseInt(event.target.value).toString());
+              }}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             />
           </div>
         </Box>
