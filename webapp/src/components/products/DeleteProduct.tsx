@@ -45,7 +45,14 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
         severity: "success",
         message: "Product deleted correctly",
       });
+      // TODO Popup confirmation to delete
       props.createShop();
+    }else{
+        setNotificationStatus(true);
+      setNotification({
+        severity: "error",
+        message: "Select a product to delete",
+      });
     }
   };
 
