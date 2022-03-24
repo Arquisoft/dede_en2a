@@ -45,15 +45,23 @@ export const createProduct: RequestHandler = async (req, res) => {
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-  try {
-    const productFound = await productModel.deleteOne({
-      code: req.params.code,
-    });
-    if (productFound) {
-      return res.json(productFound);
+  const isVerified = verifyToken(
+    req.headers.token + "",
+    req.headers.email + ""
+  );
+  if (isVerified) {
+    try {
+      const productFound = await productModel.deleteOne({
+        code: req.body.code,
+      });
+      if (productFound) {
+        return res.json(productFound);
+      }
+    } catch (error) {
+      res.status(301).json({ message: "The operation didn't succed " + error });
     }
-  } catch (error) {
-    res.status(301).json({ message: "The operation didn't succed " + error });
+  } else {
+    res.status(203).json();
   }
 };
 
@@ -77,14 +85,4 @@ export const updateProduct: RequestHandler = async (req, res) => {
   } else {
     res.status(203).json();
   }
-};
-
-export const uploadPhoto: RequestHandler = async (req, res) => {
-  console.log(req.body);
-  return res.json();
-};
-
-export const getPhoto: RequestHandler = async (req, res) => {
-  const photo = await productModel.findOne({ code: req.params.code });
-  return res.json(photo.imagePath);
 };
