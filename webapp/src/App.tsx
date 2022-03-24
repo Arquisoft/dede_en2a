@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { grey, lightBlue } from "@mui/material/colors";
 
-import { getProducts } from "./api/api";
+import { getProducts, getUser } from "./api/api";
 import {
   CartItem,
   NotificationType,
@@ -49,9 +49,15 @@ function App(): JSX.Element {
     message: "",
   });
 
+  const [userRole, setUserRole] = useState<string>("");
+
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
     setProducts(dbProducts);
+    if (userRole === "" && localStorage.getItem("user.email") != null) {
+      const user: User = await getUser(localStorage.getItem("user.email") + "");
+      setUserRole(user.role);
+    }
   };
 
   const setCurrentUser = (user: User) => {
@@ -61,6 +67,7 @@ function App(): JSX.Element {
       severity: "success",
       message: "Welcome to DeDe application " + user.name,
     });
+    setUserRole(user.role);
   };
 
   const logCurrentUserOut = () => {
@@ -71,6 +78,7 @@ function App(): JSX.Element {
       severity: "success",
       message: "You signed out correctly. See you soon!",
     });
+    setUserRole("");
   };
 
   const handleAddCart = (product: Product) => {
@@ -214,6 +222,7 @@ function App(): JSX.Element {
             logCurrentUserOut={logCurrentUserOut}
             changeTheme={toggleDarkMode}
             initialState={mode === "dark"}
+            userRole={userRole}
           />
           <Routes>
             <Route index element={<Home />} />
@@ -258,11 +267,13 @@ function App(): JSX.Element {
             />
             <Route
               path="addProduct"
-              element={<UploadImage createShop={createShop}/>}
+              element={<UploadImage createShop={createShop} />}
             />
             <Route
               path="deleteProduct"
-              element={<DeleteProduct products={products} createShop={createShop}/>}
+              element={
+                <DeleteProduct products={products} createShop={createShop} />
+              }
             />
             <Route
               path="product/:id"
