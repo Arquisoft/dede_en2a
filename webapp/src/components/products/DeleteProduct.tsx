@@ -4,8 +4,11 @@ import Alert from "@mui/material/Alert";
 import { Button } from "react-bootstrap";
 import { NotificationType, Product } from "../../shared/shareddtypes";
 
+import { deleteProduct } from "../../api/api";
+
 type DeleteProductProps = {
   products: Product[];
+  createShop: () => void;
 };
 
 export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
@@ -21,12 +24,11 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
 
-  const [product, setProduct] = React.useState<null | Product>();
+  const products = props.products
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const p = await props.products.find((p) => p.code === event.target.value);
+    const p = await products.find((p) => p.code === event.target.value);
     if (p !== undefined) {
-      setProduct(p);
       setCode(p.code);
       setName(p.name);
       setDescription(p.description);
@@ -35,12 +37,24 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     }
   };
 
+  const handleDeleteProduct = async () => {
+    if (code !== "") {
+      await deleteProduct(code);
+      setNotificationStatus(true);
+      setNotification({
+        severity: "success",
+        message: "Product deleted correctly",
+      });
+      props.createShop();
+    }
+  };
+
   return (
     <React.Fragment>
       <Box component="main" width="auto" height="auto">
         <Box>
           <div>
-            <h1 style={{ margin: 8 }}>Upload an Image</h1>
+            <h1 style={{ margin: 8 }}>Delete a product</h1>
 
             <TextField
               id="outlined-select-currency"
@@ -50,7 +64,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
               style={{ margin: 8 }}
               onChange={handleChange}
             >
-              {props.products.map((product) => (
+              {products.map((product) => (
                 <MenuItem key={product.code} value={product.code}>
                   {product.name + " (" + product.description + ")"}
                 </MenuItem>
@@ -121,7 +135,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
             />
           </div>
         </Box>
-        <Button> Delete </Button>
+        <Button onClick={handleDeleteProduct}> Delete </Button>
       </Box>
 
       <Snackbar

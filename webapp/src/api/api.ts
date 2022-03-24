@@ -47,7 +47,7 @@ export async function getUser(userEmail: String): Promise<User> {
 
 export async function getProducts(): Promise<Product[]> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/products/list");
+  let response = await fetch(apiEndPoint + "/products");
   return response.json();
 }
 
@@ -87,7 +87,7 @@ export async function createProduct(image: any, body: any) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/products", {
     method: "POST",
-   /* headers: {
+    /* headers: {
       "Content-Type": "multipart/form-data",
       token: localStorage.getItem("token") + "",
       email: localStorage.getItem("user.email") + "",
@@ -102,6 +102,20 @@ export async function createProduct(image: any, body: any) {
   }
 }
 
+export async function deleteProduct(code: string) {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  await fetch(apiEndPoint + "/products/", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token") + "",
+      email: localStorage.getItem("user.email") + "",
+    },
+    body: JSON.stringify({
+      code: code,
+    }),
+  });
+}
 
 export async function createOrder(body: any) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";

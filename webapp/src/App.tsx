@@ -258,11 +258,11 @@ function App(): JSX.Element {
             />
             <Route
               path="addProduct"
-              element={<UploadImage/>}
+              element={<UploadImage createShop={createShop}/>}
             />
             <Route
               path="deleteProduct"
-              element={<DeleteProduct products={products}/>}
+              element={<DeleteProduct products={products} createShop={createShop}/>}
             />
             <Route
               path="product/:id"
