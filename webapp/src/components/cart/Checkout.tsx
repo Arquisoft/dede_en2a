@@ -15,7 +15,7 @@ import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 
 import ShippingCosts from "./ShippingCosts";
-import Review from "../products/Review";
+import Review from "./Review";
 import Billing from "./Billing";
 
 function getSteps() {
