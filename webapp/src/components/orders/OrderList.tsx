@@ -21,13 +21,12 @@ import {
 } from "@mui/material";
 
 import { Autorenew } from "@mui/icons-material";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 import { Order, User } from "../../shared/shareddtypes";
 import { getOrdersForUser, getUser } from "../../api/api";
 
 import FeaturedProducts from "../FeaturedProducts";
+import StatusMessage from "./StatusMessage";
 
 type OrderTableItemProps = {
   order: Order;
@@ -68,32 +67,6 @@ function OrderHeader(props: any) {
     );
 }
 
-function StatusMessage(props: any) {
-  if (props.isOrderReceived)
-    return (
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-      >
-        <CheckBoxIcon color="success" />
-        <Typography>Received</Typography>
-      </Stack>
-    );
-  else
-    return (
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-      >
-        <LocalShippingIcon color="primary" />
-        <Typography>Shipping</Typography>
-      </Stack>
-    );
-}
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
