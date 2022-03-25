@@ -47,26 +47,30 @@ function OrderHeader(props: any) {
     );
   }
 
-  if (props.isOrder)
-    return (
-      <Stack direction="row" spacing={1} justifyContent="center">
-        <Typography component="h1" variant="h4" align="center">
-          Your orders, {props.name}
-        </Typography>
-        <AutorenewOrders />
-      </Stack>
-    );
-  else
-    return (
-      <Stack direction="row" spacing={1} justifyContent="center">
-        <Typography component="h1" variant="h4" align="center">
-          No orders have been made
-        </Typography>
-        <AutorenewOrders />
-      </Stack>
-    );
+  if (localStorage.getItem("role") !== null) {
+    if (props.isOrder)
+      return (
+        <Stack direction="row" spacing={1} justifyContent="center">
+          <Typography component="h1" variant="h4" align="center">
+            Your orders, {props.name}
+          </Typography>
+          <AutorenewOrders />
+        </Stack>
+      );
+    else
+      return (
+        <Stack direction="row" spacing={1} justifyContent="center">
+          <Typography component="h1" variant="h4" align="center">
+            No orders have been made
+          </Typography>
+          <AutorenewOrders />
+        </Stack>
+      );
+  } else {
+    document.location.href = "/";
+    return <></>;
+  }
 }
-
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
