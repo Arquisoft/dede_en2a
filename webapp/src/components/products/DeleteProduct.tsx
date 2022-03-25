@@ -5,6 +5,7 @@ import { Button } from "react-bootstrap";
 import { NotificationType, Product } from "../../shared/shareddtypes";
 
 import { deleteProduct } from "../../api/api";
+import ConfirmDialog from "./ConfirmDialog";
 
 type DeleteProductProps = {
   products: Product[];
@@ -23,6 +24,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(0);
 
   const products = props.products
 
@@ -39,14 +41,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
   const handleDeleteProduct = async () => {
     if (code !== "") {
-      await deleteProduct(code);
-      setNotificationStatus(true);
-      setNotification({
-        severity: "success",
-        message: "Product deleted correctly",
-      });
-      // TODO Popup confirmation to delete
-      props.createShop();
+      openDialog();
     }else{
         setNotificationStatus(true);
       setNotification({
@@ -54,6 +49,20 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
         message: "Select a product to delete",
       });
     }
+  };
+
+  const handleDeleteConfirmed = async () => {
+    await deleteProduct(code);
+    setNotificationStatus(true);
+    setNotification({
+      severity: "success",
+      message: "Product deleted correctly",
+    });
+    props.createShop();
+  }
+
+  const openDialog = () => {
+    setDialogOpen(dialogOpen + 1);
   };
 
   return (
@@ -160,6 +169,12 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           {notification.message}
         </Alert>
       </Snackbar>
+
+      <ConfirmDialog show={dialogOpen}
+                     titleText="Are you sure?"
+                     contentText="Are you sure you really want to delete this product?"
+                     handleConfirm={handleDeleteConfirmed} />
+
     </React.Fragment>
   );
 }
