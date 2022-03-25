@@ -7,6 +7,7 @@ let page: puppeteer.Page;
 let browser: puppeteer.Browser;
 
 defineFeature(feature, test => {
+  /*
   
   beforeAll(async () => {
     browser = process.env.GITHUB_ACTIONS
@@ -47,7 +48,7 @@ defineFeature(feature, test => {
 
   afterAll(async ()=>{
     browser.close()
-  })
+  })*/
 
 });
 

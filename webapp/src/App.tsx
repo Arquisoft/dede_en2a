@@ -13,6 +13,8 @@ import ProductDetails from "./components/products/ProductDetails";
 import OrderDetails from "./components/orders/OrderDetails";
 import OrderList from "./components/orders/OrderList";
 
+import "./App.css";
+
 import {
   createTheme,
   CssBaseline,
@@ -232,6 +234,7 @@ function App(): JSX.Element {
                 <ShoppingCart
                   products={productsCart}
                   totalUnitsInCart={totalUnitsInCart}
+                  userEmail={localStorage.getItem("user.email")}
                   onDecrementUnit={handleDecrementUnit}
                   onIncrementUnit={handleAddCart}
                 />
@@ -255,10 +258,7 @@ function App(): JSX.Element {
               path="sign-up"
               element={<SignUp setCurrentUser={setCurrentUser} />}
             />
-            <Route
-              path="addProduct"
-              element={<UploadImage/>}
-            />
+            <Route path="addProduct" element={<UploadImage />} />
             <Route
               path="product/:id"
               element={
