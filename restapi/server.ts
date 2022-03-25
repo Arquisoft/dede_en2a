@@ -14,7 +14,8 @@ import apiReviews from "./reviews/ReviewRoutes";
 const app: Application = express();
 
 const mongoose = require("mongoose");
-const connectionString = process.env.MONGO_DB_URI;
+const connectionString =
+  "mongodb+srv://DedeAdmin:dedeen2a.@cluster0.b1agy.mongodb.net/dede?retryWrites=true&w=majority";
 
 const options: cors.CorsOptions = {
   origin: ["http://localhost:3000"],
