@@ -30,7 +30,6 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
   function handleChange(e: any) {
     setFile(e.target.files[0]);
-    console.log(e.target.files[0]);
   }
 
   const emptyFields = () => {
