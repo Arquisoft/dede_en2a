@@ -21,10 +21,10 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import StoreIcon from "@mui/icons-material/Store";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { Grid } from "@mui/material";
 import MUISwitch from "./ThemeSlider";
+import ShowByRoles from "./ShowByRoles";
 
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
@@ -113,11 +113,13 @@ function UserButton(props: any): JSX.Element {
     );
 }
 
+
 type NavBarProps = {
   totalUnitsInCart: number;
   logCurrentUserOut: () => void;
   changeTheme: Function;
   initialState: boolean;
+  userRole: string;
 };
 
 export default function NavBar(props: NavBarProps): JSX.Element {
@@ -166,12 +168,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
 
-        <MenuItem component={Link} to="addProduct">
-          <ListItemIcon>
-            <AddCircleOutlineIcon fontSize="small" />
-          </ListItemIcon>
-          <Typography variant="inherit">Add product</Typography>
-        </MenuItem>
+        <ShowByRoles userRole={props.userRole}/>
       </MenuList>
     </Grid>
   );
@@ -239,3 +236,5 @@ export default function NavBar(props: NavBarProps): JSX.Element {
     </Box>
   );
 }
+
+

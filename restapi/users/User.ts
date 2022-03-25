@@ -35,6 +35,10 @@ export const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    role:{
+      type: String,
+      default: 'user'
+    }
   },
   {
     versionKey: false,

@@ -35,6 +35,7 @@ export default function SignUp(props: SignUpProps) {
   const [value, setValue] = useState<string>("");
   const [buttonMessage, setButtonMessage] = useState("Verify my fields");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
   const [repPassword, setRepPassword] = useState("");
   const [notificationStatus, setNotificationStatus] = useState(false);
   const [redirect, setRedirect] = useState<boolean>(false);
@@ -86,6 +87,7 @@ export default function SignUp(props: SignUpProps) {
       webId: webId,
       email: value,
       password: password,
+      role: role,
     };
 
     const correctSignUp = await Api.addUser(newUser);

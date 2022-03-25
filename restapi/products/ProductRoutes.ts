@@ -5,16 +5,14 @@ import multer from "../utils/multer";
 
 const api: Router = express.Router();
 
-api.get("/products/list", ProdctController.getProducts);
+api.get("/products", ProdctController.getProducts);
 
 api.get("/products/findByCode/:code", ProdctController.getProduct);
 
 api.post("/products", multer.single("image"), ProdctController.createProduct);
 
-api.delete("/products/delete/:code", ProdctController.deleteProduct);
+api.post("/products/delete/:code", ProdctController.deleteProduct);
 
-api.post("/products/:code", ProdctController.updateProduct);
-
-api.get("/photos/:code", ProdctController.getPhoto);
+api.post("/products/update/:code", ProdctController.updateProduct);
 
 export default api;

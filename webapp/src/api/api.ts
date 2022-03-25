@@ -47,7 +47,7 @@ export async function getUser(userEmail: String): Promise<User> {
 
 export async function getProducts(): Promise<Product[]> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/products/list");
+  let response = await fetch(apiEndPoint + "/products");
   return response.json();
 }
 
@@ -61,7 +61,7 @@ export async function getProduct(productCode: string): Promise<Product> {
 
 export async function updateProduct(product: Product) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/products/" + product.code, {
+  await fetch(apiEndPoint + "/products/update" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -86,12 +86,8 @@ export async function createProduct(image: any, body: any) {
 
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/products", {
+    //TODO - Pass token and email to verify identity
     method: "POST",
-   /* headers: {
-      "Content-Type": "multipart/form-data",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
-    },*/
     body: data,
   });
 
@@ -102,6 +98,17 @@ export async function createProduct(image: any, body: any) {
   }
 }
 
+export async function deleteProduct(code: string) {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  await fetch(apiEndPoint + "/products/delete/" +code, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token") + "",
+      email: localStorage.getItem("user.email") + "",
+    }
+  });
+}
 
 export async function createOrder(body: any) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
