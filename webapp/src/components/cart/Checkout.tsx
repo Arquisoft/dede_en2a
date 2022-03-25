@@ -144,21 +144,10 @@ export default function Checkout(props: any) {
           <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
 
           <Stack
-            sx={{ pt: 2 }}
-            direction={{ xs: "column", sm: "row" }}
+            direction={{ xs: "column", sm: "row-reverse" }}
             justifyContent="space-between"
             alignItems="center"
           >
-            <Button
-              disabled={activeStep === 0}
-              hidden={activeStep === getSteps().length - 1}
-              onClick={handleBack}
-              variant="outlined"
-              className="m-1"
-            >
-              Back
-            </Button>
-
             <Button
               disabled={!isCostsCalculated}
               hidden={activeStep === getSteps().length}
@@ -167,6 +156,15 @@ export default function Checkout(props: any) {
               className="m-1"
             >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+
+            <Button
+              hidden={activeStep === 0}
+              onClick={handleBack}
+              variant="outlined"
+              className="m-1"
+            >
+              Back
             </Button>
           </Stack>
         </Paper>
