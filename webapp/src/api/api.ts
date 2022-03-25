@@ -56,6 +56,7 @@ export async function getUser(userEmail: String): Promise<User> {
 
 export async function getProducts(): Promise<Product[]> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  console.log(process.env.REACT_APP_API_URI);
   let response = await fetch(apiEndPoint + "/products/list");
   return response.json();
 }
@@ -120,10 +121,14 @@ export async function getReviewsByCode(code: string): Promise<Review[]> {
   return response.json();
 }
 
-
-export async function getReviewsByCodeAndEmail(code : string, email : string):Promise<Review[]>{
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || 'http://localhost:5000'
-  let response = await fetch(apiEndPoint+'/reviews/listByCodeAndEmail/' + code + "/" + email);
+export async function getReviewsByCodeAndEmail(
+  code: string,
+  email: string
+): Promise<Review[]> {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(
+    apiEndPoint + "/reviews/listByCodeAndEmail/" + code + "/" + email
+  );
   return response.json();
 }
 
@@ -133,10 +138,10 @@ export async function addReview(review: Review): Promise<boolean> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      rating : review.rating,
-      comment : review.comment,
-      userEmail : review.userEmail,
-      productCode : review.productCode,
+      rating: review.rating,
+      comment: review.comment,
+      userEmail: review.userEmail,
+      productCode: review.productCode,
     }),
   });
   if (response.status === 200) {

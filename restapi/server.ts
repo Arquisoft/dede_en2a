@@ -1,4 +1,4 @@
-require("dotenv").config();
+//require("dotenv").config();
 
 import express, { Application, RequestHandler } from "express";
 import cors from "cors";
