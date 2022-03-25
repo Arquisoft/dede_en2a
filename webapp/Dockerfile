@@ -5,7 +5,7 @@ WORKDIR /app
 #Install the dependencies
 RUN npm install
 
-ARG API_URI="http://localhost:5000/api"
+ARG API_URI="http://localhost:5000"
 ENV REACT_APP_API_URI=$API_URI
 
 ARG MAPBOX_KEY
