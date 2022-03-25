@@ -58,9 +58,11 @@ export const deleteProduct: RequestHandler = async (req, res) => {
       const productFound = await productModel.deleteOne({
         code: req.params.code,
       });
-      
+      const reqPath = "../webapp/src/images/" + req.params.code + ".png";
+      const resolvedPath = path.resolve(reqPath);
+
       if (productFound) {
-        fs.unlink("../webapp/src/images/" +req.params.code + '.png', (err) => {
+        fs.unlink(resolvedPath, (err) => {
           if (err) {
             console.error(err);
           }
