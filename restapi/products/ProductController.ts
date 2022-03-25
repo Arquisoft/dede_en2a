@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import path from "path";
+import { userModel } from "../users/User";
 import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 
@@ -49,10 +50,12 @@ export const deleteProduct: RequestHandler = async (req, res) => {
     req.headers.token + "",
     req.headers.email + ""
   );
-  if (isVerified) {
+  const user = await userModel.findOne({ email: req.headers.email });
+  console.log(user)
+  if (isVerified && user.role === "admin") {
     try {
       const productFound = await productModel.deleteOne({
-        code: req.body.code,
+        code: req.params.code,
       });
       if (productFound) {
         return res.json(productFound);
@@ -70,7 +73,8 @@ export const updateProduct: RequestHandler = async (req, res) => {
     req.headers.token + "",
     req.headers.email + ""
   );
-  if (isVerified) {
+  const user = userModel.findOne({ email: req.headers.email });
+  if (isVerified && (user.role === "admin" || user.role === "manager")) {
     try {
       console.log(req.body);
       const product = await productModel.findOneAndUpdate(

@@ -8,8 +8,6 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import {Alert, Grid, Snackbar, TextField} from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
@@ -60,11 +58,11 @@ type ConfirmDialogProps = {
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
     const [open, setOpen] = React.useState(false);
-    const [show, showInfo] = React.useState(false);
+    /*const [show, showInfo] = React.useState(false);
 
     const handleCloseInfo = () => {
         showInfo(false);
-    };
+    };*/
 
     React.useEffect(() => {
         setOpen(props.show > 0);

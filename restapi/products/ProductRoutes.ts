@@ -11,8 +11,8 @@ api.get("/products/findByCode/:code", ProdctController.getProduct);
 
 api.post("/products", multer.single("image"), ProdctController.createProduct);
 
-api.delete("/products", ProdctController.deleteProduct);
+api.post("/products/delete/:code", ProdctController.deleteProduct);
 
-api.post("/products/:code", ProdctController.updateProduct);
+api.post("/products/update/:code", ProdctController.updateProduct);
 
 export default api;

@@ -26,10 +26,12 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [price, setPrice] = useState("");
   const [dialogOpen, setDialogOpen] = useState(0);
 
-  const products = props.products
+  const products = props.products;
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const p = await products.find((p) => p.code === event.target.value);
+    const p = await products.find(
+      (product) => product.code === event.target.value
+    );
     if (p !== undefined) {
       setCode(p.code);
       setName(p.name);
@@ -42,8 +44,8 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const handleDeleteProduct = async () => {
     if (code !== "") {
       openDialog();
-    }else{
-        setNotificationStatus(true);
+    } else {
+      setNotificationStatus(true);
       setNotification({
         severity: "error",
         message: "Select a product to delete",
@@ -58,8 +60,17 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       severity: "success",
       message: "Product deleted correctly",
     });
+    emptyFields();
     props.createShop();
-  }
+  };
+
+  const emptyFields = () => {
+    setCode("");
+    setName("");
+    setDescription("");
+    setStock("");
+    setPrice("");
+  };
 
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
@@ -170,11 +181,12 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
         </Alert>
       </Snackbar>
 
-      <ConfirmDialog show={dialogOpen}
-                     titleText="Are you sure?"
-                     contentText="Are you sure you really want to delete this product?"
-                     handleConfirm={handleDeleteConfirmed} />
-
+      <ConfirmDialog
+        show={dialogOpen}
+        titleText="Are you sure?"
+        contentText="Are you sure you really want to delete this product?"
+        handleConfirm={handleDeleteConfirmed}
+      />
     </React.Fragment>
   );
 }
