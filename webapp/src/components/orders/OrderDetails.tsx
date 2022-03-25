@@ -10,29 +10,23 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
-import { getProduct, getOrder } from "../../api/api";
+import { getOrder } from "../../api/api";
 import { Order, Product } from "../../shared/shareddtypes";
 import { checkImageExists } from "../../helpers/ImageHelper";
+import Divider from "@mui/material/Divider";
+import StatusMessage from "./StatusMessage";
 
 type OrderListItemProps = {
   product: Product;
 };
 
 function OrderListItem(props: OrderListItemProps): JSX.Element {
-  const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product>(props.product);
 
   const Img = styled("img")({
     display: "block",
     width: "30%",
   });
-
-  const obtainProduct = async () => {
-    setProduct(await getProduct(props.product.code));
-  };
-
-  useEffect(() => {
-    obtainProduct();
-  }, []);
 
   if (typeof product === "undefined")
     return (
@@ -43,7 +37,11 @@ function OrderListItem(props: OrderListItemProps): JSX.Element {
   else {
     return (
       <ListItem key={product.code} sx={{ py: 1, px: 0 }}>
-        <Img alt="Image of the product" src={checkImageExists(product.image)} />
+        <Img
+          alt="Image of the product"
+          src={checkImageExists(product.image)}
+          sx={{ width: "20%", p: 2, m: "auto" }}
+        />
         <Typography mr={4}>{product.stock}</Typography>
         <ListItemText primary={product.name} secondary={product.description} />
         <Typography>{product.price}€</Typography>
@@ -62,9 +60,58 @@ function OrderList(props: any): JSX.Element {
   else
     return (
       <List>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Date:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {new Date(props.order.date).toUTCString().substring(0, 16)}
+          </Typography>
+        </ListItem>
+
+        <Divider />
+
         {props.order.products.map((product: Product) => (
           <OrderListItem product={product} />
         ))}
+        <Divider />
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Subtotal:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {props.order.subtotalPrice} €
+          </Typography>
+        </ListItem>
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Shipping costs:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {props.order.shippingPrice} €
+          </Typography>
+        </ListItem>
+
+        <Divider />
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Total:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {props.order.totalPrice} €
+          </Typography>
+        </ListItem>
+
+        <Divider />
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Shipping address:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {props.order.userAddress}
+          </Typography>
+        </ListItem>
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Status:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            <StatusMessage isOrderReceived={props.order.isOrderReceived} />
+          </Typography>
+        </ListItem>
       </List>
     );
 }
