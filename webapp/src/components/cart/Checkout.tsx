@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Navigate } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -15,7 +14,7 @@ import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 
 import ShippingCosts from "./ShippingCosts";
-import Review from "../products/Review";
+import Review from "./Review";
 import Billing from "./Billing";
 
 function getSteps() {
@@ -45,25 +44,10 @@ export default function Checkout(props: any) {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-
-    // when we click FINISH button ==> update the stock
-    if (activeStep === steps.length - 2) {
-      saveOrderToDB();
+    if (activeStep === steps.length - 1) {
+      // We have finished the process...
+      document.location.href = "/";
     }
-  };
-
-  const saveOrderToDB = () => {
-    handleUpdateStock();
-    saveOrder(
-      props.productsCart,
-      costs,
-      props.userEmail,
-      "Get address not implemented yet"
-    );
-    props.deleteCart();
-
-    // We have finished the process...
-    <Navigate to="/" />;
   };
 
   const handleBack = () => {
@@ -78,6 +62,18 @@ export default function Checkout(props: any) {
 
   const handlePayed = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    saveOrderToDB();
+  };
+
+  const saveOrderToDB = () => {
+    handleUpdateStock();
+    saveOrder(
+      props.productsCart,
+      costs,
+      props.userEmail,
+      "Get address not implemented yet"
+    );
+    props.deleteCart();
   };
 
   const getStepContent = (stepIndex: number) => {
@@ -116,6 +112,14 @@ export default function Checkout(props: any) {
             </Typography>
           </React.Fragment>
         );
+      default:
+        return (
+          <React.Fragment>
+            <Typography>
+              We are redirecting you to the homepage! See you next time 👋
+            </Typography>
+          </React.Fragment>
+        );
     }
   };
 
@@ -144,21 +148,10 @@ export default function Checkout(props: any) {
           <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
 
           <Stack
-            sx={{ pt: 2 }}
-            direction={{ xs: "column", sm: "row" }}
+            direction={{ xs: "column", sm: "row-reverse" }}
             justifyContent="space-between"
             alignItems="center"
           >
-            <Button
-              disabled={activeStep === 0}
-              hidden={activeStep === getSteps().length - 1}
-              onClick={handleBack}
-              variant="outlined"
-              className="m-1"
-            >
-              Back
-            </Button>
-
             <Button
               disabled={!isCostsCalculated}
               hidden={activeStep === getSteps().length}
@@ -167,6 +160,15 @@ export default function Checkout(props: any) {
               className="m-1"
             >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+
+            <Button
+              hidden={activeStep === 0 || activeStep >= 3}
+              onClick={handleBack}
+              variant="outlined"
+              className="m-1"
+            >
+              Back
             </Button>
           </Stack>
         </Paper>

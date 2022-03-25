@@ -17,6 +17,7 @@ import ShoppingCartTable from "./ShoppingCartTable";
 type ShoppingCartProps = {
   products: CartItem[];
   totalUnitsInCart: number;
+  userEmail: string | null;
   onIncrementUnit: (product: Product) => void;
   onDecrementUnit: (product: Product) => void;
 };
@@ -52,7 +53,7 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
 
             <Button
               variant="contained"
-              disabled={props.products.length === 0}
+              disabled={props.products.length === 0 || !props.userEmail}
               component={Link}
               to="/checkout"
               className="m-1"

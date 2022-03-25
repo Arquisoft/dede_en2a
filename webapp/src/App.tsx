@@ -13,6 +13,8 @@ import ProductDetails from "./components/products/ProductDetails";
 import OrderDetails from "./components/orders/OrderDetails";
 import OrderList from "./components/orders/OrderList";
 
+import "./App.css";
+
 import {
   createTheme,
   CssBaseline,
@@ -242,6 +244,7 @@ function App(): JSX.Element {
                 <ShoppingCart
                   products={productsCart}
                   totalUnitsInCart={totalUnitsInCart}
+                  userEmail={localStorage.getItem("user.email")}
                   onDecrementUnit={handleDecrementUnit}
                   onIncrementUnit={handleAddCart}
                 />

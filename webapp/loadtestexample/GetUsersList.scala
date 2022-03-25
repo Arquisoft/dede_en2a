@@ -7,20 +7,22 @@ import io.gatling.jdbc.Predef._
 
 class GetUsersList extends Simulation {
 
+  /*
   private val httpProtocol = http
     .baseUrl("http://localhost:3000")
     .inferHtmlResources(AllowList(), DenyList())
-    .acceptHeader("*/*")
+    .acceptHeader("")
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("en-US,en;q=0.5")
-    .userAgentHeader("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:95.0) Gecko/20100101 Firefox/95.0")
+    .userAgentHeader("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:95.0) Gecko/20100101 Firefox/95.0")*/
   
+  /*
   private val headers_0 = Map(
-  		"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+  		"Accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,;q=0.8",
   		"Upgrade-Insecure-Requests" -> "1"
   )
   
-  private val headers_1 = Map("Accept" -> "image/avif,image/webp,*/*")
+  private val headers_1 = Map("Accept" -> "image/avif,image/webp,*")
   
   private val headers_2 = Map(
   		"If-None-Match" -> """W/"21-Da2z2ryWGAvtwohXYJERIWJgKbU"""",
@@ -75,5 +77,5 @@ class GetUsersList extends Simulation {
         )
     )
 
-	setUp(scn.inject(constantUsersPerSec(3).during(15))).protocols(httpProtocol)
+	setUp(scn.inject(constantUsersPerSec(3).during(15))).protocols(httpProtocol)*/
 }

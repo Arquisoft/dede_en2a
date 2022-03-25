@@ -72,7 +72,10 @@ export default function SignUp(props: SignUpProps) {
 
     // We store the retrieved emails from the pod
     let retrievedEmails = await getEmailsFromPod(webId);
-    retrievedEmails.forEach((email) => emails.push(email));
+    retrievedEmails.forEach((email) => {
+      // In case we are not repeating emails...
+      if (!emails.includes(email)) emails.push(email);
+    });
 
     // We change this page to allow user to (choose the email
     setButtonMessage("Sign up");

@@ -16,6 +16,15 @@ export default function Review(props: any) {
         Order summary
       </Typography>
       <List>
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Date:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {new Date(Date.now()).toUTCString().substring(0, 16)}
+          </Typography>
+        </ListItem>
+
+        <Divider />
+
         {props.productsCart.slice().map(
           (cartItem: CartItem) =>
             cartItem.amount > 0 && (
