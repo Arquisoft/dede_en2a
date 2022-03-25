@@ -15,10 +15,6 @@ export default function Billing(props: BillingProps): JSX.Element {
     props.shippingCosts
   );
 
-  const handleApprove = () => {
-    props.onPayed();
-  };
-
   return (
     <PayPalButtons
       createOrder={(data, actions) => {
@@ -36,7 +32,7 @@ export default function Billing(props: BillingProps): JSX.Element {
       }}
       onApprove={async (data, actions: any) => {
         await actions.order.capture();
-        handleApprove();
+        props.onPayed();
       }}
     />
   );
