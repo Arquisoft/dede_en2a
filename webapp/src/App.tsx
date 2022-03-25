@@ -234,6 +234,7 @@ function App(): JSX.Element {
                 <ShoppingCart
                   products={productsCart}
                   totalUnitsInCart={totalUnitsInCart}
+                  userEmail={localStorage.getItem("user.email")}
                   onDecrementUnit={handleDecrementUnit}
                   onIncrementUnit={handleAddCart}
                 />
