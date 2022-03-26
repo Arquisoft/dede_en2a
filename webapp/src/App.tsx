@@ -51,36 +51,30 @@ function App(): JSX.Element {
     message: "",
   });
 
-  const [userRole, setUserRole] = useState<string>("");
-
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
     setProducts(dbProducts);
-    if (userRole === "" && localStorage.getItem("user.email") != null) {
-      const user: User = await getUser(localStorage.getItem("user.email") + "");
-      setUserRole(user.role);
-    }
   };
 
   const setCurrentUser = (user: User) => {
     localStorage.setItem("user.email", user.email);
+    localStorage.setItem("role", user.role);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "Welcome to DeDe application " + user.name,
     });
-    setUserRole(user.role);
   };
 
   const logCurrentUserOut = () => {
     localStorage.removeItem("user.email");
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "You signed out correctly. See you soon!",
     });
-    setUserRole("");
   };
 
   const handleAddCart = (product: Product) => {
@@ -224,7 +218,7 @@ function App(): JSX.Element {
             logCurrentUserOut={logCurrentUserOut}
             changeTheme={toggleDarkMode}
             initialState={mode === "dark"}
-            userRole={userRole}
+            userRole={localStorage.getItem("role") + ""}
           />
           <Routes>
             <Route index element={<Home />} />

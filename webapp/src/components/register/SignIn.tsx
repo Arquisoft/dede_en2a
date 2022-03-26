@@ -66,87 +66,91 @@ export default function SignIn(props: SignInProps) {
     return <Navigate to="/" />;
   }
 
-  return (
-    <React.Fragment>
-      <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-
+  if (localStorage.getItem("user.email") === null) {
+    return (
+      <React.Fragment>
+        <Container component="main" maxWidth="xs">
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
 
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={checkFields}
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Sign In
-            </Button>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-            <Link to="/sign-up">
-              <Typography>{"Don't have an account? Sign Up"}</Typography>
-            </Link>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={checkFields}
+              >
+                Sign In
+              </Button>
+
+              <Link to="/sign-up">
+                <Typography>{"Don't have an account? Sign Up"}</Typography>
+              </Link>
+            </Box>
           </Box>
-        </Box>
 
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
-      </Container>
-    </React.Fragment>
-  );
+          <Snackbar
+            open={notificationStatus}
+            autoHideDuration={3000}
+            onClose={() => {
+              setNotificationStatus(false);
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+          >
+            <Alert severity={notification.severity} sx={{ width: "100%" }}>
+              {notification.message}
+            </Alert>
+          </Snackbar>
+        </Container>
+      </React.Fragment>
+    );
+  } else {
+    return <Navigate to="/" />;
+  }
 }

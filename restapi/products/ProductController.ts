@@ -3,6 +3,7 @@ import path from "path";
 import { userModel } from "../users/User";
 import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
+import fs from "fs";
 
 export const getProducts: RequestHandler = async (req, res) => {
   try {
@@ -51,13 +52,21 @@ export const deleteProduct: RequestHandler = async (req, res) => {
     req.headers.email + ""
   );
   const user = await userModel.findOne({ email: req.headers.email });
-  console.log(user)
+
   if (isVerified && user.role === "admin") {
     try {
       const productFound = await productModel.deleteOne({
         code: req.params.code,
       });
+      const reqPath = "../webapp/src/images/" + req.params.code + ".png";
+      const resolvedPath = path.resolve(reqPath);
+
       if (productFound) {
+        fs.unlink(resolvedPath, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
         return res.json(productFound);
       }
     } catch (error) {
@@ -76,7 +85,6 @@ export const updateProduct: RequestHandler = async (req, res) => {
   const user = userModel.findOne({ email: req.headers.email });
   if (isVerified && (user.role === "admin" || user.role === "manager")) {
     try {
-      console.log(req.body);
       const product = await productModel.findOneAndUpdate(
         { code: req.params.code },
         req.body,
