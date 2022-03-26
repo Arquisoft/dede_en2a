@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { CartItem, Product } from "../shared/shareddtypes";
 
 import ProductList from "./products/ProductList";
-import { alpha, styled, TextField } from "@mui/material";
+import { alpha, styled, TablePagination, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 
 
@@ -19,10 +19,31 @@ const Search = styled('div')({
   marginLeft: "30px",
 });
 
+
 function Home(props: HomeProps): JSX.Element {
 
   const [searchTerm, setSearchTerm] = useState("");
   let productos : Product[] = [];
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage] = React.useState(20);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setPage(0);
+  };
+
+  const emptyRows =
+    rowsPerPage -
+    Math.min(rowsPerPage, productos.length - page * rowsPerPage);
   
 
   return (
@@ -47,11 +68,21 @@ function Home(props: HomeProps): JSX.Element {
           productos.push(val);
         }
       })}
+
       <ProductList
-          products={productos}
+          products={productos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
           cartProducts={props.cartProducts}
           OnAddCart={props.onAdd}
       />
+      <TablePagination
+          component="div"
+          count={productos.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[0]}
+        />
     </React.Fragment>
   );
 }
