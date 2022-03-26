@@ -77,6 +77,7 @@ function OrderHeader(props: any) {
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
+  stateC = "all";
 
   return (
     <TableRow hover key={props.order.orderCode}>
@@ -189,7 +190,6 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     return (
       <React.Fragment>
         <Divider sx={{ m: 2 }}>Just in case</Divider>
-
         <FeaturedProducts />
       </React.Fragment>
     );
@@ -220,7 +220,6 @@ function Orders(props: any): JSX.Element {
   const handleChange = (event: SelectChangeEvent) => {
     setState(event.target.value);
     stateC = event.target.value;
-    console.log(state);
   };
 
   useEffect(() => {
