@@ -176,7 +176,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
         </TableContainer>
         <TablePagination
           component="div"
-          count={props.orders.length}
+          count={ordersN.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
