@@ -6,6 +6,7 @@ import { NotificationType, Product } from "../../shared/shareddtypes";
 
 import { deleteProduct } from "../../api/api";
 import ConfirmDialog from "./ConfirmDialog";
+import { Navigate } from "react-router-dom";
 
 type DeleteProductProps = {
   products: Product[];
@@ -190,7 +191,6 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       </React.Fragment>
     );
   } else {
-    document.location.href = "/";
-    return <></>;
+    return <Navigate to="/" />;
   }
 }

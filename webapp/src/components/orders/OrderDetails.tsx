@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -53,8 +53,7 @@ function OrderListItem(props: OrderListItemProps): JSX.Element {
       );
     }
   } else {
-    document.location.href = "/";
-    return <></>;
+    return <Navigate to="/" />;
   }
 }
 

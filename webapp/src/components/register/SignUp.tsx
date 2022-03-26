@@ -233,7 +233,6 @@ export default function SignUp(props: SignUpProps) {
       </React.Fragment>
     );
   } else {
-    document.location.href = "/";
-    return <></>;
+    return <Navigate to="/" />;
   }
 }

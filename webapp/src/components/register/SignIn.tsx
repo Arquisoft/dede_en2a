@@ -151,7 +151,6 @@ export default function SignIn(props: SignInProps) {
       </React.Fragment>
     );
   } else {
-    document.location.href = "/";
-    return <></>;
+    return <Navigate to="/" />;
   }
 }

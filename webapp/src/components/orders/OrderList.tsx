@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import {
   Table,
@@ -67,8 +67,7 @@ function OrderHeader(props: any) {
         </Stack>
       );
   } else {
-    document.location.href = "/";
-    return <></>;
+    return <Navigate to="/" />;
   }
 }
 

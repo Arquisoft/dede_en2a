@@ -16,6 +16,7 @@ import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 import Billing from "./Billing";
+import { Navigate } from "react-router-dom";
 
 function getSteps() {
   return [
@@ -46,7 +47,7 @@ export default function Checkout(props: any) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
       // We have finished the process...
-      document.location.href = "/";
+      return <Navigate to="/" />;
     }
   };
 

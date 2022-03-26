@@ -9,6 +9,7 @@ import {
   checkTextField,
 } from "../../helpers/CheckFieldsHelper";
 import { NotificationType } from "../../shared/shareddtypes";
+import { Navigate } from "react-router-dom";
 
 type UploadProductProps = {
   createShop: () => void;
@@ -196,7 +197,6 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
       </React.Fragment>
     );
   } else {
-    document.location.href = "/";
-    return <></>;
+    return <Navigate to="/" />;
   }
 }
