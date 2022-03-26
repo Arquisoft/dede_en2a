@@ -123,56 +123,61 @@ export default function Checkout(props: any) {
     }
   };
 
-  return (
-    <React.Fragment>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <Typography component="h1" variant="h4" align="center">
-            Checkout
-          </Typography>
-          <Stepper
-            activeStep={activeStep}
-            sx={{ pt: 3, pb: 5 }}
-            alternativeLabel
+  if (localStorage.getItem("user.email") !== null) {
+    return (
+      <React.Fragment>
+        <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
           >
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-
-          <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
-
-          <Stack
-            direction={{ xs: "column", sm: "row-reverse" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Button
-              disabled={!isCostsCalculated}
-              hidden={activeStep === getSteps().length}
-              variant="contained"
-              onClick={handleNext}
-              className="m-1"
+            <Typography component="h1" variant="h4" align="center">
+              Checkout
+            </Typography>
+            <Stepper
+              activeStep={activeStep}
+              sx={{ pt: 3, pb: 5 }}
+              alternativeLabel
             >
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
 
-            <Button
-              hidden={activeStep === 0 || activeStep >= 3}
-              onClick={handleBack}
-              variant="outlined"
-              className="m-1"
+            <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
+
+            <Stack
+              direction={{ xs: "column", sm: "row-reverse" }}
+              justifyContent="space-between"
+              alignItems="center"
             >
-              Back
-            </Button>
-          </Stack>
-        </Paper>
-      </Container>
-    </React.Fragment>
-  );
+              <Button
+                disabled={!isCostsCalculated}
+                hidden={activeStep === getSteps().length}
+                variant="contained"
+                onClick={handleNext}
+                className="m-1"
+              >
+                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              </Button>
+
+              <Button
+                hidden={activeStep === 0 || activeStep >= 3}
+                onClick={handleBack}
+                variant="outlined"
+                className="m-1"
+              >
+                Back
+              </Button>
+            </Stack>
+          </Paper>
+        </Container>
+      </React.Fragment>
+    );
+  } else {
+    document.location.href = "/sign-in";
+    return <></>
+  }
 }

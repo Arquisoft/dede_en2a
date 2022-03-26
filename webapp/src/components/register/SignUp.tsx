@@ -119,115 +119,121 @@ export default function SignUp(props: SignUpProps) {
   if (redirect) {
     return <Navigate to="/" />;
   }
-
-  return (
-    <React.Fragment>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+  if (localStorage.getItem("user.email") === null) {
+    return (
+      <React.Fragment>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  disabled={emails.length > 0}
-                  fullWidth
-                  id="webId"
-                  label="Web ID"
-                  name="webId"
-                  onChange={(e) => setWebId(e.target.value)}
-                  autoFocus
-                />
-              </Grid>
-              {emails.length > 0 && (
-                <WebIdRadioGroup
-                  value={value}
-                  setValue={setValue}
-                  radioItems={emails}
-                  icon={<MailOutlineIcon />}
-                  checkedIcon={<MarkEmailReadIcon />}
-                />
-              )}
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  disabled={emails.length > 0}
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  disabled={emails.length > 0}
-                  fullWidth
-                  name="repPassword"
-                  label="Repeat password"
-                  type="password"
-                  id="repPassword"
-                  onChange={(e) => setRepPassword(e.target.value)}
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleNext}
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 3 }}
             >
-              {buttonMessage}
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/sign-in">
-                  <Typography>{"Already have an account? Sign in"}</Typography>
-                </Link>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    disabled={emails.length > 0}
+                    fullWidth
+                    id="webId"
+                    label="Web ID"
+                    name="webId"
+                    onChange={(e) => setWebId(e.target.value)}
+                    autoFocus
+                  />
+                </Grid>
+                {emails.length > 0 && (
+                  <WebIdRadioGroup
+                    value={value}
+                    setValue={setValue}
+                    radioItems={emails}
+                    icon={<MailOutlineIcon />}
+                    checkedIcon={<MarkEmailReadIcon />}
+                  />
+                )}
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    disabled={emails.length > 0}
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    disabled={emails.length > 0}
+                    fullWidth
+                    name="repPassword"
+                    label="Repeat password"
+                    type="password"
+                    id="repPassword"
+                    onChange={(e) => setRepPassword(e.target.value)}
+                    autoComplete="new-password"
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleNext}
+              >
+                {buttonMessage}
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link to="/sign-in">
+                    <Typography>
+                      {"Already have an account? Sign in"}
+                    </Typography>
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
           </Box>
-        </Box>
 
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
-      </Container>
-    </React.Fragment>
-  );
+          <Snackbar
+            open={notificationStatus}
+            autoHideDuration={3000}
+            onClose={() => {
+              setNotificationStatus(false);
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+          >
+            <Alert severity={notification.severity} sx={{ width: "100%" }}>
+              {notification.message}
+            </Alert>
+          </Snackbar>
+        </Container>
+      </React.Fragment>
+    );
+  } else {
+    document.location.href = "/";
+    return <></>;
+  }
 }
