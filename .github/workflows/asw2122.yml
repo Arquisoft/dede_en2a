@@ -4,6 +4,12 @@ on:
   release:
     types: [published]
 
+env:
+  API_URI: http://${{ secrets.DEPLOY_HOST }}:5000
+  MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
+  BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
+  PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
+
 jobs:
   unit-test-webapp:
     runs-on: ubuntu-latest
@@ -51,12 +57,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
-        env:
-          API_URI: http://${{ secrets.DEPLOY_HOST }}:5000
-          MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
-          BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
-          PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
         with:
+          API_URI: ${{ env.API_URI }}
           name: arquisoft/dede_en2a/webapp
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
