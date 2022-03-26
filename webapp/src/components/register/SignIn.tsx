@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -11,7 +11,6 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { Link, Navigate } from "react-router-dom";
 import { User, NotificationType } from "../../shared/shareddtypes";
 import * as Checker from "../../helpers/CheckFieldsHelper";
 

@@ -10,8 +10,9 @@ import SignIn from "./components/register/SignIn";
 import SignUp from "./components/register/SignUp";
 import Checkout from "./components/cart/Checkout";
 import ProductDetails from "./components/products/ProductDetails";
-import OrderDetails from "./components/orders/OrderDetails";
-import OrderList from "./components/orders/OrderList";
+import OrderDetails from "./components/dashboard/orders/OrderDetails";
+import OrderList from "./components/dashboard/orders/OrderList";
+import Dashboard from "./components/dashboard/Dashboard";
 
 import "./App.css";
 
@@ -286,6 +287,12 @@ function App(): JSX.Element {
                   cartItems={productsCart}
                   onAdd={handleAddCart}
                 />
+              }
+            />
+            <Route
+              path="dashboard"
+              element={
+                <Dashboard userEmail={localStorage.getItem("user.email")} />
               }
             />
             <Route

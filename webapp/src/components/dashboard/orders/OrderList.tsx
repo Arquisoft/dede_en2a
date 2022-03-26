@@ -22,10 +22,10 @@ import {
 
 import { Autorenew } from "@mui/icons-material";
 
-import { Order, User } from "../../shared/shareddtypes";
-import { getOrdersForUser, getUser } from "../../api/api";
+import { Order, User } from "../../../shared/shareddtypes";
+import { getOrdersForUser, getUser } from "../../../api/api";
 
-import FeaturedProducts from "../FeaturedProducts";
+import FeaturedProducts from "../../FeaturedProducts";
 import StatusMessage from "./StatusMessage";
 
 type OrderTableItemProps = {
@@ -66,7 +66,6 @@ function OrderHeader(props: any) {
       </Stack>
     );
 }
-
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
