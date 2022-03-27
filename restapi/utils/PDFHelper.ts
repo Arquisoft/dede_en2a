@@ -124,7 +124,8 @@ export const createPDF = async (code: string) => {
     .create(root.toString(), options)
     .toFile("./pdf/" + orderFound.orderCode + ".pdf", function (err, res) {
       if (err) console.log(err);
+      else {
+        sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
+      }
     });
-
-  sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
 };
