@@ -1,11 +1,11 @@
-import fs from "fs";
 import pdf, { CreateOptions } from "html-pdf";
 import { orderModel } from "../orders/Order";
+import { sendInvoiceEmail } from "./emailSender";
 
-const PDF = require("pdfkit");
+const fs = require("fs");
 
 export const createPDF = async (code: string) => {
-  var html = fs.readFileSync("./views/order.html", "utf-8");
+  var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
   const parse = require("node-html-parser").parse;
 
   const options: CreateOptions = {
@@ -58,18 +58,19 @@ export const createPDF = async (code: string) => {
     "</thead>" +
     "<tbody>";
 
-  for (let i = 0; i < orderFound.products.length; ) {
+  for (let i: number = 0; i < orderFound.products.length; i++) {
+    let j: number = i + 1;
     aux =
       aux +
       "<tr>" +
       '<td class="no">' +
-      ++i +
+      j +
       "</td>" +
       '<td class="desc">' +
       "<h3>" +
       orderFound.products[i].name +
       "</h3>" +
-      orderFound.products[0].description +
+      orderFound.products[i].description +
       "</td>" +
       '<td class="unit">' +
       orderFound.products[i].price +
@@ -124,4 +125,6 @@ export const createPDF = async (code: string) => {
     .toFile("./pdf/" + orderFound.orderCode + ".pdf", function (err, res) {
       if (err) console.log(err);
     });
+
+  sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
 };

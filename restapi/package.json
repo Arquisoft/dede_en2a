@@ -22,6 +22,7 @@
     "express-async-handler": "^1.2.0",
     "express-prom-bundle": "^6.4.1",
     "express-validator": "^6.14.0",
+    "fs": "^0.0.1-security",
     "gridfs-stream": "^1.1.1",
     "helmet": "^5.0.2",
     "html-pdf": "^3.0.1",

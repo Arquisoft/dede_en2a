@@ -14,12 +14,17 @@ let transporter = nodemailer.createTransport({
   requireTLS: true,
 });
 
-export const sendInvoiceEmail: Function = async (email: string) => {
+export const sendInvoiceEmail: Function = (email: string, orderCode: string) => {
   const mailOptions = {
     from: process.env.AUTH_EMAIL,
     to: email,
     subject: "DeDe Order Invoice",
     html: "<p> Thank you for trusting in DeDe and buying with us</p>",
+    attachments: [
+      {
+        path: "./pdf/" + orderCode + ".pdf",
+      },
+    ],
   };
 
   transporter.sendMail(mailOptions);

@@ -50,12 +50,11 @@ export const createOrder: RequestHandler = async (req, res) => {
     try {
       const order = new orderModel(req.body);
       const ordersaved = await order.save();
-
       await createPDF(req.body.orderCode);
       // SEND EMAIL AND DELETE PDF
-
       res.json(ordersaved);
     } catch (error) {
+      console.log(error)
       res.status(412).json();
     }
   } else {

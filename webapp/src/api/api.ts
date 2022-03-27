@@ -61,7 +61,7 @@ export async function getProduct(productCode: string): Promise<Product> {
 
 export async function updateProduct(product: Product) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/products/update" + product.code, {
+  await fetch(apiEndPoint + "/products/update/" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
