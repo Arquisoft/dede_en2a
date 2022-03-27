@@ -7,7 +7,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import {jsx} from "@emotion/react";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
@@ -107,7 +106,7 @@ export default function DialogWrapper(props: DialogWrapperProps) {
                     </Button>
 
                     {
-                        handleConfirm != null &&
+                        props.handleConfirm &&
 
                         <Button autoFocus onClick={handleConfirm}>
                             Confirm

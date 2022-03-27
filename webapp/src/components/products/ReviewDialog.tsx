@@ -35,6 +35,12 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             setOpen(props.show + 1);
     }, [props.stars]);
 
+    React.useEffect(() => {
+        setRating(props.stars);
+        if (props.show > 1)
+            setOpen(props.show + 1);
+    }, [props.show]);
+
     const handleCloseInfo = () => {
         showInfo(false);
     };

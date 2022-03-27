@@ -19,7 +19,7 @@ export default function ShareDialog(props: ShareDialogProps) {
     };
     return (
         <React.Fragment>
-            <DialogWrapper show={props.show} titleText="Share item">
+            <DialogWrapper show={props.show} titleText="Share item" >
                 <Typography gutterBottom style={{margin: "-1vh 1vw 3vh"}}>
                     You can share this product with your friend with the following link!
                 </Typography>
