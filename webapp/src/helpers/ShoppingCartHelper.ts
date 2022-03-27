@@ -13,7 +13,7 @@ export function calculateTotal(
     total += unit * cartItem.product.price;
   });
   total += shippingCosts;
-  return total;
+  return Math.round((total + Number.EPSILON) * 100) / 100;
 }
 
 export async function saveOrder(
