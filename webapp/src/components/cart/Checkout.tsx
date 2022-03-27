@@ -119,6 +119,7 @@ export default function Checkout(props: any) {
             <Typography>
               We are redirecting you to the homepage! See you next time 👋
             </Typography>
+            <Navigate to="/" />;
           </React.Fragment>
         );
     }
@@ -179,6 +180,6 @@ export default function Checkout(props: any) {
     );
   } else {
     document.location.href = "/sign-in";
-    return <></>
+    return <></>;
   }
 }

@@ -45,11 +45,6 @@ export async function getUser(userEmail: String): Promise<User> {
   return response.json();
 }
 
-export async function createPDF() {
-  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/pdf");
-}
-
 export async function getProducts(): Promise<Product[]> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/products");

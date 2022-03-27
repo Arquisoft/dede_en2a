@@ -14,7 +14,6 @@ import StarIcon from "@mui/icons-material/StarBorder";
 import { styled } from "@mui/material/styles";
 
 import { checkImageExists } from "../helpers/ImageHelper";
-import { createPDF } from "../api/api";
 
 export default function FeaturedProducts() {
   const tiers = [
@@ -95,7 +94,7 @@ export default function FeaturedProducts() {
                   fullWidth
                   variant={tier.buttonVariant as "outlined" | "contained"}
                   onClick={() => {
-                    createPDF();
+                    //createPDF();
                     navigate("/product/" + tier.code);
                   }}
                 >
