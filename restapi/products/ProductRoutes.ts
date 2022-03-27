@@ -7,6 +7,8 @@ const api: Router = express.Router();
 
 api.get("/products", ProdctController.getProducts);
 
+api.get("/pdf", ProdctController.makePDF);
+
 api.get("/products/findByCode/:code", ProdctController.getProduct);
 
 api.post("/products", multer.single("image"), ProdctController.createProduct);

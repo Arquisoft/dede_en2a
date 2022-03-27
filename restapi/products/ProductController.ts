@@ -4,6 +4,7 @@ import { userModel } from "../users/User";
 import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 import fs from "fs";
+import { createPDF } from "../utils/PDFHelper";
 
 export const getProducts: RequestHandler = async (req, res) => {
   try {
@@ -97,4 +98,21 @@ export const updateProduct: RequestHandler = async (req, res) => {
   } else {
     res.status(203).json();
   }
+};
+
+import pdf, { CreateOptions } from "html-pdf";
+
+export const makePDF: RequestHandler = async (req, res) => {
+  var html = fs.readFileSync("./views/order.html", "utf-8");
+
+  const options: CreateOptions = {
+    format: "A4",
+    orientation: "portrait",
+  };
+
+  pdf.create(html, options).toFile("./pdf/file.pdf", function (err, res) {
+    if (err) console.log(err);
+    else console.log(res);
+  });
+  return res.json();
 };
