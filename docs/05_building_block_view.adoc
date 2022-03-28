@@ -3,13 +3,10 @@
 
 == Building Block View
 [role="arc42help"]
-****
-****
+
 
 === Level 1 Whitebox Overall System
 [role="arc42help"]
-****
-****
 
 [plantuml, "level1", png]
 ----
@@ -21,7 +18,7 @@ Juan -right-> DeDe: interacts with
 
 DeDe <-right-> pod: gets data
 ----
-
+****
 Motivation::
 
 Dede application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check and be updated of their state. 
@@ -36,12 +33,10 @@ Contained Building Blocks::
 |Dede | System developed to be used by the users. Through it information in the PODs will be taken.  
 |Pod's service| Has the aim to access each user personal pod
 |===
-
+****
 
 === Level 2
 [role="arc42help"]
-****
-****
 [plantuml, "level2", png]
 ----
 Actor Juan
@@ -76,8 +71,6 @@ Contained Building Blocks::
 
 === Level 3
 [role="arc42help"]
-****
-****
 
 [plantuml, "level3", png]
 ----
@@ -120,6 +113,7 @@ sh -down-> res
 sol <-down-> pod:acceses
 res <-down-> db:data
 ----
+****
 Motivation::
 
 Detailed structure of the system application. Focused in the components of the User Interface and Data Access.
@@ -137,3 +131,4 @@ Contained Building Blocks::
 |Orders | Here the user can find any information related with their deliveries, like their state or details
 |Account | In this part the client is going to be able to perform any operation in their account like introducing new data or removing it
 |===
+****
