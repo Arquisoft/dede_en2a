@@ -182,16 +182,6 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           {notification.message}
         </Alert>
       </Snackbar>
-
-        <ConfirmDialog
-          show={dialogOpen}
-          titleText="Are you sure?"
-          contentText="Are you sure you really want to delete this product?"
-          handleConfirm={handleDeleteConfirmed}
-        />
-      </React.Fragment>
-    );
-  } else {
-    return <Navigate to="/" />;
-  }
+    </React.Fragment>
+  );
 }
