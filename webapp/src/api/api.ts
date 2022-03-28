@@ -46,7 +46,7 @@ export async function getUser(userEmail: String): Promise<User> {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   console.log(process.env.REACT_APP_API_URI);
   console.log(process.env.REACT_APP_MAPBOY_KEY);
   let response = await fetch(apiEndPoint + "/products/list");
@@ -54,7 +54,7 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function getProduct(productCode: string): Promise<Product> {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(
     apiEndPoint + "/products/findByCode/" + productCode
   );
@@ -62,7 +62,7 @@ export async function getProduct(productCode: string): Promise<Product> {
 }
 
 export async function updateProduct(product: Product) {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   await fetch(apiEndPoint + "/products/update" + product.code, {
     method: "POST",
     headers: {
@@ -86,7 +86,7 @@ export async function createProduct(image: any, body: any) {
     data.append(key, body[key]);
   }
 
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/products", {
     //TODO - Pass token and email to verify identity
     method: "POST",
@@ -101,7 +101,7 @@ export async function createProduct(image: any, body: any) {
 }
 
 export async function deleteProduct(code: string) {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   await fetch(apiEndPoint + "/products/delete/" +code, {
     method: "POST",
     headers: {
@@ -113,7 +113,7 @@ export async function deleteProduct(code: string) {
 }
 
 export async function createOrder(body: any) {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   await fetch(apiEndPoint + "/orders", {
     method: "POST",
     headers: {
@@ -131,7 +131,7 @@ export async function getOrder(orderCode: string): Promise<Order> {
     token: localStorage.getItem("token"),
     email: localStorage.getItem("user.email"),
   };
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(
     apiEndPoint + "/orders/findByOrderCode/" + orderCode,
     { method: "GET", headers: headers }
@@ -146,7 +146,7 @@ export async function getOrdersForUser(): Promise<Order[]> {
     email: localStorage.getItem("user.email"),
   };
 
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/orders", {
     method: "GET",
     headers: headers,
@@ -155,7 +155,7 @@ export async function getOrdersForUser(): Promise<Order[]> {
 }
 
 export async function getReviewsByCode(code: string): Promise<Review[]> {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
   return response.json();
 }
@@ -164,7 +164,7 @@ export async function getReviewsByCodeAndEmail(
   code: string,
   email: string
 ): Promise<Review[]> {
-  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(
     apiEndPoint + "/reviews/listByCodeAndEmail/" + code + "/" + email
   );
