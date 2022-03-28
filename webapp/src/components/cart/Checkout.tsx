@@ -16,6 +16,7 @@ import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 import Billing from "./Billing";
+import { Navigate } from "react-router-dom";
 
 function getSteps() {
   return [
