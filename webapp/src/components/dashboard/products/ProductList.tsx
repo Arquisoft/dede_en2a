@@ -13,16 +13,15 @@ import {
   Stack,
   Button,
   IconButton,
-  Divider,
   Tooltip,
   TablePagination,
   styled,
   tableCellClasses,
 } from "@mui/material";
 
-import { Autorenew } from "@mui/icons-material";
+import { Autorenew, Add } from "@mui/icons-material";
 
-import { Product, User } from "../../../shared/shareddtypes";
+import { Product } from "../../../shared/shareddtypes";
 import { getProducts } from "../../../api/api";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -39,20 +38,28 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 function AutorenewOrders(props: any) {
   return (
     <IconButton edge="end">
-      <Tooltip title="Refresh orders" arrow>
-        <Autorenew onClick={props.refreshOrderList}></Autorenew>
+      <Tooltip title="Refresh products" arrow>
+        <Autorenew onClick={props.refreshOrderList} />
       </Tooltip>
     </IconButton>
   );
 }
 
 function ProductsHeader(props: any) {
+  let navigate = useNavigate();
+
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
       <Typography component="h1" variant="h4" align="center">
         Listing of all the products
       </Typography>
       <AutorenewOrders refreshOrderList={props.refreshOrderList} />
+
+      <IconButton edge="end">
+        <Tooltip title="Add a new product" arrow>
+          <Add onClick={() => navigate("add")} />
+        </Tooltip>
+      </IconButton>
     </Stack>
   );
 }
@@ -72,7 +79,7 @@ function ProductTableItem(props: any): JSX.Element {
           variant="contained"
           color="secondary"
           className="m-1"
-          onClick={() => navigate("/product/delete/" + props.order.orderCode)}
+          onClick={() => navigate("delete/" + props.order.orderCode)}
         >
           Delete
         </Button>

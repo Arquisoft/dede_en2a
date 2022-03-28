@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import DedeApp from "./components/DedeApp";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
 import ShoppingCart from "./components/cart/ShoppingCart";
@@ -228,58 +228,59 @@ function App(): JSX.Element {
             userRole={userRole}
           />
           <Routes>
-            <Route index element={<Home />} />
-            <Route
-              path="shop"
-              element={
-                <Shop
-                  products={products}
-                  cartProducts={productsCart}
-                  onAdd={handleAddCart}
-                />
-              }
-            />
-            <Route
-              path="cart"
-              element={
-                <ShoppingCart
-                  products={productsCart}
-                  totalUnitsInCart={totalUnitsInCart}
-                  userEmail={localStorage.getItem("user.email")}
-                  onDecrementUnit={handleDecrementUnit}
-                  onIncrementUnit={handleAddCart}
-                />
-              }
-            />
-            <Route
-              path="checkout"
-              element={
-                <Checkout
-                  productsCart={productsCart.slice()}
-                  userEmail={localStorage.getItem("user.email")}
-                  deleteCart={handleDeleteCart}
-                />
-              }
-            />
-            <Route
-              path="sign-in"
-              element={<SignIn setCurrentUser={setCurrentUser} />}
-            />
-            <Route
-              path="sign-up"
-              element={<SignUp setCurrentUser={setCurrentUser} />}
-            />
-
-            <Route
-              path="product/:id"
-              element={
-                <ProductDetails
-                  product={null as any}
-                  cartItems={productsCart}
-                  onAdd={handleAddCart}
-                />
-              }
-            />
+            <Route path="/" element={<DedeApp />}>
+              <Route index element={<Home />} />
+              <Route
+                path="shop"
+                element={
+                  <Shop
+                    products={products}
+                    cartProducts={productsCart}
+                    onAdd={handleAddCart}
+                  />
+                }
+              />
+              <Route
+                path="cart"
+                element={
+                  <ShoppingCart
+                    products={productsCart}
+                    totalUnitsInCart={totalUnitsInCart}
+                    userEmail={localStorage.getItem("user.email")}
+                    onDecrementUnit={handleDecrementUnit}
+                    onIncrementUnit={handleAddCart}
+                  />
+                }
+              />
+              <Route
+                path="checkout"
+                element={
+                  <Checkout
+                    productsCart={productsCart.slice()}
+                    userEmail={localStorage.getItem("user.email")}
+                    deleteCart={handleDeleteCart}
+                  />
+                }
+              />
+              <Route
+                path="sign-in"
+                element={<SignIn setCurrentUser={setCurrentUser} />}
+              />
+              <Route
+                path="sign-up"
+                element={<SignUp setCurrentUser={setCurrentUser} />}
+              />
+              <Route
+                path="product/:id"
+                element={
+                  <ProductDetails
+                    product={null as any}
+                    cartItems={productsCart}
+                    onAdd={handleAddCart}
+                  />
+                }
+              />
+            </Route>
             <Route path="dashboard" element={<Dashboard />}>
               <Route
                 index
@@ -309,7 +310,6 @@ function App(): JSX.Element {
               />
             </Route>
           </Routes>
-          <Footer />
 
           <Snackbar
             open={notificationStatus}
