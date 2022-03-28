@@ -20,12 +20,14 @@ import {
   Stack,
   Divider,
   LinearProgress,
-  Link,
+  Link, TextField,
 } from "@mui/material";
 import { checkImageExists } from "../../helpers/ImageHelper";
 import ProductSpeedDial from "./ProductSpeedDial";
 import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";
+import DialogWrapper from "../dialogs/Dialog";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export type ProductProps = {
   product: Product;
@@ -215,7 +217,9 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
             show={dialogOpen}
             stars={starsSelected}
           />
+
           <ShareDialog show={shareDialogOpen} />
+
         </Grid>
 
         <ProductSpeedDial

@@ -16,6 +16,7 @@ import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 import Billing from "./Billing";
+import { Navigate } from "react-router-dom";
 
 function getSteps() {
   return [
@@ -118,6 +119,7 @@ export default function Checkout(props: any) {
             <Typography>
               We are redirecting you to the homepage! See you next time 👋
             </Typography>
+            <Navigate to="/" />;
           </React.Fragment>
         );
     }

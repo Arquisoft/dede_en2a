@@ -18,6 +18,11 @@ import {
   TablePagination,
   styled,
   tableCellClasses,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 
 import { Autorenew } from "@mui/icons-material";
@@ -69,6 +74,7 @@ function OrderHeader(props: any) {
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
+  stateC = "all";
 
   return (
     <TableRow hover key={props.order.orderCode}>
@@ -84,7 +90,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
           variant="contained"
           color="secondary"
           className="m-1"
-          onClick={() => navigate("/order/" + props.order.orderCode)}
+          onClick={() => navigate("/dashboard/order/" + props.order.orderCode)}
         >
           See details
         </Button>
@@ -107,6 +113,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 function OrderTable(props: OrderTableProps): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
+
+  let ordersN: Order[] = [];
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -141,11 +149,25 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.orders
+              {props.orders.filter((val) => {
+                if (stateC == "received" && val.isOrderReceived == true) {
+                  ordersN.push(val);
+                } else if (
+                  stateC == "shipping" &&
+                  val.isOrderReceived == false
+                ) {
+                  ordersN.push(val);
+                } else if (stateC == "all" || stateC == null) {
+                  ordersN = props.orders;
+                }
+              })}
+
+              {ordersN
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((order: Order) => {
                   return <OrderTableItem order={order} />;
                 })}
+
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
                   <TableCell colSpan={5} />
@@ -156,7 +178,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
         </TableContainer>
         <TablePagination
           component="div"
-          count={props.orders.length}
+          count={ordersN.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
@@ -169,11 +191,16 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     return (
       <React.Fragment>
         <Divider sx={{ m: 2 }}>Just in case</Divider>
-
         <FeaturedProducts />
       </React.Fragment>
     );
 }
+
+const Filter = styled("div")({
+  marginLeft: "1000px",
+});
+
+let stateC: String;
 
 function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -185,6 +212,13 @@ function Orders(props: any): JSX.Element {
 
   const refreshUser = async () => {
     setUser(await getUser(props.userEmail));
+  };
+
+  const [state, setState] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setState(event.target.value);
+    stateC = event.target.value;
   };
 
   useEffect(() => {
@@ -199,6 +233,24 @@ function Orders(props: any): JSX.Element {
         refreshOrderList={refreshOrderList}
         name={user?.name}
       />
+      <Filter>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="demo-simple-select-standard-label">Show</InputLabel>
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={state}
+            onChange={handleChange}
+            label="show"
+          >
+            <MenuItem value="all">
+              <em>All</em>
+            </MenuItem>
+            <MenuItem value="received">Received</MenuItem>
+            <MenuItem value="shipping">Shipping</MenuItem>
+          </Select>
+        </FormControl>
+      </Filter>
       <OrderTable orders={orders} />
     </Container>
   );

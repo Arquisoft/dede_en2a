@@ -19,7 +19,7 @@ import {
   tableCellClasses,
 } from "@mui/material";
 
-import { Autorenew, Add } from "@mui/icons-material";
+import { Autorenew, Add, Remove } from "@mui/icons-material";
 
 import { Product } from "../../../shared/shareddtypes";
 import { getProducts } from "../../../api/api";
@@ -60,6 +60,12 @@ function ProductsHeader(props: any) {
           <Add onClick={() => navigate("add")} />
         </Tooltip>
       </IconButton>
+
+      <IconButton edge="end">
+        <Tooltip title="Delete a product" arrow>
+          <Remove onClick={() => navigate("delete")} />
+        </Tooltip>
+      </IconButton>
     </Stack>
   );
 }
@@ -74,16 +80,6 @@ function ProductTableItem(props: any): JSX.Element {
       <TableCell align="center">{props.product.description}</TableCell>
       <TableCell align="center">{props.product.price + " €"}</TableCell>
       <TableCell align="center">{props.product.stock}</TableCell>
-      <TableCell align="center">
-        <Button
-          variant="contained"
-          color="secondary"
-          className="m-1"
-          onClick={() => navigate("delete/" + props.order.orderCode)}
-        >
-          Delete
-        </Button>
-      </TableCell>
     </TableRow>
   );
 }
@@ -120,7 +116,6 @@ function ProductsTable(props: any): JSX.Element {
               <StyledTableCell align="center">Description</StyledTableCell>
               <StyledTableCell align="center">Price</StyledTableCell>
               <StyledTableCell align="center">Stock</StyledTableCell>
-              <StyledTableCell align="center"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -4,6 +4,8 @@ import { userModel } from "../users/User";
 import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 
+
+
 export const getProducts: RequestHandler = async (req, res) => {
   try {
     const products = await productModel.find();

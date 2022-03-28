@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { orderModel } from "./Order";
 import { verifyToken } from "../utils/generateToken";
+import { createPDF } from "../utils/PDFHelper";
 
 export const getOrder: RequestHandler = async (req, res) => {
   const isVerified = verifyToken(
@@ -49,8 +50,11 @@ export const createOrder: RequestHandler = async (req, res) => {
     try {
       const order = new orderModel(req.body);
       const ordersaved = await order.save();
+      await createPDF(req.body.orderCode);
+      // SEND EMAIL AND DELETE PDF
       res.json(ordersaved);
     } catch (error) {
+      console.log(error)
       res.status(412).json();
     }
   } else {
