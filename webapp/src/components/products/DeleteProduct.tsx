@@ -77,118 +77,118 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
   };
-  if (localStorage.getItem("role") === "admin") {
-    return (
-      <React.Fragment>
-        <Box component="main" width="auto" height="auto">
-          <Box>
-            <div>
-              <h1 style={{ margin: 8 }}>Delete a product</h1>
 
-              <TextField
-                id="outlined-select-currency"
-                select
-                label="Select"
-                fullWidth
-                style={{ margin: 8 }}
-                onChange={handleChange}
-              >
-                {products.map((product) => (
-                  <MenuItem key={product.code} value={product.code}>
-                    {product.name + " (" + product.description + ")"}
-                  </MenuItem>
-                ))}
-              </TextField>
+  return (
+    <React.Fragment>
+      <Box component="main" width="auto" height="auto">
+        <Box>
+          <div>
+            <h1 style={{ margin: 8 }}>Delete a product</h1>
 
-              <TextField
-                disabled
-                value={code}
-                id="outlined-full-width"
-                label="Product code"
-                style={{ margin: 8 }}
-                type="number"
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-              />
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="Select"
+              fullWidth
+              style={{ margin: 8 }}
+              onChange={handleChange}
+            >
+              {products.map((product) => (
+                <MenuItem key={product.code} value={product.code}>
+                  {product.name + " (" + product.description + ")"}
+                </MenuItem>
+              ))}
+            </TextField>
 
-              <TextField
-                disabled
-                value={name}
-                id="outlined-full-width"
-                label="Product name"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-              />
+            <TextField
+              disabled
+              value={code}
+              id="outlined-full-width"
+              label="Product code"
+              style={{ margin: 8 }}
+              type="number"
+              fullWidth
+              required
+              margin="normal"
+              variant="outlined"
+            />
 
-              <TextField
-                disabled
-                value={description}
-                id="outlined-full-width"
-                label="Product description"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-              />
+            <TextField
+              disabled
+              value={name}
+              id="outlined-full-width"
+              label="Product name"
+              style={{ margin: 8 }}
+              fullWidth
+              required
+              margin="normal"
+              variant="outlined"
+            />
 
-              <TextField
-                disabled
-                value={price}
-                id="outlined-full-width"
-                label="Product price"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                type="number"
-                variant="outlined"
-              />
+            <TextField
+              disabled
+              value={description}
+              id="outlined-full-width"
+              label="Product description"
+              style={{ margin: 8 }}
+              fullWidth
+              required
+              margin="normal"
+              variant="outlined"
+            />
 
-              <TextField
-                disabled
-                value={stock}
-                id="outlined-full-width"
-                label="Product stock"
-                style={{ margin: 8 }}
-                fullWidth
-                type="number"
-                required
-                margin="normal"
-                variant="outlined"
-              />
-            </div>
-          </Box>
-          <Button onClick={handleDeleteProduct}> Delete </Button>
+            <TextField
+              disabled
+              value={price}
+              id="outlined-full-width"
+              label="Product price"
+              style={{ margin: 8 }}
+              fullWidth
+              required
+              margin="normal"
+              type="number"
+              variant="outlined"
+            />
+
+            <TextField
+              disabled
+              value={stock}
+              id="outlined-full-width"
+              label="Product stock"
+              style={{ margin: 8 }}
+              fullWidth
+              type="number"
+              required
+              margin="normal"
+              variant="outlined"
+            />
+          </div>
         </Box>
+        <Button onClick={handleDeleteProduct}> Delete </Button>
+      </Box>
 
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
+      <Snackbar
+        open={notificationStatus}
+        autoHideDuration={3000}
+        onClose={() => {
+          setNotificationStatus(false);
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <Alert severity={notification.severity} sx={{ width: "100%" }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
 
-        <DialogWrapper show={dialogOpen} titleText="Are you sure?" handleConfirm={handleDeleteConfirmed}>
-          <Typography gutterBottom style={{margin: "-1vh 1vw 3vh"}}>
-            Are you sure you really want to delete this product?
-          </Typography>
-        </DialogWrapper>
-
+        <ConfirmDialog
+          show={dialogOpen}
+          titleText="Are you sure?"
+          contentText="Are you sure you really want to delete this product?"
+          handleConfirm={handleDeleteConfirmed}
+        />
       </React.Fragment>
     );
   } else {

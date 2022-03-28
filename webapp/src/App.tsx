@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
+import DedeApp from "./components/DedeApp";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
 import ShoppingCart from "./components/cart/ShoppingCart";
@@ -12,9 +12,13 @@ import Checkout from "./components/cart/Checkout";
 import ProductDetails from "./components/products/ProductDetails";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
+import ProductList from "./components/dashboard/products/ProductList";
 import Dashboard from "./components/dashboard/Dashboard";
+import UploadProduct from "./components/products/UploadProduct";
+import DeleteProduct from "./components/products/DeleteProduct";
 
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
 
 import {
   createTheme,
@@ -36,11 +40,7 @@ import {
 } from "./shared/shareddtypes";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-
-import "bootstrap/dist/css/bootstrap.css";
-import "./App.css";
-import UploadImage from "./components/products/UploadProduct";
-import DeleteProduct from "./components/products/DeleteProduct";
+import DashboardContent from "./components/dashboard/DashboardContent";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -52,30 +52,36 @@ function App(): JSX.Element {
     message: "",
   });
 
+  const [userRole, setUserRole] = useState<string>("");
+
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
     setProducts(dbProducts);
+    if (userRole === "" && localStorage.getItem("user.email") != null) {
+      const user: User = await getUser(localStorage.getItem("user.email") + "");
+      setUserRole(user.role);
+    }
   };
 
   const setCurrentUser = (user: User) => {
     localStorage.setItem("user.email", user.email);
-    localStorage.setItem("role", user.role);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "Welcome to DeDe application " + user.name,
     });
+    setUserRole(user.role);
   };
 
   const logCurrentUserOut = () => {
     localStorage.removeItem("user.email");
     localStorage.removeItem("token");
-    localStorage.removeItem("role");
     setNotificationStatus(true);
     setNotification({
       severity: "success",
       message: "You signed out correctly. See you soon!",
     });
+    setUserRole("");
   };
 
   const handleAddCart = (product: Product) => {
@@ -219,85 +225,91 @@ function App(): JSX.Element {
             logCurrentUserOut={logCurrentUserOut}
             changeTheme={toggleDarkMode}
             initialState={mode === "dark"}
-            userRole={localStorage.getItem("role") + ""}
+            userRole={userRole}
           />
           <Routes>
-            <Route index element={<Home />} />
-            <Route
-              path="shop"
-              element={
-                <Shop
-                  products={products}
-                  cartProducts={productsCart}
-                  onAdd={handleAddCart}
-                />
-              }
-            />
-            <Route
-              path="cart"
-              element={
-                <ShoppingCart
-                  products={productsCart}
-                  totalUnitsInCart={totalUnitsInCart}
-                  userEmail={localStorage.getItem("user.email")}
-                  onDecrementUnit={handleDecrementUnit}
-                  onIncrementUnit={handleAddCart}
-                />
-              }
-            />
-            <Route
-              path="checkout"
-              element={
-                <Checkout
-                  productsCart={productsCart.slice()}
-                  userEmail={localStorage.getItem("user.email")}
-                  deleteCart={handleDeleteCart}
-                />
-              }
-            />
-            <Route
-              path="sign-in"
-              element={<SignIn setCurrentUser={setCurrentUser} />}
-            />
-            <Route
-              path="sign-up"
-              element={<SignUp setCurrentUser={setCurrentUser} />}
-            />
-            <Route
-              path="addProduct"
-              element={<UploadImage createShop={createShop} />}
-            />
-            <Route
-              path="deleteProduct"
-              element={
-                <DeleteProduct products={products} createShop={createShop} />
-              }
-            />
-            <Route
-              path="product/:id"
-              element={
-                <ProductDetails
-                  product={null as any}
-                  cartItems={productsCart}
-                  onAdd={handleAddCart}
-                />
-              }
-            />
-            <Route
-              path="dashboard"
-              element={
-                <Dashboard userEmail={localStorage.getItem("user.email")} />
-              }
-            />
-            <Route
-              path="orders"
-              element={
-                <OrderList userEmail={localStorage.getItem("user.email")} />
-              }
-            />
-            <Route path="/order/:code" element={<OrderDetails />} />
+            <Route path="/" element={<DedeApp />}>
+              <Route index element={<Home />} />
+              <Route
+                path="shop"
+                element={
+                  <Shop
+                    products={products}
+                    cartProducts={productsCart}
+                    onAdd={handleAddCart}
+                  />
+                }
+              />
+              <Route
+                path="cart"
+                element={
+                  <ShoppingCart
+                    products={productsCart}
+                    totalUnitsInCart={totalUnitsInCart}
+                    userEmail={localStorage.getItem("user.email")}
+                    onDecrementUnit={handleDecrementUnit}
+                    onIncrementUnit={handleAddCart}
+                  />
+                }
+              />
+              <Route
+                path="checkout"
+                element={
+                  <Checkout
+                    productsCart={productsCart.slice()}
+                    userEmail={localStorage.getItem("user.email")}
+                    deleteCart={handleDeleteCart}
+                  />
+                }
+              />
+              <Route
+                path="sign-in"
+                element={<SignIn setCurrentUser={setCurrentUser} />}
+              />
+              <Route
+                path="sign-up"
+                element={<SignUp setCurrentUser={setCurrentUser} />}
+              />
+              <Route
+                path="product/:id"
+                element={
+                  <ProductDetails
+                    product={null as any}
+                    cartItems={productsCart}
+                    onAdd={handleAddCart}
+                  />
+                }
+              />
+            </Route>
+            <Route path="dashboard" element={<Dashboard />}>
+              <Route
+                index
+                element={
+                  <DashboardContent
+                    userEmail={localStorage.getItem("user.email")}
+                  />
+                }
+              />
+              <Route
+                path="orders"
+                element={
+                  <OrderList userEmail={localStorage.getItem("user.email")} />
+                }
+              />
+              <Route path="order/:code" element={<OrderDetails />} />
+              <Route path="products" element={<ProductList />} />
+              <Route
+                path="products/add"
+                element={<UploadProduct createShop={createShop} />}
+              />
+              <Route
+                path="products/delete"
+                element={
+                  <DeleteProduct products={products} createShop={createShop} />
+                }
+              />
+            </Route>
           </Routes>
-          <Footer />
 
           <Snackbar
             open={notificationStatus}

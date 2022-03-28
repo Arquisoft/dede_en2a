@@ -63,6 +63,7 @@ jobs:
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
           workdir: webapp
+          buildargs: API_URI, MAPBOX_KEY, BING_KEY, PAYPAL_CLIENT_ID
   docker-push-restapi:
     name: Push restapi Docker Image to GitHub Packages
     runs-on: ubuntu-latest
@@ -84,6 +85,7 @@ jobs:
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
           workdir: restapi
+          buildargs: PORT, MONGO_DB_URI, NODE_ENV, JWT_SECRET, AUTH_EMAIL, AUTH_PASS
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
