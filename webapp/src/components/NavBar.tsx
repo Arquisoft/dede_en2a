@@ -25,7 +25,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 
 import MUISwitch from "./ThemeSlider";
-import ShowByRoles from "./ShowByRoles";
 
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
@@ -171,8 +170,6 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           </ListItemIcon>
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
-
-        <ShowByRoles userRole={props.userRole} />
       </MenuList>
     </Grid>
   );

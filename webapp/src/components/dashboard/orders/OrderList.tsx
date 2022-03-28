@@ -90,7 +90,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
           variant="contained"
           color="secondary"
           className="m-1"
-          onClick={() => navigate("/order/" + props.order.orderCode)}
+          onClick={() => navigate("/dashboard/order/" + props.order.orderCode)}
         >
           See details
         </Button>

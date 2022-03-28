@@ -8,7 +8,7 @@ import {checkNumericField, checkTextField,} from "../../../helpers/CheckFieldsHe
 import {NotificationType, Product} from "../../../shared/shareddtypes";
 import {Navigate} from "react-router-dom";
 
-const DEF_IMAGE: string = require("../../images/not-found.png");
+const DEF_IMAGE: string = require("../../../images/not-found.png");
 
 type UploadProductProps = {
     createShop: () => void;

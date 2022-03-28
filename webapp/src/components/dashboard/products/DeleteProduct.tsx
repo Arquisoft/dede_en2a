@@ -7,7 +7,7 @@ import {Navigate} from "react-router-dom";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-const DEF_IMAGE: string = require("../../images/not-found.png");
+const DEF_IMAGE: string = require("../../../images/not-found.png");
 
 const Img = styled("img")({
     display: "block",
