@@ -14,8 +14,8 @@ import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
 import ProductList from "./components/dashboard/products/ProductList";
 import Dashboard from "./components/dashboard/Dashboard";
-import UploadProduct from "./components/products/UploadProduct";
-import DeleteProduct from "./components/products/DeleteProduct";
+import UploadProduct from "./components/dashboard/products/UploadProduct";
+import DeleteProduct from "./components/dashboard/products/DeleteProduct";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
