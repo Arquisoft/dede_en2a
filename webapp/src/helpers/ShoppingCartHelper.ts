@@ -13,10 +13,10 @@ export function calculateTotal(
     total += unit * cartItem.product.price;
   });
   total += shippingCosts;
-  return total;
+  return Math.round((total + Number.EPSILON) * 100) / 100;
 }
 
-export function saveOrder(
+export async function saveOrder(
   products: CartItem[],
   shippingCosts: number,
   userEmail: string,
@@ -41,7 +41,7 @@ export function saveOrder(
     isOrderReceived: false,
   };
 
-  createOrder(JSON.stringify(order));
+  await createOrder(JSON.stringify(order));
 }
 
 export function getCurrentCartAmount(

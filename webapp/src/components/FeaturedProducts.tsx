@@ -21,7 +21,7 @@ export default function FeaturedProducts() {
       code: "1235",
       title: "AMONGUS™ T-shirt",
       price: "12.95",
-      image:"1236.png",
+      image: "1236.png",
       buttonVariant: "outlined",
     },
     {
@@ -29,14 +29,14 @@ export default function FeaturedProducts() {
       title: "AMONG US™ T-shirt",
       subheader: "Most popular",
       price: "12.95",
-      image:"1234.png",
+      image: "1234.png",
       buttonVariant: "contained",
     },
     {
       code: "1237",
       title: "AMONG US T-shirt",
       price: "12.95",
-      image:"1237.png",
+      image: "1237.png",
       buttonVariant: "outlined",
     },
   ];
@@ -93,7 +93,10 @@ export default function FeaturedProducts() {
                 <Button
                   fullWidth
                   variant={tier.buttonVariant as "outlined" | "contained"}
-                  onClick={() => navigate("/product/" + tier.code)}
+                  onClick={() => {
+                    //createPDF();
+                    navigate("/product/" + tier.code);
+                  }}
                 >
                   Further details
                 </Button>

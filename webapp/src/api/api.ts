@@ -60,8 +60,8 @@ export async function getProduct(productCode: string): Promise<Product> {
 }
 
 export async function updateProduct(product: Product) {
-  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/products/update" + product.code, {
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  await fetch(apiEndPoint + "/products/update/" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export async function createProduct(image: any, body: any) {
 }
 
 export async function deleteProduct(code: string) {
-  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   await fetch(apiEndPoint + "/products/delete/" + code, {
     method: "POST",
     headers: {
