@@ -88,6 +88,7 @@ export default function SignUp(props: SignUpProps) {
       email: value,
       password: password,
       role: role,
+      verified: false,
     };
 
     const correctSignUp = await Api.addUser(newUser);
