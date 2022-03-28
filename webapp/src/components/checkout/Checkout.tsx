@@ -5,8 +5,7 @@ import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+
 import Typography from "@mui/material/Typography";
 
 import { updateProduct } from "../../api/api";
@@ -87,11 +86,17 @@ export default function Checkout(props: any) {
             handleCostsCalculated={setCostsCalculated}
             isCostsCalculated={isCostsCalculated}
             userEmail={props.userEmail}
+            handleNext={handleNext}
           />
         );
       case 1:
         return (
-          <Review productsCart={props.productsCart} shippingCosts={costs} />
+          <Review
+            productsCart={props.productsCart}
+            shippingCosts={costs}
+            handleBack={handleBack}
+            handleNext={handleNext}
+          />
         );
       case 2:
         return (
@@ -148,31 +153,6 @@ export default function Checkout(props: any) {
           </Stepper>
 
           <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
-
-          <Stack
-            direction={{ xs: "column", sm: "row-reverse" }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Button
-              disabled={!isCostsCalculated}
-              hidden={activeStep === getSteps().length}
-              variant="contained"
-              onClick={handleNext}
-              className="m-1"
-            >
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-
-            <Button
-              hidden={activeStep === 0 || activeStep >= 3}
-              onClick={handleBack}
-              variant="outlined"
-              className="m-1"
-            >
-              Back
-            </Button>
-          </Stack>
         </Paper>
       </Container>
     </React.Fragment>

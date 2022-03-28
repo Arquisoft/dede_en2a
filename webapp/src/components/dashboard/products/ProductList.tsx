@@ -57,13 +57,13 @@ function ProductsHeader(props: any) {
 
       <IconButton edge="end">
         <Tooltip title="Add a new product" arrow>
-          <Add onClick={() => navigate("add")} />
+          <Add onClick={() => navigate("/dashboard/products/add")} />
         </Tooltip>
       </IconButton>
 
       <IconButton edge="end">
         <Tooltip title="Delete a product" arrow>
-          <Remove onClick={() => navigate("delete")} />
+          <Remove onClick={() => navigate("/dashboard/products/delete")} />
         </Tooltip>
       </IconButton>
     </Stack>

@@ -10,6 +10,7 @@ import {
   TableBody,
   Typography,
   Container,
+  Grid,
   Stack,
   Button,
   IconButton,
@@ -41,7 +42,16 @@ type OrderTableProps = {
   orders: Order[];
 };
 
+let stateC: String;
+
 function OrderHeader(props: any) {
+  const [state, setState] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setState(event.target.value);
+    stateC = event.target.value;
+  };
+
   function AutorenewOrders() {
     return (
       <IconButton edge="end">
@@ -54,11 +64,34 @@ function OrderHeader(props: any) {
 
   if (props.isOrder)
     return (
-      <Stack direction="row" spacing={1} justifyContent="center">
-        <Typography component="h1" variant="h4" align="center">
-          Your orders, {props.name}
-        </Typography>
-        <AutorenewOrders />
+      <Stack direction="column">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-around"
+        >
+          <Typography component="h1" variant="h4" align="center">
+            Your orders, {props.name}
+          </Typography>
+          <AutorenewOrders />
+        </Stack>
+
+        <FormControl variant="standard">
+          <InputLabel id="select-order-status">Show</InputLabel>
+          <Select
+            labelId="select-order-status"
+            id="select-order-status"
+            value={state}
+            onChange={handleChange}
+            label="show"
+          >
+            <MenuItem value="all">
+              <em>All</em>
+            </MenuItem>
+            <MenuItem value="received">Received</MenuItem>
+            <MenuItem value="shipping">Shipping</MenuItem>
+          </Select>
+        </FormControl>
       </Stack>
     );
   else
@@ -196,12 +229,6 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
 }
 
-const Filter = styled("div")({
-  marginLeft: "1000px",
-});
-
-let stateC: String;
-
 function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User>();
@@ -212,13 +239,6 @@ function Orders(props: any): JSX.Element {
 
   const refreshUser = async () => {
     setUser(await getUser(props.userEmail));
-  };
-
-  const [state, setState] = React.useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setState(event.target.value);
-    stateC = event.target.value;
   };
 
   useEffect(() => {
@@ -233,24 +253,7 @@ function Orders(props: any): JSX.Element {
         refreshOrderList={refreshOrderList}
         name={user?.name}
       />
-      <Filter>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="demo-simple-select-standard-label">Show</InputLabel>
-          <Select
-            labelId="demo-simple-select-standard-label"
-            id="demo-simple-select-standard"
-            value={state}
-            onChange={handleChange}
-            label="show"
-          >
-            <MenuItem value="all">
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value="received">Received</MenuItem>
-            <MenuItem value="shipping">Shipping</MenuItem>
-          </Select>
-        </FormControl>
-      </Filter>
+
       <OrderTable orders={orders} />
     </Container>
   );

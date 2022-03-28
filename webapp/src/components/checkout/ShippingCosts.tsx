@@ -143,6 +143,8 @@ export default function ShippingCosts(props: any): JSX.Element {
     if (activeStep === 0) refreshAddresses(webId);
     // An address has been provided
     if (activeStep === 1) shippingCosts();
+    // If have to go to the next step...
+    if (activeStep === 2) props.handleNext();
   };
 
   const isContinue = () => {
@@ -150,6 +152,8 @@ export default function ShippingCosts(props: any): JSX.Element {
     if (activeStep === 0) return webId === "";
     // we are now at the second: in case no address has been choosen
     if (activeStep === 1) return address === "";
+    // In case we are in the last step, we have to enable the button
+    if (activeStep === 2) return false;
     // By default we will disable it
     return true;
   };
@@ -234,13 +238,12 @@ export default function ShippingCosts(props: any): JSX.Element {
               onClick={handleNext}
               disabled={isContinue()}
             >
-              Continue
+              {activeStep === 2 ? "Next" : "Continue"}
             </Button>
             <Button hidden={activeStep === 0} onClick={handleReset}>
               Reset
             </Button>
           </Stack>
-          <Divider />
         </React.Fragment>
       )}
     </Container>

@@ -5,6 +5,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
 import { calculateTotal } from "../../helpers/ShoppingCartHelper";
 import { CartItem } from "../../shared/shareddtypes";
@@ -64,6 +66,24 @@ export default function Review(props: any) {
           </Typography>
         </ListItem>
       </List>
+
+      <Stack
+        direction={{ xs: "column", sm: "row-reverse" }}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Button
+          variant="contained"
+          onClick={props.handleNext()}
+          className="m-1"
+        >
+          Next
+        </Button>
+
+        <Button onClick={props.handleBack()} variant="outlined" className="m-1">
+          Back
+        </Button>
+      </Stack>
     </React.Fragment>
   );
 }
