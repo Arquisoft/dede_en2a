@@ -10,7 +10,7 @@ import {
   TableBody,
   Typography,
   Container,
-  Grid,
+  LinearProgress,
   Stack,
   Button,
   IconButton,
@@ -34,24 +34,20 @@ import { getOrdersForUser, getUser } from "../../../api/api";
 import FeaturedProducts from "../../FeaturedProducts";
 import StatusMessage from "./StatusMessage";
 
+const ALL = "all";
+const RECEIVED = "received";
+const SHIPPING = "shipping";
+
 type OrderTableItemProps = {
   order: Order;
 };
 
 type OrderTableProps = {
   orders: Order[];
+  state: string;
 };
 
-let stateC: String;
-
 function OrderHeader(props: any) {
-  const [state, setState] = React.useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setState(event.target.value);
-    stateC = event.target.value;
-  };
-
   function AutorenewOrders() {
     return (
       <IconButton edge="end">
@@ -81,15 +77,15 @@ function OrderHeader(props: any) {
           <Select
             labelId="select-order-status"
             id="select-order-status"
-            value={state}
-            onChange={handleChange}
+            value={props.state}
+            onChange={props.handleChange}
             label="show"
           >
-            <MenuItem value="all">
+            <MenuItem value={ALL}>
               <em>All</em>
             </MenuItem>
-            <MenuItem value="received">Received</MenuItem>
-            <MenuItem value="shipping">Shipping</MenuItem>
+            <MenuItem value={RECEIVED}>Received</MenuItem>
+            <MenuItem value={SHIPPING}>Shipping</MenuItem>
           </Select>
         </FormControl>
       </Stack>
@@ -107,7 +103,6 @@ function OrderHeader(props: any) {
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
-  stateC = "all";
 
   return (
     <TableRow hover key={props.order.orderCode}>
@@ -183,14 +178,14 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.orders.filter((val) => {
-                if (stateC == "received" && val.isOrderReceived == true) {
+                if (props.state == RECEIVED && val.isOrderReceived == true) {
                   ordersN.push(val);
                 } else if (
-                  stateC == "shipping" &&
+                  props.state == SHIPPING &&
                   val.isOrderReceived == false
                 ) {
                   ordersN.push(val);
-                } else if (stateC == "all" || stateC == null) {
+                } else if (props.state == ALL || props.state == null) {
                   ordersN = props.orders;
                 }
               })}
@@ -232,6 +227,12 @@ function OrderTable(props: OrderTableProps): JSX.Element {
 function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User>();
+  const [loading, setLoading] = React.useState(false);
+  const [state, setState] = React.useState(ALL);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setState(event.target.value);
+  };
 
   const refreshOrderList = async () => {
     setOrders(await getOrdersForUser());
@@ -242,19 +243,26 @@ function Orders(props: any): JSX.Element {
   };
 
   useEffect(() => {
-    refreshOrderList();
+    setLoading(true); // we start with the loading process
     refreshUser();
+    refreshOrderList().finally(() => setLoading(false)); // loading process must be finished
   }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <OrderHeader
-        isOrder={orders.length > 0}
-        refreshOrderList={refreshOrderList}
-        name={user?.name}
-      />
-
-      <OrderTable orders={orders} />
+      <LinearProgress hidden={!loading} />
+      {!loading && (
+        <React.Fragment>
+          <OrderHeader
+            isOrder={orders.length > 0}
+            refreshOrderList={refreshOrderList}
+            name={user?.name}
+            state={state}
+            handleChange={handleChange}
+          />
+          <OrderTable orders={orders} state={state} />
+        </React.Fragment>
+      )}
     </Container>
   );
 }
