@@ -31,14 +31,6 @@ export default function Checkout(props: any) {
 
   const steps = getSteps();
 
-  const handleUpdateStock = () => {
-    props.productsCart.forEach((cartItem: CartItem) => {
-      let productUnits: number = cartItem.amount;
-      cartItem.product.stock -= productUnits;
-      updateProduct(cartItem.product);
-    });
-  };
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -53,7 +45,6 @@ export default function Checkout(props: any) {
   };
 
   const saveOrderToDB = () => {
-    handleUpdateStock();
     saveOrder(
       props.productsCart,
       costs,
