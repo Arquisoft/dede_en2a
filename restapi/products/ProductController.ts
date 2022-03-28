@@ -5,6 +5,8 @@ import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 import fs from "fs";
 
+
+
 export const getProducts: RequestHandler = async (req, res) => {
   try {
     const products = await productModel.find();
