@@ -12,6 +12,7 @@ import Checkout from "./components/cart/Checkout";
 import ProductDetails from "./components/products/ProductDetails";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
+import ProductList from "./components/dashboard/products/ProductList";
 import Dashboard from "./components/dashboard/Dashboard";
 import UploadProduct from "./components/products/UploadProduct";
 import DeleteProduct from "./components/products/DeleteProduct";
@@ -289,22 +290,23 @@ function App(): JSX.Element {
                 }
               />
               <Route
-                path="product/add"
-                element={<UploadProduct createShop={createShop} />}
-              />
-              <Route
-                path="product/delete"
-                element={
-                  <DeleteProduct products={products} createShop={createShop} />
-                }
-              />
-              <Route
                 path="orders"
                 element={
                   <OrderList userEmail={localStorage.getItem("user.email")} />
                 }
               />
               <Route path="order/:code" element={<OrderDetails />} />
+              <Route path="products" element={<ProductList />} />
+              <Route
+                path="products/add"
+                element={<UploadProduct createShop={createShop} />}
+              />
+              <Route
+                path="products/delete"
+                element={
+                  <DeleteProduct products={products} createShop={createShop} />
+                }
+              />
             </Route>
           </Routes>
           <Footer />
