@@ -40,7 +40,18 @@ export async function getAddressesFromPod(webId: string) {
       await getProfile(addressURL),
       VCARD.street_address
     );
-    if (address) addresses.push(address);
+    let locality = getStringNoLocale(
+      await getProfile(addressURL),
+      VCARD.locality
+    );
+    let region = getStringNoLocale(await getProfile(addressURL), VCARD.region);
+    let postal_code = getStringNoLocale(
+      await getProfile(addressURL),
+      VCARD.postal_code
+    );
+
+    if (address)
+      addresses.push(`${address} - ${locality}, ${region} - ${postal_code}`);
   }
 
   return addresses;

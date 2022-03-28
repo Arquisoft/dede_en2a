@@ -198,7 +198,6 @@ export default function ShippingCosts(props: any): JSX.Element {
     setLoading(true); // we start with the loading process
 
     let destCoords: string = await getCoordinatesFromAddress(address);
-    props.handleCostsCalculated(true);
     props.handleCosts(await calculateShippingCosts(destCoords));
 
     showMapRoute(destCoords)
