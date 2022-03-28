@@ -22,14 +22,17 @@ export const getUser: RequestHandler = async (req, res) => {
 export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
-    const usersaved = await new userModel(req.body).save();
-    sendVerificationEmail(usersaved.email);
+    if (req.body.test !== "true") {
+      // This way we avoid creating infinite users will executing the tests
+      const usersaved = await new userModel(req.body).save();
+      sendVerificationEmail(usersaved.email);
+    }
     res.json(generateToken(req.body.email));
   } catch (error) {
+    console.log(error)
     res.status(412).json({ message: "The data is not valid" });
   }
 };
-
 
 export const verifyUser: RequestHandler = async (req, res) => {
   const userToVerify = await userVerificationModel
