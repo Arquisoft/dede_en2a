@@ -46,10 +46,8 @@ export async function getUser(userEmail: String): Promise<User> {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
-  console.log(process.env.REACT_APP_API_URI);
-  console.log(process.env.REACT_APP_MAPBOY_KEY);
-  let response = await fetch(apiEndPoint + "/products/list");
+  const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
+  let response = await fetch(apiEndPoint + "/products");
   return response.json();
 }
 
@@ -102,13 +100,13 @@ export async function createProduct(image: any, body: any) {
 
 export async function deleteProduct(code: string) {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
-  await fetch(apiEndPoint + "/products/delete/" +code, {
+  await fetch(apiEndPoint + "/products/delete/" + code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.getItem("token") + "",
       email: localStorage.getItem("user.email") + "",
-    }
+    },
   });
 }
 
