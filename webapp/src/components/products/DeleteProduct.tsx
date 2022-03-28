@@ -5,8 +5,9 @@ import { Button } from "react-bootstrap";
 import { NotificationType, Product } from "../../shared/shareddtypes";
 
 import { deleteProduct } from "../../api/api";
-import ConfirmDialog from "./ConfirmDialog";
 import { Navigate } from "react-router-dom";
+import DialogWrapper from "../dialogs/Dialog";
+import Typography from "@mui/material/Typography";
 
 type DeleteProductProps = {
   products: Product[];
@@ -182,12 +183,12 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           </Alert>
         </Snackbar>
 
-        <ConfirmDialog
-          show={dialogOpen}
-          titleText="Are you sure?"
-          contentText="Are you sure you really want to delete this product?"
-          handleConfirm={handleDeleteConfirmed}
-        />
+        <DialogWrapper show={dialogOpen} titleText="Are you sure?" handleConfirm={handleDeleteConfirmed}>
+          <Typography gutterBottom style={{margin: "-1vh 1vw 3vh"}}>
+            Are you sure you really want to delete this product?
+          </Typography>
+        </DialogWrapper>
+
       </React.Fragment>
     );
   } else {

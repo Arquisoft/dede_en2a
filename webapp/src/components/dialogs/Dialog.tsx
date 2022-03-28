@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -7,7 +7,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
@@ -48,15 +47,16 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
     );
 };
 
-type ConfirmDialogProps = {
+type DialogWrapperProps = {
     show: number;
+    hide?: number;
     titleText: string;
-    contentText: string;
-    handleConfirm: Function;
+    handleConfirm?: Function;
+    children: React.ReactNode;
 
 }
 
-export default function ConfirmDialog(props: ConfirmDialogProps) {
+export default function DialogWrapper(props: DialogWrapperProps) {
     const [open, setOpen] = React.useState(false);
     /*const [show, showInfo] = React.useState(false);
 
@@ -68,14 +68,21 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         setOpen(props.show > 0);
     }, [props.show]);
 
+    React.useEffect(() => {
+        setOpen(false);
+    }, [props.hide]);
+
     const handleClose = () => {
         setOpen(false);
     };
 
     const handleConfirm = () => {
-        setOpen(false);
-        props.handleConfirm();
-    };
+            if (props.handleConfirm != null) {
+                setOpen(false);
+                props.handleConfirm();
+            }
+        }
+    ;
 
     return (
         <React.Fragment>
@@ -91,17 +98,20 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
                     {props.titleText}
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
-                    <Typography gutterBottom style={{margin: "-1vh 1vw 3vh"}}>
-                        {props.contentText}
-                    </Typography>
+                    {props.children}
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button autoFocus onClick={handleConfirm}>
-                        Confirm
-                    </Button>
+
+                    {
+                        props.handleConfirm &&
+
+                        <Button autoFocus onClick={handleConfirm}>
+                            Confirm
+                        </Button>
+                    }
                 </DialogActions>
             </BootstrapDialog>
         </React.Fragment>
