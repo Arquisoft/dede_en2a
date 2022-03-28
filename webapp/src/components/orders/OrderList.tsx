@@ -199,7 +199,6 @@ const Filter = styled('div')({
   marginLeft: "1000px",
 });
 
-
 let stateC : String;
 
 function Orders(props: any): JSX.Element {
