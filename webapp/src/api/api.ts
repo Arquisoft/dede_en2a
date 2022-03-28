@@ -47,7 +47,9 @@ export async function getUser(userEmail: String): Promise<User> {
 
 export async function getProducts(): Promise<Product[]> {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
-  let response = await fetch(apiEndPoint + "/products");
+  console.log(process.env.REACT_APP_API_URI);
+  console.log(process.env.REACT_APP_MAPBOY_KEY);
+  let response = await fetch(apiEndPoint + "/products/list");
   return response.json();
 }
 

@@ -46,16 +46,17 @@ jobs:
   docker-push-webapp:
     name: Push webapp Docker Image to GitHub Packages
     runs-on: ubuntu-latest
+    env:
+      API_URI: http://${{ secrets.DEPLOY_HOST }}:5000
+      MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
+      BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
+      PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
+      SKIP_PREFLIGHT_CHECK: true
     needs: [unit-test-webapp, unit-test-restapi]
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@3.04
-        env:
-          API_URI: http://${{ secrets.DEPLOY_HOST }}:5000/
-          MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
-          BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
-          PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: arquisoft/dede_en2a/webapp
           username: ${{ github.actor }}
@@ -65,11 +66,18 @@ jobs:
   docker-push-restapi:
     name: Push restapi Docker Image to GitHub Packages
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{ secrets.PORT }}
+      MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
+      AUTH_PASS: ${{ secrets.AUTH_PASS }}
     needs: [unit-test-webapp, unit-test-restapi]
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@3.04
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: arquisoft/dede_en2a/restapi
           username: ${{ github.actor }}

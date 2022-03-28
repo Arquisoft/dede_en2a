@@ -1,4 +1,4 @@
-require("dotenv").config();
+//require("dotenv").config();
 
 import express, { Application, RequestHandler } from "express";
 import cors from "cors";
@@ -43,8 +43,8 @@ app.use('/uploads', express.static(path.resolve('uploads')))
 app.set('view engine', 'ejs');
 
 app
-  .listen(process.env.PORT, (): void => {
-    console.log("Restapi listening on " + process.env.PORT);
+  .listen(5000, (): void => {
+    console.log("Restapi listening on " + 5000);
   })
   .on("error", (error: Error) => {
     console.error("Error occured: " + error.message);
