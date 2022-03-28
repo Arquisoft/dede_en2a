@@ -85,6 +85,7 @@ jobs:
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
           workdir: restapi
+          buildargs: PORT, MONGO_DB_URI, NODE_ENV, JWT_SECRET, AUTH_EMAIL, AUTH_PASS
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
