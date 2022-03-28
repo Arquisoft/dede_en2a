@@ -8,12 +8,7 @@ import Typography from "@mui/material/Typography";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
 import Badge from "@mui/material/Badge";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import LogoutIcon from "@mui/icons-material/Logout";
-import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
@@ -21,8 +16,14 @@ import MenuList from "@mui/material/MenuList";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import StoreIcon from "@mui/icons-material/Store";
+import Grid from "@mui/material/Grid";
 
-import { Grid } from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+
 import MUISwitch from "./ThemeSlider";
 import ShowByRoles from "./ShowByRoles";
 
@@ -89,11 +90,15 @@ function UserButton(props: any): JSX.Element {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <MenuItem component={Link} to="/orders" onClick={handleCloseUserMenu}>
+          <MenuItem
+            component={Link}
+            to="/dashboard"
+            onClick={handleCloseUserMenu}
+          >
             <ListItemIcon>
-              <MoveToInboxIcon fontSize="small" />
+              <SettingsIcon fontSize="small" />
             </ListItemIcon>
-            <Typography variant="inherit">Orders</Typography>
+            <Typography variant="inherit">Dashboard</Typography>
           </MenuItem>
 
           <LogOut
@@ -112,7 +117,6 @@ function UserButton(props: any): JSX.Element {
       </Link>
     );
 }
-
 
 type NavBarProps = {
   totalUnitsInCart: number;
@@ -168,7 +172,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
 
-        <ShowByRoles userRole={props.userRole}/>
+        <ShowByRoles userRole={props.userRole} />
       </MenuList>
     </Grid>
   );
@@ -236,5 +240,3 @@ export default function NavBar(props: NavBarProps): JSX.Element {
     </Box>
   );
 }
-
-

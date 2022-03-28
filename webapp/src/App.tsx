@@ -13,8 +13,11 @@ import ProductDetails from "./components/products/ProductDetails";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
 import Dashboard from "./components/dashboard/Dashboard";
+import UploadProduct from "./components/products/UploadProduct";
+import DeleteProduct from "./components/products/DeleteProduct";
 
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
 
 import {
   createTheme,
@@ -36,11 +39,7 @@ import {
 } from "./shared/shareddtypes";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-
-import "bootstrap/dist/css/bootstrap.css";
-import "./App.css";
-import UploadImage from "./components/products/UploadProduct";
-import DeleteProduct from "./components/products/DeleteProduct";
+import DashboardContent from "./components/dashboard/DashboardContent";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -269,16 +268,7 @@ function App(): JSX.Element {
               path="sign-up"
               element={<SignUp setCurrentUser={setCurrentUser} />}
             />
-            <Route
-              path="addProduct"
-              element={<UploadImage createShop={createShop} />}
-            />
-            <Route
-              path="deleteProduct"
-              element={
-                <DeleteProduct products={products} createShop={createShop} />
-              }
-            />
+
             <Route
               path="product/:id"
               element={
@@ -289,19 +279,33 @@ function App(): JSX.Element {
                 />
               }
             />
-            <Route
-              path="dashboard"
-              element={
-                <Dashboard userEmail={localStorage.getItem("user.email")} />
-              }
-            />
-            <Route
-              path="orders"
-              element={
-                <OrderList userEmail={localStorage.getItem("user.email")} />
-              }
-            />
-            <Route path="/order/:code" element={<OrderDetails />} />
+            <Route path="dashboard" element={<Dashboard />}>
+              <Route
+                index
+                element={
+                  <DashboardContent
+                    userEmail={localStorage.getItem("user.email")}
+                  />
+                }
+              />
+              <Route
+                path="product/add"
+                element={<UploadProduct createShop={createShop} />}
+              />
+              <Route
+                path="product/delete"
+                element={
+                  <DeleteProduct products={products} createShop={createShop} />
+                }
+              />
+              <Route
+                path="orders"
+                element={
+                  <OrderList userEmail={localStorage.getItem("user.email")} />
+                }
+              />
+              <Route path="order/:code" element={<OrderDetails />} />
+            </Route>
           </Routes>
           <Footer />
 
