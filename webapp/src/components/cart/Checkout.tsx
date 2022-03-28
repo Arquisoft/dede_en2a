@@ -16,7 +16,6 @@ import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 import Billing from "./Billing";
-import { Navigate } from "react-router-dom";
 
 function getSteps() {
   return [
@@ -47,7 +46,7 @@ export default function Checkout(props: any) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
       // We have finished the process...
-      return <Navigate to="/" />;
+      document.location.href = "/";
     }
   };
 
@@ -124,61 +123,56 @@ export default function Checkout(props: any) {
     }
   };
 
-  if (localStorage.getItem("user.email") !== null) {
-    return (
-      <React.Fragment>
-        <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-          <Paper
-            variant="outlined"
-            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+  return (
+    <React.Fragment>
+      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+        <Paper
+          variant="outlined"
+          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+        >
+          <Typography component="h1" variant="h4" align="center">
+            Checkout
+          </Typography>
+          <Stepper
+            activeStep={activeStep}
+            sx={{ pt: 3, pb: 5 }}
+            alternativeLabel
           >
-            <Typography component="h1" variant="h4" align="center">
-              Checkout
-            </Typography>
-            <Stepper
-              activeStep={activeStep}
-              sx={{ pt: 3, pb: 5 }}
-              alternativeLabel
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+
+          <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
+
+          <Stack
+            direction={{ xs: "column", sm: "row-reverse" }}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Button
+              disabled={!isCostsCalculated}
+              hidden={activeStep === getSteps().length}
+              variant="contained"
+              onClick={handleNext}
+              className="m-1"
             >
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
 
-            <React.Fragment>{getStepContent(activeStep)}</React.Fragment>
-
-            <Stack
-              direction={{ xs: "column", sm: "row-reverse" }}
-              justifyContent="space-between"
-              alignItems="center"
+            <Button
+              hidden={activeStep === 0 || activeStep >= 3}
+              onClick={handleBack}
+              variant="outlined"
+              className="m-1"
             >
-              <Button
-                disabled={!isCostsCalculated}
-                hidden={activeStep === getSteps().length}
-                variant="contained"
-                onClick={handleNext}
-                className="m-1"
-              >
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
-
-              <Button
-                hidden={activeStep === 0 || activeStep >= 3}
-                onClick={handleBack}
-                variant="outlined"
-                className="m-1"
-              >
-                Back
-              </Button>
-            </Stack>
-          </Paper>
-        </Container>
-      </React.Fragment>
-    );
-  } else {
-    document.location.href = "/sign-in";
-    return <></>
-  }
+              Back
+            </Button>
+          </Stack>
+        </Paper>
+      </Container>
+    </React.Fragment>
+  );
 }

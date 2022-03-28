@@ -168,7 +168,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           <Typography variant="inherit">Cart</Typography>
         </MenuItem>
 
-        <ShowByRoles/>
+        <ShowByRoles userRole={props.userRole}/>
       </MenuList>
     </Grid>
   );
