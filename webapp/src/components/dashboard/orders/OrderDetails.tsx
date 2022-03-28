@@ -139,7 +139,7 @@ export default function OrderDetails(): JSX.Element {
         Order details
       </Typography>
       <OrderList order={order} />
-      <Link to="/orders" style={{ textDecoration: "none" }}>
+      <Link to="/dashboard/orders" style={{ textDecoration: "none" }}>
         <Button variant="outlined" className="m-1">
           Go back
         </Button>

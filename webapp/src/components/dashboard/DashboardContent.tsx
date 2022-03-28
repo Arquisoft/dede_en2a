@@ -1,5 +1,5 @@
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 import Chart from "./Chart";
@@ -7,7 +7,7 @@ import Orders from "./orders/OrderList";
 
 export default function DashboardContent(props: any) {
   return (
-    <Box sx={{ width: "100%" }}>
+    <Container component="main">
       <Grid
         container
         component="main"
@@ -35,6 +35,6 @@ export default function DashboardContent(props: any) {
           </Paper>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }

@@ -10,6 +10,7 @@ import {
   TableBody,
   Typography,
   Container,
+  LinearProgress,
   Stack,
   Button,
   IconButton,
@@ -33,12 +34,17 @@ import { getOrdersForUser, getUser } from "../../../api/api";
 import FeaturedProducts from "../../FeaturedProducts";
 import StatusMessage from "./StatusMessage";
 
+const ALL = "all";
+const RECEIVED = "received";
+const SHIPPING = "shipping";
+
 type OrderTableItemProps = {
   order: Order;
 };
 
 type OrderTableProps = {
   orders: Order[];
+  state: string;
 };
 
 function OrderHeader(props: any) {
@@ -54,11 +60,34 @@ function OrderHeader(props: any) {
 
   if (props.isOrder)
     return (
-      <Stack direction="row" spacing={1} justifyContent="center">
-        <Typography component="h1" variant="h4" align="center">
-          Your orders, {props.name}
-        </Typography>
-        <AutorenewOrders />
+      <Stack direction="column">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-around"
+        >
+          <Typography component="h1" variant="h4" align="center">
+            Your orders, {props.name}
+          </Typography>
+          <AutorenewOrders />
+        </Stack>
+
+        <FormControl variant="standard">
+          <InputLabel id="select-order-status">Show</InputLabel>
+          <Select
+            labelId="select-order-status"
+            id="select-order-status"
+            value={props.state}
+            onChange={props.handleChange}
+            label="show"
+          >
+            <MenuItem value={ALL}>
+              <em>All</em>
+            </MenuItem>
+            <MenuItem value={RECEIVED}>Received</MenuItem>
+            <MenuItem value={SHIPPING}>Shipping</MenuItem>
+          </Select>
+        </FormControl>
       </Stack>
     );
   else
@@ -74,7 +103,6 @@ function OrderHeader(props: any) {
 
 function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
-  stateC = "all";
 
   return (
     <TableRow hover key={props.order.orderCode}>
@@ -150,14 +178,14 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.orders.filter((val) => {
-                if (stateC == "received" && val.isOrderReceived == true) {
+                if (props.state == RECEIVED && val.isOrderReceived == true) {
                   ordersN.push(val);
                 } else if (
-                  stateC == "shipping" &&
+                  props.state == SHIPPING &&
                   val.isOrderReceived == false
                 ) {
                   ordersN.push(val);
-                } else if (stateC == "all" || stateC == null) {
+                } else if (props.state == ALL || props.state == null) {
                   ordersN = props.orders;
                 }
               })}
@@ -196,15 +224,15 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
 }
 
-const Filter = styled("div")({
-  marginLeft: "1000px",
-});
-
-let stateC: String;
-
 function Orders(props: any): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User>();
+  const [loading, setLoading] = React.useState(false);
+  const [state, setState] = React.useState(ALL);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setState(event.target.value);
+  };
 
   const refreshOrderList = async () => {
     setOrders(await getOrdersForUser());
@@ -214,44 +242,27 @@ function Orders(props: any): JSX.Element {
     setUser(await getUser(props.userEmail));
   };
 
-  const [state, setState] = React.useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setState(event.target.value);
-    stateC = event.target.value;
-  };
-
   useEffect(() => {
-    refreshOrderList();
+    setLoading(true); // we start with the loading process
     refreshUser();
+    refreshOrderList().finally(() => setLoading(false)); // loading process must be finished
   }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <OrderHeader
-        isOrder={orders.length > 0}
-        refreshOrderList={refreshOrderList}
-        name={user?.name}
-      />
-      <Filter>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="demo-simple-select-standard-label">Show</InputLabel>
-          <Select
-            labelId="demo-simple-select-standard-label"
-            id="demo-simple-select-standard"
-            value={state}
-            onChange={handleChange}
-            label="show"
-          >
-            <MenuItem value="all">
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value="received">Received</MenuItem>
-            <MenuItem value="shipping">Shipping</MenuItem>
-          </Select>
-        </FormControl>
-      </Filter>
-      <OrderTable orders={orders} />
+      <LinearProgress hidden={!loading} />
+      {!loading && (
+        <React.Fragment>
+          <OrderHeader
+            isOrder={orders.length > 0}
+            refreshOrderList={refreshOrderList}
+            name={user?.name}
+            state={state}
+            handleChange={handleChange}
+          />
+          <OrderTable orders={orders} state={state} />
+        </React.Fragment>
+      )}
     </Container>
   );
 }

@@ -8,7 +8,7 @@ import Shop from "./components/Shop";
 import ShoppingCart from "./components/cart/ShoppingCart";
 import SignIn from "./components/register/SignIn";
 import SignUp from "./components/register/SignUp";
-import Checkout from "./components/cart/Checkout";
+import Checkout from "./components/checkout/Checkout";
 import ProductDetails from "./components/products/ProductDetails";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
