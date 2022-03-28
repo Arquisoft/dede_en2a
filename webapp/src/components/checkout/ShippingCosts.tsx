@@ -223,12 +223,12 @@ export default function ShippingCosts(props: any): JSX.Element {
   }, []);
 
   return (
-    <Container maxWidth="sm" sx={{ mb: 4 }}>
+    <Container>
       {!loadingPage && (
         <React.Fragment>
           {getStepContent(activeStep)}
           <Stack
-            sx={{ py: 2 }}
+            sx={{ pt: 2 }}
             direction={{ xs: "column", sm: "row-reverse" }}
             justifyContent="space-between"
             alignItems="center"

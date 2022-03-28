@@ -5,7 +5,6 @@ import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-
 import Typography from "@mui/material/Typography";
 
 import { updateProduct } from "../../api/api";
@@ -15,7 +14,7 @@ import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import ShippingCosts from "./ShippingCosts";
 import Review from "./Review";
 import Billing from "./Billing";
-import { Navigate } from "react-router-dom";
+import OrderConfirmation from "./OrderConfirmation";
 
 function getSteps() {
   return [
@@ -29,8 +28,6 @@ function getSteps() {
 export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [costs, setCosts] = React.useState<number>(Number());
-  const [isCostsCalculated, setCostsCalculated] =
-    React.useState<boolean>(false);
 
   const steps = getSteps();
 
@@ -44,20 +41,10 @@ export default function Checkout(props: any) {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    if (activeStep === steps.length - 1) {
-      // We have finished the process...
-      document.location.href = "/";
-    }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    if (activeStep === 1) {
-      // if we came back to the beginning
-      setCostsCalculated(false);
-      setCosts(Number());
-    }
   };
 
   const handlePayed = () => {
@@ -83,8 +70,6 @@ export default function Checkout(props: any) {
           <ShippingCosts
             handleCosts={setCosts}
             costs={costs}
-            handleCostsCalculated={setCostsCalculated}
-            isCostsCalculated={isCostsCalculated}
             userEmail={props.userEmail}
             handleNext={handleNext}
           />
@@ -103,30 +88,12 @@ export default function Checkout(props: any) {
           <Billing
             products={props.productsCart}
             shippingCosts={costs}
+            handleBack={handleBack}
             onPayed={handlePayed}
           />
         );
       case 3:
-        return (
-          <React.Fragment>
-            <Typography component="h2" variant="h6">
-              It's ordered!
-            </Typography>
-            <Typography>
-              We've received your order and will ship your package as as soon as
-              possible.
-            </Typography>
-          </React.Fragment>
-        );
-      default:
-        return (
-          <React.Fragment>
-            <Typography>
-              We are redirecting you to the homepage! See you next time 👋
-            </Typography>
-            <Navigate to="/" />;
-          </React.Fragment>
-        );
+        return <OrderConfirmation />;
     }
   };
 
