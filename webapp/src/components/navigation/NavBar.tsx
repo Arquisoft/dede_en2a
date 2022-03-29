@@ -2,18 +2,17 @@ import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import StoreIcon from "@mui/icons-material/Store";
-import HomeIcon from "@mui/icons-material/Home";
 
 import MUISwitch from "../ThemeSlider";
 import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
+import NavMenu from "./NavMenu";
 
 type NavBarProps = {
   totalUnitsInCart: number;
@@ -22,28 +21,6 @@ type NavBarProps = {
   initialState: boolean;
   userRole: string;
 };
-
-const menuList: {
-  name: string;
-  icon: any;
-  link: string;
-}[] = [
-  {
-    name: "Home",
-    icon: <HomeIcon fontSize="small" />,
-    link: "",
-  },
-  {
-    name: "Shop",
-    icon: <StoreIcon fontSize="small" />,
-    link: "shop",
-  },
-  {
-    name: "Cart",
-    icon: <ShoppingCartIcon fontSize="small" />,
-    link: "cart",
-  },
-];
 
 function Logo() {
   return (
@@ -94,19 +71,32 @@ function ShoppingCartButton(props: any) {
 
 export default function NavBar(props: NavBarProps): JSX.Element {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Drawer menuList={menuList} />
+    <AppBar position="static">
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ px: 2, py: 1 }}
+      >
+        <Stack direction="row" alignItems="center">
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <Drawer orientation="vertical" />
+          </Box>
           <Logo />
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, pl: 5 }}>
+            <NavMenu orientation="row" />
+          </Box>
+        </Stack>
+
+        <Stack direction="row" alignItems="center">
           <ThemeModeSwitch
             changeTheme={props.changeTheme}
             initialState={props.initialState}
           />
           <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
           <UserMenuButton logCurrentUserOut={props.logCurrentUserOut} />
-        </Toolbar>
-      </AppBar>
-    </Box>
+        </Stack>
+      </Stack>
+    </AppBar>
   );
 }

@@ -1,26 +1,13 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
 
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import MenuList from "@mui/material/MenuList";
-import MenuItem from "@mui/material/MenuItem";
-
 import Grid from "@mui/material/Grid";
 
-import ListItemIcon from "@mui/material/ListItemIcon";
 import MenuIcon from "@mui/icons-material/Menu";
+import NavMenu from "./NavMenu";
 
-type DrawerProps = {
-  menuList: {
-    name: string;
-    icon: any;
-    link: string;
-  }[];
-};
-
-export default function Drawer(props: DrawerProps) {
+export default function Drawer(props: any) {
   const [state, setState] = React.useState(false);
 
   const toggleDrawer =
@@ -35,25 +22,6 @@ export default function Drawer(props: DrawerProps) {
 
       setState(open);
     };
-
-  const list = () => (
-    <Grid
-      container
-      alignItems="center"
-      direction="column"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <MenuList>
-        {props.menuList.map((menuItem) => (
-          <MenuItem component={Link} to={menuItem.link}>
-            <ListItemIcon>{menuItem.icon}</ListItemIcon>
-            <Typography variant="inherit">{menuItem.name}</Typography>
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Grid>
-  );
 
   return (
     <React.Fragment>
@@ -73,7 +41,17 @@ export default function Drawer(props: DrawerProps) {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        {list()}
+        {
+          <Grid
+            container
+            alignItems="center"
+            direction="column"
+            onClick={toggleDrawer(false)}
+            onKeyDown={toggleDrawer(false)}
+          >
+            <NavMenu orientation={props.orientation} />
+          </Grid>
+        }
       </SwipeableDrawer>
     </React.Fragment>
   );
