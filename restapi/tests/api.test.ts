@@ -54,7 +54,7 @@ afterAll(async () => {
   mongoose.connection.close();
 });
 
-describe("user ", () => {
+describe("users", () => {
   /**
    * Test that we can get a user without error
    */
@@ -63,6 +63,14 @@ describe("user ", () => {
       "/users/findByEmail/pablo268la@gmail.com"
     );
     expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        name: "Pablo Lopez Amado",
+        webId: "https://pablo268.solidcommunity.net/profile/card#me",
+        email: "pablo268la@gmail.com",
+        verified: true,
+      })
+    );
   });
 
   /**
@@ -78,7 +86,7 @@ describe("user ", () => {
   /**
    * Tests that a user can be created through the productService without throwing any errors.
    */
-  it("can be created correctly", async () => {
+  it("Can create a user correctly", async () => {
     const response: Response = await request(app).post("/users").send({
       name: "name",
       webId: "webId",
@@ -89,5 +97,44 @@ describe("user ", () => {
       test: "true",
     });
     expect(response.statusCode).toBe(200);
+  });
+
+  it("Can get a user token correctly", async () => {
+    const response: Response = await request(app)
+      .post("/users/requestToken/")
+      .send({
+        email: "test",
+        password: "test",
+      });
+    expect(response.statusCode).toBe(200);
+  });
+});
+
+describe("prodcuts", () => {
+  /**
+   * Test that we can get the products without error
+   */
+  it("Can get all products", async () => {
+    const response: Response = await request(app).get("/products");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  /**
+   * Test that we can get a concrete product
+   */
+  it("Can get a product", async () => {
+    const response: Response = await request(app).get(
+      "/products/findByCode/0001"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        code: "0001",
+        name: "Super SUS T-Shirt",
+        price: 9.5,
+        image: "0001.png",
+      })
+    );
   });
 });
