@@ -91,7 +91,7 @@ describe("users", () => {
       name: "name",
       webId: "webId",
       email: "email",
-      password: "password",
+      password: process.env.TEST_PASSWORD,
       verified: "false",
       role: "user",
       test: "true",
@@ -104,7 +104,7 @@ describe("users", () => {
       .post("/users/requestToken/")
       .send({
         email: "test",
-        password: "test",
+        password: process.env.TEST_PASSWORD,
       });
     expect(response.statusCode).toBe(200);
   });
