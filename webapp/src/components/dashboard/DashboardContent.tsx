@@ -1,3 +1,5 @@
+import React from "react";
+
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -7,6 +9,11 @@ import LastMonthOrdersChart from "./charts/LastMonthOrdersChart";
 import TotalOrdersChart from "./charts/TotalOrdersChart";
 import UniqueBuyersChart from "./charts/UniqueBuyersChart";
 import TotalReceivedOrdersChart from "./charts/TotalReceivedOrdersChart";
+
+import {
+  isRenderForModeratorAtLeast,
+  isRenderForAdminOnly,
+} from "../../helpers/RoleHelper";
 
 export default function DashboardContent(props: any) {
   return (
@@ -19,57 +26,63 @@ export default function DashboardContent(props: any) {
         spacing={2}
         sx={{ mt: 2 }}
       >
-        <Grid item xs={11}>
-          <Paper
-            sx={{
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              height: 260,
-            }}
-          >
-            <LastMonthOrdersChart />
-          </Paper>
-        </Grid>
+        {isRenderForModeratorAtLeast() && (
+          <Grid item xs={11}>
+            <Paper
+              sx={{
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                height: 260,
+              }}
+            >
+              <LastMonthOrdersChart />
+            </Paper>
+          </Grid>
+        )}
 
-        <Grid item xs={4} md={3}>
-          <Paper
-            sx={{
-              p: { xs: 1, md: 2 },
-              display: "flex",
-              flexDirection: "column",
-              height: { xs: 160, md: 140 },
-            }}
-          >
-            <TotalOrdersChart />
-          </Paper>
-        </Grid>
+        {isRenderForAdminOnly() && (
+          <React.Fragment>
+            <Grid item xs={4} md={3}>
+              <Paper
+                sx={{
+                  p: { xs: 1, md: 2 },
+                  display: "flex",
+                  flexDirection: "column",
+                  height: { xs: 160, md: 140 },
+                }}
+              >
+                <TotalOrdersChart />
+              </Paper>
+            </Grid>
 
-        <Grid item xs={4}>
-          <Paper
-            sx={{
-              p: { xs: 1, md: 2 },
-              display: "flex",
-              flexDirection: "column",
-              height: { xs: 160, md: 140 },
-            }}
-          >
-            <TotalReceivedOrdersChart />
-          </Paper>
-        </Grid>
+            <Grid item xs={4}>
+              <Paper
+                sx={{
+                  p: { xs: 1, md: 2 },
+                  display: "flex",
+                  flexDirection: "column",
+                  height: { xs: 160, md: 140 },
+                }}
+              >
+                <TotalReceivedOrdersChart />
+              </Paper>
+            </Grid>
 
-        <Grid item xs={3} md={4}>
-          <Paper
-            sx={{
-              p: { xs: 1, md: 2 },
-              display: "flex",
-              flexDirection: "column",
-              height: { xs: 160, md: 140 },
-            }}
-          >
-            <UniqueBuyersChart />
-          </Paper>
-        </Grid>
+            <Grid item xs={3} md={4}>
+              <Paper
+                sx={{
+                  p: { xs: 1, md: 2 },
+                  display: "flex",
+                  flexDirection: "column",
+                  height: { xs: 160, md: 140 },
+                }}
+              >
+                <UniqueBuyersChart />
+              </Paper>
+            </Grid>
+          </React.Fragment>
+        )}
 
         <Grid item xs={11}>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>

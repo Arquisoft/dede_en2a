@@ -84,7 +84,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           </Box>
           <Logo />
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, pl: 5 }}>
-            <NavMenu orientation="row" />
+            <NavMenu orientation="horizontal" />
           </Box>
         </Stack>
 
