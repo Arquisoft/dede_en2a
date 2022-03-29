@@ -45,12 +45,21 @@ export default function SignIn(props: SignInProps) {
 
   const signIn = async () => {
     const correctSingIn = await checkUser(email, password);
-    if (correctSingIn) {
-      props.setCurrentUser(await getUser(email));
-      setRedirect(true);
-    } else {
-      sendErrorNotification("Invalid email or password");
-    }
+    getUser(email).then(
+      (user) => {
+        if (correctSingIn) {
+          props.setCurrentUser(user);
+          setRedirect(true);
+        } else {
+          if (!user.verified)
+            sendErrorNotification(
+              "You have to verify your account before logging in"
+            );
+          else sendErrorNotification("Invalid email or password");
+        }
+      },
+      () => sendErrorNotification("User is not registered")
+    );
   };
 
   const sendErrorNotification = (msg: string) => {

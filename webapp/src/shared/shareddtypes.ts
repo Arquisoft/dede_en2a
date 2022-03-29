@@ -6,6 +6,7 @@ export type User = {
   email: string;
   password: string;
   role: string;
+  verified: boolean;
 };
 
 export type Product = {
@@ -30,10 +31,10 @@ export type CartItem = {
 export type Order = {
   orderCode: string;
   userEmail: string;
-  userAddress: string,
+  userAddress: string;
   products: Product[];
-  date: Date,
-  subtotalPrice: number,
+  date: Date;
+  subtotalPrice: number;
   shippingPrice: number;
   totalPrice: number;
   isOrderReceived: boolean;

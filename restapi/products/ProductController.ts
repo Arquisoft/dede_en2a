@@ -4,8 +4,6 @@ import { userModel } from "../users/User";
 import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 
-
-
 export const getProducts: RequestHandler = async (req, res) => {
   try {
     const products = await productModel.find();
@@ -53,7 +51,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
     req.headers.email + ""
   );
   const user = await userModel.findOne({ email: req.headers.email });
-  console.log(user)
+  console.log(user);
   if (isVerified && user.role === "admin") {
     try {
       const productFound = await productModel.deleteOne({
