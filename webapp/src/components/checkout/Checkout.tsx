@@ -12,6 +12,7 @@ import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 
 import ShippingCosts from "./ShippingCosts";
+import ShippingMethod from "./ShippingMethod";
 import Review from "./Review";
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
@@ -19,6 +20,7 @@ import OrderConfirmation from "./OrderConfirmation";
 function getSteps() {
   return [
     "Shipping address",
+    "Shipping method",
     "Review your order",
     "Billing Info",
     "Order confirmation",
@@ -27,6 +29,7 @@ function getSteps() {
 
 export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [address, setAddress] = React.useState("");
   const [costs, setCosts] = React.useState<number>(Number());
 
   const steps = getSteps();
@@ -70,11 +73,15 @@ export default function Checkout(props: any) {
           <ShippingCosts
             handleCosts={setCosts}
             costs={costs}
+            address={address}
+            setAddress={setAddress}
             userEmail={props.userEmail}
             handleNext={handleNext}
           />
         );
       case 1:
+        return <ShippingMethod address={address} />;
+      case 2:
         return (
           <Review
             productsCart={props.productsCart}
@@ -83,7 +90,7 @@ export default function Checkout(props: any) {
             handleNext={handleNext}
           />
         );
-      case 2:
+      case 3:
         return (
           <Billing
             products={props.productsCart}
@@ -92,7 +99,7 @@ export default function Checkout(props: any) {
             onPayed={handlePayed}
           />
         );
-      case 3:
+      case 4:
         return <OrderConfirmation />;
     }
   };

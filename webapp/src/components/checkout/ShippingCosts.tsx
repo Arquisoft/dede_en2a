@@ -107,7 +107,6 @@ export default function ShippingCosts(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
   const [webId, setWebId] = React.useState("");
   const [addresses, setAddresses] = React.useState<string[]>([]);
-  const [address, setAddress] = React.useState("");
   const [map, setMap] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [loadingPage, setLoadingPage] = React.useState(false);
@@ -151,7 +150,7 @@ export default function ShippingCosts(props: any): JSX.Element {
     // We are at the first step: in case no webId has been provided
     if (activeStep === 0) return webId === "";
     // we are now at the second: in case no address has been choosen
-    if (activeStep === 1) return address === "";
+    if (activeStep === 1) return props.address === "";
     // In case we are in the last step, we have to enable the button
     if (activeStep === 2) return false;
     // By default we will disable it
@@ -164,7 +163,7 @@ export default function ShippingCosts(props: any): JSX.Element {
     // We reset all values to default
     setWebId("");
     setAddresses([]);
-    setAddress("");
+    props.setAddress("");
     setMap("");
   };
 
@@ -175,8 +174,8 @@ export default function ShippingCosts(props: any): JSX.Element {
       case 1:
         return (
           <StreetAddressesStep
-            address={address}
-            setAddress={setAddress}
+            address={props.address}
+            setAddress={props.setAddress}
             addresses={addresses}
             loading={loading}
           />
@@ -186,7 +185,7 @@ export default function ShippingCosts(props: any): JSX.Element {
           <MapStep
             map={map}
             costs={props.costs}
-            address={address}
+            address={props.address}
             loading={loading}
           />
         );
@@ -197,7 +196,7 @@ export default function ShippingCosts(props: any): JSX.Element {
   const shippingCosts = async () => {
     setLoading(true); // we start with the loading process
 
-    let destCoords: string = await getCoordinatesFromAddress(address);
+    let destCoords: string = await getCoordinatesFromAddress(props.address);
     props.handleCosts(await calculateShippingCosts(destCoords));
 
     showMapRoute(destCoords)
