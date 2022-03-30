@@ -8,9 +8,9 @@ import apiUser from "../users/UserRoutes";
 import apiProduct from "../products/ProductRoutes";
 import apiOrders from "../orders/OrderRoutes";
 import apiReviews from "../reviews/ReviewRoutes";
+import { Server } from "http";
 
-require('dotenv').config()
-
+var server: Server;
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 
@@ -45,7 +45,7 @@ beforeAll(async () => {
   app.use("/uploads", express.static(path.resolve("uploads")));
   app.set("view engine", "ejs");
 
-  app.listen(5000);
+  server = app.listen(5000);
 
   mongoose.connect(connectionString, {
     useNewUrlParser: true,
@@ -54,6 +54,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  server.close()
   mongoose.connection.close();
 });
 
@@ -88,6 +89,7 @@ describe("users", () => {
 
   /**
    * Tests that a user can be created through the productService without throwing any errors.
+   * Also test that the requests returns a string, that will be the token
    */
   it("Can create a user correctly", async () => {
     const response: Response = await request(app).post("/users").send({
@@ -97,9 +99,9 @@ describe("users", () => {
       password: "test",
       verified: "false",
       role: "user",
-      test: "true",
     });
     expect(response.statusCode).toBe(200);
+    expect(typeof response.body).toBe('string');
   });
 
   it("Can get a user token correctly", async () => {

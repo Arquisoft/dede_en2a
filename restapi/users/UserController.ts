@@ -23,7 +23,7 @@ export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const usersaved = await new userModel(req.body).save();
-    if (req.body.test !== "true") {
+    if (process.env.MONGO_DB_URI !== undefined) {
       sendVerificationEmail(usersaved.email);
     }
     res.json(generateToken(req.body.email));
