@@ -11,7 +11,6 @@ import {
   Typography,
   Container,
   Stack,
-  Button,
   IconButton,
   Tooltip,
   TablePagination,
@@ -23,6 +22,10 @@ import { Autorenew, Add, Remove } from "@mui/icons-material";
 
 import { Product } from "../../../shared/shareddtypes";
 import { getProducts } from "../../../api/api";
+import {
+  isRenderForModeratorAtLeast,
+  isRenderForAdminOnly,
+} from "../../../helpers/RoleHelper";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,17 +58,21 @@ function ProductsHeader(props: any) {
       </Typography>
       <AutorenewOrders refreshOrderList={props.refreshOrderList} />
 
-      <IconButton edge="end">
-        <Tooltip title="Add a new product" arrow>
-          <Add onClick={() => navigate("/dashboard/products/add")} />
-        </Tooltip>
-      </IconButton>
+      {isRenderForModeratorAtLeast() && (
+        <IconButton edge="end">
+          <Tooltip title="Add a new product" arrow>
+            <Add onClick={() => navigate("/dashboard/products/add")} />
+          </Tooltip>
+        </IconButton>
+      )}
 
-      <IconButton edge="end">
-        <Tooltip title="Delete a product" arrow>
-          <Remove onClick={() => navigate("/dashboard/products/delete")} />
-        </Tooltip>
-      </IconButton>
+      {isRenderForAdminOnly() && (
+        <IconButton edge="end">
+          <Tooltip title="Delete a product" arrow>
+            <Remove onClick={() => navigate("/dashboard/products/delete")} />
+          </Tooltip>
+        </IconButton>
+      )}
     </Stack>
   );
 }
@@ -149,7 +156,7 @@ export default function Products(props: any): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
 
   const refreshProductList = async () => {
-    setProducts(await getProducts());
+    getProducts().then((products) => setProducts(products));
   };
 
   useEffect(() => {

@@ -1,5 +1,4 @@
-import * as React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -8,6 +7,8 @@ import Paper from "@mui/material/Paper";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+
+import { isRenderForModeratorAtLeast } from "../../helpers/RoleHelper";
 
 export default function DashboardSideBar() {
   return (
@@ -28,12 +29,14 @@ export default function DashboardSideBar() {
           label="Orders"
           icon={<MoveToInboxIcon />}
         />
-        <BottomNavigationAction
-          component={Link}
-          to="products"
-          label="Products"
-          icon={<LocalOfferIcon />}
-        />
+        {isRenderForModeratorAtLeast() && (
+          <BottomNavigationAction
+            component={Link}
+            to="products"
+            label="Products"
+            icon={<LocalOfferIcon />}
+          />
+        )}
       </BottomNavigation>
     </Paper>
   );

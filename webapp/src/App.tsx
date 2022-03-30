@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import NavBar from "./components/NavBar";
+import NavBar from "./components/navigation/NavBar";
 import DedeApp from "./components/DedeApp";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
@@ -65,6 +65,7 @@ function App(): JSX.Element {
 
   const setCurrentUser = (user: User) => {
     localStorage.setItem("user.email", user.email);
+    localStorage.setItem("user.role", user.role);
     setNotificationStatus(true);
     setNotification({
       severity: "success",
@@ -75,6 +76,7 @@ function App(): JSX.Element {
 
   const logCurrentUserOut = () => {
     localStorage.removeItem("user.email");
+    localStorage.removeItem("user.role");
     localStorage.removeItem("token");
     setNotificationStatus(true);
     setNotification({

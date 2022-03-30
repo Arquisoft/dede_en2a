@@ -152,6 +152,12 @@ export async function getOrdersForUser(): Promise<Order[]> {
   return response.json();
 }
 
+export async function getOrders(): Promise<Order[]> {
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
+  let response = await fetch(apiEndPoint + "/orders/list/");
+  return response.json();
+}
+
 export async function getReviewsByCode(code: string): Promise<Review[]> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
   let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
