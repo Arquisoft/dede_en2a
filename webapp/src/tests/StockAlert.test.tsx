@@ -1,4 +1,4 @@
-import React from "React";
+import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import StockAlert from "../components/StockAlert";
 
