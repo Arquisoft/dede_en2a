@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   Box,
   Card,
@@ -8,9 +9,9 @@ import {
   Stack,
   styled,
   TextField,
+  Alert,
+  Button,
 } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import { Button } from "react-bootstrap";
 
 import { createProduct, getProducts } from "../../../api/api";
 import {
@@ -18,7 +19,6 @@ import {
   checkTextField,
 } from "../../../helpers/CheckFieldsHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
-import { Navigate } from "react-router-dom";
 
 const DEF_IMAGE: string = require("../../../images/not-found.png");
 
@@ -131,144 +131,137 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
     };
   }
 
-  if (
-    localStorage.getItem("role") === "admin" ||
-    localStorage.getItem("role") === "manager"
-  ) {
-    return (
-      <React.Fragment>
-        <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
-          <Paper
-            variant="outlined"
-            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-          >
-            <h1 style={{ margin: 8 }}>Upload a product</h1>
-
-            <Stack
-              direction="row"
-              spacing={2}
-              justifyContent="space-evenly"
-              alignItems="stretch"
-            >
-              <div id="textInput">
-                <TextField
-                  value={code}
-                  id="outlined-full-width"
-                  label="Product code"
-                  style={{ margin: 8 }}
-                  type="number"
-                  fullWidth
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  onChange={(event) => setCode(event.target.value)}
-                />
-
-                <TextField
-                  value={name}
-                  id="outlined-full-width"
-                  label="Product name"
-                  style={{ margin: 8 }}
-                  fullWidth
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  onChange={(event) => setName(event.target.value)}
-                />
-
-                <TextField
-                  value={description}
-                  id="outlined-full-width"
-                  label="Product description"
-                  style={{ margin: 8 }}
-                  fullWidth
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  onChange={(event) => setDescription(event.target.value)}
-                />
-
-                <TextField
-                  value={price}
-                  id="outlined-full-width"
-                  label="Product price"
-                  style={{ margin: 8 }}
-                  fullWidth
-                  required
-                  margin="normal"
-                  type="number"
-                  variant="outlined"
-                  onChange={(event) => {
-                    if (parseInt(event.target.value) < 0) setPrice(0 + "");
-                    else setPrice(parseFloat(event.target.value).toString());
-                  }}
-                  inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                />
-
-                <TextField
-                  value={stock}
-                  id="outlined-full-width"
-                  label="Product stock"
-                  style={{ margin: 8 }}
-                  fullWidth
-                  type="number"
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  onChange={(event) => {
-                    if (parseInt(event.target.value) < 0) setStock(0 + "");
-                    else setStock(parseInt(event.target.value).toString());
-                  }}
-                  inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                />
-              </div>
-
-              <Box alignItems="center">
-                <TextField
-                  id="outlined-full-width"
-                  label="Image Upload"
-                  style={{ margin: 8 }}
-                  name="upload-photo"
-                  type="file"
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="outlined"
-                  onChange={handleChange}
-                />
-
-                <Card style={{ margin: 8 }}>
-                  <Img src={image} />
-                </Card>
-              </Box>
-            </Stack>
-
-            <Box textAlign="center">
-              <Button onClick={checkFields}> Submit </Button>
-            </Box>
-          </Paper>
-        </Container>
-
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
+  return (
+    <React.Fragment>
+      <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+        <Paper
+          variant="outlined"
+          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
         >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
-      </React.Fragment>
-    );
-  } else {
-    return <Navigate to="/" />;
-  }
+          <h1 style={{ margin: 8 }}>Upload a product</h1>
+
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="space-evenly"
+            alignItems="stretch"
+          >
+            <div id="textInput">
+              <TextField
+                value={code}
+                id="outlined-full-width"
+                label="Product code"
+                style={{ margin: 8 }}
+                type="number"
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                onChange={(event) => setCode(event.target.value)}
+              />
+
+              <TextField
+                value={name}
+                id="outlined-full-width"
+                label="Product name"
+                style={{ margin: 8 }}
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                onChange={(event) => setName(event.target.value)}
+              />
+
+              <TextField
+                value={description}
+                id="outlined-full-width"
+                label="Product description"
+                style={{ margin: 8 }}
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                onChange={(event) => setDescription(event.target.value)}
+              />
+
+              <TextField
+                value={price}
+                id="outlined-full-width"
+                label="Product price"
+                style={{ margin: 8 }}
+                fullWidth
+                required
+                margin="normal"
+                type="number"
+                variant="outlined"
+                onChange={(event) => {
+                  if (parseInt(event.target.value) < 0) setPrice(0 + "");
+                  else setPrice(parseFloat(event.target.value).toString());
+                }}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              />
+
+              <TextField
+                value={stock}
+                id="outlined-full-width"
+                label="Product stock"
+                style={{ margin: 8 }}
+                fullWidth
+                type="number"
+                required
+                margin="normal"
+                variant="outlined"
+                onChange={(event) => {
+                  if (parseInt(event.target.value) < 0) setStock(0 + "");
+                  else setStock(parseInt(event.target.value).toString());
+                }}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              />
+            </div>
+
+            <Box alignItems="center">
+              <TextField
+                id="outlined-full-width"
+                label="Image Upload"
+                style={{ margin: 8 }}
+                name="upload-photo"
+                type="file"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                onChange={handleChange}
+              />
+
+              <Card style={{ margin: 8 }}>
+                <Img src={image} />
+              </Card>
+            </Box>
+          </Stack>
+
+          <Box textAlign="center">
+            <Button onClick={checkFields}> Submit </Button>
+          </Box>
+        </Paper>
+      </Container>
+
+      <Snackbar
+        open={notificationStatus}
+        autoHideDuration={3000}
+        onClose={() => {
+          setNotificationStatus(false);
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <Alert severity={notification.severity} sx={{ width: "100%" }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
+    </React.Fragment>
+  );
 }

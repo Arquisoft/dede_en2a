@@ -23,6 +23,15 @@ export const getOrder: RequestHandler = async (req, res) => {
   }
 };
 
+export const getOrders: RequestHandler = async (req, res) => {
+  try {
+    const orders = await orderModel.find();
+    return res.json(orders);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 export const getUserOrders: RequestHandler = async (req, res) => {
   const isVerified = verifyToken(
     req.headers.token + "",
