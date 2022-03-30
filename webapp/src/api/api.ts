@@ -78,8 +78,7 @@ export async function getPlaces(
     y +
     "&limit=" +
     maxResults +
-    "&apiKey=" +
-    process.env.REACT_APP_GEOAPIFY_KEY;
+    "&apiKey=7ce2223b21114b98b42821edfef62190";
 
   let places;
   await fetch(url, {

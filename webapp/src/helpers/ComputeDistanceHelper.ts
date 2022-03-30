@@ -79,11 +79,20 @@ function getRouteImage(destCoords: String) {
     });
 }
 
-export async function getNearByPlaces(address: String, radiusMeters: number, maxResults: number) {
+export async function getNearByPlaces(
+  address: String,
+  radiusMeters: number,
+  maxResults: number
+) {
   let coords = await calculateCoordinates(address);
   const x = coords.features[0].geometry.coordinates[0];
   const y = coords.features[0].geometry.coordinates[1];
 
   const places = await getPlaces(x, y, radiusMeters, maxResults);
-  console.log(places);
+
+  let addresses: string[] = new Array();
+  for (let i = 0; i < places.features.length; i++)
+    addresses.push(places.features[i].properties.formatted);
+  console.log(addresses);
+  return addresses;
 }

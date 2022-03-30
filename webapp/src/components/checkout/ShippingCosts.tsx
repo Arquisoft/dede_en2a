@@ -12,16 +12,16 @@ import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 
-import { getUser } from "../../api/api";
-
 import WebIdRadioGroup from "../WebIdRadioGroup";
 
 import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
+  getNearByPlaces,
 } from "../../helpers/ComputeDistanceHelper";
 import { getAddressesFromPod } from "../../helpers/SolidHelper";
+import { getUser } from "../../api/api";
 
 function WebIdStep(props: any) {
   return (
