@@ -202,15 +202,15 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.orders.filter((val) => {
-                if (props.state == RECEIVED && val.isOrderReceived == true)
-                  orders.push(val);
+              {props.orders.forEach((order) => {
+                if (props.state === RECEIVED && order.isOrderReceived === true)
+                  orders.push(order);
                 else if (
-                  props.state == SHIPPING &&
-                  val.isOrderReceived == false
+                  props.state === SHIPPING &&
+                  order.isOrderReceived === false
                 ) {
-                  orders.push(val);
-                } else if (props.state == ALL || props.state == null) {
+                  orders.push(order);
+                } else if (props.state === ALL || props.state === null) {
                   orders = props.orders;
                 }
               })}
