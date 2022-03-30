@@ -12,6 +12,7 @@ import {
   Container,
   LinearProgress,
   Stack,
+  Grid,
   Button,
   IconButton,
   Divider,
@@ -29,6 +30,7 @@ import {
 import { Autorenew } from "@mui/icons-material";
 
 import { Order, User } from "../../../shared/shareddtypes";
+import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
 import { getOrdersForUser, getUser } from "../../../api/api";
 
 import FeaturedProducts from "../../FeaturedProducts";
@@ -47,56 +49,81 @@ type OrderTableProps = {
   state: string;
 };
 
+function OrderFilter(props: any) {
+  return (
+    <FormControl variant="standard">
+      <InputLabel id="select-order-status">Show</InputLabel>
+      <Select
+        labelId="select-order-status"
+        id="select-order-status"
+        value={props.state}
+        onChange={props.handleChange}
+        label="show"
+      >
+        <MenuItem value={ALL}>
+          <em>All</em>
+        </MenuItem>
+        <MenuItem value={RECEIVED}>Received</MenuItem>
+        <MenuItem value={SHIPPING}>Shipping</MenuItem>
+      </Select>
+    </FormControl>
+  );
+}
+
+function AutorenewOrders(props: any) {
+  return (
+    <IconButton edge="end">
+      <Tooltip title="Refresh orders" arrow>
+        <Autorenew onClick={props.refreshOrderList}></Autorenew>
+      </Tooltip>
+    </IconButton>
+  );
+}
+
+function OrderTitle(props: any) {
+  return (
+    <Grid container alignItems="center">
+      <Grid item xs={11}>
+        <Typography component="h1" variant="h4" align="center">
+          {props.title}
+        </Typography>
+      </Grid>
+      <Grid item xs={1}>
+        <AutorenewOrders refreshOrderList={props.refreshOrderList} />
+      </Grid>
+
+      <OrderFilter state={props.state} handleChange={props.handleChange} />
+    </Grid>
+  );
+}
+
 function OrderHeader(props: any) {
-  function AutorenewOrders() {
-    return (
-      <IconButton edge="end">
-        <Tooltip title="Refresh orders" arrow>
-          <Autorenew onClick={props.refreshOrderList}></Autorenew>
-        </Tooltip>
-      </IconButton>
-    );
-  }
-
-  if (props.isOrder)
-    return (
-      <Stack direction="column">
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-around"
-        >
-          <Typography component="h1" variant="h4" align="center">
-            Your orders, {props.name}
-          </Typography>
-          <AutorenewOrders />
-        </Stack>
-
-        <FormControl variant="standard">
-          <InputLabel id="select-order-status">Show</InputLabel>
-          <Select
-            labelId="select-order-status"
-            id="select-order-status"
-            value={props.state}
-            onChange={props.handleChange}
-            label="show"
-          >
-            <MenuItem value={ALL}>
-              <em>All</em>
-            </MenuItem>
-            <MenuItem value={RECEIVED}>Received</MenuItem>
-            <MenuItem value={SHIPPING}>Shipping</MenuItem>
-          </Select>
-        </FormControl>
-      </Stack>
-    );
-  else
+  if (props.isOrder) {
+    if (isRenderForAdminOnly()) {
+      return (
+        <OrderTitle
+          state={props.state}
+          handleChange={props.handleChange}
+          title="Welcome back Admin!"
+          refreshOrderList={props.refreshOrderList}
+        />
+      );
+    } else
+      return (
+        <OrderTitle
+          state={props.state}
+          handleChange={props.handleChange}
+          title={"Your orders, " + props.name}
+          refreshOrderList={props.refreshOrderList}
+        />
+      );
+  } else
     return (
       <Stack direction="row" spacing={1} justifyContent="center">
         <Typography component="h1" variant="h4" align="center">
           No orders have been made
         </Typography>
-        <AutorenewOrders />
+        <AutorenewOrders refreshOrderList={props.refreshOrderList} />
       </Stack>
     );
 }
