@@ -59,6 +59,34 @@ export async function getProduct(productCode: string): Promise<Product> {
   return response.json();
 }
 
+export async function getPlaces(
+  x: number,
+  y: number,
+  radiusMeters: number,
+  maxResults: number
+): Promise<any> {
+  const url =
+    "https://api.geoapify.com/v2/places?categories=commercial&filter=circle:" +
+    x +
+    "," +
+    y +
+    "," +
+    radiusMeters +
+    "&bias=proximity:" +
+    x +
+    "," +
+    y +
+    "&limit=" +
+    maxResults +
+    "&apiKey=7ce2223b21114b98b42821edfef62190";
+
+  let places;
+  await fetch(url, {
+    method: "GET",
+  }).then((response) => (places = response.json()));
+  return places;
+}
+
 export async function updateProduct(product: Product) {
   const apiEndPoint = process.env.REACT_APP_ARI_URI || "http://localhost:5000";
   await fetch(apiEndPoint + "/products/update/" + product.code, {
