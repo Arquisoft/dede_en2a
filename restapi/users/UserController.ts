@@ -22,9 +22,8 @@ export const getUser: RequestHandler = async (req, res) => {
 export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
+    const usersaved = await new userModel(req.body).save();
     if (req.body.test !== "true") {
-      // This way we avoid creating infinite users will executing the tests
-      const usersaved = await new userModel(req.body).save();
       sendVerificationEmail(usersaved.email);
     }
     res.json(generateToken(req.body.email));

@@ -9,14 +9,17 @@ import apiProduct from "../products/ProductRoutes";
 import apiOrders from "../orders/OrderRoutes";
 import apiReviews from "../reviews/ReviewRoutes";
 
+require('dotenv').config()
+
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 let helmet = require("helmet");
 
 const app: Application = express();
 
 const mongoose = require("mongoose");
-const connectionString = process.env.MONGO_DB_URI;
+const connectionString = "mongodb+srv://test:test@cluster0.uzcmm.mongodb.net/test?retryWrites=true&w=majority";
 
 const options: cors.CorsOptions = {
   origin: ["http://localhost:3000"],
@@ -90,8 +93,8 @@ describe("users", () => {
     const response: Response = await request(app).post("/users").send({
       name: "name",
       webId: "webId",
-      email: "email",
-      password: process.env.TEST_PASSWORD,
+      email: uuidv4(),
+      password: "test",
       verified: "false",
       role: "user",
       test: "true",
@@ -104,7 +107,7 @@ describe("users", () => {
       .post("/users/requestToken/")
       .send({
         email: "test",
-        password: process.env.TEST_PASSWORD,
+        password: "test",
       });
     expect(response.statusCode).toBe(200);
   });
