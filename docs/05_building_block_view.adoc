@@ -78,12 +78,13 @@ Actor Juan
 
 Component Interface{
     Component vi as "Views"{
+       Component ho as "Home"
+       Component sh as "Shopping cart"
+       Component sho as "Shop"
        Component lo as "Sign in"
        Component re as "Sign up"
-       Component out as "Log out"
-       Component ho as "Home"
+       Component out as "Log out"       
        Component my as "Orders"
-       Component sh as "Shopping cart"
        Component ck as "Check out"
     }    
 }
@@ -98,17 +99,19 @@ Component pod as "Pod's service"
 Database db as "MongoDB"
 Juan -right->Interface: interacts
 
-re -down-> sol
+re -right-> sol
 ck -down-> sol
+
+re-right->res
+sho-right->res
+lo-right->res
+sh-right->res
+my-right->res
+
 
 ck -down-> pay
 
-lo -down-> res
-re -down-> res 
-my -down-> res
-my -down-> res
-ho -down-> res
-sh -down-> res
+
 
 sol <-down-> pod:acceses
 res <-down-> db:data
@@ -124,11 +127,15 @@ Contained Building Blocks::
 |===
 |Name| Description
 |Views | Parts of the application which the user is going to interact with during experience with the system
+|Home |  Initial screen for the application
+|Shop | View where all the products are show 
+|Shopping cart | The user has a shoppin cart where he will can see the products previosly selected and change the amount of the product.
 |Sign in |  Here the user will log in into their personal account if they have previously created one
 |Sign up | Allows the client to create a new account for the application
-|Log out | It signs out the application from the last user.
-|Home |  Initial screen for the application 
 |Orders | Here the user can find any information related with their deliveries, like their state or details
-|Account | In this part the client is going to be able to perform any operation in their account like introducing new data or removing it
+|Log out | It signs out the application from the last user.
+|Check out | In the check out the user can finish with his purchase.
+|Restapi | The application asks the restapi for the information needed and this asks and returns it from the MongoDB.
+|PayPal Api | Api from PayPal used in the checkout for the users to pay their purchase.
 |===
 ****
