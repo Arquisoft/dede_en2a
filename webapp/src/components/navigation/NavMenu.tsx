@@ -39,6 +39,7 @@ export default function NavMenu(props: any) {
           component={Link}
           to={menuItem.link}
           startIcon={menuItem.icon}
+          key={menuItem.name}
           sx={{ color: "text.primary" }}
         >
           {menuItem.name}

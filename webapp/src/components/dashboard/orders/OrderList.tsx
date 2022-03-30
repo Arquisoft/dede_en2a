@@ -106,7 +106,9 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
 
   return (
     <TableRow hover key={props.order.orderCode}>
-      <TableCell align="center">{props.order.orderCode}</TableCell>
+      <TableCell align="center" component="th" scope="row">
+        {props.order.orderCode}
+      </TableCell>
       <TableCell align="center">{props.order.subtotalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
@@ -139,10 +141,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 function OrderTable(props: OrderTableProps): JSX.Element {
+  let orders: Order[] = [];
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
-
-  let ordersN: Order[] = [];
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -156,10 +158,6 @@ function OrderTable(props: OrderTableProps): JSX.Element {
   ) => {
     setPage(0);
   };
-
-  const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, props.orders.length - page * rowsPerPage);
 
   if (props.orders.length > 0)
     return (
@@ -178,35 +176,28 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.orders.filter((val) => {
-                if (props.state == RECEIVED && val.isOrderReceived == true) {
-                  ordersN.push(val);
-                } else if (
+                if (props.state == RECEIVED && val.isOrderReceived == true)
+                  orders.push(val);
+                else if (
                   props.state == SHIPPING &&
                   val.isOrderReceived == false
                 ) {
-                  ordersN.push(val);
+                  orders.push(val);
                 } else if (props.state == ALL || props.state == null) {
-                  ordersN = props.orders;
+                  orders = props.orders;
                 }
               })}
-
-              {ordersN
+              {orders
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((order: Order) => {
-                  return <OrderTableItem order={order} />;
+                  return <OrderTableItem key={order.orderCode} order={order} />;
                 })}
-
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={5} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           component="div"
-          count={ordersN.length}
+          count={orders.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
