@@ -9,6 +9,7 @@ import apiProduct from "../products/ProductRoutes";
 import apiOrders from "../orders/OrderRoutes";
 import apiReviews from "../reviews/ReviewRoutes";
 import { Server } from "http";
+import { productModel } from "../products/Product";
 
 var server: Server;
 const path = require("path");
@@ -19,7 +20,8 @@ let helmet = require("helmet");
 const app: Application = express();
 
 const mongoose = require("mongoose");
-const connectionString = "mongodb+srv://test:test@cluster0.uzcmm.mongodb.net/test?retryWrites=true&w=majority";
+const connectionString =
+  "mongodb+srv://test:test@cluster0.uzcmm.mongodb.net/test?retryWrites=true&w=majority";
 
 const options: cors.CorsOptions = {
   origin: ["http://localhost:3000"],
@@ -54,7 +56,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  server.close()
+  server.close();
   mongoose.connection.close();
 });
 
@@ -101,7 +103,19 @@ describe("users", () => {
       role: "user",
     });
     expect(response.statusCode).toBe(200);
-    expect(typeof response.body).toBe('string');
+    expect(typeof response.body).toBe("string");
+  });
+
+  it("Can't create a user with email already in ise ", async () => {
+    const response: Response = await request(app).post("/users").send({
+      name: "name",
+      webId: "webId",
+      email: "pablo268la@gmail.com",
+      password: "test",
+      verified: "false",
+      role: "user",
+    });
+    expect(response.statusCode).toBe(412);
   });
 
   it("Can get a user token correctly", async () => {
@@ -141,5 +155,26 @@ describe("prodcuts", () => {
         image: "0001.png",
       })
     );
+  });
+
+  /**
+   * Test that we can't get a non existing product'
+   */
+  it("Can't get non existing product", async () => {
+    const response: Response = await request(app).get("/products/findByCode/0");
+    expect(response.statusCode).toBe(204);
+  });
+
+  it("Can create a product correctly", async () => {
+    const response: Response = await request(app).post("/products").send({
+      code: uuidv4(),
+      name: "testProduct",
+      price: 0.99,
+      description: "Another test product",
+      stock: 0,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.name).toBe("testProduct");
+    expect(response.body.stock).toBe(0);
   });
 });

@@ -28,7 +28,6 @@ export const createUser: RequestHandler = async (req, res) => {
     }
     res.json(generateToken(req.body.email));
   } catch (error) {
-    console.log(error)
     res.status(412).json({ message: "The data is not valid" });
   }
 };
