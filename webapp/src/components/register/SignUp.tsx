@@ -195,6 +195,7 @@ export default function SignUp(props: SignUpProps) {
               </Grid>
             </Grid>
             <Button
+              data-testid="signup-button"
               type="submit"
               fullWidth
               variant="contained"
