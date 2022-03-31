@@ -1,4 +1,3 @@
-import React from "React";
 import { fireEvent, render } from "@testing-library/react";
 import ProductBox from "../../components/products/ProductBox";
 import { Product, CartItem } from "../../shared/shareddtypes";
