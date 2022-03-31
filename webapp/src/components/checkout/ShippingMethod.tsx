@@ -1,20 +1,22 @@
-import * as React from "react";
+import React, { useEffect, useRef } from "react";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import LinearProgress from "@mui/material/LinearProgress";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 import WebIdRadioGroup from "../WebIdRadioGroup";
 
-import { getCoordinatesFromAddress } from "../../helpers/ComputeDistanceHelper";
-import { retrievePickUpLocationsJSON } from "../../helpers/ShippingMethodHelper";
+import { calculateCoordinates } from "../../helpers/ComputeDistanceHelper";
+import { getPickUpPlacesNearby } from "../../helpers/ShippingMethodHelper";
+
+import * as ol from "ol";
+import olms from "ol-mapbox-style";
+import { transform } from "ol/proj";
+
+import "../../App.css";
 
 function ShippingMethodStep(props: any) {
   const shippingMethods = ["Correos", "Pick up point"];
@@ -38,41 +40,50 @@ function ShippingMethodStep(props: any) {
 }
 
 function MapStep(props: any) {
-  return (
-    <React.Fragment>
-      <Divider sx={{ mb: 2 }}>Delivery</Divider>
+  const mapContainer = useRef(null);
 
-      <LinearProgress hidden={!props.loading} />
-      {!props.loading && (
-        <React.Fragment>
-          <Card>
-            <CardMedia
-              component="img"
-              image={props.map}
-              alt="Image of the delivery process"
-            />
-            <CardContent>
-              <Typography variant="h6">
-                Shipping rates for {props.address}
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                After computing some calculations we have obtained that the
-                shipping costs are {props.costs}€
-              </Typography>
-            </CardContent>
-          </Card>
-        </React.Fragment>
-      )}
-    </React.Fragment>
+  useEffect(() => {
+    calculateCoordinates(props.address).then((coordinates: any) => {
+      const initialState = {
+        lng: coordinates.features[0].geometry.coordinates[0],
+        lat: coordinates.features[0].geometry.coordinates[1],
+        zoom: 15,
+      };
+
+      const myAPIKey = "7ce2223b21114b98b42821edfef62190";
+      const mapStyle =
+        "https://maps.geoapify.com/v1/styles/maptiler-3d/style.json";
+
+      olms(mapContainer.current, `${mapStyle}?apiKey=${myAPIKey}`).then(
+        (map) => {
+          map
+            .getView()
+            .setCenter(
+              transform(
+                [initialState.lng, initialState.lat],
+                "EPSG:4326",
+                "EPSG:3857"
+              )
+            );
+          map.getView().setZoom(initialState.zoom);
+        }
+      );
+    });
+  }, []);
+
+  return (
+    <Stack
+      width="100%"
+      height="400px"
+      className="map-container"
+      ref={mapContainer}
+    />
   );
 }
 
-export default function ShippingCosts(props: any): JSX.Element {
+export default function ShippingMethod(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [address, setAddress] = React.useState("");
   const [shippingMethod, setShippingMethod] = React.useState("");
-  const [map, setMap] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
 
   // We manage the button for going back and forth
   const handleNext = () => {
@@ -82,11 +93,7 @@ export default function ShippingCosts(props: any): JSX.Element {
 
   const stepHandler = async () => {
     // The user has selected a shipping method
-    if (activeStep === 0)
-      return retrievePickUpLocationsJSON(
-        await getCoordinatesFromAddress(address),
-        "7ce2223b21114b98b42821edfef62190"
-      );
+    if (activeStep === 0) return getPickUpPlacesNearby(props.address, 500, 20);
     // In case tu user has chosen
     if (activeStep === 1) props.handleNext();
   };
@@ -108,14 +115,7 @@ export default function ShippingCosts(props: any): JSX.Element {
           />
         );
       case 1:
-        return (
-          <MapStep
-            map={map}
-            costs={props.costs}
-            address={address}
-            loading={loading}
-          />
-        );
+        return <MapStep costs={props.costs} address={props.address} />;
     }
   };
 

@@ -18,7 +18,6 @@ import {
   showMapRoute,
   calculateShippingCosts,
   getCoordinatesFromAddress,
-  getNearByPlaces,
 } from "../../helpers/ComputeDistanceHelper";
 import { getAddressesFromPod } from "../../helpers/SolidHelper";
 import { getUser } from "../../api/api";

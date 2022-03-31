@@ -1,5 +1,3 @@
-import { getPlaces } from "../api/api";
-
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
 export const calculateShippingCosts = async (destAddress: String) => {
@@ -26,7 +24,7 @@ export const getCoordinatesFromAddress = async (address: String) => {
   return lat + "," + lon; //e.g 36.23423,-5.23423
 };
 
-function calculateCoordinates(address: String) {
+export function calculateCoordinates(address: String) {
   const axios = require("axios");
 
   return axios
@@ -77,22 +75,4 @@ function getRouteImage(destCoords: String) {
     .then((response: any) => {
       return response.data;
     });
-}
-
-export async function getNearByPlaces(
-  address: String,
-  radiusMeters: number,
-  maxResults: number
-) {
-  let coords = await calculateCoordinates(address);
-  const x = coords.features[0].geometry.coordinates[0];
-  const y = coords.features[0].geometry.coordinates[1];
-
-  const places = await getPlaces(x, y, radiusMeters, maxResults);
-
-  let addresses: string[] = new Array();
-  for (let i = 0; i < places.features.length; i++)
-    addresses.push(places.features[i].properties.formatted);
-  console.log(addresses);
-  return addresses;
 }
