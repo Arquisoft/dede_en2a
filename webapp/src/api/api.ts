@@ -130,17 +130,22 @@ export async function getOrder(orderCode: string): Promise<Order> {
 }
 
 export async function getOrdersForUser(): Promise<Order[]> {
-  var headers = {};
-  headers = {
-    token: localStorage.getItem("token"),
-    email: localStorage.getItem("user.email"),
-  };
+  if (localStorage.getItem("user.role") === "admin") return getOrders();
+  else {
+    let headers = {};
+    headers = {
+      token: localStorage.getItem("token"),
+      email: localStorage.getItem("user.email"),
+    };
 
-  let response = await fetch(apiEndPoint + "/orders", {
-    method: "GET",
-    headers: headers,
-  });
-  return response.json();
+    const apiEndPoint =
+      process.env.REACT_APP_API_URI || "http://localhost:5000";
+    let response = await fetch(apiEndPoint + "/orders", {
+      method: "GET",
+      headers: headers,
+    });
+    return response.json();
+  }
 }
 
 export async function getOrders(): Promise<Order[]> {
