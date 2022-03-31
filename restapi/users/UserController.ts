@@ -22,14 +22,12 @@ export const getUser: RequestHandler = async (req, res) => {
 export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
-    if (req.body.test !== "true") {
-      // This way we avoid creating infinite users will executing the tests
-      const usersaved = await new userModel(req.body).save();
+    const usersaved = await new userModel(req.body).save();
+    if (process.env.MONGO_DB_URI !== undefined) {
       sendVerificationEmail(usersaved.email);
     }
     res.json(generateToken(req.body.email));
   } catch (error) {
-    console.log(error)
     res.status(412).json({ message: "The data is not valid" });
   }
 };

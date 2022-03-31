@@ -78,8 +78,6 @@ function ProductsHeader(props: any) {
 }
 
 function ProductTableItem(props: any): JSX.Element {
-  let navigate = useNavigate();
-
   return (
     <TableRow hover key={props.product.orderCode}>
       <TableCell align="center">{props.product.code}</TableCell>
@@ -108,10 +106,6 @@ function ProductsTable(props: any): JSX.Element {
     setPage(0);
   };
 
-  const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, props.products.length - page * rowsPerPage);
-
   return (
     <React.Fragment>
       <TableContainer sx={{ mt: 2 }}>
@@ -129,13 +123,10 @@ function ProductsTable(props: any): JSX.Element {
             {props.products
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((product: Product) => {
-                return <ProductTableItem product={product} />;
+                return (
+                  <ProductTableItem key={product.code} product={product} />
+                );
               })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={5} />
-              </TableRow>
-            )}
           </TableBody>
         </Table>
       </TableContainer>

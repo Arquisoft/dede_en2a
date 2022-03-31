@@ -11,7 +11,7 @@ export default function ProductComment(
 ): JSX.Element {
   return (
     <Paper elevation={3} style={{ margin: "1vh 2vw", padding: "1em" }}>
-      <Grid spacing={0} direction="row" style={{ minHeight: "30vh" }}>
+      <Grid container spacing={0} direction="row" style={{ minHeight: "30vh" }}>
         <Box
           sx={{
             display: "flex",
