@@ -51,11 +51,11 @@ export default function SignIn(props: SignInProps) {
           props.setCurrentUser(user);
           setRedirect(true);
         } else {
-          if (!user.verified)
+          if (!user.verified) {
             sendErrorNotification(
               "You have to verify your account before logging in"
             );
-          else sendErrorNotification("Invalid email or password");
+          } else sendErrorNotification("Invalid email or password");
         }
       },
       () => sendErrorNotification("User is not registered")
@@ -124,6 +124,7 @@ export default function SignIn(props: SignInProps) {
             />
 
             <Button
+              data-testid="sign-in-button"
               type="submit"
               fullWidth
               variant="contained"
