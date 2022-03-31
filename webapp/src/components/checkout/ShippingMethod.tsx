@@ -12,9 +12,7 @@ import WebIdRadioGroup from "../WebIdRadioGroup";
 import { calculateCoordinates } from "../../helpers/ComputeDistanceHelper";
 import { getPickUpPlacesNearby } from "../../helpers/ShippingMethodHelper";
 
-import * as ol from "ol";
-import olms from "ol-mapbox-style";
-import { transform } from "ol/proj";
+import maplibre from "maplibre-gl";
 
 import "../../App.css";
 
@@ -40,7 +38,25 @@ function ShippingMethodStep(props: any) {
 }
 
 function MapStep(props: any) {
-  const mapContainer = useRef(null);
+  let mapContainer: any;
+
+  const createMarker = (lat: number, lon: number, map: any) => {
+    let pickUpPointIcon = document.createElement("div");
+    pickUpPointIcon.classList.add("pickUpPoint");
+
+    let pickUpPopup = new maplibre.Popup({
+      anchor: "bottom",
+      offset: [0, -64], // height - shadow
+    }).setText("Zürich Airport");
+
+    new maplibre.Marker(pickUpPointIcon, {
+      anchor: "bottom",
+      offset: [0, 6],
+    })
+      .setLngLat([lat, lon])
+      .setPopup(pickUpPopup)
+      .addTo(map);
+  };
 
   useEffect(() => {
     calculateCoordinates(props.address).then((coordinates: any) => {
@@ -54,19 +70,15 @@ function MapStep(props: any) {
       const mapStyle =
         "https://maps.geoapify.com/v1/styles/maptiler-3d/style.json";
 
-      olms(mapContainer.current, `${mapStyle}?apiKey=${myAPIKey}`).then(
-        (map) => {
-          map
-            .getView()
-            .setCenter(
-              transform(
-                [initialState.lng, initialState.lat],
-                "EPSG:4326",
-                "EPSG:3857"
-              )
-            );
-          map.getView().setZoom(initialState.zoom);
-        }
+      const map = new maplibre.Map({
+        container: mapContainer,
+        style: `${mapStyle}?apiKey=${myAPIKey}`,
+        center: [initialState.lng, initialState.lat],
+        zoom: initialState.zoom,
+      });
+
+      props.pickUpPlaces.forEach((place: any) =>
+        createMarker(place.lat, place.lon, map)
       );
     });
   }, []);
@@ -76,7 +88,7 @@ function MapStep(props: any) {
       width="100%"
       height="400px"
       className="map-container"
-      ref={mapContainer}
+      ref={(el) => (mapContainer = el)}
     />
   );
 }
@@ -84,6 +96,7 @@ function MapStep(props: any) {
 export default function ShippingMethod(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
   const [shippingMethod, setShippingMethod] = React.useState("");
+  const [pickUpPlaces, setPickUpPlaces] = React.useState<any[]>([]);
 
   // We manage the button for going back and forth
   const handleNext = () => {
@@ -93,7 +106,10 @@ export default function ShippingMethod(props: any): JSX.Element {
 
   const stepHandler = async () => {
     // The user has selected a shipping method
-    if (activeStep === 0) return getPickUpPlacesNearby(props.address, 500, 20);
+    if (activeStep === 0)
+      getPickUpPlacesNearby(props.address, 500, 10).then((places) =>
+        setPickUpPlaces(places)
+      );
     // In case tu user has chosen
     if (activeStep === 1) props.handleNext();
   };
@@ -115,7 +131,13 @@ export default function ShippingMethod(props: any): JSX.Element {
           />
         );
       case 1:
-        return <MapStep costs={props.costs} address={props.address} />;
+        return (
+          <MapStep
+            costs={props.costs}
+            address={props.address}
+            pickUpPlaces={pickUpPlaces}
+          />
+        );
     }
   };
 

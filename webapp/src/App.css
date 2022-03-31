@@ -1,4 +1,4 @@
-@import "~ol/ol.css";
+@import "~maplibre-gl/dist/maplibre-gl.css";
 
 .App {
   text-align: center;
@@ -32,4 +32,12 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.pickUpPoint {
+  height: 23px;
+  width: 16px;
+  background-image: url(https://api.geoapify.com/v1/icon/?type=awesome&color=%233900ff&icon=truck&scaleFactor=2&apiKey=7ce2223b21114b98b42821edfef62190);
+  background-size: contain;
+  cursor: pointer;
 }
