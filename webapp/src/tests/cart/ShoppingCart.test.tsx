@@ -1,6 +1,6 @@
-import { fireEvent, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import ShoppingCart from "../../components/cart/ShoppingCart";
-import { Product, CartItem } from "../../shared/shareddtypes";
+import { CartItem } from "../../shared/shareddtypes";
 import { BrowserRouter as Router } from "react-router-dom";
 
 //Test for the ShoppingCart component, receives a list of cart items and it is rendered properly.
