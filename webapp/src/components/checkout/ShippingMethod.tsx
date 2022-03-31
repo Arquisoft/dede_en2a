@@ -1,141 +1,66 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-
-import WebIdRadioGroup from "../WebIdRadioGroup";
-
-import { calculateCoordinates } from "../../helpers/ComputeDistanceHelper";
-import { getPickUpPlacesNearby } from "../../helpers/ShippingMethodHelper";
-
-import maplibre from "maplibre-gl";
-
-import "../../App.css";
-
-function ShippingMethodStep(props: any) {
-  const shippingMethods = ["Correos", "Pick up point"];
-  return (
-    <React.Fragment>
-      <Divider sx={{ mb: 2 }}>Shipping method</Divider>
-
-      <Typography sx={{ pb: 2 }}>
-        Those are the shipping methods we have in our site; feel free to choose
-        any of them:
-      </Typography>
-      <WebIdRadioGroup
-        value={props.shippingMethod}
-        setValue={props.setShippingMethod}
-        radioItems={shippingMethods}
-        icon={<LocalShippingIcon />}
-        checkedIcon={<LocalShippingIcon />}
-      />
-    </React.Fragment>
-  );
-}
-
-function MapStep(props: any) {
-  let mapContainer: any;
-
-  const createMarker = (lat: number, lon: number, map: any) => {
-    let pickUpPointIcon = document.createElement("div");
-    pickUpPointIcon.classList.add("pickUpPoint");
-
-    let pickUpPopup = new maplibre.Popup({
-      anchor: "bottom",
-      offset: [0, -64], // height - shadow
-    }).setText("Zürich Airport");
-
-    new maplibre.Marker(pickUpPointIcon, {
-      anchor: "bottom",
-      offset: [0, 6],
-    })
-      .setLngLat([lat, lon])
-      .setPopup(pickUpPopup)
-      .addTo(map);
-  };
-
-  useEffect(() => {
-    calculateCoordinates(props.address).then((coordinates: any) => {
-      const initialState = {
-        lng: coordinates.features[0].geometry.coordinates[0],
-        lat: coordinates.features[0].geometry.coordinates[1],
-        zoom: 15,
-      };
-
-      const myAPIKey = "7ce2223b21114b98b42821edfef62190";
-      const mapStyle =
-        "https://maps.geoapify.com/v1/styles/maptiler-3d/style.json";
-
-      const map = new maplibre.Map({
-        container: mapContainer,
-        style: `${mapStyle}?apiKey=${myAPIKey}`,
-        center: [initialState.lng, initialState.lat],
-        zoom: initialState.zoom,
-      });
-
-      props.pickUpPlaces.forEach((place: any) =>
-        createMarker(place.lat, place.lon, map)
-      );
-    });
-  }, []);
-
-  return (
-    <Stack
-      width="100%"
-      height="400px"
-      className="map-container"
-      ref={(el) => (mapContainer = el)}
-    />
-  );
-}
+import ShippingMethodForm from "./shipping/ShippingMethodForm";
+import PickUpLocationsMap from "./shipping/PickUpLocationsMap";
+import ShippingRouteMap from "./shipping/ShippingRouteMap";
 
 export default function ShippingMethod(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [pickUpAddress, setPickUpAddress] = React.useState("");
   const [shippingMethod, setShippingMethod] = React.useState("");
-  const [pickUpPlaces, setPickUpPlaces] = React.useState<any[]>([]);
 
   // We manage the button for going back and forth
   const handleNext = () => {
     setActiveStep(activeStep + 1);
-    stepHandler();
+
+    // In case the shipping method is not Pick UP go directly to the last step
+    if (activeStep === 0 && shippingMethod !== "Pick UP") setActiveStep(2);
+    // The user has completed all the steps sucessfully
+    if (activeStep === 2) props.handleNext();
   };
 
-  const stepHandler = async () => {
-    // The user has selected a shipping method
-    if (activeStep === 0)
-      getPickUpPlacesNearby(props.address, 500, 10).then((places) =>
-        setPickUpPlaces(places)
-      );
-    // In case tu user has chosen
-    if (activeStep === 1) props.handleNext();
-  };
-
-  const isContinue = () => {
+  const isForward = () => {
     // We are at the first step: in case no shipping method has been selected
-    if (activeStep === 0) return shippingMethod === "";
+    if (activeStep === 0) return shippingMethod !== "";
+    // In case we are at the pickUp location selector: no address has been selected
+    if (activeStep === 1) return pickUpAddress !== "";
+    // We are at the last step: viewing the delivery details
+    if (activeStep === 2) return true;
+    // By default we will disable it
+    return false;
   };
 
-  const handleReset = () => {};
+  const handleBack = () => {
+    if (activeStep === 0) props.handleBack();
+    else setActiveStep(activeStep - 1);
+  };
 
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
         return (
-          <ShippingMethodStep
+          <ShippingMethodForm
             shippingMethod={shippingMethod}
             setShippingMethod={setShippingMethod}
           />
         );
       case 1:
         return (
-          <MapStep
-            costs={props.costs}
+          <PickUpLocationsMap
             address={props.address}
-            pickUpPlaces={pickUpPlaces}
+            setAddress={props.setAddress}
+            setPickUpAddress={setPickUpAddress}
+          />
+        );
+      case 2:
+        return (
+          <ShippingRouteMap
+            address={props.address}
+            costs={props.costs}
+            setCosts={props.setCosts}
           />
         );
     }
@@ -150,15 +75,11 @@ export default function ShippingMethod(props: any): JSX.Element {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Button
-          variant="contained"
-          onClick={handleNext}
-          disabled={isContinue()}
-        >
-          {activeStep === 2 ? "Next" : "Continue"}
+        <Button disabled={!isForward()} onClick={handleNext}>
+          Next
         </Button>
-        <Button hidden={activeStep === 0} onClick={handleReset}>
-          Reset
+        <Button disabled={activeStep === 2} onClick={handleBack}>
+          Back
         </Button>
       </Stack>
     </React.Fragment>

@@ -11,7 +11,7 @@ import { updateProduct } from "../../api/api";
 import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 
-import ShippingCosts from "./ShippingCosts";
+import ShippingAddress from "./ShippingAddress";
 import ShippingMethod from "./ShippingMethod";
 import Review from "./Review";
 import Billing from "./Billing";
@@ -22,7 +22,7 @@ function getSteps() {
     "Shipping address",
     "Shipping method",
     "Review your order",
-    "Billing Info",
+    "Billing",
     "Order confirmation",
   ];
 }
@@ -50,6 +50,10 @@ export default function Checkout(props: any) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
   const handlePayed = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     saveOrderToDB();
@@ -70,9 +74,7 @@ export default function Checkout(props: any) {
     switch (stepIndex) {
       case 0:
         return (
-          <ShippingCosts
-            handleCosts={setCosts}
-            costs={costs}
+          <ShippingAddress
             address={address}
             setAddress={setAddress}
             userEmail={props.userEmail}
@@ -80,13 +82,22 @@ export default function Checkout(props: any) {
           />
         );
       case 1:
-        return <ShippingMethod address={address} />;
+        return (
+          <ShippingMethod
+            address={address}
+            setAddress={setAddress}
+            costs={costs}
+            setCosts={setCosts}
+            handleBack={handleBack}
+            handleNext={handleNext}
+          />
+        );
       case 2:
         return (
           <Review
             productsCart={props.productsCart}
             shippingCosts={costs}
-            handleBack={handleBack}
+            handleReset={handleReset}
             handleNext={handleNext}
           />
         );
