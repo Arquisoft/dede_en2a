@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
-import { orderModel } from "./Order";
 import { productModel } from "../products/Product";
 import { verifyToken } from "../utils/generateToken";
 import { createPDF } from "../utils/PDFHelper";
+import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
   const isVerified = verifyToken(
@@ -24,6 +24,7 @@ export const getOrder: RequestHandler = async (req, res) => {
 };
 
 export const getOrders: RequestHandler = async (req, res) => {
+  //TODO CHECK TOKEN AND USER=ADMIN
   try {
     const orders = await orderModel.find();
     return res.json(orders);
