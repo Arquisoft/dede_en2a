@@ -2,32 +2,38 @@ import { userVerificationModel } from "../users/UserVerification";
 
 const nodemailer = require("nodemailer");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 const path = require("path");
+const SENDGRID_API_KEY =
+  "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";
 
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS,
-  },
-  secure: true,
-  requireTLS: true,
-});
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(SENDGRID_API_KEY);
 
-export const sendInvoiceEmail: Function = (email: string, orderCode: string) => {
+export const sendInvoiceEmail: Function = (
+  email: string,
+  orderCode: string
+) => {
+  const pathToAttachment = `${__dirname}/pdf/` + orderCode + ".pdf";
+  const attachment = fs.readFileSync(pathToAttachment).toString("base64");
+
   const mailOptions = {
-    from: process.env.AUTH_EMAIL,
     to: email,
+    from: process.env.AUTH_EMAIL,
     subject: "DeDe Order Invoice",
-    html: "<p> Thank you for trusting in DeDe and buying with us</p>",
+    html:
+      "<p>Thank you for trusting in DeDe and buying with us.<br><br>Here you have the receipt of your purchase." +
+      "<br><br>We hope to see you soon :)</p>",
     attachments: [
       {
-        path: "./pdf/" + orderCode + ".pdf",
+        content: attachment,
+        filename: orderCode + ".pdf",
+        type: "application/pdf",
+        disposition: "attachment",
       },
     ],
   };
-
-  transporter.sendMail(mailOptions);
+  sgMail.send(mailOptions);
 };
 
 export const sendVerificationEmail: Function = async (email: string) => {
@@ -35,8 +41,8 @@ export const sendVerificationEmail: Function = async (email: string) => {
   const uniqueString = uuidv4();
 
   const mailOptions = {
-    from: process.env.AUTH_EMAIL,
     to: email,
+    from: process.env.AUTH_EMAIL,
     subject: "Verify your DeDe account",
     html:
       "<p> Verify your email account to complete the sign up and login into your account.</p>" +
@@ -56,5 +62,5 @@ export const sendVerificationEmail: Function = async (email: string) => {
   });
 
   await newUserVerification.save();
-  transporter.sendMail(mailOptions);
+  sgMail.send(mailOptions);
 };
