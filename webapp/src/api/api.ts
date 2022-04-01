@@ -56,6 +56,35 @@ export async function getProduct(productCode: string): Promise<Product> {
   return response.json();
 }
 
+export async function getPlaces(
+  x: number,
+  y: number,
+  radiusMeters: number,
+  maxResults: number
+): Promise<any> {
+  const url =
+    "https://api.geoapify.com/v2/places?categories=commercial&filter=circle:" +
+    x +
+    "," +
+    y +
+    "," +
+    radiusMeters +
+    "&bias=proximity:" +
+    x +
+    "," +
+    y +
+    "&limit=" +
+    maxResults +
+    "&apiKey=" +
+    process.env.REACT_APP_GEOAPIFY_KEY;
+
+  let places;
+  await fetch(url, {
+    method: "GET",
+  }).then((response) => (places = response.json()));
+  return places;
+}
+
 export async function updateProduct(product: Product) {
   await fetch(apiEndPoint + "/products/update/" + product.code, {
     method: "POST",
@@ -130,17 +159,22 @@ export async function getOrder(orderCode: string): Promise<Order> {
 }
 
 export async function getOrdersForUser(): Promise<Order[]> {
-  var headers = {};
-  headers = {
-    token: localStorage.getItem("token"),
-    email: localStorage.getItem("user.email"),
-  };
+  if (localStorage.getItem("user.role") === "admin") return getOrders();
+  else {
+    let headers = {};
+    headers = {
+      token: localStorage.getItem("token"),
+      email: localStorage.getItem("user.email"),
+    };
 
-  let response = await fetch(apiEndPoint + "/orders", {
-    method: "GET",
-    headers: headers,
-  });
-  return response.json();
+    const apiEndPoint =
+      process.env.REACT_APP_API_URI || "http://localhost:5000";
+    let response = await fetch(apiEndPoint + "/orders", {
+      method: "GET",
+      headers: headers,
+    });
+    return response.json();
+  }
 }
 
 export async function getOrders(): Promise<Order[]> {

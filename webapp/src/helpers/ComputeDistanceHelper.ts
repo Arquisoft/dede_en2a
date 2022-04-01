@@ -1,12 +1,33 @@
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
-export const calculateShippingCosts = async (destAddress: String) => {
-  let distance = await getDistanceDriving(destAddress);
-
-  let costs = Math.round(distance * 2 * 100) / 100; // 2 euros per km
-
-  return costs;
+export type ShippingMethodType = {
+  title: string;
+  subtitle: string;
+  price: number;
 };
+
+export async function obtainShippingMethods(
+  destAddress: String
+): Promise<ShippingMethodType[]> {
+  // We obtain the coordinates from the address
+  let coords = await getCoordinatesFromAddress(destAddress);
+  // We compute the total distance that the package has to travel
+  let distance = await getDistanceDriving(coords);
+
+  // We return the different shipping methods and the costs for each of them
+  return [
+    {
+      title: "Correos",
+      subtitle: "The fastest shipping method we have!",
+      price: Math.round(distance * 2 * 100) / 100,
+    },
+    {
+      title: "Pick UP",
+      subtitle: "The cheapest method on earth!",
+      price: 0,
+    },
+  ];
+}
 
 export const showMapRoute = async (destCoords: String) => {
   let map = await getRouteImage(destCoords);
@@ -24,14 +45,15 @@ export const getCoordinatesFromAddress = async (address: String) => {
   return lat + "," + lon; //e.g 36.23423,-5.23423
 };
 
-function calculateCoordinates(address: String) {
+export function calculateCoordinates(address: String) {
   const axios = require("axios");
 
   return axios
     .get(
       "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
         address +
-        ".json?access_token=" + process.env.REACT_APP_MAPBOX_KEY
+        ".json?access_token=" +
+        process.env.REACT_APP_MAPBOX_KEY
     )
     .then((response: any) => {
       return response.data;
@@ -50,7 +72,8 @@ function getDistanceDriving(destCoords: String) {
         fromCoords +
         "&wp.1=" +
         destCoords +
-        "&key=" + process.env.REACT_APP_BING_KEY
+        "&key=" +
+        process.env.REACT_APP_BING_KEY
     )
     .then((response: any) => {
       return response.data.resourceSets[0].resources[0].travelDistance;
@@ -66,37 +89,11 @@ function getRouteImage(destCoords: String) {
         fromCoords +
         "&wp.1=" +
         destCoords +
-        "&key=" + process.env.REACT_APP_BING_KEY,
+        "&key=" +
+        process.env.REACT_APP_BING_KEY,
       { responseType: "blob" }
     )
     .then((response: any) => {
       return response.data;
     });
 }
-
-//Use to calculate the distance in straight line
-/*
-export function getDistanceFromLatLonInKm(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ) {
-    var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(lat2 - lat1); // deg2rad below
-    var dLon = deg2rad(lon2 - lon1);
-    var a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c; // Distance in km
-    return d;
-  }
-  
-function deg2rad(deg: number) {
-    return deg * (Math.PI / 180);
-  }
-*/

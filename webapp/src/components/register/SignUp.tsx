@@ -19,7 +19,7 @@ import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import * as Checker from "../../helpers/CheckFieldsHelper";
 import { getNameFromPod, getEmailsFromPod } from "../../helpers/SolidHelper";
 
-import WebIdRadioGroup from "../WebIdRadioGroup";
+import CustomRadioGroup from "../CustomRadioGroup";
 
 import * as Api from "../../api/api";
 import { User, NotificationType } from "../../shared/shareddtypes";
@@ -159,7 +159,7 @@ export default function SignUp(props: SignUpProps) {
                 />
               </Grid>
               {emails.length > 0 && (
-                <WebIdRadioGroup
+                <CustomRadioGroup
                   value={value}
                   setValue={setValue}
                   radioItems={emails}

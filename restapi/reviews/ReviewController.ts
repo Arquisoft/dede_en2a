@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { verifyToken } from "../utils/generateToken";
-import { reviewModel, reviewSchema } from "./Review";
-
+import { reviewModel } from "./Review";
 
 export const getReviewsByProduct: RequestHandler = async (req, res) => {
   try {
@@ -28,6 +27,7 @@ export const createReview: RequestHandler = async (req, res) => {
     res.status(203).json({ message: "Invalid token " });
   }
 };
+
 export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {
   try {
     const reviews = await reviewModel.find({

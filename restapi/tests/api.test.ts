@@ -1,15 +1,14 @@
-import request, { Response } from "supertest";
-import express, { Application, RequestHandler } from "express";
-import cors from "cors";
 import bp from "body-parser";
+import cors from "cors";
+import express, { Application, RequestHandler } from "express";
 import promBundle from "express-prom-bundle";
-import morgan from "morgan";
-import apiUser from "../users/UserRoutes";
-import apiProduct from "../products/ProductRoutes";
-import apiOrders from "../orders/OrderRoutes";
-import apiReviews from "../reviews/ReviewRoutes";
 import { Server } from "http";
-import { productModel } from "../products/Product";
+import morgan from "morgan";
+import request, { Response } from "supertest";
+import apiOrders from "../orders/OrderRoutes";
+import apiProduct from "../products/ProductRoutes";
+import apiReviews from "../reviews/ReviewRoutes";
+import apiUser from "../users/UserRoutes";
 
 var server: Server;
 const path = require("path");
@@ -106,7 +105,7 @@ describe("users", () => {
     expect(typeof response.body).toBe("string");
   });
 
-  it("Can't create a user with email already in ise ", async () => {
+  it("Can't create a user with email already in use ", async () => {
     const response: Response = await request(app).post("/users").send({
       name: "name",
       webId: "webId",
@@ -177,4 +176,70 @@ describe("prodcuts", () => {
     expect(response.body.name).toBe("testProduct");
     expect(response.body.stock).toBe(0);
   });
+
+  it("Can't get create a product with same code", async () => {
+    const response: Response = await request(app).post("/products").send({
+      code: "0001",
+      name: "testFailProduct",
+      price: 0.99,
+      description: "A failure insert test product",
+      stock: 0,
+    });
+    expect(response.statusCode).toBe(409);
+  });
+
+  it("Can't get create a product without all values", async () => {
+    const response: Response = await request(app).post("/products").send({
+      name: "testFailProduct",
+      price: 0.99,
+      description: "A failure insert test product",
+      stock: 0,
+    });
+    expect(response.statusCode).toBe(412);
+  });
 });
+
+describe("reviews", () => {
+  it("Can get all reviews for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCode/0001"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can not get review of a user for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCodeAndEmail/0001/pablo268la@gmail.com"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can't get create a review without been verified", async () => {
+    const response: Response = await request(app).post("/reviews").send({
+      userEmail: "pablo268la@gmail.com",
+      productCode: "0001",
+      rating: 1,
+      comment: "Tuvo güena la cami",
+    });
+    expect(response.statusCode).toBe(203);
+    expect(response.body.message).toBe("Invalid token ");
+  });
+});
+
+
+describe("orders", () => {
+
+  // TODO ADD HEADERS
+  it("Can get all orders", async () => {
+    const response: Response = await request(app).get("/orders/list");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can not get user orders without ", async () => {
+    const response: Response = await request(app).get("/orders");
+    expect(response.statusCode).toBe(203);
+  });
+})
