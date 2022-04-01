@@ -63,7 +63,7 @@ export default function PickUpLocationsMap(props: any) {
       zoom: initialState.zoom,
     });
 
-    pickUpPlaces.map((place) =>
+    pickUpPlaces.forEach((place) =>
       createMarker(place.lat, place.lon, place.name, map)
     );
 
