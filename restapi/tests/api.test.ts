@@ -198,3 +198,32 @@ describe("prodcuts", () => {
     expect(response.statusCode).toBe(412);
   });
 });
+
+describe("reviews", () => {
+  it("Can get all reviews for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCode/0001"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can not get review of a user for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCodeAndEmail/0001/pablo268la@gmail.com"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can't get create a review without been verified", async () => {
+    const response: Response = await request(app).post("/reviews").send({
+      userEmail: "pablo268la@gmail.com",
+      productCode: "0001",
+      rating: 1,
+      comment: "Tuvo güena la cami",
+    });
+    expect(response.statusCode).toBe(203);
+    expect(response.body.message).toBe("Invalid token ");
+  });
+});
