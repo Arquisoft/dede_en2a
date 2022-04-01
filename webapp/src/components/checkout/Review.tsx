@@ -76,7 +76,7 @@ export default function Review(props: any) {
           Next
         </Button>
 
-        <Button onClick={props.handleBack} variant="outlined" className="m-1">
+        <Button onClick={props.handleReset} variant="outlined" className="m-1">
           Back
         </Button>
       </Stack>

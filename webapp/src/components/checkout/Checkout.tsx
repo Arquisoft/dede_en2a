@@ -11,7 +11,8 @@ import { updateProduct } from "../../api/api";
 import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 
-import ShippingCosts from "./ShippingCosts";
+import ShippingAddress from "./ShippingAddress";
+import ShippingMethod from "./ShippingMethod";
 import Review from "./Review";
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
@@ -19,14 +20,16 @@ import OrderConfirmation from "./OrderConfirmation";
 function getSteps() {
   return [
     "Shipping address",
+    "Shipping method",
     "Review your order",
-    "Billing Info",
+    "Billing",
     "Order confirmation",
   ];
 }
 
 export default function Checkout(props: any) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [address, setAddress] = React.useState("");
   const [costs, setCosts] = React.useState<number>(Number());
 
   const steps = getSteps();
@@ -45,6 +48,10 @@ export default function Checkout(props: any) {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
   };
 
   const handlePayed = () => {
@@ -67,23 +74,34 @@ export default function Checkout(props: any) {
     switch (stepIndex) {
       case 0:
         return (
-          <ShippingCosts
-            handleCosts={setCosts}
-            costs={costs}
+          <ShippingAddress
+            address={address}
+            setAddress={setAddress}
             userEmail={props.userEmail}
             handleNext={handleNext}
           />
         );
       case 1:
         return (
-          <Review
-            productsCart={props.productsCart}
-            shippingCosts={costs}
+          <ShippingMethod
+            address={address}
+            setAddress={setAddress}
+            costs={costs}
+            setCosts={setCosts}
             handleBack={handleBack}
             handleNext={handleNext}
           />
         );
       case 2:
+        return (
+          <Review
+            productsCart={props.productsCart}
+            shippingCosts={costs}
+            handleReset={handleReset}
+            handleNext={handleNext}
+          />
+        );
+      case 3:
         return (
           <Billing
             products={props.productsCart}
@@ -92,7 +110,7 @@ export default function Checkout(props: any) {
             onPayed={handlePayed}
           />
         );
-      case 3:
+      case 4:
         return <OrderConfirmation />;
     }
   };
