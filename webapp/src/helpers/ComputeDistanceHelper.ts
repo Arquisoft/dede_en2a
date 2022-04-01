@@ -1,12 +1,33 @@
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
-export const calculateShippingCosts = async (destAddress: String) => {
-  let distance = await getDistanceDriving(destAddress);
-
-  let costs = Math.round(distance * 2 * 100) / 100; // 2 euros per km
-
-  return costs;
+export type ShippingMethodType = {
+  title: string;
+  subtitle: string;
+  price: number;
 };
+
+export async function obtainShippingMethods(
+  destAddress: String
+): Promise<ShippingMethodType[]> {
+  // We obtain the coordinates from the address
+  let coords = await getCoordinatesFromAddress(destAddress);
+  // We compute the total distance that the package has to travel
+  let distance = await getDistanceDriving(coords);
+
+  // We return the different shipping methods and the costs for each of them
+  return [
+    {
+      title: "Correos",
+      subtitle: "The fastest shipping method we have!",
+      price: Math.round(distance * 2 * 100) / 100,
+    },
+    {
+      title: "Pick UP",
+      subtitle: "The cheapest method on earth!",
+      price: 0,
+    },
+  ];
+}
 
 export const showMapRoute = async (destCoords: String) => {
   let map = await getRouteImage(destCoords);

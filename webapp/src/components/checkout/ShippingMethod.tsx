@@ -13,11 +13,11 @@ export default function ShippingMethod(props: any): JSX.Element {
   const [shippingMethod, setShippingMethod] = React.useState("");
 
   // We manage the button for going back and forth
-  const handleNext = () => {
+  const handleNext = (shippingMethodTitle: string) => {
     setActiveStep(activeStep + 1);
 
     // In case the shipping method is not Pick UP go directly to the last step
-    if (activeStep === 0 && shippingMethod !== "Pick UP") setActiveStep(2);
+    if (activeStep === 0 && shippingMethodTitle !== "Pick UP") setActiveStep(2);
     // The user has completed all the steps sucessfully
     if (activeStep === 2) props.handleNext();
   };
@@ -45,6 +45,9 @@ export default function ShippingMethod(props: any): JSX.Element {
           <ShippingMethodForm
             shippingMethod={shippingMethod}
             setShippingMethod={setShippingMethod}
+            setCosts={props.setCosts}
+            address={props.address}
+            handleNext={handleNext}
           />
         );
       case 1:
@@ -56,13 +59,7 @@ export default function ShippingMethod(props: any): JSX.Element {
           />
         );
       case 2:
-        return (
-          <ShippingRouteMap
-            address={props.address}
-            costs={props.costs}
-            setCosts={props.setCosts}
-          />
-        );
+        return <ShippingRouteMap address={props.address} costs={props.costs} />;
     }
   };
 
@@ -75,10 +72,14 @@ export default function ShippingMethod(props: any): JSX.Element {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Button disabled={!isForward()} onClick={handleNext}>
+        <Button
+          hidden={activeStep === 0}
+          disabled={!isForward()}
+          onClick={() => handleNext("")}
+        >
           Next
         </Button>
-        <Button disabled={activeStep === 2} onClick={handleBack}>
+        <Button hidden={activeStep === 2} onClick={handleBack}>
           Back
         </Button>
       </Stack>

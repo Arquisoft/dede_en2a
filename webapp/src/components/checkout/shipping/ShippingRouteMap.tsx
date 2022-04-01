@@ -9,7 +9,6 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 import {
   showMapRoute,
-  calculateShippingCosts,
   getCoordinatesFromAddress,
 } from "../../../helpers/ComputeDistanceHelper";
 
@@ -22,7 +21,6 @@ export default function ShippingRouteMap(props: any) {
     setLoading(true); // we start with the loading process
 
     let destCoords: string = await getCoordinatesFromAddress(props.address);
-    props.setCosts(await calculateShippingCosts(destCoords));
 
     showMapRoute(destCoords)
       .then((response: string) => setMap(response))
