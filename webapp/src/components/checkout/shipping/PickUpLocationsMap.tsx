@@ -12,8 +12,6 @@ import { getPickUpPlacesNearby } from "../../../helpers/ShippingMethodHelper";
 
 import maplibre from "maplibre-gl";
 
-import "../../../App.css";
-
 export default function PickUpLocationsMap(props: any) {
   const [pickUpLocation, setPickUpLocation] = React.useState("");
   const [map, setMap] = React.useState<any>(null);
@@ -22,6 +20,13 @@ export default function PickUpLocationsMap(props: any) {
   const createMarker = (lat: number, lon: number, name: string, map: any) => {
     let pickUpPointIcon = document.createElement("div");
     pickUpPointIcon.classList.add("pickUpPoint");
+
+    // We style the marker as intended for it be displayed
+    pickUpPointIcon.style.width = "16px";
+    pickUpPointIcon.style.height = "23px";
+    pickUpPointIcon.style.backgroundSize = "contain";
+    pickUpPointIcon.style.backgroundImage = `url(https://api.geoapify.com/v1/icon/?type=awesome&color=%233900ff&icon=truck&scaleFactor=2&apiKey=${process.env.REACT_APP_GEOAPIFY_KEY})`;
+    pickUpPointIcon.style.cursor = "pointer";
 
     let pickUpPopup = new maplibre.Popup({
       anchor: "bottom",
@@ -47,7 +52,7 @@ export default function PickUpLocationsMap(props: any) {
     let coords = await calculateCoordinates(props.address);
     let pickUpPlaces = await getPickUpPlacesNearby(props.address, 500, 10);
 
-    const key = "7ce2223b21114b98b42821edfef62190";
+    const key = process.env.REACT_APP_GEOAPIFY_KEY;
     const style = "https://maps.geoapify.com/v1/styles/maptiler-3d/style.json";
 
     const initialState = {
