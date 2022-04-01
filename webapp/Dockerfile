@@ -17,6 +17,9 @@ ENV REACT_APP_BING_KEY=$BING_KEY
 ARG PAYPAL_CLIENT_ID="PaypalCheckoutKey"
 ENV REACT_APP_PAYPAL_CLIENT_ID=$PAYPAL_CLIENT_ID
 
+ARG GEOAPIFY_KEY="GeoapifyKey"
+ENV REACT_APP_GEOAPIFY_KEY=$GEOAPIFY_KEY
+
 #Create an optimized version of the webapp
 RUN npm run build
 
