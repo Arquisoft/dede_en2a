@@ -27,7 +27,7 @@ function Logo() {
     <Typography
       variant="h6"
       component={Link}
-      to="/"
+      to="/shop"
       color="inherit"
       sx={{
         flexGrow: 1,
