@@ -110,10 +110,17 @@ export default function ShippingAddress(props: any): JSX.Element {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Button disabled={!isForward()} onClick={handleNext}>
+            <Button
+              disabled={!isForward()}
+              onClick={handleNext}
+              variant="contained"
+              className="m-1"
+            >
               Next
             </Button>
-            <Button onClick={handleBack}>Reset</Button>
+            <Button onClick={handleBack} variant="outlined" className="m-1">
+              Reset
+            </Button>
           </Stack>
         </React.Fragment>
       )}

@@ -76,10 +76,17 @@ export default function ShippingMethod(props: any): JSX.Element {
           hidden={activeStep === 0}
           disabled={!isForward()}
           onClick={() => handleNext("")}
+          variant="contained"
+          className="m-1"
         >
           Next
         </Button>
-        <Button hidden={activeStep === 2} onClick={handleBack}>
+        <Button
+          hidden={activeStep === 2}
+          onClick={handleBack}
+          variant="outlined"
+          className="m-1"
+        >
           Back
         </Button>
       </Stack>

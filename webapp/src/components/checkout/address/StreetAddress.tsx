@@ -3,8 +3,45 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
+import Grid from "@mui/material/Grid";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import WebIdRadioGroup from "../../WebIdRadioGroup";
+
+function CustomRadioGroup(props: any) {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    props.setValue((event.target as HTMLInputElement).value);
+  };
+
+  return (
+    <Grid item xs={12}>
+      <FormControl>
+        <RadioGroup value={props.value} onChange={handleChange}>
+          {props.radioItems.map((radioItem: string) => (
+            <FormControlLabel
+              control={
+                <Radio icon={props.icon} checkedIcon={props.checkedIcon} />
+              }
+              value={radioItem}
+              label={
+                <React.Fragment>
+                  <Typography>{radioItem.split("-")[0]}</Typography>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    {radioItem.split("-")[1] + " - " + radioItem.split("-")[2]}
+                  </Typography>
+                </React.Fragment>
+              }
+              key={radioItem}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+    </Grid>
+  );
+}
 
 export default function StreetAddress(props: any) {
   return (
@@ -19,7 +56,7 @@ export default function StreetAddress(props: any) {
             you chose as the valid one:
           </Typography>
           {props.addresses.length > 0 && (
-            <WebIdRadioGroup
+            <CustomRadioGroup
               value={props.address}
               setValue={props.setAddress}
               radioItems={props.addresses}
