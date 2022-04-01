@@ -50,12 +50,16 @@ export default function SignUp(props: SignUpProps) {
 
   const checkFields = async () => {
     // We check that the provided WebID is correct
-    if (!Checker.checkTextField(webId))
+    if (!Checker.checkTextField(webId)) {
       sendErrorNotification("A valid WebID must be provided");
+      return;
+    }
 
     // We check that the passwords match
-    if (!Checker.checkPasswords(password, repPassword))
-      sendErrorNotification("Passwords must match");
+    if (!Checker.checkPasswords(password, repPassword)) {
+      sendErrorNotification("The passwords do not match");
+      return;
+    }
 
     // We check that the password is correct
     if (Checker.checkPassword(password)) validateRetrievedFields();
