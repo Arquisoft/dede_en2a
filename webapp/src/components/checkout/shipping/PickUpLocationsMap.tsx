@@ -53,7 +53,7 @@ export default function PickUpLocationsMap(props: any) {
     let pickUpPlaces = await getPickUpPlacesNearby(props.address, 500, 10);
 
     const key = process.env.REACT_APP_GEOAPIFY_KEY;
-    const style = "https://maps.geoapify.com/v1/styles/maptiler-3d/style.json";
+    const style = "https://maps.geoapify.com/v1/styles/osm-carto/style.json";
 
     const initialState = {
       lng: coords.features[0].geometry.coordinates[0],

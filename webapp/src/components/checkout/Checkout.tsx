@@ -18,13 +18,7 @@ import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
 
 function getSteps() {
-  return [
-    "Shipping address",
-    "Shipping method",
-    "Review your order",
-    "Billing",
-    "Order confirmation",
-  ];
+  return ["Address", "Shipping method", "Review", "Billing", "Confirm"];
 }
 
 export default function Checkout(props: any) {

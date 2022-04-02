@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
@@ -14,7 +13,7 @@ function Hero() {
       sx={{
         bgcolor: "background.paper",
         width: "100%",
-        height: "90vh",
+        height: "91vh",
       }}
       component="main"
       justifyContent="center"
@@ -44,10 +43,20 @@ function Hero() {
           spacing={2}
           justifyContent="center"
         >
-          <Button variant="contained" component={Link} to="shop">
+          <Button
+            variant="contained"
+            component={Link}
+            to="shop"
+            sx={{ textAlign: "center" }}
+          >
             Start shopping
           </Button>
-          <Button variant="outlined" component={Link} to="sign-up">
+          <Button
+            variant="outlined"
+            component={Link}
+            to="sign-up"
+            sx={{ textAlign: "center" }}
+          >
             Create an account
           </Button>
         </Stack>

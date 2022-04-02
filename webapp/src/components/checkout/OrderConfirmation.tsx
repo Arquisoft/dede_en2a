@@ -19,7 +19,7 @@ export default function OrderConfirmation(props: any) {
       </Typography>
 
       <Stack
-        direction={{ xs: "column", sm: "row-reverse" }}
+        direction="row-reverse"
         justifyContent="space-between"
         alignItems="center"
       >

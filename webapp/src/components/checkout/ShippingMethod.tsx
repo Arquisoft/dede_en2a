@@ -68,7 +68,7 @@ export default function ShippingMethod(props: any): JSX.Element {
       {getStepContent(activeStep)}
       <Stack
         sx={{ pt: 2 }}
-        direction={{ xs: "column", sm: "row-reverse" }}
+        direction="row-reverse"
         justifyContent="space-between"
         alignItems="center"
       >
