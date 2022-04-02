@@ -3,13 +3,10 @@
 
 == Building Block View
 [role="arc42help"]
-****
-****
+
 
 === Level 1 Whitebox Overall System
 [role="arc42help"]
-****
-****
 
 [plantuml, "level1", png]
 ----
@@ -21,7 +18,7 @@ Juan -right-> DeDe: interacts with
 
 DeDe <-right-> pod: gets data
 ----
-
+****
 Motivation::
 
 Dede application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check and be updated of their state. 
@@ -34,15 +31,12 @@ Contained Building Blocks::
 |Name| Description
 |User | Client of the application which will interact with it
 |Dede | System developed to be used by the users. Through it information in the PODs will be taken.  
-|Pods provider | Has the aim to access each user personal pod
-|User pod | Where the user's information is saved with total security 
+|Pod's service| Has the aim to access each user personal pod
 |===
-
+****
 
 === Level 2
 [role="arc42help"]
-****
-****
 [plantuml, "level2", png]
 ----
 Actor Juan
@@ -77,8 +71,6 @@ Contained Building Blocks::
 
 === Level 3
 [role="arc42help"]
-****
-****
 
 [plantuml, "level3", png]
 ----
@@ -86,42 +78,46 @@ Actor Juan
 
 Component Interface{
     Component vi as "Views"{
-       Component lo as "Log in"
-       Component re as "Register"
        Component ho as "Home"
-       Component loc as "Location"
-       Component no as "Notifications"
-       Component my as "My deliveries"
-       Component ac as "Account"
-       Component out as "Sign out"
        Component sh as "Shopping cart"
+       Component sho as "Shop"
+       Component lo as "Sign in"
+       Component re as "Sign up"
+       Component out as "Log out"       
+       Component my as "Orders"
+       Component ck as "Check out"
     }    
 }
 
 Component DataAccess{
        Component sol as "Solid"
        Component res as "RestApi"
+       Component pay as "PayPal Api"
+       Component de as "Delivery Api"
 }
 
 Component pod as "Pod's service"
 Database db as "MongoDB"
 Juan -right->Interface: interacts
-lo -down-> sol
-re -down-> sol
-ho -down-> sol
-loc -down-> sol
-no -down-> sol
-my -down-> sol
-ac -down-> sol
-out -down-> sol
-sh -down->sol
-lo -down-> res
-my -down-> res
-ac -down-> res
+
+re -right-> sol
+ck -down-> sol
+
+re-right->res
+sho-right->res
+lo-right->res
+sh-right->res
+my-right->res
+
+
+ck -down-> pay
+ck-down->de
+
 
 sol <-down-> pod:acceses
 res <-down-> db:data
 ----
+****
 Motivation::
 
 Detailed structure of the system application. Focused in the components of the User Interface and Data Access.
@@ -132,12 +128,15 @@ Contained Building Blocks::
 |===
 |Name| Description
 |Views | Parts of the application which the user is going to interact with during experience with the system
-|Log in |  Here the user will log in into their personal account if they have previously created one
-|Register | Allows the client to create a new account for the application
 |Home |  Initial screen for the application
-|Location | Shows the current location of the user that is using the app
-|Notifications | The notification will make the client to be up to date with their deliveries  
-|My deliveries | Here the user can find any information related with their deliveries, like their state or their location 
-|Account | In this part the client is going to be able to perform any operation in their account like introducing new data or removing it
-|Sign out | It signs out the application from the last user.
+|Shop | View where all the products are show 
+|Shopping cart | The user has a shoppin cart where he will can see the products previosly selected and change the amount of the product.
+|Sign in |  Here the user will log in into their personal account if they have previously created one
+|Sign up | Allows the client to create a new account for the application
+|Orders | Here the user can find any information related with their deliveries, like their state or details
+|Log out | It signs out the application from the last user.
+|Check out | In the check out the user can finish with his purchase.
+|Restapi | The application asks the restapi for the information needed and this asks and returns it from the MongoDB.
+|PayPal Api | Api from PayPal used in the checkout for the users to pay their purchase.
 |===
+****
