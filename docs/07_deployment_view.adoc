@@ -61,9 +61,15 @@ Actor User
 
 cloud SOLID_POD
 cloud CarrierAPI
+cloud BingMaps
+cloud Geoapify
+cloud PayPalAPI
 
 RestApi -u-> MongoDB : "access information"
 WebApp -l-> SOLID_POD : "access user data"
+WebApp -l-> BingMaps : "provides maps and route image"
+WebApp -r-> Geoapify : "get near places"
+WebApp -r-> PayPalAPI : "provides paying system"
 RestApi -d-> WebApp : "supply data"
 RestApi -r-> CarrierAPI : "calculate routes prices"
 WebApp <-d- User
@@ -72,7 +78,7 @@ WebApp <-d- User
 ----
 
 .Motivation
-For development and testing the execution environment will be on each student's machine. But for the production phase it will be deployed in a Dockerized environment hosted on Azure. Our goal is to have a correct understanding of Docker, the infraestructure over which our system will be deployed.
+For development and testing the execution environment will be on each student's machine. But for the production phase it will be deployed in a Dockerized environment hosted on Azure. Our goal is to have a correct understanding of Docker, the infrastructure over which our system will be deployed.
 
 
 .Quality and/or performance features
