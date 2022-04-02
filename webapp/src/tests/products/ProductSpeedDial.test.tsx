@@ -42,7 +42,7 @@ test("The Add Button Works", async () => {
     let addButton = container.querySelector("[aria-label='Add to Shopping Cart']") as HTMLElement;
     fireEvent.click(addButton);
 
-    expect(works)
+    expect(works).toBe(true);
 });
 
 test("The Review Button Works", async () => {
@@ -59,7 +59,7 @@ test("The Review Button Works", async () => {
     let addButton = container.querySelector("[aria-label='Review item']") as HTMLElement;
     fireEvent.click(addButton);
 
-    expect(works)
+    expect(works).toBe(true);
 });
 
 test("The Share Button Works", async () => {
@@ -76,5 +76,5 @@ test("The Share Button Works", async () => {
     let addButton = container.querySelector("[aria-label='Share']") as HTMLElement;
     fireEvent.click(addButton);
 
-    expect(works)
+    expect(works).toBe(true);
 });
