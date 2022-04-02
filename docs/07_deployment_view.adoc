@@ -37,50 +37,54 @@ when your infrastructure is more complex.
 === Infrastructure Level 1
 
 [role="arc42help"]
-****
-Describe (usually in a combination of diagrams, tables, and text):
+[plantuml, "07_DeploymentView", png]
+----
+@startuml 07_DeploymentView_V0
 
-*  the distribution of your system to multiple locations, environments, computers, processors, .. as well as the physical connections between them
-*  important justification or motivation for this deployment structure
-* Quality and/or performance features of the infrastructure
-*  the mapping of software artifacts to elements of the infrastructure
+node AzureServer{
+    node DockerContainer {
+        component RestApi
+    }
+}
 
-For multiple environments or alternative deployments please copy that section of arc42 for all relevant environments.
-****
+node UserDevice {
+    node WebBrowser {
+        component WebApp
+    }
+}
 
-_**<Overview Diagram>**_
+database DatabaseServer {
+    component MongoDB
+}
 
-Motivation::
+Actor User
 
-_<explanation in text form>_
+cloud SOLID_POD
+cloud CarrierAPI
 
-Quality and/or Performance Features::
+RestApi -u-> MongoDB : "access information"
+WebApp -l-> SOLID_POD : "access user data"
+RestApi -d-> WebApp : "supply data"
+RestApi -r-> CarrierAPI : "calculate routes prices"
+WebApp <-d- User
 
-_<explanation in text form>_
+@enduml
+----
 
-Mapping of Building Blocks to Infrastructure::
-_<description of the mapping>_
+.Motivation
+For development and testing the execution environment will be on each student's machine. But for the production phase it will be deployed in a Dockerized environment hosted on Azure. Our goal is to have a correct understanding of Docker, the infraestructure over which our system will be deployed.
 
 
-=== Infrastructure Level 2
+.Quality and/or performance features
+The performance on the deployment build will depend on the user's internet connection as well as on the Azure servers used for the deployment of the app, since those factors are out of our hand. But the performance of the application can be maxed with some coding approaches, then, privacy and security will be our main concerns to aim for the best and more secure expirience for the user. 
 
-[role="arc42help"]
-****
-Here you can include the internal structure of (some) infrastructure elements from level 1.
-
-Please copy the structure from level 1 for each selected element.
-****
-
-==== _<Infrastructure Element 1>_
-
-_<diagram + explanation>_
-
-==== _<Infrastructure Element 2>_
-
-_<diagram + explanation>_
-
-...
-
-==== _<Infrastructure Element n>_
-
-_<diagram + explanation>_
+.Mapping of building blocks to infrastructure
+[options="header",cols="1,2"]
+|===
+|Element|Description
+| WebApp | The front end of our application. It will be rendered by a web browser, which will be executed over the user device
+| RestApi | The back-end of our application. It will run on the Azure server.
+| MongoDB | Database of our application
+| POD provider | Solid pods will be provided by Solid Community
+| Carrier API | API created to provide the costs for shipping 
+|===
