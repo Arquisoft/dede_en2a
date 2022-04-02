@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 
-import FeaturedProducts from "../FeaturedProducts";
+import FeaturedProducts from "../home/FeaturedProducts";
 
 import { CartItem, Product } from "../../shared/shareddtypes";
 import ShoppingCartTable from "./ShoppingCartTable";
