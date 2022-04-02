@@ -20,7 +20,8 @@ import {
   Stack,
   Divider,
   LinearProgress,
-  Link, TextField,
+  Link,
+  TextField,
 } from "@mui/material";
 import { checkImageExists } from "../../helpers/ImageHelper";
 import ProductSpeedDial from "./ProductSpeedDial";
@@ -158,7 +159,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} direction={"column"}>
+              <Grid container item xs={12} md={6} direction={"column"}>
                 <Typography component="h1" variant="h5">
                   {product.name}
                 </Typography>
@@ -219,7 +220,6 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
           />
 
           <ShareDialog show={shareDialogOpen} />
-
         </Grid>
 
         <ProductSpeedDial

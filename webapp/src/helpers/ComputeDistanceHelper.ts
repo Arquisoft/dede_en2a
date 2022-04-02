@@ -1,14 +1,33 @@
-import { getPlaces } from "../api/api";
-
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
-export const calculateShippingCosts = async (destAddress: String) => {
-  let distance = await getDistanceDriving(destAddress);
-
-  let costs = Math.round(distance * 2 * 100) / 100; // 2 euros per km
-
-  return costs;
+export type ShippingMethodType = {
+  title: string;
+  subtitle: string;
+  price: number;
 };
+
+export async function obtainShippingMethods(
+  destAddress: String
+): Promise<ShippingMethodType[]> {
+  // We obtain the coordinates from the address
+  let coords = await getCoordinatesFromAddress(destAddress);
+  // We compute the total distance that the package has to travel
+  let distance = await getDistanceDriving(coords);
+
+  // We return the different shipping methods and the costs for each of them
+  return [
+    {
+      title: "Correos",
+      subtitle: "The fastest shipping method we have!",
+      price: Math.round(distance * 2 * 100) / 100,
+    },
+    {
+      title: "Pick UP",
+      subtitle: "The cheapest method on earth!",
+      price: 0,
+    },
+  ];
+}
 
 export const showMapRoute = async (destCoords: String) => {
   let map = await getRouteImage(destCoords);
@@ -26,7 +45,7 @@ export const getCoordinatesFromAddress = async (address: String) => {
   return lat + "," + lon; //e.g 36.23423,-5.23423
 };
 
-function calculateCoordinates(address: String) {
+export function calculateCoordinates(address: String) {
   const axios = require("axios");
 
   return axios
@@ -77,22 +96,4 @@ function getRouteImage(destCoords: String) {
     .then((response: any) => {
       return response.data;
     });
-}
-
-export async function getNearByPlaces(
-  address: String,
-  radiusMeters: number,
-  maxResults: number
-) {
-  let coords = await calculateCoordinates(address);
-  const x = coords.features[0].geometry.coordinates[0];
-  const y = coords.features[0].geometry.coordinates[1];
-
-  const places = await getPlaces(x, y, radiusMeters, maxResults);
-
-  let addresses: string[] = new Array();
-  for (let i = 0; i < places.features.length; i++)
-    addresses.push(places.features[i].properties.formatted);
-  console.log(addresses);
-  return addresses;
 }

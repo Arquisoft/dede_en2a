@@ -4,7 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 
-export default function WebIdRadioGroup(props: any) {
+export default function CustomRadioGroup(props: any) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setValue((event.target as HTMLInputElement).value);
   };

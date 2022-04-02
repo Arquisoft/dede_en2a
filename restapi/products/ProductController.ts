@@ -25,7 +25,8 @@ export const getProduct: RequestHandler = async (req, res) => {
 export const createProduct: RequestHandler = async (req, res) => {
   try {
     let product = new productModel(req.body);
-    product.image = path.basename(req.file?.path + "");
+    if (process.env.MONGO_DB_URI !== undefined)
+      product.image = path.basename(req.file?.path + "");
     const productSaved = await product.save();
     res.json(productSaved);
   } catch (error) {
@@ -51,7 +52,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
     req.headers.email + ""
   );
   const user = await userModel.findOne({ email: req.headers.email });
-  console.log(user);
+
   if (isVerified && user.role === "admin") {
     try {
       const productFound = await productModel.deleteOne({
@@ -76,7 +77,6 @@ export const updateProduct: RequestHandler = async (req, res) => {
   const user = userModel.findOne({ email: req.headers.email });
   if (isVerified && (user.role === "admin" || user.role === "manager")) {
     try {
-      console.log(req.body);
       const product = await productModel.findOneAndUpdate(
         { code: req.params.code },
         req.body,

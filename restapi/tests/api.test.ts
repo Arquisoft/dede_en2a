@@ -1,22 +1,26 @@
-import request, { Response } from "supertest";
-import express, { Application, RequestHandler } from "express";
-import cors from "cors";
 import bp from "body-parser";
+import cors from "cors";
+import express, { Application, RequestHandler } from "express";
 import promBundle from "express-prom-bundle";
+import { Server } from "http";
 import morgan from "morgan";
-import apiUser from "../users/UserRoutes";
-import apiProduct from "../products/ProductRoutes";
+import request, { Response } from "supertest";
 import apiOrders from "../orders/OrderRoutes";
+import apiProduct from "../products/ProductRoutes";
 import apiReviews from "../reviews/ReviewRoutes";
+import apiUser from "../users/UserRoutes";
 
+var server: Server;
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 let helmet = require("helmet");
 
 const app: Application = express();
 
 const mongoose = require("mongoose");
-const connectionString = process.env.MONGO_DB_URI;
+const connectionString =
+  "mongodb+srv://test:test@cluster0.uzcmm.mongodb.net/test?retryWrites=true&w=majority";
 
 const options: cors.CorsOptions = {
   origin: ["http://localhost:3000"],
@@ -42,7 +46,7 @@ beforeAll(async () => {
   app.use("/uploads", express.static(path.resolve("uploads")));
   app.set("view engine", "ejs");
 
-  app.listen(5000);
+  server = app.listen(5000);
 
   mongoose.connect(connectionString, {
     useNewUrlParser: true,
@@ -51,6 +55,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  server.close();
   mongoose.connection.close();
 });
 
@@ -85,18 +90,31 @@ describe("users", () => {
 
   /**
    * Tests that a user can be created through the productService without throwing any errors.
+   * Also test that the requests returns a string, that will be the token
    */
   it("Can create a user correctly", async () => {
     const response: Response = await request(app).post("/users").send({
       name: "name",
       webId: "webId",
-      email: "email",
-      password: process.env.TEST_PASSWORD,
+      email: uuidv4(),
+      password: "test",
       verified: "false",
       role: "user",
-      test: "true",
     });
     expect(response.statusCode).toBe(200);
+    expect(typeof response.body).toBe("string");
+  });
+
+  it("Can't create a user with email already in use ", async () => {
+    const response: Response = await request(app).post("/users").send({
+      name: "name",
+      webId: "webId",
+      email: "pablo268la@gmail.com",
+      password: "test",
+      verified: "false",
+      role: "user",
+    });
+    expect(response.statusCode).toBe(412);
   });
 
   it("Can get a user token correctly", async () => {
@@ -104,7 +122,7 @@ describe("users", () => {
       .post("/users/requestToken/")
       .send({
         email: "test",
-        password: process.env.TEST_PASSWORD,
+        password: "test",
       });
     expect(response.statusCode).toBe(200);
   });
@@ -137,4 +155,91 @@ describe("prodcuts", () => {
       })
     );
   });
+
+  /**
+   * Test that we can't get a non existing product'
+   */
+  it("Can't get non existing product", async () => {
+    const response: Response = await request(app).get("/products/findByCode/0");
+    expect(response.statusCode).toBe(204);
+  });
+
+  it("Can create a product correctly", async () => {
+    const response: Response = await request(app).post("/products").send({
+      code: uuidv4(),
+      name: "testProduct",
+      price: 0.99,
+      description: "Another test product",
+      stock: 0,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.name).toBe("testProduct");
+    expect(response.body.stock).toBe(0);
+  });
+
+  it("Can't get create a product with same code", async () => {
+    const response: Response = await request(app).post("/products").send({
+      code: "0001",
+      name: "testFailProduct",
+      price: 0.99,
+      description: "A failure insert test product",
+      stock: 0,
+    });
+    expect(response.statusCode).toBe(409);
+  });
+
+  it("Can't get create a product without all values", async () => {
+    const response: Response = await request(app).post("/products").send({
+      name: "testFailProduct",
+      price: 0.99,
+      description: "A failure insert test product",
+      stock: 0,
+    });
+    expect(response.statusCode).toBe(412);
+  });
 });
+
+describe("reviews", () => {
+  it("Can get all reviews for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCode/0001"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can not get review of a user for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCodeAndEmail/0001/pablo268la@gmail.com"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can't get create a review without been verified", async () => {
+    const response: Response = await request(app).post("/reviews").send({
+      userEmail: "pablo268la@gmail.com",
+      productCode: "0001",
+      rating: 1,
+      comment: "Tuvo güena la cami",
+    });
+    expect(response.statusCode).toBe(203);
+    expect(response.body.message).toBe("Invalid token ");
+  });
+});
+
+
+describe("orders", () => {
+
+  // TODO ADD HEADERS
+  it("Can get all orders", async () => {
+    const response: Response = await request(app).get("/orders/list");
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+  });
+
+  it("Can not get user orders without ", async () => {
+    const response: Response = await request(app).get("/orders");
+    expect(response.statusCode).toBe(203);
+  });
+})

@@ -1,27 +1,26 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
+import StarIcon from "@mui/icons-material/StarBorder";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
 import CardHeader from "@mui/material/CardHeader";
-import StarIcon from "@mui/icons-material/StarBorder";
-
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
-
+import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 import { checkImageExists } from "../helpers/ImageHelper";
+
+
+
 
 export default function FeaturedProducts() {
   const tiers = [
     {
-      code: "1235",
-      title: "AMONGUS™ T-shirt",
-      price: "12.95",
-      image: "1236.png",
+      code: "0010",
+      title: 'Among Us "CryptoBro"',
+      price: "129.99",
+      image: "0010.png",
       buttonVariant: "outlined",
     },
     {
@@ -33,10 +32,10 @@ export default function FeaturedProducts() {
       buttonVariant: "contained",
     },
     {
-      code: "1237",
-      title: "AMONG US T-shirt",
-      price: "12.95",
-      image: "1237.png",
+      code: "0029",
+      title: "Seat Covers",
+      price: "99.99",
+      image: "0029.png",
       buttonVariant: "outlined",
     },
   ];
