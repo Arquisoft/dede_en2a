@@ -93,6 +93,7 @@ Component DataAccess{
        Component sol as "Solid"
        Component res as "RestApi"
        Component pay as "PayPal Api"
+       Component de as "Delivery Api"
 }
 
 Component pod as "Pod's service"
@@ -110,7 +111,7 @@ my-right->res
 
 
 ck -down-> pay
-
+ck-down->de
 
 
 sol <-down-> pod:acceses
