@@ -23,6 +23,10 @@ We have identified these risks and technical debts we might face during this pro
 | We are limited by the deadlines of this course.
 | We have to put an effort on managing our schedule as good as we can.
 
+|*Git and Github* 
+| We have a limited experience working with git and some troubles may arise from this. Indeed, we lost some work because a merge that was not properly performed.
+| As it is one of the most important tools a developer should know, we must understand better who it works. We have to study and learn - probably by try and error - this technologies: git and Github.
+
 |*First time we work in such a big team*
 | Having a group of 6 members has some benefits: you can develop a bigger project. But with some drawbacks regarding organization.
 | We have to make use of some tools such as Kanban or Issues for us to manage the project and communicate.
