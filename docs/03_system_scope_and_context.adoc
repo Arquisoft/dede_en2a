@@ -29,6 +29,9 @@ database "Database" as Db
 database "User's POD" as Pod
 component "WebApp" as WApp
 component "RestApi" as RApi
+component "Geoapify" as Geo
+component "PayPal" as PayPal
+component "Bing Maps" as Bing
 :User: --> [Pod]: Creates
 :User: --> [WApp]: Interacts
 [Db] --> [RApi]: Queries' result
@@ -37,7 +40,11 @@ component "RestApi" as RApi
 [WApp] --> [RApi]: Make requests
 [WApp] --> [Pod]: Request permissions
 [Pod] --> [WApp]: User's information
+[WApp] --> [Geo]: Request pickup locations
+[WApp] --> [Bing]: Request shipping information
+[WApp] --> [PayPal]: Request payment
 ----
+
 [%header, cols=3]
 |===
 |Entity|Input|Output
