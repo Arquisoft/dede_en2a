@@ -122,13 +122,10 @@ export const createPDF = async (code: string) => {
 
   pdf
     .create(root.toString(), options)
-    .toFile(
-      "./utils/pdf/" + orderFound.orderCode + ".pdf",
-      function (err, res) {
-        if (err) console.log(err);
-        else {
-          sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
-        }
+    .toFile("./pdf/" + orderFound.orderCode + ".pdf", function (err, res) {
+      if (err) console.log(err);
+      else {
+        sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
       }
-    );
+    });
 };
