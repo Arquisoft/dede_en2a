@@ -56,6 +56,26 @@ Those are the different decisions we have taken for developing our project. They
 | We all write code in a different manner, having a tool that manages the formatting is way too handy
 | Custom formattings are not allowed unless you tell the plug-in to do it
 | https://github.com/Arquisoft/dede_en2a/wiki/ADR-%239%3A-Code-formatter[ADR #9]
+
+| *Carrier API developed by ourselves*
+| We will know how the application works so the process of understanding it will be avoided.
+| We will have some extra work as we have to develop the API for ourselves.
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2310%3A-Carrier-API[ADR #10]
+
+| *Bing Maps (Static)*
+| We want to allow the user have a view of the route his package will travel, Bing Maps provides plenty of useful tools for doing so. More in more, we have an studend account!
+| The more functionalities an API has, the complex it becomes. This is no exception.
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2311%3A-Bing-Maps-%28Static%29[ADR #11]
+
+| *Geoapify (Dynamic)*
+| We want to let the user choose Pick UP locations as one of the shipping methods. Geoapify provides all those functionalities out-of-the-box. Including integration with dynamic maps and markers. The free-plan has also plenty of features, more than needed.
+| Having that said, you have to create your own queries for you to choose the locations and customize it a little bit.
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2312%3A-Geoapify-%28Dynamic%29[ADR #12]
+
+| *Application hosting*
+| Users all around the world will be able to connect to our application!
+| It's the first time we do this process, that is, some troubles are arising. More in more, we have never worked with Docker.
+| https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2313%3A-Application-hosting[ADR #13]
 |===
 
 === Deprecated decisions
