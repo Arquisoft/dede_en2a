@@ -68,7 +68,7 @@ export default function Review(props: any) {
       </List>
 
       <Stack
-        direction={{ xs: "column", sm: "row-reverse" }}
+        direction="row-reverse"
         justifyContent="space-between"
         alignItems="center"
       >

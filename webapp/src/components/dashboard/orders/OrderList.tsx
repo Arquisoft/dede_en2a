@@ -33,7 +33,7 @@ import { Order, User } from "../../../shared/shareddtypes";
 import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
 import { getOrdersForUser, getUser } from "../../../api/api";
 
-import FeaturedProducts from "../../FeaturedProducts";
+import FeaturedProducts from "../../home/FeaturedProducts";
 import StatusMessage from "./StatusMessage";
 
 const ALL = "all";

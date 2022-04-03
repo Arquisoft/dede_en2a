@@ -4,10 +4,15 @@ import { useParams } from "react-router-dom";
 import { getProduct, getReviewsByCode } from "../../api/api";
 import { getReviewMean } from "../../helpers/ReviewHelper";
 import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
+import { checkImageExists } from "../../helpers/ImageHelper";
+
 import { Product, Review, CartItem } from "../../shared/shareddtypes";
 
 import ProductCommentList from "./ProductCommentList";
 import StockAlert from "../StockAlert";
+import ProductSpeedDial from "./ProductSpeedDial";
+import ReviewDialog from "./ReviewDialog";
+import ShareDialog from "./ShareDialog";
 
 import {
   Paper,
@@ -21,14 +26,7 @@ import {
   Divider,
   LinearProgress,
   Link,
-  TextField,
 } from "@mui/material";
-import { checkImageExists } from "../../helpers/ImageHelper";
-import ProductSpeedDial from "./ProductSpeedDial";
-import ReviewDialog from "./ReviewDialog";
-import ShareDialog from "./ShareDialog";
-import DialogWrapper from "../dialogs/Dialog";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 export type ProductProps = {
   product: Product;
@@ -139,11 +137,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
       <React.Fragment>
         <ShopBreadcrumbs product={product.name} />
         <Grid>
-          <Paper
-            variant="outlined"
-            elevation={8}
-            style={{ margin: "3vh 5vw", padding: "1em" }}
-          >
+          <Paper elevation={8} style={{ margin: "3vh 5vw", padding: "1em" }}>
             <Grid
               container
               direction="row"

@@ -13,11 +13,16 @@ import { getPickUpPlacesNearby } from "../../../helpers/ShippingMethodHelper";
 import maplibre from "maplibre-gl";
 
 export default function PickUpLocationsMap(props: any) {
-  const [pickUpLocation, setPickUpLocation] = React.useState("");
   const [map, setMap] = React.useState<any>(null);
   const mapContainer = React.useRef<string | HTMLElement>("");
 
-  const createMarker = (lat: number, lon: number, name: string, map: any) => {
+  const createMarker = (
+    lat: number,
+    lon: number,
+    name: string,
+    street_address: string,
+    map: any
+  ) => {
     let pickUpPointIcon = document.createElement("div");
     pickUpPointIcon.classList.add("pickUpPoint");
 
@@ -31,7 +36,9 @@ export default function PickUpLocationsMap(props: any) {
     let pickUpPopup = new maplibre.Popup({
       anchor: "bottom",
       offset: [0, -32], // height - shadow
-    }).setHTML(`<p style="color:black; font-style: italic">${name}</p>`);
+    }).setHTML(
+      `<p style="color:black; font-style: italic">${name}</p> <p style="color:black"> ${street_address} </p>`
+    );
 
     let marker = new maplibre.Marker(pickUpPointIcon, {
       anchor: "bottom",
@@ -42,9 +49,8 @@ export default function PickUpLocationsMap(props: any) {
       .addTo(map);
 
     marker.getElement().addEventListener("click", function () {
-      setPickUpLocation(name);
-      props.setAddress(name);
-      props.setPickUpAddress(name);
+      props.setAddress(street_address);
+      props.setPickUpLocation(name);
     });
   };
 
@@ -53,7 +59,7 @@ export default function PickUpLocationsMap(props: any) {
     let pickUpPlaces = await getPickUpPlacesNearby(props.address, 500, 10);
 
     const key = process.env.REACT_APP_GEOAPIFY_KEY;
-    const style = "https://maps.geoapify.com/v1/styles/maptiler-3d/style.json";
+    const style = "https://maps.geoapify.com/v1/styles/positron/style.json";
 
     const initialState = {
       lng: coords.features[0].geometry.coordinates[0],
@@ -69,7 +75,7 @@ export default function PickUpLocationsMap(props: any) {
     });
 
     pickUpPlaces.forEach((place) =>
-      createMarker(place.lat, place.lon, place.name, map)
+      createMarker(place.lat, place.lon, place.name, place.street_address, map)
     );
 
     setMap(map);
@@ -81,7 +87,7 @@ export default function PickUpLocationsMap(props: any) {
 
   return (
     <React.Fragment>
-      <Divider sx={{ mb: 2 }}>Pickup locations</Divider>
+      <Divider sx={{ mb: 2 }}>Pick UP locations</Divider>
 
       <Card>
         <CardMedia>
@@ -94,13 +100,13 @@ export default function PickUpLocationsMap(props: any) {
           />
         </CardMedia>
         <CardContent>
-          <Typography variant="h6">
-            {pickUpLocation
-              ? "You have chosen the following Pickup location"
+          <Typography variant="subtitle1">
+            {props.pickUpLocation
+              ? `You have chosen the following location: ${props.pickUpLocation}`
               : "No location has been chosen yet"}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {pickUpLocation}
+            {props.pickUpLocation ? props.address : ""}
           </Typography>
         </CardContent>
       </Card>
