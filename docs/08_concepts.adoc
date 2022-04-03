@@ -52,16 +52,50 @@ image:08-Crosscutting-Concepts-Structure-EN.png["Possible topics for crosscuttin
 
 === Domain model
 
-image:UmlDiagram.png["Example UML Diagram"]
+[plantuml, "DomainModel", png]
+----
+object User{
+    name : String
+    webId : String
+    email : String
+    password: String
+    role : String
+    verified : boolean
+}
 
+object Product{
+    code: String
+    name: String
+    description: String
+    price: double
+    stock: int
+    image: String
+}
 
+object Order{
+    orderCode: String
+    totalPrice: double
+    shippingPrice: double
+    orderReceived: boolean
+}
 
-=== _<Concept 2>_
+object Review{
+    rating: int
+    comment: String
+}
 
-_<explanation>_
+User *--> Order
+Order o--> Product
+Product *--> Review
+User *--> Review
+----
 
-...
+=== Security
 
-=== _<Concept n>_
+Security is a very important concept in the context of a system, because we are managing information from users. It is important to ensure that the information is secure and that the system is not compromised. So, we decided to store in our system the minimun information necessary and obtain the other from the PODs. Also we decided to encrypt the users' passwords.
 
-_<explanation>_
+Also we added security in the backend to prevent unauthorized requests to the RestAPI, as well as to prevent the insertion of malicious code.
+
+=== Testability
+
+In order to ensure the correct functioning of the system, we decided to implement unit tests for each component. Also we implement e2e tests to check that the full system is working properly and that the user experience is good.

@@ -1,17 +1,47 @@
 [[section-technical-risks]]
 == Risks and Technical Debts
 
+We have identified these risks and technical debts we might face during this project. They are ordered by priority from higher to lower.
 
-[role="arc42help"]
-****
-.Contents
-A list of identified technical risks or technical debts, ordered by priority
+=== Risks
 
-.Motivation
-“Risk management is project management for grown-ups” (Tim Lister, Atlantic Systems Guild.) 
+[options="header",cols="3,5,5"]
+|===
+|Risk
+|Brief description
+|Measures we are taking against it
 
-This should be your motto for systematic detection and evaluation of risks and technical debts in the architecture, which will be needed by management stakeholders (e.g. project managers, product owners) as part of the overall risk analysis and measurement planning.
+|*Lack of knowledge of SOLID* 
+| It's a new technology and we have never worked in any product of this kind. That is, we have no idea of how to work with it. It is not quite easy finding the documentation we needed and there are not quite many examples.
+| We did our own research and found a library that works just fine. However, before doing so, we needed to understand the technology itself first.
 
-.Form
-List of risks and/or technical debts, probably including suggested measures to minimize, mitigate or avoid risks or reduce technical debts.
-****
+|*Lack of knowledge of many of the tools* 
+|We have not quite much experience working with Typescript, React, Node.js, Docker or Web testing.
+|Those software products have a nice documentation and - once you understand them - they are easy to work with. Probably Docker was the one we had more struggles with. However, we make this separation between SOLID and the rest of tools, as probably we put the same effort on researching for the first as with the second stack (whole).
+
+|*Time* 
+| We are limited by the deadlines of this course.
+| We have to put an effort on managing our schedule as good as we can.
+
+|*Git and Github* 
+| We have a limited experience working with git and some troubles may arise from this. Indeed, we lost some work because a merge that was not properly performed.
+| As it is one of the most important tools a developer should know, we must understand better who it works. We have to study and learn - probably by try and error - this technologies: git and Github.
+
+|*First time we work in such a big team*
+| Having a group of 6 members has some benefits: you can develop a bigger project. But with some drawbacks regarding organization.
+| We have to make use of some tools such as Kanban or Issues for us to manage the project and communicate.
+|===
+
+=== Technical debts
+
+[options="header",cols="3,5"]
+|===
+|Technical debt
+|Brief description
+
+|*Client internet connection* 
+| In case the user has a weak Internet connection - and the use of different services we consume from external APIs - the application will run quite slowly. This is an issue involving every application has. We made the decision of using different services, this cannot be undone.
+
+|*Services going down* 
+| If any of the services we consume goes down, that is, we have a strong dependency with external APIs we have no control of. If Inrupt, Bing, Geoapify or any other API fails, some of our features won't work as intended.
+|===

@@ -1,63 +1,87 @@
 [[section-quality-scenarios]]
 == Quality Requirements
 
-
-[role="arc42help"]
-****
-
-.Content
-This section contains all quality requirements as quality tree with scenarios. The most important ones have already been described in section 1.2. (quality goals)
-
-Here you can also capture quality requirements with lesser priority,
-which will not create high risks when they are not fully achieved.
-
-.Motivation
-Since quality requirements will have a lot of influence on architectural
-decisions you should know for every stakeholder what is really important to them,
-concrete and measurable.
-****
-
 === Quality Tree
 
-[role="arc42help"]
-****
-.Content
-The quality tree (as defined in ATAM – Architecture Tradeoff Analysis Method) with quality/evaluation scenarios as leafs.
-
-.Motivation
-The tree structure with priorities provides an overview for a sometimes large number of quality requirements.
-
-.Form
-The quality tree is a high-level overview of the quality goals and requirements:
-
-* tree-like refinement of the term "quality". Use "quality" or "usefulness" as a root
-* a mind map with quality categories as main branches
-
-In any case the tree should include links to the scenarios of the following section.
-****
+[plantuml, "Quality tree", png]
+----
+left to right direction
+(Quality) as (Q)
+(Privacy) as (Pr)
+(Performance) as (Pe)
+(Usability) as (U)
+(Security) as (S)
+(Reliability) as (R)
+(Maintainability) as (M)
+(Freedom) as (F)
+(Portability) as (P)
+Q --> Pr
+Q --> Pe
+Q --> U
+Q --> S
+Q --> R
+Q --> M
+Q --> F
+Q --> P
+----
 
 === Quality Scenarios
 
-[role="arc42help"]
-****
-.Contents
-Concretization of (sometimes vague or implicit) quality requirements using (quality) scenarios.
+In this section, point 1.2 is being extended, describing them all with a different perspective in mind:
 
-These scenarios describe what should happen when a stimulus arrives at the system.
+[options="header",cols="1,3,3,3,1"]
+|===
+|Quality goal
+|Motivation
+|Usage scenarios
+|Change scenarios
+|Priority
 
-For architects, two kinds of scenarios are important:
+|*Privacy*
+|We must protect data from users. This means, application will only take essential data. Not only that, but also in a decentralized way.
+|Data from users will be retrieved in a decentralized way, from the user's pod. Only the username, password and street (for us to know where we have to deliver the package) will be stored. In the sign-up form and checkout the data is not stored, but retrieved from the POD.
+|We had to change the way we implemented the sign-up form and create a new checkout process where data is retrieved from the POD. This is strictly related to the usability scenario as we have to refactor those sections of the application in such a way that a user with no experience will be able to successfully perform any task.
+|High
 
-* Usage scenarios (also called application scenarios or use case scenarios) describe the system’s runtime reaction to a certain stimulus. This also includes scenarios that describe the system’s efficiency or performance. Example: The system reacts to a user’s request within one second.
-* Change scenarios describe a modification of the system or of its immediate environment. Example: Additional functionality is implemented or requirements for a quality attribute change.
+|*Performance*
+|It won't matter the usability, nor the overall aesthetics of the applications if the user leaves the site as it won't load as fast as he expects. More in more, there's nothing more frustrating than waiting for something to load. This means, user interaction must be done as fluent as possible.
+|We will aim for the application to load in less than 1.5 seconds; indeed, 47% of the internet users expect a site to load in 2 seconds or less, so we are focusing in doing it better than the average.
+| We will have to refactor large pieces of code for us to have the best performances possible: one example is using pagination for the shop not to load all the items at once.
+|High
 
-.Motivation
-Scenarios make quality requirements concrete and allow to
-more easily measure or decide whether they are fulfilled.
+|*Usability*
+|The user won't purchase any item if he is not able to reach the shopping cart, or have some feedback for that product from other customers.
+|We aim for 90% of the users to be able to complete any -separate- task in less than 2 minutes, without any previous knowledge of the app.
+|We have included a rating system for the application. This way the user will have a measure of the quality of each item we offer. Not only that but we have also included some loading effects in case we are waiting for a response from a third party system.
+|High
 
-Especially when you want to assess your architecture using methods like
-ATAM you need to describe your quality goals (from section 1.2)
-more precisely down to a level of scenarios that can be discussed and evaluated.
+|*Security*
+|We wont be able to develop a good product unless data is stored in a secure place. If the user doesn't trust in our site, he won't purchase any item: just leave the app.
+|Data must not be accesible for any third parties. Data from users will be stored in a secure system.
+|Highly related to the privacy requirement, we had made plenty of changes for the application to be as secure as possible: one example is preventing NoSQL injections from happening from text fields in forms.
+|High
 
-.Form
-Tabular or free form text.
-****
+|*Reliability*
+|Errors from the application have to be handled by the application itself, it shouldn't crash!
+|The user will be unconscious from system crashes happening. In case some error takes place, it will be properly handled.
+|A big effort will be put into preventing errorrs. This is strongly related with the maintanability part, where implementing a feature is much more than making it work.
+|High
+
+|*Maintanability*
+|Modifications will take place, so we have to enforce ourselves to code in such a way that maintaining our code will be an easy task.
+|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher execellence-ratios: 0.5 defects per 1000 lines of code.
+|A higher effort will be devoted when implementing a new feature but it will be highly rewarded when modifications take place!
+|Medium
+
+|*Freedom*
+|We are developing in a green field: Solid PODS. This means, we expect no one else will take as much effort as we did for implementing our system. Our code is available in a repository with plenty of documentation.
+|The whole project, including all the components: code, documentation... Must be uploaded to a public repository, for it to be accessible to anyone in any place.
+|A public repository with every discussion, issue or decision recorded.
+|Medium
+
+|*Portability*
+|The application will be available for any kind of device. Users surf the internet in plenty of different devices: cell phones, tablets, desktop computers, laptops... Even wearables!
+|We will make the user experience as good as possible for the more different devices as possible.
+|We have to put an effort on making our front-end responsive for it to work with any device.
+|Low-Medium
+|===
