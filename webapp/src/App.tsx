@@ -1,43 +1,46 @@
-import {
-  Alert, createTheme,
-  CssBaseline,
-  PaletteMode, Snackbar, ThemeProvider,
-  useMediaQuery
-} from "@mui/material";
-import { grey, lightBlue } from "@mui/material/colors";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import "bootstrap/dist/css/bootstrap.css";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { getProducts, getUser } from "./api/api";
-import "./App.css";
-import ShoppingCart from "./components/cart/ShoppingCart";
-import Checkout from "./components/checkout/Checkout";
-import Dashboard from "./components/dashboard/Dashboard";
-import DashboardContent from "./components/dashboard/DashboardContent";
-import OrderDetails from "./components/dashboard/orders/OrderDetails";
-import OrderList from "./components/dashboard/orders/OrderList";
-import DeleteProduct from "./components/dashboard/products/DeleteProduct";
-import ProductList from "./components/dashboard/products/ProductList";
-import UploadProduct from "./components/dashboard/products/UploadProduct";
+
+import NavBar from "./components/navigation/NavBar";
 import DedeApp from "./components/DedeApp";
 import Home from "./components/Home";
-import NavBar from "./components/navigation/NavBar";
-import ProductDetails from "./components/products/ProductDetails";
+import Shop from "./components/Shop";
+import ShoppingCart from "./components/cart/ShoppingCart";
 import SignIn from "./components/register/SignIn";
 import SignUp from "./components/register/SignUp";
-import Shop from "./components/Shop";
+import Checkout from "./components/checkout/Checkout";
+import ProductDetails from "./components/products/ProductDetails";
+import OrderDetails from "./components/dashboard/orders/OrderDetails";
+import OrderList from "./components/dashboard/orders/OrderList";
+import ProductList from "./components/dashboard/products/ProductList";
+import Dashboard from "./components/dashboard/Dashboard";
+import UploadProduct from "./components/dashboard/products/UploadProduct";
+import DeleteProduct from "./components/dashboard/products/DeleteProduct";
+
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
+
+import {
+  createTheme,
+  CssBaseline,
+  PaletteMode,
+  ThemeProvider,
+  useMediaQuery,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import { grey, lightBlue } from "@mui/material/colors";
+
+import { getProducts, getUser } from "./api/api";
 import {
   CartItem,
   NotificationType,
   Product,
-  User
+  User,
 } from "./shared/shareddtypes";
 
-
-
-
-
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import DashboardContent from "./components/dashboard/DashboardContent";
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
