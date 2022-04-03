@@ -5,6 +5,7 @@ type PickupLocation = {
   lat: number;
   lon: number;
   name: string;
+  street_address: string;
 };
 
 export async function getPickUpPlacesNearby(
@@ -22,7 +23,8 @@ export async function getPickUpPlacesNearby(
     locations.push({
       lat: feature.geometry.coordinates[0],
       lon: feature.geometry.coordinates[1],
-      name: feature.properties.formatted,
+      name: feature.properties.name,
+      street_address: feature.properties.address_line2,
     })
   );
 

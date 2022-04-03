@@ -9,7 +9,7 @@ import ShippingRouteMap from "./shipping/ShippingRouteMap";
 
 export default function ShippingMethod(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [pickUpAddress, setPickUpAddress] = React.useState("");
+  const [pickUpLocation, setPickUpLocation] = React.useState("");
   const [shippingMethod, setShippingMethod] = React.useState("");
 
   // We manage the button for going back and forth
@@ -26,7 +26,7 @@ export default function ShippingMethod(props: any): JSX.Element {
     // We are at the first step: in case no shipping method has been selected
     if (activeStep === 0) return shippingMethod !== "";
     // In case we are at the pickUp location selector: no address has been selected
-    if (activeStep === 1) return pickUpAddress !== "";
+    if (activeStep === 1) return pickUpLocation !== "";
     // We are at the last step: viewing the delivery details
     if (activeStep === 2) return true;
     // By default we will disable it
@@ -55,7 +55,8 @@ export default function ShippingMethod(props: any): JSX.Element {
           <PickUpLocationsMap
             address={props.address}
             setAddress={props.setAddress}
-            setPickUpAddress={setPickUpAddress}
+            pickUpLocation={pickUpLocation}
+            setPickUpLocation={setPickUpLocation}
           />
         );
       case 2:

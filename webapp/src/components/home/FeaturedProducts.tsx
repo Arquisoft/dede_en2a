@@ -18,7 +18,6 @@ const tiers = [
     title: "AMONG US™ CryptoBro",
     price: "129.99",
     image: "0010.png",
-    buttonVariant: "outlined",
   },
   {
     code: "1234",
@@ -26,14 +25,12 @@ const tiers = [
     subheader: "The most popular among all",
     price: "12.95",
     image: "1234.png",
-    buttonVariant: "contained",
   },
   {
     code: "0029",
     title: "AMONG US™ Seat Covers",
     price: "99.99",
     image: "0029.png",
-    buttonVariant: "outlined",
   },
 ];
 
@@ -88,6 +85,7 @@ function FeaturedProduct(props: any) {
             width="100%"
             alt="Image of the product"
             src={checkImageExists(props.tier.image)}
+            onClick={() => navigate("/product/" + props.tier.code)}
             sx={{ m: 0, p: 0, objectFit: "cover" }}
           />
         </CardActionArea>
