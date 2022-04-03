@@ -39,7 +39,6 @@ when your infrastructure is more complex.
 [role="arc42help"]
 [plantuml, "07_DeploymentView", png]
 ----
-@startuml 07_DeploymentView_V0
 
 node AzureServer{
     node DockerContainer {
@@ -74,7 +73,6 @@ RestApi -d-> WebApp : "supply data"
 RestApi -r-> CarrierAPI : "calculate routes prices"
 WebApp <-d- User
 
-@enduml
 ----
 
 .Motivation
