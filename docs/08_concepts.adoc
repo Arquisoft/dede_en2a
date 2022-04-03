@@ -99,5 +99,3 @@ Also we added security in the backend to prevent unauthorized requests to the Re
 === Testability
 
 In order to ensure the correct functioning of the system, we decided to implement unit tests for each component. Also we implement e2e tests to check that the full system is working properly and that the user experience is good.
-
-_<explanation>_

@@ -2,10 +2,7 @@
 == Glossary
 
 
-
-[role="arc42help"]
-
-[options="header", cols="1,2"]
+[options="header", cols="1,1"]
 |===
 | Term         | Definition
 | Api     | Set of programming code that enables data transmission between one software product and another.

@@ -36,10 +36,8 @@ when your infrastructure is more complex.
 
 === Infrastructure Level 1
 
-[role="arc42help"]
 [plantuml, "07_DeploymentView", png]
 ----
-
 node AzureServer{
     node DockerContainer {
         component RestApi
@@ -72,7 +70,6 @@ WebApp -r-> PayPalAPI : "provides paying system"
 RestApi -d-> WebApp : "supply data"
 RestApi -r-> CarrierAPI : "calculate routes prices"
 WebApp <-d- User
-
 ----
 
 .Motivation
