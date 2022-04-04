@@ -75,6 +75,7 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
       AUTH_PASS: ${{ secrets.AUTH_PASS }}
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
     needs: [unit-test-webapp, unit-test-restapi]
     steps:
       - uses: actions/checkout@v2
@@ -86,7 +87,7 @@ jobs:
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
           workdir: restapi
-          buildargs: PORT, MONGO_DB_URI, NODE_ENV, JWT_SECRET, AUTH_EMAIL, AUTH_PASS
+          buildargs: PORT, MONGO_DB_URI, NODE_ENV, JWT_SECRET, AUTH_EMAIL, AUTH_PASS, SENDGRID_API_KEY
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
