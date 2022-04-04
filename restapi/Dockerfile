@@ -8,12 +8,12 @@ RUN npm install
 ENV OPENSSL_CONF=/opt/openssl.cnf
 ENV PHANTOMJS_VERSION 2.1.1
 
-RUN apk add --update --no-cache curl && 
-curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xz -C / && \
-curl -k -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar -jxvf - -C / && 
-cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs && 
-rm -fR phantomjs-2.1.1-linux-x86_64 && 
-apk del curl
+RUN apk add --update --no-cache curl \
+&& curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xz -C / \ 
+&& curl -k -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar -jxvf - -C / \ 
+&& cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs \ 
+&& rm -fR phantomjs-2.1.1-linux-x86_64  \ 
+&& apk del curl
 
 ARG PORT="5000"
 ENV PORT=$PORT
