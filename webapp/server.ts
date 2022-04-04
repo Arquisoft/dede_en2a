@@ -1,6 +1,6 @@
 import express,{Application} from 'express'; 
 const path = require('path');
-const publicPath = path.join(__dirname, '..', 'public');
+const publicPath = path.join(__dirname, '.', 'public');
 //for using an import here we need to configure the tsconfig.json
 //setting the option module to commonjs
 
