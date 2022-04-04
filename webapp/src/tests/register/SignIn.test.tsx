@@ -89,6 +89,7 @@ test("Sign in with incorrect values not found", async () => {
     .mockImplementation(
       (email: String): Promise<User> => Promise.resolve(user)
     );
+
   const { getByText, container, getByTestId } = render(
     <Router>
       <SignIn setCurrentUser={() => {}} />
