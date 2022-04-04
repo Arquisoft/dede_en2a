@@ -5,7 +5,9 @@ import promBundle from "express-prom-bundle";
 import { Server } from "http";
 import morgan from "morgan";
 import request, { Response } from "supertest";
+import { userModel } from "../users/User";
 import apiUser from "../users/UserRoutes";
+import { userVerificationModel } from "../users/UserVerification";
 
 var server: Server;
 const { v4: uuidv4 } = require("uuid");
@@ -81,11 +83,12 @@ describe("users", () => {
    * Tests that a user can be created through the productService without throwing any errors.
    * Also test that the requests returns a string, that will be the token
    */
+  let userEmail = uuidv4();
   it("Can create a user correctly", async () => {
     const response: Response = await request(app).post("/users").send({
       name: "name",
       webId: "webId",
-      email: uuidv4(),
+      email: userEmail,
       password: "test",
       verified: "false",
       role: "user",
@@ -106,6 +109,14 @@ describe("users", () => {
     expect(response.statusCode).toBe(412);
   });
 
+  it("Can't create a user without all fields", async () => {
+    const response: Response = await request(app).post("/users").send({
+      name: "name",
+      role: "user",
+    });
+    expect(response.statusCode).toBe(412);
+  });
+
   it("Can get a user token correctly", async () => {
     const response: Response = await request(app)
       .post("/users/requestToken/")
@@ -114,5 +125,110 @@ describe("users", () => {
         password: "test",
       });
     expect(response.statusCode).toBe(200);
+  });
+
+  it("Can't get a user token for unverified user", async () => {
+    const response: Response = await request(app)
+      .post("/users/requestToken/")
+      .send({
+        email: userEmail,
+        password: "test",
+      });
+    expect(response.statusCode).toBe(412);
+  });
+
+  it("Can get a user token with erroneous password", async () => {
+    const response: Response = await request(app)
+      .post("/users/requestToken/")
+      .send({
+        email: userEmail,
+        password: "erroneous",
+      });
+    expect(response.statusCode).toBe(412);
+  });
+
+  it("Can't get a user token for non-existing email", async () => {
+    const response: Response = await request(app)
+      .post("/users/requestToken/")
+      .send({
+        email: "empty email",
+        password: "test",
+      });
+    expect(response.statusCode).toBe(409);
+  });
+
+  // First all incorrect tries to verify. Last one the successful one
+  it("Trying to verify with incorrect uniqueString", async () => {
+    const prevUser = await userModel.findOne({ email: userEmail });
+    expect(prevUser.verified).toBe(false);
+    const response: Response = await request(app)
+      .get("/users/verify/" + userEmail + "/0")
+      .send();
+    const postUser = await userModel.findOne({ email: userEmail });
+    expect(postUser.verified).toBe(false);
+    expect(response.header.location).toBe(
+      "/users/notVerified/An%20internal%20error%20happen."
+    );
+  });
+
+  it("Trying to verify a non-exisiting verification model", async () => {
+    const prevUser = await userModel.findOne({ email: userEmail });
+    expect(prevUser.verified).toBe(false);
+    const response: Response = await request(app)
+      .get(
+        "/users/verify/notThis" +
+          userEmail +
+          "/" +
+          userVerificationModel.uniqueString
+      )
+      .send();
+    const postUser = await userModel.findOne({ email: userEmail });
+    expect(postUser.verified).toBe(false);
+    expect(response.header.location).toBe(
+      "/users/notVerified/That%20account%20doesn't%20exist%20or%20has%20been%20already%20verified.%20Please%20sign%20up%20or%20sign%20in."
+    );
+  });
+
+  it("Trying to verify with expired time for verifying", async () => {
+    const userVerification = await userVerificationModel.findOneAndUpdate(
+      {
+        email: userEmail,
+      },
+      { expiresAt: Date.now() - 1200000 },
+      { new: true }
+    ); // Updating the user verification document to set the verifiedExpiringTime to an old date
+    const prevUser = await userModel.findOne({ email: userEmail });
+    expect(prevUser.verified).toBe(false);
+    const response: Response = await request(app)
+      .get("/users/verify/" + userEmail + "/" + userVerification.uniqueString)
+      .send();
+    const postUser = await userModel.findOne({ email: userEmail });
+    expect(response.header.location).toBe(
+      "/users/notVerified/The%20link%20has%20expired.%20Please%20sign%20up%20again"
+    );
+  });
+
+  it("Trying to verify", async () => {
+    let emailForTest = uuidv4();
+    await request(app).post("/users").send({
+      name: "name",
+      webId: "webId",
+      email: emailForTest,
+      password: "test",
+      verified: "false",
+      role: "user",
+    }); // Creating a new user for testing a good verification
+    const userVerification = await userVerificationModel.findOne({
+      email: emailForTest,
+    }); // To get the userverification email string
+    const prevUser = await userModel.findOne({ email: emailForTest });
+    expect(prevUser.verified).toBe(false);
+    await request(app)
+      .get(
+        "/users/verify/" + emailForTest + "/" + userVerification.uniqueString
+      )
+      .send();
+    const postUser = await userModel.findOne({ email: emailForTest });
+    expect(postUser.verified).toBe(true);
   });
 });

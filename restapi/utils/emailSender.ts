@@ -1,4 +1,3 @@
-import { userVerificationModel } from "../users/UserVerification";
 
 const nodemailer = require("nodemailer");
 const { v4: uuidv4 } = require("uuid");
@@ -37,9 +36,8 @@ export const sendInvoiceEmail: Function = (
   sgMail.send(mailOptions);
 };
 
-export const sendVerificationEmail: Function = async (email: string) => {
+export const sendVerificationEmail: Function = async (email: string, uniqueString: string) => {
   const currentUrl = "http://localhost:5000";
-  const uniqueString = uuidv4();
 
   const mailOptions = {
     to: email,
@@ -55,14 +53,6 @@ export const sendVerificationEmail: Function = async (email: string) => {
       uniqueString +
       '"}>here<a/> to proceed</p>',
   };
-
-  const newUserVerification = new userVerificationModel({
-    email: email,
-    uniqueString: uniqueString,
-    expiresAt: Date.now() + 21600000,
-  });
-
-  await newUserVerification.save();
 
   if (process.env.MONGO_DB_URI !== undefined) sgMail.send(mailOptions);
 };
