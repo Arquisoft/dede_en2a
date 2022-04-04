@@ -120,7 +120,7 @@ export const createPDF = async (code: string) => {
 
   body.insertAdjacentHTML("beforeend", aux);
 
-  pdf
+  await pdf
     .create(root.toString(), options)
     .toFile("./pdf/" + orderFound.orderCode + ".pdf", function (err, res) {
       if (err) console.log(err);
