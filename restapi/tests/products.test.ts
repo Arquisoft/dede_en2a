@@ -6,6 +6,7 @@ import { Server } from "http";
 import morgan from "morgan";
 import request, { Response } from "supertest";
 import apiProduct from "../products/ProductRoutes";
+import apiUsers from "../users/UserRoutes";
 
 var server: Server;
 const { v4: uuidv4 } = require("uuid");
@@ -18,7 +19,6 @@ const mongoose = require("mongoose");
 const connectionString =
   "mongodb+srv://test:test@cluster0.uzcmm.mongodb.net/test?retryWrites=true&w=majority";
 
-
 beforeAll(async () => {
   const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
   app.use(metricsMiddleware);
@@ -29,6 +29,7 @@ beforeAll(async () => {
   app.use(bp.urlencoded({ extended: false }));
   app.use(morgan("dev"));
 
+  app.use(apiUsers);
   app.use(apiProduct);
 
   app.use(helmet.hidePoweredBy());
@@ -45,7 +46,6 @@ afterAll(async () => {
   server.close();
   mongoose.connection.close();
 });
-
 
 describe("prodcuts", () => {
   /**
@@ -83,38 +83,111 @@ describe("prodcuts", () => {
     expect(response.statusCode).toBe(412);
   });
 
-  it("Can create a product correctly", async () => {
+  let productCode = uuidv4();
+  it("Can't create a product without token", async () => {
     const response: Response = await request(app).post("/products").send({
-      code: uuidv4(),
+      code: productCode,
       name: "testProduct",
       price: 0.99,
       description: "Another test product",
       stock: 0,
     });
+    expect(response.statusCode).toBe(403);
+  });
+
+  /*
+  To create a product the user must be registered and also be a manager or admin role
+  */
+  it("Can create a product correctly", async () => {
+    let userToken = await getToken();
+    const response: Response = await request(app)
+      .post("/products")
+      .set("token", userToken)
+      .set("email", "test")
+      .send({
+        code: productCode,
+        name: "testProduct",
+        price: 0.99,
+        description: "Another test product",
+        stock: 0,
+      });
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toBe("testProduct");
     expect(response.body.stock).toBe(0);
   });
 
-  it("Can't get create a product with same code", async () => {
-    const response: Response = await request(app).post("/products").send({
-      code: "0001",
-      name: "testFailProduct",
-      price: 0.99,
-      description: "A failure insert test product",
-      stock: 0,
-    });
+  it("Can't create a product with same code", async () => {
+    let userToken = await getToken();
+    const response: Response = await request(app)
+      .post("/products")
+      .set("token", userToken)
+      .set("email", "test")
+      .send({
+        code: productCode,
+        name: "testFailProduct",
+        price: 0.99,
+        description: "A failure insert test product",
+        stock: 0,
+      });
     expect(response.statusCode).toBe(409);
   });
 
-  it("Can't get create a product without all values", async () => {
-    const response: Response = await request(app).post("/products").send({
-      name: "testFailProduct",
-      price: 0.99,
-      description: "A failure insert test product",
-      stock: 0,
-    });
+  it("Can't create a product without all values", async () => {
+    let userToken = await getToken();
+    const response: Response = await request(app)
+      .post("/products")
+      .set("token", userToken)
+      .set("email", "test")
+      .send({
+        name: "testFailProduct",
+      });
     expect(response.statusCode).toBe(412);
+  });
+
+  it("Can update a product correctly", async () => {
+    let userToken = await getToken();
+    const response: Response = await request(app)
+      .post("/products/update/" + productCode)
+      .set("token", userToken)
+      .set("email", "test")
+      .send({
+        stock: 1,
+      });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.stock).toBe(1);
+  });
+
+  it("Can't update a product without token", async () => {
+    const response: Response = await request(app)
+      .post("/products/update/" + productCode)
+      .send({
+        stock: 1,
+      });
+    expect(response.statusCode).toBe(403);
+  });
+
+  it("Can delete a product correctly", async () => {
+    let userToken = await getToken();
+    const response: Response = await request(app)
+      .post("/products/delete/" + productCode)
+      .set("token", userToken)
+      .set("email", "test")
+      .send();
+    expect(response.statusCode).toBe(200);
+  });
+
+  it("Can't delete a product without token", async () => {
+    const response: Response = await request(app)
+      .post("/products/delete/" + productCode)
+      .send();
+    expect(response.statusCode).toBe(403);
   });
 });
 
+async function getToken() {
+  const token: Response = await request(app).post("/users/requestToken/").send({
+    email: "test",
+    password: "test",
+  });
+  return token.body;
+}
