@@ -12,7 +12,6 @@ export const verifyToken = (token: String, email: String) => {
     if (decoded.email === email) return true;
     else return false;
   } catch (error) {
-    console.log("Ese token no valido manin");
     return false;
   }
 };

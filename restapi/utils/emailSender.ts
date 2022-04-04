@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 
 const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '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');
 
 export const sendInvoiceEmail: Function = (
   email: string,
