@@ -16,10 +16,10 @@ export const getOrder: RequestHandler = async (req, res) => {
     if (orderFound) {
       return res.json(orderFound);
     } else {
-      return res.status(204).json();
+      return res.status(412).json();
     }
   } else {
-    return res.status(203).json();
+    return res.status(403).json();
   }
 };
 
@@ -45,10 +45,10 @@ export const getUserOrders: RequestHandler = async (req, res) => {
     if (orderFound) {
       return res.json(orderFound);
     } else {
-      return res.status(204).json();
+      return res.status(412).json();
     }
   } else {
-    return res.status(203).json();
+    return res.status(403).json();
   }
 };
 
@@ -77,6 +77,6 @@ export const createOrder: RequestHandler = async (req, res) => {
       res.status(412).json();
     }
   } else {
-    res.status(203).json();
+    res.status(403).json();
   }
 };

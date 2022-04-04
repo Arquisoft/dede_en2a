@@ -15,7 +15,7 @@ export const getUser: RequestHandler = async (req, res) => {
   if (userFound) {
     return res.json(userFound);
   } else {
-    return res.status(204).json();
+    return res.status(412).json();
   }
 };
 

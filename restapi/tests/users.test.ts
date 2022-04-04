@@ -74,7 +74,7 @@ describe("users", () => {
     const response: Response = await request(app).get(
       "/users/findByEmail/something"
     );
-    expect(response.statusCode).toBe(204);
+    expect(response.statusCode).toBe(412);
   });
 
   /**

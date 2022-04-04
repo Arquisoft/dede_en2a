@@ -55,6 +55,6 @@ describe("orders", () => {
 
   it("Can not get user orders without ", async () => {
     const response: Response = await request(app).get("/orders");
-    expect(response.statusCode).toBe(203);
+    expect(response.statusCode).toBe(403);
   });
 })

@@ -18,7 +18,7 @@ export const getProduct: RequestHandler = async (req, res) => {
   if (productFound) {
     return res.json(productFound);
   } else {
-    return res.status(204).json();
+    return res.status(412).json();
   }
 };
 
@@ -65,7 +65,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
       res.status(301).json({ message: "The operation didn't succed " + error });
     }
   } else {
-    res.status(203).json();
+    res.status(403).json();
   }
 };
 
@@ -87,6 +87,6 @@ export const updateProduct: RequestHandler = async (req, res) => {
       res.json(error);
     }
   } else {
-    res.status(203).json();
+    res.status(403).json();
   }
 };

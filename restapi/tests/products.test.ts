@@ -80,7 +80,7 @@ describe("prodcuts", () => {
    */
   it("Can't get non existing product", async () => {
     const response: Response = await request(app).get("/products/findByCode/0");
-    expect(response.statusCode).toBe(204);
+    expect(response.statusCode).toBe(412);
   });
 
   it("Can create a product correctly", async () => {
