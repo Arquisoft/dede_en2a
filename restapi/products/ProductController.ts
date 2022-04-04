@@ -5,12 +5,9 @@ import { verifyToken } from "../utils/generateToken";
 import { productModel } from "./Product";
 
 export const getProducts: RequestHandler = async (req, res) => {
-  try {
-    const products = await productModel.find();
-    return res.json(products);
-  } catch (error) {
-    res.json(error);
-  }
+  const products = await productModel.find();
+  if (products) return res.json(products);
+  else return res.status(412).json();
 };
 
 export const getProduct: RequestHandler = async (req, res) => {
@@ -62,7 +59,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
         return res.json(productFound);
       }
     } catch (error) {
-      res.status(301).json({ message: "The operation didn't succed " + error });
+      res.status(400).json({ message: "The operation didn't succed " + error });
     }
   } else {
     res.status(403).json();
