@@ -58,10 +58,17 @@ describe("reviews", () => {
 
   it("Can get review of a user for a product", async () => {
     const response: Response = await request(app).get(
-      "/reviews/listByCodeAndEmail/0001/pablo268la@gmail.com"
+      "/reviews/listByCodeAndEmail/0001/test"
     );
     expect(response.statusCode).toBe(200);
     expect(response.type).toEqual("application/json");
+  });
+
+  it("Can't get non-existing review of a user for a product", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCodeAndEmail/0000/pablo268la@gmail.com"
+    );
+    expect(response.statusCode).toBe(412);
   });
   
 

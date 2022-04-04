@@ -25,9 +25,10 @@ export const createReview: RequestHandler = async (req, res) => {
 };
 
 export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {
-  const reviews = await reviewModel.find({
+  const review = await reviewModel.findOne({
     productCode: req.params.productCode,
     userEmail: req.params.email,
   });
-  return res.json(reviews);
+  if (review) return res.json(review);
+  else return res.status(412).json();
 };

@@ -6,8 +6,7 @@ import { productModel } from "./Product";
 
 export const getProducts: RequestHandler = async (req, res) => {
   const products = await productModel.find();
-  if (products) return res.json(products);
-  else return res.status(412).json();
+  return res.json(products);
 };
 
 export const getProduct: RequestHandler = async (req, res) => {
