@@ -10,7 +10,7 @@ const port: number = 3000;
 app.use(express.static('build'))
 
 app.get('*', (req, res) => {    
-    res.sendFile(path.join(publicPath, 'index.html')), function(err) {             
+    res.sendFile(path.join(publicPath, 'index.html')), function(err: any) {             
     if (err) {                 
          res.status(500).send(err) 
          }        
