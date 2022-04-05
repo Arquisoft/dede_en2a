@@ -8,6 +8,7 @@ const orderSchema = new Schema(
     orderCode: {
       type: String,
       required: true,
+      unique: true
     },
     userEmail: {
       type: String,

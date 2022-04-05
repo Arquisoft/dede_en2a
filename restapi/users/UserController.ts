@@ -15,7 +15,7 @@ export const getUser: RequestHandler = async (req, res) => {
   if (userFound) {
     return res.json(userFound);
   } else {
-    return res.status(204).json();
+    return res.status(412).json();
   }
 };
 
@@ -23,9 +23,8 @@ export const createUser: RequestHandler = async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     const usersaved = await new userModel(req.body).save();
-    if (process.env.MONGO_DB_URI !== undefined) {
-      sendVerificationEmail(usersaved.email);
-    }
+    const uniqueString = await saveNewUserVerification(usersaved.email);
+    sendVerificationEmail(usersaved.email, uniqueString);
     res.json(generateToken(req.body.email));
   } catch (error) {
     res.status(412).json({ message: "The data is not valid" });
@@ -33,27 +32,18 @@ export const createUser: RequestHandler = async (req, res) => {
 };
 
 export const verifyUser: RequestHandler = async (req, res) => {
-  const userToVerify = await userVerificationModel
-    .findOne({
-      email: req.params.email,
-    })
-    .then()
-    .catch((error: Error) => {
-      let message =
-        "An error ocurred within the application. Please contact support.";
-      res.redirect("/users/notVerified/" + message);
-    });
+  const userToVerify = await userVerificationModel.findOne({
+    email: req.params.email,
+  });
 
   // records exists
   if (userToVerify !== null) {
     if (userToVerify.expiresAt < Date.now()) {
       // record expired - need to erase from database: 1. UserVerificationDoc 2. UserDoc
       await userVerificationModel.deleteOne({ email: userToVerify.email });
-      await userModel.deleteOne({ email: userToVerify.email }).then(() => {
-        let message = "The link has expired. Please sign up again";
-        //res.redirect("/users/verified/error=true&message=${" + message + "}");
-        res.redirect("/users/notVerified/" + message);
-      });
+      await userModel.deleteOne({ email: userToVerify.email });
+      let message = "The link has expired. Please sign up again";
+      res.redirect("/users/notVerified/" + message);
     } else {
       const dbUniqueString = userToVerify.uniqueString;
 
@@ -94,7 +84,7 @@ export const requestToken: RequestHandler = async (req, res) => {
   };
   const user = await userModel.findOne({ email: query.email });
 
-  if (user !== null) {
+  if (user !== null && user !== undefined) {
     if (
       (await user.matchPassword(query.password.toString())) &&
       user.verified
@@ -107,3 +97,16 @@ export const requestToken: RequestHandler = async (req, res) => {
     res.status(409).json();
   }
 };
+async function saveNewUserVerification(email: string) {
+  const { v4: uuidv4 } = require("uuid");
+  const uniqueString = uuidv4();
+  const newUserVerification = new userVerificationModel({
+    email: email,
+    uniqueString: uniqueString,
+    expiresAt: Date.now() + 21600000,
+  });
+
+  await newUserVerification.save();
+
+  return uniqueString;
+}
