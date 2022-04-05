@@ -1,13 +1,37 @@
-import pdf, { CreateOptions } from "html-pdf";
 import { orderModel } from "../orders/Order";
-import { sendInvoiceEmail } from "./emailSender";
+import { userModel } from "../users/User";
 
 const fs = require("fs");
+const PDFGenerator = require("pdfkit");
 
 export const createPDF = async (code: string) => {
   if (process.env.MONGO_DB_URI === undefined) return;
-  
-  var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
+  const InvoiceGenerator = require("./InvoiceGenerator");
+
+  const orderFound = await orderModel.findOne({
+    orderCode: code,
+  });
+  const user = await userModel.findOne({ email: orderFound.userEmail });
+  const invoiceData = {
+    addresses: {
+      shipping: {
+        name: user.name,
+        address: orderFound.userAddress,
+        email: orderFound.userEmail,
+      },
+    },
+    items: orderFound.products,
+    subtotal: orderFound.subtotalPrice,
+    total: orderFound.totalPrice,
+    shippingPrice: orderFound.shippingPrice,
+    invoiceNumber: orderFound.orderCode,
+    dueDate: orderFound.date,
+  };
+
+  const ig = new InvoiceGenerator(invoiceData);
+  ig.generate();
+
+  /*var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
   const parse = require("node-html-parser").parse;
 
   const options: CreateOptions = {
@@ -129,5 +153,5 @@ export const createPDF = async (code: string) => {
       else {
         sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
       }
-    });
+    });*/
 };
