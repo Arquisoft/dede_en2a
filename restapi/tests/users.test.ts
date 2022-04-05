@@ -137,7 +137,7 @@ describe("users", () => {
     expect(response.statusCode).toBe(412);
   });
 
-  it("Can get a user token with erroneous password", async () => {
+  it("Can't get a user token with an erroneous password", async () => {
     const response: Response = await request(app)
       .post("/users/requestToken/")
       .send({
@@ -157,7 +157,10 @@ describe("users", () => {
     expect(response.statusCode).toBe(409);
   });
 
-  // First all incorrect tries to verify. Last one the successful one
+  /*
+  Testing user verification
+  First all incorrect tries to verify. Last one the successful one
+  */
   it("Trying to verify with incorrect uniqueString", async () => {
     const prevUser = await userModel.findOne({ email: userEmail });
     expect(prevUser.verified).toBe(false);
@@ -166,6 +169,7 @@ describe("users", () => {
       .send();
     const postUser = await userModel.findOne({ email: userEmail });
     expect(postUser.verified).toBe(false);
+    expect(response.type).toBe("text/plain");
     expect(response.header.location).toBe(
       "/users/notVerified/An%20internal%20error%20happen."
     );
@@ -184,6 +188,7 @@ describe("users", () => {
       .send();
     const postUser = await userModel.findOne({ email: userEmail });
     expect(postUser.verified).toBe(false);
+    expect(response.type).toBe("text/plain");
     expect(response.header.location).toBe(
       "/users/notVerified/That%20account%20doesn't%20exist%20or%20has%20been%20already%20verified.%20Please%20sign%20up%20or%20sign%20in."
     );
@@ -202,7 +207,7 @@ describe("users", () => {
     const response: Response = await request(app)
       .get("/users/verify/" + userEmail + "/" + userVerification.uniqueString)
       .send();
-    const postUser = await userModel.findOne({ email: userEmail });
+    expect(response.type).toBe("text/plain");
     expect(response.header.location).toBe(
       "/users/notVerified/The%20link%20has%20expired.%20Please%20sign%20up%20again"
     );
@@ -223,12 +228,25 @@ describe("users", () => {
     }); // To get the userverification email string
     const prevUser = await userModel.findOne({ email: emailForTest });
     expect(prevUser.verified).toBe(false);
-    await request(app)
+    const response: Response = await request(app)
       .get(
         "/users/verify/" + emailForTest + "/" + userVerification.uniqueString
       )
       .send();
     const postUser = await userModel.findOne({ email: emailForTest });
     expect(postUser.verified).toBe(true);
+    expect(response.type).toBe("text/html");
+  });
+
+  it("Verified route", async () => {
+    const response: Response = await request(app).get("/users/verified").send();
+    expect(response.type).toBe("text/html");
+  });
+
+  it("Not verified route", async () => {
+    const response: Response = await request(app)
+      .get("/users/notVerified/something")
+      .send();
+    expect(response.type).toBe("text/html");
   });
 });
