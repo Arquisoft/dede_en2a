@@ -5,6 +5,8 @@ import { sendInvoiceEmail } from "./emailSender";
 const fs = require("fs");
 
 export const createPDF = async (code: string) => {
+  if (process.env.MONGO_DB_URI === undefined) return;
+  
   var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
   const parse = require("node-html-parser").parse;
 

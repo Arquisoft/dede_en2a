@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
+import { userModel } from "../users/User";
 import { verifyToken } from "../utils/generateToken";
 import { createPDF } from "../utils/PDFHelper";
 import { orderModel } from "./Order";
@@ -9,12 +10,18 @@ export const getOrder: RequestHandler = async (req, res) => {
     req.headers.token + "",
     req.headers.email + ""
   );
+
+  const orderFound = await orderModel.findOne({
+    orderCode: req.params.orderCode,
+  });
+
   if (isVerified) {
-    const orderFound = await orderModel.findOne({
-      orderCode: req.params.orderCode,
-    });
     if (orderFound) {
-      return res.json(orderFound);
+      if (orderFound.userEmail === req.headers.email) {
+        return res.json(orderFound);
+      } else {
+        return res.status(403).json();
+      }
     } else {
       return res.status(412).json();
     }
@@ -24,12 +31,16 @@ export const getOrder: RequestHandler = async (req, res) => {
 };
 
 export const getOrders: RequestHandler = async (req, res) => {
-  //TODO CHECK TOKEN AND USER=ADMIN
-  try {
+  const isVerified = verifyToken(
+    req.headers.token + "",
+    req.headers.email + ""
+  );
+  const user = await userModel.findOne({ email: req.headers.email });
+  if (isVerified && user.role === "admin") {
     const orders = await orderModel.find();
     return res.json(orders);
-  } catch (error) {
-    res.json(error);
+  } else {
+    return res.status(403).json();
   }
 };
 
@@ -42,11 +53,7 @@ export const getUserOrders: RequestHandler = async (req, res) => {
     const orderFound = await orderModel.find({
       userEmail: req.headers.email,
     });
-    if (orderFound) {
-      return res.json(orderFound);
-    } else {
-      return res.status(412).json();
-    }
+    return res.json(orderFound);
   } else {
     return res.status(403).json();
   }
