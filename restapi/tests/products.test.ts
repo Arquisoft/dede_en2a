@@ -158,6 +158,21 @@ describe("prodcuts", () => {
   });
 
   it("Can't update a product without token", async () => {
+    const token: Response = await request(app).post("/users/requestToken/").send({
+      email: "test1",
+      password: "test",
+    });
+    const response: Response = await request(app)
+      .post("/products/update/" + productCode)
+      .set("token", token.body)
+      .set("email", "test1")
+      .send({
+        stock: 1,
+      });
+    expect(response.statusCode).toBe(403);
+  });
+
+  it("Can't update a product without been admin or manager", async () => {
     const response: Response = await request(app)
       .post("/products/update/" + productCode)
       .send({
