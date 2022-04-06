@@ -8,7 +8,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
-import { isRenderForModeratorAtLeast } from "../../helpers/RoleHelper";
+import { isRenderForModeratorAtLeast } from "../../../helpers/RoleHelper";
 
 export default function DashboardSideBar() {
   return (

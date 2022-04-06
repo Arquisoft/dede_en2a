@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -9,7 +10,7 @@ import Badge from "@mui/material/Badge";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
-import MUISwitch from "../ThemeSlider";
+import ThemeSlider from "./ThemeSlider";
 import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
@@ -17,9 +18,9 @@ import NavMenu from "./NavMenu";
 type NavBarProps = {
   totalUnitsInCart: number;
   logCurrentUserOut: () => void;
-  changeTheme: Function;
-  initialState: boolean;
   userRole: string;
+  toggleColorMode: () => void;
+  mode: "dark" | "light";
 };
 
 function Logo() {
@@ -39,17 +40,6 @@ function Logo() {
     >
       Dede
     </Typography>
-  );
-}
-
-function ThemeModeSwitch(props: any) {
-  return (
-    <MUISwitch
-      onChange={(e) => {
-        props.changeTheme();
-      }}
-      checked={props.initialState}
-    />
   );
 }
 
@@ -89,9 +79,9 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         </Stack>
 
         <Stack direction="row" alignItems="center">
-          <ThemeModeSwitch
-            changeTheme={props.changeTheme}
-            initialState={props.initialState}
+          <ThemeSlider
+            onChange={props.toggleColorMode}
+            checked={props.mode === "dark"}
           />
           <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
           <UserMenuButton logCurrentUserOut={props.logCurrentUserOut} />

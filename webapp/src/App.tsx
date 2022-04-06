@@ -1,57 +1,85 @@
-import {
-  Alert, createTheme,
-  CssBaseline,
-  PaletteMode, Snackbar, ThemeProvider,
-  useMediaQuery
-} from "@mui/material";
-import { grey, lightBlue } from "@mui/material/colors";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import "bootstrap/dist/css/bootstrap.css";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { getProducts, getUser } from "./api/api";
-import "./App.css";
+
+import {
+  Alert,
+  CssBaseline,
+  Snackbar,
+  ThemeProvider,
+  createTheme,
+  useMediaQuery,
+} from "@mui/material";
+
 import ShoppingCart from "./components/cart/ShoppingCart";
 import Checkout from "./components/checkout/Checkout";
-import Dashboard from "./components/dashboard/Dashboard";
+import DashboardOutlet from "./components/DashboardOutlet";
 import DashboardContent from "./components/dashboard/DashboardContent";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
 import DeleteProduct from "./components/dashboard/products/DeleteProduct";
 import ProductList from "./components/dashboard/products/ProductList";
 import UploadProduct from "./components/dashboard/products/UploadProduct";
-import DedeApp from "./components/DedeApp";
-import Home from "./components/Home";
+import DedeApp from "./components/MainOutlet";
+import Home from "./components/home/Home";
 import NavBar from "./components/navigation/NavBar";
 import ProductDetails from "./components/products/ProductDetails";
-import SignIn from "./components/register/SignIn";
-import SignUp from "./components/register/SignUp";
+import SignIn from "./components/userManagement/SignIn";
 import Shop from "./components/Shop";
+
 import {
   CartItem,
   NotificationType,
   Product,
-  User
+  User,
 } from "./shared/shareddtypes";
+import { getProducts, getUser } from "./api/api";
 
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
+import "./App.css";
 
+export default function App(): JSX.Element {
+  // Some variables to perform calculations in an easier way
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
-
-
-function App(): JSX.Element {
-  const [notificationStatus, setNotificationStatus] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productsCart, setProductsCart] = useState<CartItem[]>([]);
-  const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [notification, setNotification] = useState<NotificationType>({
+  // React.useState
+  const [products, setProducts] = React.useState<Product[]>([]); // We store the whole set of products of the APP
+  const [productsCart, setProductsCart] = React.useState<CartItem[]>([]); // We store the products that are IN the cart
+  const [totalUnitsInCart, setTotalUnitsInCart] = React.useState(Number()); // We compute the total number of units in the cart
+  const [userRole, setUserRole] = React.useState(""); // TODO: probably this could be deleted
+  const [mode, setMode] = React.useState<"light" | "dark">(
+    prefersDarkMode ? "dark" : "light"
+  ); // We establish the actual mode based in the prefered color scheme
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
     severity: "success",
     message: "",
   });
 
-  const [userRole, setUserRole] = useState<string>("");
+  // We establish a button for us to toggle the actual mode
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        localStorage.setItem("mode", mode);
+      },
+    }),
+    []
+  );
+
+  // We establish the theme of the site based on the actual preference
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
 
   const createShop = async () => {
+    // TODO: move to a helper
     const dbProducts: Product[] = await getProducts(); // and obtain the products
     setProducts(dbProducts);
     if (userRole === "" && localStorage.getItem("user.email") != null) {
@@ -61,6 +89,7 @@ function App(): JSX.Element {
   };
 
   const setCurrentUser = (user: User) => {
+    // TODO: refactor using SOLID
     localStorage.setItem("user.email", user.email);
     localStorage.setItem("user.role", user.role);
     setNotificationStatus(true);
@@ -72,6 +101,7 @@ function App(): JSX.Element {
   };
 
   const logCurrentUserOut = () => {
+    // TODO: see how to do it with SOLID
     localStorage.removeItem("user.email");
     localStorage.removeItem("user.role");
     localStorage.removeItem("token");
@@ -84,6 +114,7 @@ function App(): JSX.Element {
   };
 
   const handleAddCart = (product: Product) => {
+    // TODO: move to the same helper as createSHOP
     let products = productsCart.slice();
     let found: number = -1;
     products.forEach((cartItem, index) => {
@@ -106,6 +137,7 @@ function App(): JSX.Element {
   };
 
   const handleDecrementUnit = (product: Product) => {
+    // TODO: move the same helper as above
     let products = productsCart.slice();
     let found: number = -1;
     products.forEach((cartItem, index) => {
@@ -133,7 +165,14 @@ function App(): JSX.Element {
     localStorage.setItem("cart", JSON.stringify([]));
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
+    // We establish the stored color mode as the active one: if the user reloads we have to remember the preferences
+    if (localStorage.getItem("mode") === null)
+      localStorage.setItem("mode", mode);
+    // In case we have stored a theme: set the actual mode to the user preference
+    else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark");
+
+    // TODO: add the SOLID thing
     createShop();
 
     //Retrive the cart from the session.
@@ -152,63 +191,6 @@ function App(): JSX.Element {
     }
   }, []);
 
-  const themeString = (b: boolean) => (b ? "dark" : "light");
-
-  const getDesignTokens = (mode: PaletteMode) => ({
-    palette: {
-      mode,
-      ...(mode === "light"
-        ? {
-            // palette values for light mode
-            primary: { main: lightBlue[600] },
-            secondary: { main: lightBlue[800] },
-            background: {
-              default: grey[50],
-              paper: grey[200],
-              card: grey[400],
-            },
-            text: {
-              primary: grey[900],
-              secondary: grey[800],
-            },
-          }
-        : {
-            // palette values for dark mode
-            primary: { main: lightBlue[600] },
-            secondary: { main: lightBlue[800] },
-            background: {
-              default: grey[900],
-              paper: grey[800],
-              card: grey[700],
-            },
-            text: {
-              primary: "#fff",
-              secondary: grey[500],
-            },
-          }),
-    },
-  });
-
-  // We get the users browser prefered theme.
-  let initialTheme: boolean = useMediaQuery("(prefers-color-scheme: dark)");
-
-  if (localStorage.getItem("theme") === null) {
-    localStorage.setItem("theme", String(initialTheme));
-  } else {
-    initialTheme = localStorage.getItem("theme") === "true";
-  }
-
-  const [mode, setMode] = React.useState<PaletteMode>(
-    themeString(!initialTheme)
-  );
-
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
-  const toggleDarkMode = () => {
-    setMode(themeString(mode === "light"));
-    localStorage.setItem("theme", String(mode === "dark"));
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -222,9 +204,9 @@ function App(): JSX.Element {
           <NavBar
             totalUnitsInCart={totalUnitsInCart}
             logCurrentUserOut={logCurrentUserOut}
-            changeTheme={toggleDarkMode}
-            initialState={mode === "dark"}
             userRole={userRole}
+            mode={mode}
+            toggleColorMode={colorMode.toggleColorMode}
           />
           <Routes>
             <Route path="/" element={<DedeApp />}>
@@ -261,14 +243,7 @@ function App(): JSX.Element {
                   />
                 }
               />
-              <Route
-                path="sign-in"
-                element={<SignIn setCurrentUser={setCurrentUser} />}
-              />
-              <Route
-                path="sign-up"
-                element={<SignUp setCurrentUser={setCurrentUser} />}
-              />
+              <Route path="sign-in" element={<SignIn />} />
               <Route
                 path="product/:id"
                 element={
@@ -280,7 +255,7 @@ function App(): JSX.Element {
                 }
               />
             </Route>
-            <Route path="dashboard" element={<Dashboard />}>
+            <Route path="dashboard" element={<DashboardOutlet />}>
               <Route
                 index
                 element={
@@ -330,5 +305,3 @@ function App(): JSX.Element {
     </ThemeProvider>
   );
 }
-
-export default App;

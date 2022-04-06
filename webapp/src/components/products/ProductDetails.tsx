@@ -9,7 +9,7 @@ import { checkImageExists } from "../../helpers/ImageHelper";
 import { Product, Review, CartItem } from "../../shared/shareddtypes";
 
 import ProductCommentList from "./ProductCommentList";
-import StockAlert from "../StockAlert";
+import StockAlert from "./StockAlert";
 import ProductSpeedDial from "./ProductSpeedDial";
 import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";

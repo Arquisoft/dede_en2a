@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 
-import DashboardSideBar from "./DashboardSideBar";
+import DashboardSideBar from "./dashboard/utils/DashboardSideBar";
 
 export default function Dashboard(props: any) {
   return (
