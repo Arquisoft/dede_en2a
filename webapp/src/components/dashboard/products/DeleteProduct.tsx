@@ -1,22 +1,19 @@
-import React, { useState } from "react";
-
 import {
-  Box,
-  Card,
+  Alert, Box, Button, Card,
   Container,
   MenuItem,
   Paper,
   Snackbar,
   Stack,
   styled,
-  TextField,
-  Alert,
-  Button,
+  TextField
 } from "@mui/material";
-
+import React, { useState } from "react";
 import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
+
+
 
 const DEF_IMAGE: string = require("../../../images/not-found.png");
 
@@ -39,6 +36,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [dialogOpen, setDialogOpen] = useState(0);
   const [image, setImage] = useState(DEF_IMAGE);
   const [notification, setNotification] = useState<NotificationType>({
@@ -54,6 +52,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       setCode(p.code);
       setName(p.name);
       setDescription(p.description);
+      setCategory(p.category)
       setPrice(p.price.toString());
       setStock(p.stock.toString());
       setImage(checkImageExists(p.image));
@@ -87,6 +86,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setCode("");
     setName("");
     setDescription("");
+    setCategory("")
     setStock("");
     setPrice("");
     setImage(DEF_IMAGE);
@@ -114,7 +114,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           >
             {products.map((product) => (
               <MenuItem key={product.code} value={product.code}>
-                {product.name + " (" + product.description + ")"}
+                {product.code + " - " + product.name}
               </MenuItem>
             ))}
           </TextField>
@@ -161,6 +161,18 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 required
                 margin="normal"
                 variant="outlined"
+              />
+
+              <TextField
+                value={category}
+                id="outlined-full-width"
+                label="Product category"
+                style={{ margin: 8 }}
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                onChange={(event) => setCategory(event.target.value)}
               />
 
               <TextField

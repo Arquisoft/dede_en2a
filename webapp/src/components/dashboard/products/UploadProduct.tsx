@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-
 import {
+  Alert,
   Box,
+  Button,
   Card,
   Container,
+  MenuItem,
   Paper,
   Snackbar,
   Stack,
   styled,
-  TextField,
-  Alert,
-  Button,
+  TextField
 } from "@mui/material";
-
+import React, { useEffect, useState } from "react";
 import { createProduct, getProducts } from "../../../api/api";
 import {
   checkNumericField,
-  checkTextField,
+  checkTextField
 } from "../../../helpers/CheckFieldsHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
@@ -46,6 +45,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [image, setImage] = useState<string>(DEF_IMAGE);
 
   const getCode = async () => {
@@ -76,6 +76,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
     setDescription("");
     setStock("");
     setPrice("");
+    setCategory("");
   };
 
   const checkFields = () => {
@@ -99,6 +100,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
       description: description,
       price: Number(price),
       stock: Number(stock),
+      category: category,
     });
     if (created) {
       emptyFields();
@@ -183,6 +185,32 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                 variant="outlined"
                 onChange={(event) => setDescription(event.target.value)}
               />
+
+              <TextField
+                value={category}
+                select
+                id="outlined-full-width"
+                label="Product category"
+                style={{ margin: 8 }}
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                onChange={(event) => setCategory(event.target.value)}
+              >
+                <MenuItem key="Clothes" value="Clothes">
+                  Clothes
+                </MenuItem>
+                <MenuItem key="Decoration" value="Decoration">
+                  Decoration
+                </MenuItem>
+                <MenuItem key="Electronics" value="Electronics">
+                  Electronics
+                </MenuItem>
+                <MenuItem key="Miscellaneous" value="Miscellaneous">
+                  Miscellaneous
+                </MenuItem>
+              </TextField>
 
               <TextField
                 value={price}
