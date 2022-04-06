@@ -9,9 +9,7 @@ api.get("/products", ProdctController.getProducts);
 
 api.get("/products/findByCode/:code", ProdctController.getProduct);
 
-api.get('/products/filter/:category', ProdctController.filterBy)
-
-api.get('/products/order/:mode', ProdctController.orderBy)
+api.get('/products/filter&order/:category&:mode', ProdctController.filterAndOrderBy)
 
 api.post("/products", multer.single("image"), ProdctController.createProduct);
 

@@ -32,4 +32,4 @@ Content-Type: application/json
 GET {{url}}/products/order/desc
 
 ###
-GET {{url}}/products/filter/Electronics
+GET {{url}}/products/filter&order/Electronics&asc
