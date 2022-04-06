@@ -27,3 +27,9 @@ Content-Type: application/json
 {
     "category": "Miscellaneous"
 }
+
+###
+GET {{url}}/products/order/desc
+
+###
+GET {{url}}/products/filter/Electronics

@@ -84,3 +84,32 @@ export const updateProduct: RequestHandler = async (req, res) => {
     res.status(403).json();
   }
 };
+
+export const filterBy: RequestHandler = async (req, res) => {
+  const category = req.params.category;
+  let products;
+
+  if (
+    category !== "Clothes" &&
+    category !== "Decoration" &&
+    category !== "Electronics" &&
+    category !== "Miscellaneous"
+  ) {
+    products = await productModel.find();
+  } else {
+    products = await productModel.find({ category: category });
+  }
+
+  return res.json(products);
+};
+
+export const orderBy: RequestHandler = async (req, res) => {
+  let mode = req.params.mode;
+  let products;
+  if (mode !== "asc" && mode !== "desc") {
+    products = await productModel.find();
+  } else {
+    products = await productModel.find().sort({ price: mode });
+  }
+  return res.json(products);
+};
