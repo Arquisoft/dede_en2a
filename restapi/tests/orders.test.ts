@@ -71,6 +71,7 @@ describe("orders", () => {
               "Do you wanna show your friends that you are THE GREATEST IMPOSTER? Then this shirt is for you!",
             stock: 1,
             image: "0001.png",
+            category: "Clothes",
           },
         ],
         date: new Date(),
