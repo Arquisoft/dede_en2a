@@ -19,6 +19,13 @@ export type Product = {
   category: string;
 };
 
+export const ProductCategories = {
+  Clothes: "Clothes",
+  Decoration: "Decoration",
+  Electronics: "Electronics",
+  Misccellaneous: "Miscellaneous",
+};
+
 export type NotificationType = {
   severity: AlertColor;
   message: string;
