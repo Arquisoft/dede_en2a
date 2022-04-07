@@ -1,4 +1,3 @@
-
 const nodemailer = require("nodemailer");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
@@ -36,8 +35,11 @@ export const sendInvoiceEmail: Function = (
   sgMail.send(mailOptions);
 };
 
-export const sendVerificationEmail: Function = async (email: string, uniqueString: string) => {
-  const currentUrl = "http://localhost:5000";
+export const sendVerificationEmail: Function = async (
+  email: string,
+  uniqueString: string
+) => {
+  const currentUrl = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
   const mailOptions = {
     to: email,
