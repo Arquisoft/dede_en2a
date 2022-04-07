@@ -1,25 +1,22 @@
-import { Link } from "react-router-dom";
-
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
+import { Link } from "react-router-dom";
 import MUISwitch from "../ThemeSlider";
-import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
+import UserMenuButton from "./UserMenuButton";
 
 type NavBarProps = {
   totalUnitsInCart: number;
   logCurrentUserOut: () => void;
   changeTheme: Function;
   initialState: boolean;
-  userRole: string;
+  userName: string;
 };
 
 function Logo() {
@@ -94,7 +91,10 @@ export default function NavBar(props: NavBarProps): JSX.Element {
             initialState={props.initialState}
           />
           <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
-          <UserMenuButton logCurrentUserOut={props.logCurrentUserOut} />
+          <UserMenuButton
+            logCurrentUserOut={props.logCurrentUserOut}
+            userName={props.userName}
+          />
         </Stack>
       </Stack>
     </AppBar>

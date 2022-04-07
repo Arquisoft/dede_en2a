@@ -50,6 +50,7 @@ function App(): JSX.Element {
   });
 
   const [userRole, setUserRole] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
 
   const createShop = async () => {
     const dbProducts: Product[] = await getProducts(); // and obtain the products
@@ -57,6 +58,7 @@ function App(): JSX.Element {
     if (userRole === "" && localStorage.getItem("user.email") != null) {
       const user: User = await getUser(localStorage.getItem("user.email") + "");
       setUserRole(user.role);
+      setUserName(user.name)
     }
   };
 
@@ -224,7 +226,7 @@ function App(): JSX.Element {
             logCurrentUserOut={logCurrentUserOut}
             changeTheme={toggleDarkMode}
             initialState={mode === "dark"}
-            userRole={userRole}
+            userName={userName}
           />
           <Routes>
             <Route path="/" element={<DedeApp />}>
