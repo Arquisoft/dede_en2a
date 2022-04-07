@@ -32,7 +32,11 @@ import {
   Product,
   User,
 } from "./shared/shareddtypes";
-import { getProducts, getUser } from "./api/api";
+import {
+  addProductToCart,
+  removeProductFromCart,
+} from "./helpers/ShoppingCartHelper";
+import { getProducts } from "./api/api";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -44,7 +48,7 @@ export default function App(): JSX.Element {
 
   // React.useState
   const [products, setProducts] = React.useState<Product[]>([]); // We store the whole set of products of the APP
-  const [productsCart, setProductsCart] = React.useState<CartItem[]>([]); // We store the products that are IN the cart
+  const [productsInCart, setProductsInCart] = React.useState<CartItem[]>([]); // We store the products that are IN the cart
   const [totalUnitsInCart, setTotalUnitsInCart] = React.useState(Number()); // We compute the total number of units in the cart
   const [userRole, setUserRole] = React.useState(""); // TODO: probably this could be deleted
   const [mode, setMode] = React.useState<"light" | "dark">(
@@ -78,15 +82,38 @@ export default function App(): JSX.Element {
     [mode]
   );
 
-  const createShop = async () => {
-    // TODO: move to a helper
-    const dbProducts: Product[] = await getProducts(); // and obtain the products
-    setProducts(dbProducts);
-    if (userRole === "" && localStorage.getItem("user.email") != null) {
-      const user: User = await getUser(localStorage.getItem("user.email") + "");
-      setUserRole(user.role);
-    }
+  // We create two functions in order to add and remove products from cart
+  const addToCart = (product: Product) => {
+    addProductToCart(
+      product,
+      productsInCart,
+      setProductsInCart,
+      setTotalUnitsInCart
+    );
   };
+
+  const removeFromCart = (product: Product) => {
+    removeProductFromCart(
+      product,
+      productsInCart,
+      setProductsInCart,
+      setTotalUnitsInCart
+    );
+  };
+
+  // We have to restore the cart also
+  const handleDeleteCart = () => {
+    setProductsInCart([]);
+    setTotalUnitsInCart(0);
+    localStorage.setItem("cart", JSON.stringify([]));
+  };
+
+  // We define a function for refreshing the shop itself
+  const refreshShop = React.useCallback(async () => {
+    // We obtain the products from the Database
+    const dbProducts: Product[] = await getProducts();
+    setProducts(dbProducts); // and set the products to the state
+  }, []);
 
   const setCurrentUser = (user: User) => {
     // TODO: refactor using SOLID
@@ -113,67 +140,14 @@ export default function App(): JSX.Element {
     setUserRole("");
   };
 
-  const handleAddCart = (product: Product) => {
-    // TODO: move to the same helper as createSHOP
-    let products = productsCart.slice();
-    let found: number = -1;
-    products.forEach((cartItem, index) => {
-      if (cartItem.product.code === product.code) {
-        found = index;
-      }
-    });
-
-    //We check if the product is in the cart. In this case we add 1 to the amount,
-    //otherwise we push the product with amount 1
-    if (found >= 0) {
-      products[found].amount += 1;
-    } else {
-      products.push({ product: product, amount: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(products));
-    setProductsCart(products); // we update the products in the cart
-    setTotalUnitsInCart(totalUnitsInCart + 1);
-  };
-
-  const handleDecrementUnit = (product: Product) => {
-    // TODO: move the same helper as above
-    let products = productsCart.slice();
-    let found: number = -1;
-    products.forEach((cartItem, index) => {
-      if (cartItem.product.code === product.code) {
-        found = index;
-      }
-    });
-
-    products[found].amount -= 1;
-    if (products[found].amount === 0) {
-      delete products[found];
-    }
-
-    products = products.filter(Boolean);
-
-    localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
-
-    setProductsCart(products);
-    setTotalUnitsInCart(totalUnitsInCart - 1);
-  };
-
-  const handleDeleteCart = () => {
-    setProductsCart([]);
-    setTotalUnitsInCart(0);
-    localStorage.setItem("cart", JSON.stringify([]));
-  };
-
   React.useEffect(() => {
     // We establish the stored color mode as the active one: if the user reloads we have to remember the preferences
     if (localStorage.getItem("mode") === null)
       localStorage.setItem("mode", mode);
     // In case we have stored a theme: set the actual mode to the user preference
-    else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark");
+    else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark"); // TODO: make this work
 
     // TODO: add the SOLID thing
-    createShop();
 
     //Retrive the cart from the session.
     const sessionCart = localStorage.getItem("cart");
@@ -181,17 +155,14 @@ export default function App(): JSX.Element {
       let cart: CartItem[] = JSON.parse(sessionCart);
 
       let units: number = 0;
-      cart.forEach((cartItem) => {
-        units += cartItem.amount;
-      });
+      cart.forEach((cartItem) => (units += cartItem.amount));
       setTotalUnitsInCart(units);
-      setProductsCart(cart); //Set the cart when the componenet is rendered
-    } else {
-      localStorage.setItem("cart", JSON.stringify([]));
-    }
+      setProductsInCart(cart); //Set the cart when the componenet is rendered
+    } else localStorage.setItem("cart", JSON.stringify([]));
   }, []);
 
   return (
+    // TODO: refactor the router
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <PayPalScriptProvider
@@ -216,8 +187,9 @@ export default function App(): JSX.Element {
                 element={
                   <Shop
                     products={products}
-                    cartProducts={productsCart}
-                    onAdd={handleAddCart}
+                    productsInCart={productsInCart}
+                    refreshShop={refreshShop}
+                    addToCart={addToCart}
                   />
                 }
               />
@@ -225,11 +197,10 @@ export default function App(): JSX.Element {
                 path="cart"
                 element={
                   <ShoppingCart
-                    products={productsCart}
+                    productsInCart={productsInCart}
                     totalUnitsInCart={totalUnitsInCart}
-                    userEmail={localStorage.getItem("user.email")}
-                    onDecrementUnit={handleDecrementUnit}
-                    onIncrementUnit={handleAddCart}
+                    addToCart={addToCart}
+                    removeFromCart={removeFromCart}
                   />
                 }
               />
@@ -237,9 +208,8 @@ export default function App(): JSX.Element {
                 path="checkout"
                 element={
                   <Checkout
-                    productsCart={productsCart.slice()}
-                    userEmail={localStorage.getItem("user.email")}
-                    deleteCart={handleDeleteCart}
+                    productsInCart={productsInCart}
+                    handleDeleteCart={handleDeleteCart}
                   />
                 }
               />
@@ -247,45 +217,32 @@ export default function App(): JSX.Element {
               <Route
                 path="product/:id"
                 element={
-                  <ProductDetails
-                    product={null as any}
-                    cartItems={productsCart}
-                    onAdd={handleAddCart}
-                  />
+                  <ProductDetails product={null as any} addToCart={addToCart} />
                 }
               />
             </Route>
             <Route path="dashboard" element={<DashboardOutlet />}>
-              <Route
-                index
-                element={
-                  <DashboardContent
-                    userEmail={localStorage.getItem("user.email")}
-                  />
-                }
-              />
-              <Route
-                path="orders"
-                element={
-                  <OrderList userEmail={localStorage.getItem("user.email")} />
-                }
-              />
+              <Route index element={<DashboardContent />} />
+              <Route path="orders" element={<OrderList />} />
               <Route path="order/:code" element={<OrderDetails />} />
               <Route path="products" element={<ProductList />} />
               <Route
                 path="products/add"
-                element={<UploadProduct createShop={createShop} />}
+                element={<UploadProduct refreshShop={refreshShop} />}
               />
               <Route
                 path="products/delete"
                 element={
-                  <DeleteProduct products={products} createShop={createShop} />
+                  <DeleteProduct
+                    products={products}
+                    refreshShop={refreshShop}
+                  />
                 }
               />
             </Route>
           </Routes>
 
-          <Snackbar
+          <Snackbar // TODO: try and refactor this
             open={notificationStatus}
             autoHideDuration={3000}
             onClose={() => {

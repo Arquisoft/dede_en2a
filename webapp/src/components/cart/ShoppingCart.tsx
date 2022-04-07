@@ -15,11 +15,10 @@ import { CartItem, Product } from "../../shared/shareddtypes";
 import ShoppingCartTable from "./ShoppingCartTable";
 
 type ShoppingCartProps = {
-  products: CartItem[];
+  productsInCart: CartItem[];
   totalUnitsInCart: number;
-  userEmail: string | null;
-  onIncrementUnit: (product: Product) => void;
-  onDecrementUnit: (product: Product) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (product: Product) => void;
 };
 
 export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
@@ -34,10 +33,10 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
             Shopping cart
           </Typography>
           <ShoppingCartTable
-            products={props.products}
+            productsInCart={props.productsInCart}
             totalUnitsInCart={props.totalUnitsInCart}
-            onIncrementUnit={props.onIncrementUnit}
-            onDecrementUnit={props.onDecrementUnit}
+            addToCart={props.addToCart}
+            removeFromCart={props.removeFromCart}
           />
           <Stack
             direction={{ xs: "column", sm: "row" }}
@@ -53,9 +52,7 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
 
             <Button
               variant="contained"
-              disabled={props.products.length === 0 || !props.userEmail}
-              component={Link}
-              to="/checkout"
+              disabled={props.productsInCart.length === 0} // TODO: check no user is logged in
               className="m-1"
             >
               Proceed to checkout

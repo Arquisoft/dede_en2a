@@ -18,8 +18,6 @@ import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-const DEF_IMAGE: string = require("../../../images/not-found.png");
-
 const Img = styled("img")({
   display: "block",
   width: "22.2vw",
@@ -29,7 +27,7 @@ const Img = styled("img")({
 
 type DeleteProductProps = {
   products: Product[];
-  createShop: () => void;
+  refreshShop: () => void;
 };
 
 export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
@@ -40,7 +38,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [dialogOpen, setDialogOpen] = useState(0);
-  const [image, setImage] = useState(DEF_IMAGE);
+  const [image, setImage] = useState("");
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
     message: "",
@@ -80,7 +78,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       message: "Product deleted correctly",
     });
     emptyFields();
-    props.createShop();
+    props.refreshShop();
   };
 
   const emptyFields = () => {
@@ -89,7 +87,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setDescription("");
     setStock("");
     setPrice("");
-    setImage(DEF_IMAGE);
+    setImage(checkImageExists("")); // We find the empty image: not-found
   };
 
   const openDialog = () => {

@@ -23,7 +23,7 @@ import { NotificationType, Product } from "../../../shared/shareddtypes";
 const DEF_IMAGE: string = require("../../../images/not-found.png");
 
 type UploadProductProps = {
-  createShop: () => void;
+  refreshShop: () => void;
 };
 
 const Img = styled("img")({
@@ -102,7 +102,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
     });
     if (created) {
       emptyFields();
-      props.createShop();
+      props.refreshShop();
     } else
       sendErrorNotification(
         "That product code already exists! You should change it"

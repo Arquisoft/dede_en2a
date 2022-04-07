@@ -8,8 +8,8 @@ import ProductBox from "./ProductBox";
 
 type ProductListProps = {
   products: Product[];
-  cartProducts: CartItem[];
-  OnAddCart: (product: Product) => void;
+  productsInCart: CartItem[];
+  addToCart: (product: Product) => void;
 };
 
 export default function ProductList(props: ProductListProps): JSX.Element {
@@ -21,9 +21,9 @@ export default function ProductList(props: ProductListProps): JSX.Element {
             product={product}
             currentCartAmount={getCurrentCartAmount(
               product,
-              props.cartProducts
+              props.productsInCart
             )}
-            onAdd={(productToAdd: Product) => props.OnAddCart(productToAdd)}
+            onAdd={(productToAdd: Product) => props.addToCart(productToAdd)}
           />
         </Grid>
       ))}

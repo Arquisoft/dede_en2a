@@ -31,10 +31,10 @@ test("A list of two cart items is rendered", async () => {
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={2}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -52,10 +52,10 @@ test("An empty list of cart items is rendered", async () => {
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={0}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -80,10 +80,10 @@ test("A list of one cart item with amount 0 is not rendered", async () => {
 
   const { queryByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={1}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -109,10 +109,10 @@ test("The increment button is disabled when the amount is equal or higher to the
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={1}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -140,10 +140,10 @@ test("Increment and decrement buttons work well.", async () => {
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={1}
-      onIncrementUnit={onIncrementUnit}
-      onDecrementUnit={onDecrementUnit}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 

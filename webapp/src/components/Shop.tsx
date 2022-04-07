@@ -13,8 +13,9 @@ import ProductList from "./products/ProductList";
 
 type HomeProps = {
   products: Product[];
-  cartProducts: CartItem[];
-  onAdd: (product: Product) => void;
+  productsInCart: CartItem[];
+  refreshShop: () => void;
+  addToCart: (product: Product) => void;
 };
 
 const Search = styled("div")({
@@ -23,6 +24,7 @@ const Search = styled("div")({
 
 export default function Shop(props: HomeProps): JSX.Element {
   let products: Product[] = [];
+
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = React.useState(1);
   const [itemsPerPage] = React.useState(12);
@@ -36,6 +38,10 @@ export default function Shop(props: HomeProps): JSX.Element {
       ? Math.floor(props.products.length / itemsPerPage)
       : Math.floor(props.products.length / itemsPerPage) + 1;
   };
+
+  React.useEffect(() => {
+    props.refreshShop();
+  }, []);
 
   return (
     <React.Fragment>
@@ -66,8 +72,8 @@ export default function Shop(props: HomeProps): JSX.Element {
 
       <Stack justifyContent="center" alignItems="center" spacing={2}>
         <ProductList
-          cartProducts={props.cartProducts}
-          OnAddCart={props.onAdd}
+          productsInCart={props.productsInCart}
+          addToCart={props.addToCart}
           products={products.slice(
             (page - 1) * itemsPerPage,
             (page - 1) * itemsPerPage + itemsPerPage

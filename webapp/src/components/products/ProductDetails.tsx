@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 
 import { getProduct, getReviewsByCode } from "../../api/api";
 import { getReviewMean } from "../../helpers/ReviewHelper";
-import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
 import { checkImageExists } from "../../helpers/ImageHelper";
+import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
 
 import { Product, Review, CartItem } from "../../shared/shareddtypes";
 
@@ -30,8 +30,7 @@ import {
 
 export type ProductProps = {
   product: Product;
-  cartItems: CartItem[];
-  onAdd: (product: Product) => void;
+  addToCart: (product: Product) => void;
 };
 
 type ProductDets = {
@@ -89,19 +88,9 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     setShareDialogOpen(shareDialogOpen + 1);
   };
 
-  const addProductToCart = () => {
-    if (product !== undefined) {
-      props.onAdd(product);
-    }
-  };
-
   useEffect(() => {
     setLoading(true);
-    obtainProductDetails(id + "").finally(() => setLoading(false));
-
-    // In case we have obtained a product
-    if (product !== undefined)
-      setCurrentCartAmount(getCurrentCartAmount(product, props.cartItems));
+    obtainProductDetails(id + "").finally(() => setLoading(false)); // TODO: check that removing setCurrentCart works
   }, []);
 
   // In case we are retrieving the elements from the db...
@@ -198,7 +187,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                 <Button
                   variant="contained"
                   disabled={product.stock <= currentCartAmount}
-                  onClick={addProductToCart}
+                  onClick={() => props.addToCart(product)}
                   sx={{ my: 1, width: "100%" }}
                 >
                   Add product to cart
@@ -217,7 +206,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
         </Grid>
 
         <ProductSpeedDial
-          addToCart={addProductToCart}
+          addToCart={props.addToCart}
           review={openDialog}
           share={openShareDialog}
         />

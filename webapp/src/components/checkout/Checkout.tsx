@@ -17,11 +17,16 @@ import Review from "./Review";
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
 
+type CheckoutProps = {
+  productsInCart: CartItem[];
+  handleDeleteCart: () => void;
+};
+
 function getSteps() {
   return ["Address", "Shipping method", "Review", "Billing", "Confirm"];
 }
 
-export default function Checkout(props: any) {
+export default function Checkout(props: CheckoutProps) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [address, setAddress] = React.useState("");
   const [costs, setCosts] = React.useState<number>(Number());
@@ -29,7 +34,7 @@ export default function Checkout(props: any) {
   const steps = getSteps();
 
   const handleUpdateStock = () => {
-    props.productsCart.forEach((cartItem: CartItem) => {
+    props.productsInCart.forEach((cartItem: CartItem) => {
       let productUnits: number = cartItem.amount;
       cartItem.product.stock -= productUnits;
       updateProduct(cartItem.product);
@@ -56,12 +61,12 @@ export default function Checkout(props: any) {
   const saveOrderToDB = () => {
     handleUpdateStock();
     saveOrder(
-      props.productsCart,
+      props.productsInCart,
       costs,
-      props.userEmail,
+      "", // TODO: user the webID
       "Get address not implemented yet"
     );
-    props.deleteCart();
+    props.handleDeleteCart(); // TODO: don't use the props
   };
 
   const getStepContent = (stepIndex: number) => {
@@ -71,7 +76,7 @@ export default function Checkout(props: any) {
           <ShippingAddress
             address={address}
             setAddress={setAddress}
-            userEmail={props.userEmail}
+            userEmail={""} // TODO: use the WEBID
             handleNext={handleNext}
           />
         );
@@ -89,7 +94,7 @@ export default function Checkout(props: any) {
       case 2:
         return (
           <Review
-            productsCart={props.productsCart}
+            productsCart={props.productsInCart}
             shippingCosts={costs}
             handleReset={handleReset}
             handleNext={handleNext}
@@ -98,7 +103,7 @@ export default function Checkout(props: any) {
       case 3:
         return (
           <Billing
-            products={props.productsCart}
+            products={props.productsInCart}
             shippingCosts={costs}
             handleBack={handleBack}
             onPayed={handlePayed}

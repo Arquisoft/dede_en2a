@@ -56,3 +56,58 @@ export function getCurrentCartAmount(
   });
   return currentAmount;
 }
+
+export function addProductToCart(
+  product: Product,
+  productsInCart: CartItem[],
+  setProductsInCart: React.Dispatch<React.SetStateAction<CartItem[]>>,
+  setTotalUnitsInCart: React.Dispatch<React.SetStateAction<number>>
+) {
+  if (product !== undefined) {
+    // We have to check the parameters we pass
+    let products = productsInCart.slice();
+    let found: number = -1;
+    products.forEach((cartItem, index) => {
+      if (cartItem.product.code === product.code) found = index;
+    });
+
+    //We check if the product is in the cart. In this case we add 1 to the amount,
+    //otherwise we push the product with amount 1
+    if (found >= 0) products[found].amount += 1;
+    else products.push({ product: product, amount: 1 });
+
+    localStorage.setItem("cart", JSON.stringify(products));
+    setProductsInCart(products); // we update the products in the cart
+    setTotalUnitsInCart((prevNumberOfUnits) => prevNumberOfUnits + 1);
+  }
+}
+
+export function removeProductFromCart(
+  product: Product,
+  productsCart: CartItem[],
+  setProductsCart: React.Dispatch<React.SetStateAction<CartItem[]>>,
+  setTotalUnitsInCart: React.Dispatch<React.SetStateAction<number>>
+) {
+  let products = productsCart.slice();
+  let found: number = -1;
+  products.forEach((cartItem, index) => {
+    if (cartItem.product.code === product.code) found = index;
+  });
+
+  products[found].amount -= 1;
+  if (products[found].amount === 0) delete products[found];
+
+  products = products.filter(Boolean);
+  localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
+  setProductsCart(products);
+  setTotalUnitsInCart((prevNumberOfUnits) => prevNumberOfUnits - 1);
+}
+
+export function removeAllFromCart(
+  setProductsCart: React.Dispatch<React.SetStateAction<CartItem[]>>,
+  setTotalUnitsInCart: React.Dispatch<React.SetStateAction<number>>
+) {
+  setProductsCart([]);
+  setTotalUnitsInCart(0);
+  localStorage.setItem("cart", JSON.stringify([]));
+}
