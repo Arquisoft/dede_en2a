@@ -7,7 +7,7 @@ import Hero from "./Hero";
 
 import { handleIncomingRedirect } from "@inrupt/solid-client-authn-browser";
 
-export default function Home() {
+export default function Home(props: any) {
   React.useEffect(() => {
     // We have to handle just-in-case we are redirected from a SOLID POD provider
     // After redirect, the current URL contains login information.

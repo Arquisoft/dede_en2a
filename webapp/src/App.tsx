@@ -61,15 +61,11 @@ export default function App(): JSX.Element {
   });
 
   // We establish a button for us to toggle the actual mode
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-        localStorage.setItem("mode", mode);
-      },
-    }),
-    []
-  );
+  const toggleColorMode = () => {
+    let modeToChange: "light" | "dark" = mode === "light" ? "dark" : "light";
+    setMode(modeToChange);
+    localStorage.setItem("mode", modeToChange);
+  };
 
   // We establish the theme of the site based on the actual preference
   const theme = React.useMemo(
@@ -177,7 +173,7 @@ export default function App(): JSX.Element {
             logCurrentUserOut={logCurrentUserOut}
             userRole={userRole}
             mode={mode}
-            toggleColorMode={colorMode.toggleColorMode}
+            toggleColorMode={toggleColorMode}
           />
           <Routes>
             <Route path="/" element={<DedeApp />}>
