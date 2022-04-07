@@ -16,6 +16,14 @@ export type Product = {
   price: number;
   stock: number;
   image: string;
+  category: string;
+};
+
+export const ProductCategories = {
+  Clothes: "Clothes",
+  Decoration: "Decoration",
+  Electronics: "Electronics",
+  Misccellaneous: "Miscellaneous",
 };
 
 export type NotificationType = {

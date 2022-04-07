@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import ShoppingCart from "../../components/cart/ShoppingCart";
 import { CartItem } from "../../shared/shareddtypes";
-import { BrowserRouter as Router } from "react-router-dom";
 
 //Test for the ShoppingCart component, receives a list of cart items and it is rendered properly.
 test("A list of two cart items is rendered", async () => {
@@ -14,6 +14,7 @@ test("A list of two cart items is rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
+        category: 'Electronics'
       },
       amount: 1,
     },
@@ -25,6 +26,7 @@ test("A list of two cart items is rendered", async () => {
         price: 15,
         stock: 10,
         image: "",
+        category: 'Clothes'
       },
       amount: 2,
     },

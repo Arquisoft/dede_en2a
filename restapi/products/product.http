@@ -3,7 +3,7 @@
 GET {{url}}/products/list
 
 ###
-GET {{url}}/products/findByCode/1
+GET {{url}}/products/findByCode/0007
 
 ###
 POST  {{url}}/products/create
@@ -21,9 +21,15 @@ Content-Type: application/json
 DELETE {{url}}/products/delete/1
 
 ###
-POST {{url}}/products/update/1347
+POST {{url}}/products/update/0045
 Content-Type: application/json
 
 {
-    "name": "Camiseta del Sporting chacho"
+    "category": "Miscellaneous"
 }
+
+###
+GET {{url}}/products/order/desc
+
+###
+GET {{url}}/products/filter&order/Electronics&asc

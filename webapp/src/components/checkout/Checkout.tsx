@@ -1,21 +1,21 @@
-import * as React from "react";
-
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-
+import * as React from "react";
 import { updateProduct } from "../../api/api";
-import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
-
-import ShippingAddress from "./ShippingAddress";
-import ShippingMethod from "./ShippingMethod";
-import Review from "./Review";
+import { CartItem } from "../../shared/shareddtypes";
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
+import Review from "./Review";
+import ShippingAddress from "./ShippingAddress";
+import ShippingMethod from "./ShippingMethod";
+
+
+
 
 function getSteps() {
   return ["Address", "Shipping method", "Review", "Billing", "Confirm"];
@@ -59,7 +59,7 @@ export default function Checkout(props: any) {
       props.productsCart,
       costs,
       props.userEmail,
-      "Get address not implemented yet"
+      address
     );
     props.deleteCart();
   };

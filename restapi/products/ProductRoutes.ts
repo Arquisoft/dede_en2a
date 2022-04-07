@@ -1,13 +1,15 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
+import multer from "../utils/multer";
 import * as ProdctController from "./ProductController";
 
-import multer from "../utils/multer";
 
 const api: Router = express.Router();
 
 api.get("/products", ProdctController.getProducts);
 
 api.get("/products/findByCode/:code", ProdctController.getProduct);
+
+api.get('/products/filter&order/:category&:mode', ProdctController.filterAndOrderBy)
 
 api.post("/products", multer.single("image"), ProdctController.createProduct);
 
