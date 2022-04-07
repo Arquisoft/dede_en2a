@@ -1,40 +1,19 @@
+import { Autorenew } from "@mui/icons-material";
+import {
+  Button, Container, Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Select, SelectChangeEvent, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer,
+  TableHead, TablePagination, TableRow, Tooltip, Typography
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableCell,
-  TableRow,
-  TableBody,
-  Typography,
-  Container,
-  LinearProgress,
-  Stack,
-  Grid,
-  Button,
-  IconButton,
-  Divider,
-  Tooltip,
-  TablePagination,
-  styled,
-  tableCellClasses,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-} from "@mui/material";
-
-import { Autorenew } from "@mui/icons-material";
-
-import { Order, User } from "../../../shared/shareddtypes";
-import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
 import { getOrdersForUser, getUser } from "../../../api/api";
-
+import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
+import { Order, User } from "../../../shared/shareddtypes";
 import FeaturedProducts from "../../home/FeaturedProducts";
 import StatusMessage from "./StatusMessage";
+
+
+
+
 
 const ALL = "all";
 const RECEIVED = "received";
@@ -171,7 +150,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
   let orders: Order[] = [];
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage] = React.useState(5);
+  const [rowsPerPage] = React.useState(10);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
