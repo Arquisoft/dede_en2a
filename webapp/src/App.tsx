@@ -1,7 +1,10 @@
 import {
-  Alert, createTheme,
+  Alert,
+  createTheme,
   CssBaseline,
-  PaletteMode, Snackbar, ThemeProvider,
+  PaletteMode,
+  Snackbar,
+  ThemeProvider,
   useMediaQuery
 } from "@mui/material";
 import { grey, lightBlue } from "@mui/material/colors";
@@ -24,6 +27,7 @@ import DedeApp from "./components/DedeApp";
 import Home from "./components/Home";
 import NavBar from "./components/navigation/NavBar";
 import ProductDetails from "./components/products/ProductDetails";
+import RedirectHome from "./components/RedirectHome";
 import SignIn from "./components/register/SignIn";
 import SignUp from "./components/register/SignUp";
 import Shop from "./components/Shop";
@@ -33,11 +37,6 @@ import {
   Product,
   User
 } from "./shared/shareddtypes";
-
-
-
-
-
 
 function App(): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -308,6 +307,7 @@ function App(): JSX.Element {
                 }
               />
             </Route>
+            <Route path="*" element={<RedirectHome />}></Route>
           </Routes>
 
           <Snackbar
