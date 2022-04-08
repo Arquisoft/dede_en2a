@@ -1,11 +1,14 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
-import { verifyWebId } from "../utils/WebIDValidation";
+import { verifyToken } from "../utils/WebIDValidation";
 import { createPDF } from "../utils/PDFHelper";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebId(req.headers.webId);
+  const isVerified = verifyToken(
+    req.headers.token + "",
+    req.headers.webId + ""
+  );
   if (isVerified) {
     const orderFound = await orderModel.findOne({
       orderCode: req.params.orderCode,
@@ -31,7 +34,10 @@ export const getOrders: RequestHandler = async (req, res) => {
 };
 
 export const getUserOrders: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebId(req.headers.webId + "");
+  const isVerified = verifyToken(
+    req.headers.token + "",
+    req.headers.webId + ""
+  );
   if (isVerified) {
     const orderFound = await orderModel.find({
       userEmail: req.headers.email,
@@ -47,7 +53,7 @@ export const getUserOrders: RequestHandler = async (req, res) => {
 };
 
 export const createOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebId(
+  const isVerified = verifyToken(
     req.headers.token + "",
     req.headers.email + ""
   );

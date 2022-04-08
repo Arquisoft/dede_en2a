@@ -79,7 +79,7 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProduct(productCode: string): Promise<Product> {
   let response = await fetch(
-    apiEndPoint + "/products/listByCode/" + productCode // TODO: change the controller
+    apiEndPoint + "/products/listByCode/" + productCode
   );
   return response.json();
 }

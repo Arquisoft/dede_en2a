@@ -1,18 +1,18 @@
-import express, { Request, Response, Router } from 'express';
-import * as UserController from './UserController';
+import express, { Request, Response, Router } from "express";
+import * as UserController from "./UserController";
 
-const api:Router = express.Router()
+const api: Router = express.Router();
 
-api.get('/users/findByEmail/:email', UserController.getUser)
+api.get("/users/findByWebId/:webId", UserController.getUser);
 
-api.get('/users/verify/:email/:uniqueString', UserController.verifyUser)
+api.get("/users/verify/:webId/:uniqueString", UserController.verifyUser);
 
-api.get('/users/verified', UserController.verified)
+api.get("/users/verified", UserController.verified);
 
-api.get('/users/notVerified/:message', UserController.notVerified)
+api.get("/users/notVerified/:message", UserController.notVerified);
 
-api.post('/users', UserController.createUser)
+api.post("/users", UserController.createUser);
 
-api.post('/users/requestToken/', UserController.requestToken)
+api.post("/users/requestToken/", UserController.requestToken);
 
-export default api
+export default api;

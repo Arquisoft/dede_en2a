@@ -7,7 +7,7 @@ const api: Router = express.Router();
 
 api.get("/products", ProdctController.getProducts);
 
-api.get("/products/findByCode/:code", ProdctController.getProduct);
+api.get("/products/listByCode/:code", ProdctController.getProduct);
 
 api.post("/products", multer.single("image"), ProdctController.createProduct);
 

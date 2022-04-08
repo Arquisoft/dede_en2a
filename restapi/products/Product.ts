@@ -14,13 +14,13 @@ export const product = new Schema(
       required: true,
       trim: true,
     },
+    description: {
+      type: String,
+      trim: true,
+    },
     price: {
       type: Number,
       required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
       trim: true,
     },
     stock: {

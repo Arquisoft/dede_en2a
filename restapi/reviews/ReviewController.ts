@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { verifyWebId } from "../utils/WebIDValidation";
+import { verifyToken } from "../utils/WebIDValidation";
 import { reviewModel } from "./Review";
 
 export const getReviewsByProduct: RequestHandler = async (req, res) => {
@@ -15,7 +15,7 @@ export const getReviewsByProduct: RequestHandler = async (req, res) => {
 
 export const createReview: RequestHandler = async (req, res) => {
   const review = new reviewModel(req.body);
-  const isVerified = verifyWebId(req.headers.token + "", review.userEmail);
+  const isVerified = verifyToken(req.headers.token + "", review.userEmail);
   if (isVerified) {
     try {
       const reviewSaved = await review.save();

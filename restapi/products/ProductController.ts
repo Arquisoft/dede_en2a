@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import path from "path";
 import { userModel } from "../users/User";
-import { verifyWebId } from "../utils/WebIDValidation";
+import { verifyToken } from "../utils/WebIDValidation";
 import { productModel } from "./Product";
 
 export const getProducts: RequestHandler = async (req, res) => {
@@ -47,7 +47,7 @@ export const createProduct: RequestHandler = async (req, res) => {
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebId(
+  const isVerified = verifyToken(
     req.headers.token + "",
     req.headers.email + ""
   );
@@ -70,11 +70,11 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebId(
+  const isVerified = verifyToken(
     req.headers.token + "",
-    req.headers.email + ""
+    req.headers.webId + ""
   );
-  const user = userModel.findOne({ email: req.headers.email });
+  const user = await userModel.findOne({ webId: req.headers.webId });
   if (isVerified && (user.role === "admin" || user.role === "manager")) {
     try {
       const product = await productModel.findOneAndUpdate(

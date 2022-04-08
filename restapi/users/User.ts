@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
 const { model, Schema } = mongoose;
-const bcrypt = require("bcryptjs");
 
 /* 
 Crea el esquema de usuario para que todos los usuario sigan el mismo formato
@@ -10,35 +10,21 @@ timestamps : true --> Añade dos campos a cada registro, 1. Cuando fue creado, 2
 */
 export const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     webId: {
       type: String,
       required: true,
       trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      trim: true,
       unique: true,
+      index: true,
     },
-    password: {
+    role: {
       type: String,
-      required: true,
-      trim: true,
+      default: "user",
     },
-    verified: {
+    isVerified: {
       type: Boolean,
       default: false,
     },
-    role:{
-      type: String,
-      default: 'user'
-    }
   },
   {
     versionKey: false,
@@ -46,11 +32,7 @@ export const userSchema = new Schema(
   }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword: String) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
 /*
-Exporta el modelo de creacion de un usario
+Exporta el modelo de creación de un usario
 */
 export const userModel = model("User", userSchema);
