@@ -15,7 +15,12 @@ import {
   isRenderForAdminOnly,
 } from "../../helpers/RoleHelper";
 
-export default function DashboardContent(props: any) {
+type DashboardContentProps = {
+  webId: string | undefined;
+  role: string;
+};
+
+export default function DashboardContent(props: DashboardContentProps) {
   return (
     <Container component="main">
       <Grid
@@ -26,7 +31,7 @@ export default function DashboardContent(props: any) {
         spacing={2}
         sx={{ mt: 2 }}
       >
-        {isRenderForModeratorAtLeast() && (
+        {isRenderForModeratorAtLeast(props.role) && (
           <Grid item xs={11}>
             <Paper
               sx={{
@@ -41,7 +46,7 @@ export default function DashboardContent(props: any) {
           </Grid>
         )}
 
-        {isRenderForAdminOnly() && (
+        {isRenderForAdminOnly(props.role) && (
           <React.Fragment>
             <Grid item xs={4} md={3}>
               <Paper
@@ -86,7 +91,7 @@ export default function DashboardContent(props: any) {
 
         <Grid item xs={11}>
           <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-            <Orders userEmail={props.userEmail} />
+            <Orders webId={props.webId} role={props.role} />
           </Paper>
         </Grid>
       </Grid>

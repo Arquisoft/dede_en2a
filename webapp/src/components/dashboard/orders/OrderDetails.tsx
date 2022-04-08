@@ -10,18 +10,30 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 
-import { getOrder } from "../../../api/api";
+import { getOrderByCode } from "../../../api/api";
 import { Order, Product } from "../../../shared/shareddtypes";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import Divider from "@mui/material/Divider";
 import StatusMessage from "./StatusMessage";
 
+type OrderDetailsProps = {
+  webId: string | undefined;
+};
+
+type OrderListProps = {
+  order: Order | undefined;
+};
+
 type OrderListItemProps = {
   product: Product;
 };
 
+type ProductDets = {
+  code: string;
+};
+
 function OrderListItem(props: OrderListItemProps): JSX.Element {
-  const [product, setProduct] = useState<Product>(props.product);
+  const [product] = useState<Product>(props.product);
 
   const Img = styled("img")({
     display: "block",
@@ -50,7 +62,7 @@ function OrderListItem(props: OrderListItemProps): JSX.Element {
   }
 }
 
-function OrderList(props: any): JSX.Element {
+function OrderList(props: OrderListProps): JSX.Element {
   if (typeof props.order === "undefined")
     return (
       <Typography variant="h6" className="m-2">
@@ -102,7 +114,7 @@ function OrderList(props: any): JSX.Element {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Shipping address:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {props.order.userAddress}
+            {props.order.address}
           </Typography>
         </ListItem>
 
@@ -116,18 +128,15 @@ function OrderList(props: any): JSX.Element {
     );
 }
 
-export default function OrderDetails(): JSX.Element {
-  type ProductDets = {
-    code: string;
-  };
-
+export default function OrderDetails(props: OrderDetailsProps): JSX.Element {
   const { code } = useParams<keyof ProductDets>() as ProductDets;
 
-  const obtainOrder = async () => {
-    setOrder(await getOrder(code));
-  };
-
   const [order, setOrder] = useState<Order>();
+
+  const obtainOrder = async () => {
+    if (props.webId !== undefined)
+      setOrder(await getOrderByCode(props.webId, code));
+  };
 
   useEffect(() => {
     obtainOrder();

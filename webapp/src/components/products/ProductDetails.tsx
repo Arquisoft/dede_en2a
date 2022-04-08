@@ -4,9 +4,8 @@ import { useParams } from "react-router-dom";
 import { getProduct, getReviewsByCode } from "../../api/api";
 import { getReviewMean } from "../../helpers/ReviewHelper";
 import { checkImageExists } from "../../helpers/ImageHelper";
-import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
 
-import { Product, Review, CartItem } from "../../shared/shareddtypes";
+import { Product, Review } from "../../shared/shareddtypes";
 
 import ProductCommentList from "./ProductCommentList";
 import StockAlert from "./StockAlert";
@@ -27,10 +26,13 @@ import {
   LinearProgress,
   Link,
 } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 
 export type ProductProps = {
   product: Product;
   addToCart: (product: Product) => void;
+  sendNotification: (severity: AlertColor, message: string) => void;
+  webId: string | undefined;
 };
 
 type ProductDets = {
@@ -68,7 +70,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
   const [dialogOpen, setDialogOpen] = useState(0);
   const [shareDialogOpen, setShareDialogOpen] = useState(0);
   const [starsSelected, setSelectedStars] = useState(0);
-  const [currentCartAmount, setCurrentCartAmount] = useState(0);
+  const [currentCartAmount] = useState(0);
   const [loading, setLoading] = React.useState(false);
 
   const obtainProductDetails = async (code: string) => {
@@ -200,6 +202,8 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
             product={product}
             show={dialogOpen}
             stars={starsSelected}
+            sendNotification={props.sendNotification}
+            webId={props.webId}
           />
 
           <ShareDialog show={shareDialogOpen} />

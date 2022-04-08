@@ -27,6 +27,10 @@ import {
   isRenderForAdminOnly,
 } from "../../../helpers/RoleHelper";
 
+type ProductsProps = {
+  role: string;
+};
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.info.main,
@@ -58,7 +62,7 @@ function ProductsHeader(props: any) {
       </Typography>
       <AutorenewOrders refreshOrderList={props.refreshOrderList} />
 
-      {isRenderForModeratorAtLeast() && (
+      {isRenderForModeratorAtLeast(props.role) && (
         <IconButton edge="end">
           <Tooltip title="Add a new product" arrow>
             <Add onClick={() => navigate("/dashboard/products/add")} />
@@ -66,7 +70,7 @@ function ProductsHeader(props: any) {
         </IconButton>
       )}
 
-      {isRenderForAdminOnly() && (
+      {isRenderForAdminOnly(props.role) && (
         <IconButton edge="end">
           <Tooltip title="Delete a product" arrow>
             <Remove onClick={() => navigate("/dashboard/products/delete")} />
@@ -143,7 +147,7 @@ function ProductsTable(props: any): JSX.Element {
   );
 }
 
-export default function Products(props: any): JSX.Element {
+export default function Products(props: ProductsProps): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
 
   const refreshProductList = async () => {
@@ -156,7 +160,10 @@ export default function Products(props: any): JSX.Element {
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <ProductsHeader refreshProductList={refreshProductList} />
+      <ProductsHeader
+        refreshProductList={refreshProductList}
+        role={props.role}
+      />
       <ProductsTable products={products} />
     </Container>
   );

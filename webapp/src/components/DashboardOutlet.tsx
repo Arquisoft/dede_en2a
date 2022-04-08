@@ -5,13 +5,17 @@ import Grid from "@mui/material/Grid";
 
 import DashboardSideBar from "./dashboard/utils/DashboardSideBar";
 
-export default function Dashboard(props: any) {
+type DashboardProps = {
+  role: string;
+};
+
+export default function Dashboard(props: DashboardProps) {
   return (
     <React.Fragment>
       <Grid component="main" sx={{ mb: 10 }}>
         <Outlet />
       </Grid>
-      <DashboardSideBar />
+      <DashboardSideBar role={props.role} />
     </React.Fragment>
   );
 }

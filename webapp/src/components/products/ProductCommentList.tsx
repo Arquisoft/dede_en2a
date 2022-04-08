@@ -20,7 +20,7 @@ export default function ProductCommentList(
             item
             xs={12}
             md={6}
-            key={`${review.userEmail}${review.productCode}`}
+            key={`${review.webId}${review.productCode}`}
           >
             <ProductComment review={review} />
           </Grid>

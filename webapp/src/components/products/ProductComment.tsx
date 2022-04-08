@@ -10,6 +10,7 @@ export default function ProductComment(
   props: ProductCommentProps
 ): JSX.Element {
   return (
+    // TODO: props.review.webId temporal
     <Paper elevation={3} style={{ margin: "1vh 2vw", padding: "1em" }}>
       <Grid container spacing={0} direction="row" style={{ minHeight: "30vh" }}>
         <Grid item xs={12}>
@@ -19,7 +20,7 @@ export default function ProductComment(
             justifyContent="space-between"
           >
             <Typography variant="h6" component="h6">
-              {props.review.userEmail}
+              {props.review.webId}
             </Typography>
 
             <Rating

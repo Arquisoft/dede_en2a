@@ -49,7 +49,7 @@ export default function Drawer(props: any) {
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
           >
-            <NavMenu orientation={props.orientation} />
+            <NavMenu orientation={props.orientation} color="text.primary" />
           </Grid>
         }
       </SwipeableDrawer>

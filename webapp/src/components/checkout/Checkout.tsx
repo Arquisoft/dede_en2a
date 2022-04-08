@@ -20,6 +20,7 @@ import OrderConfirmation from "./OrderConfirmation";
 type CheckoutProps = {
   productsInCart: CartItem[];
   handleDeleteCart: () => void;
+  webId: string | undefined;
 };
 
 function getSteps() {
@@ -37,7 +38,9 @@ export default function Checkout(props: CheckoutProps) {
     props.productsInCart.forEach((cartItem: CartItem) => {
       let productUnits: number = cartItem.amount;
       cartItem.product.stock -= productUnits;
-      updateProduct(cartItem.product);
+
+      if (props.webId !== undefined)
+        updateProduct(props.webId, cartItem.product);
     });
   };
 
@@ -59,14 +62,16 @@ export default function Checkout(props: CheckoutProps) {
   };
 
   const saveOrderToDB = () => {
-    handleUpdateStock();
-    saveOrder(
-      props.productsInCart,
-      costs,
-      "", // TODO: user the webID
-      "Get address not implemented yet"
-    );
-    props.handleDeleteCart(); // TODO: don't use the props
+    if (props.webId !== undefined) {
+      handleUpdateStock();
+      saveOrder(
+        props.productsInCart,
+        costs,
+        props.webId,
+        "Get address not implemented yet"
+      );
+      props.handleDeleteCart();
+    }
   };
 
   const getStepContent = (stepIndex: number) => {

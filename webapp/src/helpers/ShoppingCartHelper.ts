@@ -19,8 +19,8 @@ export function calculateTotal(
 export async function saveOrder(
   products: CartItem[],
   shippingCosts: number,
-  userEmail: string,
-  userAddress: string
+  webId: string,
+  address: string
 ) {
   let productCosts: number = calculateTotal(products, 0);
   var orderProducts: Product[] = [];
@@ -30,9 +30,8 @@ export async function saveOrder(
   });
 
   let order: Order = {
-    orderCode: uuidv4(),
-    userEmail: userEmail,
-    userAddress: userAddress,
+    code: uuidv4(),
+    address: address,
     products: orderProducts,
     date: new Date(),
     subtotalPrice: productCosts,
@@ -41,7 +40,7 @@ export async function saveOrder(
     isOrderReceived: false,
   };
 
-  await createOrder(JSON.stringify(order));
+  await createOrder(webId, JSON.stringify(order));
 }
 
 export function getCurrentCartAmount(

@@ -9,6 +9,7 @@ import {
   createTheme,
   useMediaQuery,
 } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 
 import ShoppingCart from "./components/cart/ShoppingCart";
 import Checkout from "./components/checkout/Checkout";
@@ -26,21 +27,25 @@ import ProductDetails from "./components/products/ProductDetails";
 import SignIn from "./components/userManagement/SignIn";
 import Shop from "./components/Shop";
 
-import {
-  CartItem,
-  NotificationType,
-  Product,
-  User,
-} from "./shared/shareddtypes";
+import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
+
 import {
   addProductToCart,
   removeProductFromCart,
 } from "./helpers/ShoppingCartHelper";
-import { getProducts } from "./api/api";
+import { getNameFromPod } from "./helpers/SolidHelper";
+
+import { getProducts, getUser } from "./api/api";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "./App.css";
+
+import {
+  handleIncomingRedirect,
+  getDefaultSession,
+  logout,
+} from "@inrupt/solid-client-authn-browser";
 
 export default function App(): JSX.Element {
   // Some variables to perform calculations in an easier way
@@ -50,7 +55,8 @@ export default function App(): JSX.Element {
   const [products, setProducts] = React.useState<Product[]>([]); // We store the whole set of products of the APP
   const [productsInCart, setProductsInCart] = React.useState<CartItem[]>([]); // We store the products that are IN the cart
   const [totalUnitsInCart, setTotalUnitsInCart] = React.useState(Number()); // We compute the total number of units in the cart
-  const [userRole, setUserRole] = React.useState(""); // TODO: probably this could be deleted
+  const [role, setRole] = React.useState(""); // TODO: probably this could be deleted
+  const [webId, setWebId] = React.useState(getDefaultSession().info.webId);
   const [mode, setMode] = React.useState<"light" | "dark">(
     prefersDarkMode ? "dark" : "light"
   ); // We establish the actual mode based in the prefered color scheme
@@ -111,29 +117,24 @@ export default function App(): JSX.Element {
     setProducts(dbProducts); // and set the products to the state
   }, []);
 
-  const setCurrentUser = (user: User) => {
-    // TODO: refactor using SOLID
-    localStorage.setItem("user.email", user.email);
-    localStorage.setItem("user.role", user.role);
-    setNotificationStatus(true);
-    setNotification({
-      severity: "success",
-      message: "Welcome to DeDe application " + user.name,
-    });
-    setUserRole(user.role);
+  const logCurrentUserOut = () => {
+    // We logout from SOLID
+    logout();
+
+    // The following has no impact on the logout, it just resets the UI.
+    setWebId(undefined);
+    setRole("");
+
+    // We send a notification giving the user information
+    sendNotification("success", "You signed out correctly. See you soon!");
   };
 
-  const logCurrentUserOut = () => {
-    // TODO: see how to do it with SOLID
-    localStorage.removeItem("user.email");
-    localStorage.removeItem("user.role");
-    localStorage.removeItem("token");
+  const sendNotification = (severity: AlertColor, message: string) => {
     setNotificationStatus(true);
     setNotification({
-      severity: "success",
-      message: "You signed out correctly. See you soon!",
+      severity: severity,
+      message: message,
     });
-    setUserRole("");
   };
 
   React.useEffect(() => {
@@ -143,10 +144,30 @@ export default function App(): JSX.Element {
     // In case we have stored a theme: set the actual mode to the user preference
     else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark"); // TODO: make this work
 
-    // TODO: add the SOLID thing
+    // We have to handle just-in-case we are redirected from a SOLID POD provider
+    // After redirect, the current URL contains login information.
+    handleIncomingRedirect({
+      restorePreviousSession: true,
+    }).then(
+      (info: any) => {
+        // If everything is OK
+        setWebId(info.webId); // We store user's WebID
+        getUser(info.webId).then((user) => setRole(user.role)); // we update the role of the user
 
-    //Retrive the cart from the session.
-    const sessionCart = localStorage.getItem("cart");
+        // Inform the user his actual status
+        sendNotification(
+          "success",
+          `Welcome to DeDe ${getNameFromPod(info.webId)}!`
+        );
+      },
+      () => {
+        // In case something went wrong
+        sendNotification("error", "Something went wrong while logging-in!");
+      }
+    );
+
+    // Retrive the cart from the session in case the user refreshes the page
+    const sessionCart = localStorage.getItem("cart"); // TODO: check if something can be modified
     if (sessionCart) {
       let cart: CartItem[] = JSON.parse(sessionCart);
 
@@ -158,7 +179,6 @@ export default function App(): JSX.Element {
   }, []);
 
   return (
-    // TODO: refactor the router
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <PayPalScriptProvider
@@ -171,7 +191,6 @@ export default function App(): JSX.Element {
           <NavBar
             totalUnitsInCart={totalUnitsInCart}
             logCurrentUserOut={logCurrentUserOut}
-            userRole={userRole}
             mode={mode}
             toggleColorMode={toggleColorMode}
           />
@@ -206,6 +225,7 @@ export default function App(): JSX.Element {
                   <Checkout
                     productsInCart={productsInCart}
                     handleDeleteCart={handleDeleteCart}
+                    webId={webId}
                   />
                 }
               />
@@ -213,15 +233,29 @@ export default function App(): JSX.Element {
               <Route
                 path="product/:id"
                 element={
-                  <ProductDetails product={null as any} addToCart={addToCart} />
+                  <ProductDetails
+                    product={null as any}
+                    addToCart={addToCart}
+                    sendNotification={sendNotification}
+                    webId={webId}
+                  />
                 }
               />
             </Route>
-            <Route path="dashboard" element={<DashboardOutlet />}>
-              <Route index element={<DashboardContent />} />
-              <Route path="orders" element={<OrderList />} />
-              <Route path="order/:code" element={<OrderDetails />} />
-              <Route path="products" element={<ProductList />} />
+            <Route path="dashboard" element={<DashboardOutlet role={role} />}>
+              <Route
+                index
+                element={<DashboardContent webId={webId} role={role} />}
+              />
+              <Route
+                path="orders"
+                element={<OrderList webId={webId} role={role} />}
+              />
+              <Route
+                path="order/:code"
+                element={<OrderDetails webId={webId} />}
+              />
+              <Route path="products" element={<ProductList role={role} />} />
               <Route
                 path="products/add"
                 element={<UploadProduct refreshShop={refreshShop} />}
@@ -232,6 +266,8 @@ export default function App(): JSX.Element {
                   <DeleteProduct
                     products={products}
                     refreshShop={refreshShop}
+                    webId={webId}
+                    sendNotification={sendNotification}
                   />
                 }
               />

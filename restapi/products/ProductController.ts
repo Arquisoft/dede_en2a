@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import path from "path";
 import { userModel } from "../users/User";
-import { verifyToken } from "../utils/generateToken";
+import { verifyWebId } from "../utils/WebIDValidation";
 import { productModel } from "./Product";
 
 export const getProducts: RequestHandler = async (req, res) => {
@@ -47,7 +47,7 @@ export const createProduct: RequestHandler = async (req, res) => {
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
+  const isVerified = verifyWebId(
     req.headers.token + "",
     req.headers.email + ""
   );
@@ -70,7 +70,7 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
+  const isVerified = verifyWebId(
     req.headers.token + "",
     req.headers.email + ""
   );

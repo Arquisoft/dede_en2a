@@ -5,7 +5,7 @@ import { Review } from "../../shared/shareddtypes";
 //Test that a review is rendered correctly
 test("Renders a review", () => {
   const review: Review = {
-    userEmail: "test@email.com",
+    webId: "test@email.com",
     productCode: "9999",
     rating: 4,
     comment: "This is a test comment",
@@ -13,7 +13,7 @@ test("Renders a review", () => {
 
   const { getByText, container } = render(<ProductComment review={review} />);
 
-  expect(getByText(review.userEmail)).toBeInTheDocument();
+  expect(getByText(review.webId)).toBeInTheDocument();
   expect(getByText(review.comment)).toBeInTheDocument();
 
   //Check that the rating is rendered correctly with the correct number of stars with aria-label = "4 Stars"

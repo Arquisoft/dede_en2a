@@ -1,12 +1,9 @@
 import type { AlertColor } from "@mui/material/Alert";
 
 export type User = {
-  name: string;
   webId: string;
-  email: string;
-  password: string;
   role: string;
-  verified: boolean;
+  isVerified: boolean;
 };
 
 export type Product = {
@@ -29,11 +26,10 @@ export type CartItem = {
 };
 
 export type Order = {
-  orderCode: string;
-  userEmail: string;
-  userAddress: string;
-  products: Product[];
+  code: string;
+  address: string;
   date: Date;
+  products: Product[];
   subtotalPrice: number;
   shippingPrice: number;
   totalPrice: number;
@@ -41,7 +37,7 @@ export type Order = {
 };
 
 export type Review = {
-  userEmail: string;
+  webId: string;
   productCode: string;
   rating: number;
   comment: string;

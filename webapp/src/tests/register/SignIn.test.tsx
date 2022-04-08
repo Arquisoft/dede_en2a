@@ -24,12 +24,9 @@ test("SignIn component renders correctly", () => {
 //Test that the sign in with incorrect values not found
 test("Sign in with incorrect values not found", async () => {
   let user: User = {
-    name: "Test",
-    email: "test@email.com",
     webId: "https://test.com/",
-    password: "password",
     role: "user",
-    verified: true,
+    isVerified: true,
   } as User;
 
   jest
@@ -69,12 +66,9 @@ test("Sign in with incorrect values not found", async () => {
 //Test sign in with correct values but no verified user
 test("Sign in with incorrect values not found", async () => {
   let user: User = {
-    name: "Test",
-    email: "test@email.com",
     webId: "https://test.com/",
-    password: "password",
     role: "user",
-    verified: false,
+    isVerified: false,
   } as User;
 
   jest

@@ -58,10 +58,10 @@ export default function Hero() {
             <Button
               variant="outlined"
               component={Link}
-              to="sign-up"
+              to="sign-in"
               sx={{ textAlign: "center" }}
             >
-              Create an account
+              Log to your POD
             </Button>
           </Stack>
         </Container>

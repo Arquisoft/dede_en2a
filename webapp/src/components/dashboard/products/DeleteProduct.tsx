@@ -6,19 +6,19 @@ import {
   Container,
   MenuItem,
   Paper,
-  Snackbar,
   Stack,
   styled,
   TextField,
-  Alert,
   Button,
+  AlertColor,
 } from "@mui/material";
 
 import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
-import { NotificationType, Product } from "../../../shared/shareddtypes";
+import { Product } from "../../../shared/shareddtypes";
 
 const Img = styled("img")({
+  // TODO: check if this is working as intended
   display: "block",
   width: "22.2vw",
   height: "22.2vw",
@@ -28,10 +28,11 @@ const Img = styled("img")({
 type DeleteProductProps = {
   products: Product[];
   refreshShop: () => void;
+  webId: string | undefined;
+  sendNotification: (severity: AlertColor, message: string) => void;
 };
 
 export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
-  const [notificationStatus, setNotificationStatus] = useState(false);
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -39,10 +40,6 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [price, setPrice] = useState("");
   const [dialogOpen, setDialogOpen] = useState(0);
   const [image, setImage] = useState("");
-  const [notification, setNotification] = useState<NotificationType>({
-    severity: "success",
-    message: "",
-  });
 
   const products = props.products;
 
@@ -59,26 +56,23 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   };
 
   const handleDeleteProduct = async () => {
-    if (code !== "") {
-      openDialog();
-    } else {
-      setNotificationStatus(true);
-      setNotification({
-        severity: "error",
-        message: "Select a product to delete",
-      });
-    }
+    if (code !== "") openDialog();
+    else
+      props.sendNotification(
+        "error",
+        "You must choose a product to delete first!"
+      );
   };
 
   const handleDeleteConfirmed = async () => {
-    await deleteProduct(code);
-    setNotificationStatus(true);
-    setNotification({
-      severity: "success",
-      message: "Product deleted correctly",
-    });
-    emptyFields();
-    props.refreshShop();
+    // TODO: not working
+    if (props.webId !== undefined) {
+      await deleteProduct(props.webId, code);
+      emptyFields();
+      props.refreshShop();
+
+      props.sendNotification("success", "Product deleted successfully!");
+    }
   };
 
   const emptyFields = () => {
@@ -198,22 +192,6 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           </Box>
         </Paper>
       </Container>
-
-      <Snackbar
-        open={notificationStatus}
-        autoHideDuration={3000}
-        onClose={() => {
-          setNotificationStatus(false);
-        }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <Alert severity={notification.severity} sx={{ width: "100%" }}>
-          {notification.message}
-        </Alert>
-      </Snackbar>
     </React.Fragment>
   );
 }

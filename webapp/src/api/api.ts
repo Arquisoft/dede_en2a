@@ -2,15 +2,14 @@ import { Order, Review, User, Product } from "../shared/shareddtypes";
 
 const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
+// -*- USERS -*-
+
 export async function addUser(user: User): Promise<boolean> {
   let response = await fetch(apiEndPoint + "/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      name: user.name,
       webId: user.webId,
-      email: user.email,
-      password: user.password,
     }),
   });
   if (response.status === 200) {
@@ -18,7 +17,7 @@ export async function addUser(user: User): Promise<boolean> {
   } else return false;
 }
 
-export async function checkUser(
+export async function checkUser( // TODO: this should be refactored
   email: String,
   password: String
 ): Promise<boolean> {
@@ -31,30 +30,16 @@ export async function checkUser(
     }),
   });
 
-  if (response.status === 200) {
-    localStorage.setItem("token", await response.json());
-    return true;
-  } else {
-    return false;
-  }
+  if (response.status === 200) return true;
+  else return false;
 }
 
-export async function getUser(userEmail: String): Promise<User> {
-  let response = await fetch(apiEndPoint + "/users/findByEmail/" + userEmail);
+export async function getUser(webId: String): Promise<User> {
+  let response = await fetch(apiEndPoint + "/users/findByWebId/" + webId); // TODO: change controller
   return response.json();
 }
 
-export async function getProducts(): Promise<Product[]> {
-  let response = await fetch(apiEndPoint + "/products/");
-  return response.json();
-}
-
-export async function getProduct(productCode: string): Promise<Product> {
-  let response = await fetch(
-    apiEndPoint + "/products/findByCode/" + productCode
-  );
-  return response.json();
-}
+// -*- PLACES -*-
 
 export async function getPlaces(
   x: number,
@@ -85,14 +70,28 @@ export async function getPlaces(
   return places;
 }
 
-export async function updateProduct(product: Product) {
+// -*- PRODUCTS -*-
+
+export async function getProducts(): Promise<Product[]> {
+  let response = await fetch(apiEndPoint + "/products/");
+  return response.json();
+}
+
+export async function getProduct(productCode: string): Promise<Product> {
+  let response = await fetch(
+    apiEndPoint + "/products/listByCode/" + productCode // TODO: change the controller
+  );
+  return response.json();
+}
+
+export async function updateProduct(webId: string, product: Product) {
   await fetch(apiEndPoint + "/products/update/" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
+      webId: webId,
     },
+
     body: JSON.stringify({
       name: product.name,
       price: product.price,
@@ -122,59 +121,27 @@ export async function createProduct(image: any, body: any) {
   }
 }
 
-export async function deleteProduct(code: string) {
+export async function deleteProduct(webId: string, code: string) {
   await fetch(apiEndPoint + "/products/delete/" + code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
+      webId: webId,
     },
   });
 }
 
-export async function createOrder(body: any) {
+// -*- ORDERS -*-
+
+export async function createOrder(webId: string, body: any) {
   await fetch(apiEndPoint + "/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
+      webId: webId,
     },
     body: body,
   });
-}
-
-export async function getOrder(orderCode: string): Promise<Order> {
-  var headers = {};
-  headers = {
-    token: localStorage.getItem("token"),
-    email: localStorage.getItem("user.email"),
-  };
-  let response = await fetch(
-    apiEndPoint + "/orders/findByOrderCode/" + orderCode,
-    { method: "GET", headers: headers }
-  );
-  return response.json();
-}
-
-export async function getOrdersForUser(): Promise<Order[]> {
-  if (localStorage.getItem("user.role") === "admin") return getOrders();
-  else {
-    let headers = {};
-    headers = {
-      token: localStorage.getItem("token"),
-      email: localStorage.getItem("user.email"),
-    };
-
-    const apiEndPoint =
-      process.env.REACT_APP_API_URI || "http://localhost:5000";
-    let response = await fetch(apiEndPoint + "/orders", {
-      method: "GET",
-      headers: headers,
-    });
-    return response.json();
-  }
 }
 
 export async function getOrders(): Promise<Order[]> {
@@ -182,17 +149,54 @@ export async function getOrders(): Promise<Order[]> {
   return response.json();
 }
 
+export async function getOrderByCode(
+  webId: string,
+  orderCode: string
+): Promise<Order> {
+  let response = await fetch(
+    apiEndPoint + "/orders/findByOrderCode/" + orderCode,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.json();
+}
+
+export async function getOrdersForUser(
+  webId: string,
+  role: string
+): Promise<Order[]> {
+  if (role === "admin") return getOrders(); // TODO: make role a type
+  else {
+    const apiEndPoint =
+      process.env.REACT_APP_API_URI || "http://localhost:5000";
+    let response = await fetch(apiEndPoint + "/orders", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        webId: webId,
+      },
+    });
+    return response.json();
+  }
+}
+
+// -*- REVIEWS -*-
+
 export async function getReviewsByCode(code: string): Promise<Review[]> {
   let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
   return response.json();
 }
 
-export async function getReviewsByCodeAndEmail(
+export async function getReviewsByCodeAndWebId(
   code: string,
-  email: string
+  webId: string
 ): Promise<Review[]> {
   let response = await fetch(
-    apiEndPoint + "/reviews/listByCodeAndEmail/" + code + "/" + email
+    apiEndPoint + "/reviews/listByCodeAndWebId/" + code + "/" + webId
   );
   return response.json();
 }
@@ -202,12 +206,12 @@ export async function addReview(review: Review): Promise<boolean> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
+      webId: review.webId,
     },
     body: JSON.stringify({
       rating: review.rating,
       comment: review.comment,
-      userEmail: review.userEmail,
+      userEmail: review.webId,
       productCode: review.productCode,
     }),
   });

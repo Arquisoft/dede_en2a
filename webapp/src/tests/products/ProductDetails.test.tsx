@@ -14,7 +14,12 @@ test("Renders product details page", () => {
   };
 
   const { getByText, getAllByText } = render(
-    <ProductDetails product={product} addToCart={() => {}} />
+    <ProductDetails
+      product={product}
+      addToCart={() => {}}
+      webId={""}
+      sendNotification={() => {}}
+    />
   );
 
   //Check that the name, the description and the prices are rendered
@@ -43,7 +48,12 @@ test("Adds product to cart", () => {
   const onAdd = jest.fn();
 
   const { getByText } = render(
-    <ProductDetails product={product} addToCart={onAdd} />
+    <ProductDetails
+      product={product}
+      addToCart={onAdd}
+      webId={""}
+      sendNotification={() => {}}
+    />
   );
 
   //Click the add button

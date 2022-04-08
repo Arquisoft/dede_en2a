@@ -10,7 +10,11 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 import { isRenderForModeratorAtLeast } from "../../../helpers/RoleHelper";
 
-export default function DashboardSideBar() {
+type DashboardSideBarProps = {
+  role: string;
+};
+
+export default function DashboardSideBar(props: DashboardSideBarProps) {
   return (
     <Paper
       sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
@@ -29,7 +33,7 @@ export default function DashboardSideBar() {
           label="Orders"
           icon={<MoveToInboxIcon />}
         />
-        {isRenderForModeratorAtLeast() && (
+        {isRenderForModeratorAtLeast(props.role) && (
           <BottomNavigationAction
             component={Link}
             to="products"

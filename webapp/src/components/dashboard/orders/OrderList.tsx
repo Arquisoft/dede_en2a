@@ -40,6 +40,11 @@ const ALL = "all";
 const RECEIVED = "received";
 const SHIPPING = "shipping";
 
+type OrdersProps = {
+  webId: string | undefined;
+  role: string;
+};
+
 type OrderTableItemProps = {
   order: Order;
 };
@@ -99,7 +104,7 @@ function OrderTitle(props: any) {
 
 function OrderHeader(props: any) {
   if (props.isOrder) {
-    if (isRenderForAdminOnly()) {
+    if (isRenderForAdminOnly(props.role)) {
       return (
         <OrderTitle
           state={props.state}
@@ -113,7 +118,7 @@ function OrderHeader(props: any) {
         <OrderTitle
           state={props.state}
           handleChange={props.handleChange}
-          title={"Your orders, " + props.name}
+          title={"Your orders, " + props.webId} // TODO: refactor this
           refreshOrderList={props.refreshOrderList}
         />
       );
@@ -132,9 +137,9 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
 
   return (
-    <TableRow hover key={props.order.orderCode}>
+    <TableRow hover key={props.order.code}>
       <TableCell align="center" component="th" scope="row">
-        {props.order.orderCode}
+        {props.order.code}
       </TableCell>
       <TableCell align="center">{props.order.subtotalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
@@ -147,7 +152,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
           variant="contained"
           color="secondary"
           className="m-1"
-          onClick={() => navigate("/dashboard/order/" + props.order.orderCode)}
+          onClick={() => navigate("/dashboard/order/" + props.order.code)}
         >
           See details
         </Button>
@@ -217,7 +222,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               {orders
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((order: Order) => {
-                  return <OrderTableItem key={order.orderCode} order={order} />;
+                  return <OrderTableItem key={order.code} order={order} />;
                 })}
             </TableBody>
           </Table>
@@ -242,7 +247,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
 }
 
-function Orders(props: any): JSX.Element {
+function Orders(props: OrdersProps): JSX.Element {
   const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = React.useState(false);
@@ -253,11 +258,12 @@ function Orders(props: any): JSX.Element {
   };
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser());
+    if (props.webId !== undefined)
+      setOrders(await getOrdersForUser(props.webId, props.role));
   };
 
   const refreshUser = async () => {
-    setUser(await getUser(props.userEmail));
+    if (props.webId !== undefined) setUser(await getUser(props.webId));
   };
 
   useEffect(() => {
@@ -274,7 +280,8 @@ function Orders(props: any): JSX.Element {
           <OrderHeader
             isOrder={orders.length > 0}
             refreshOrderList={refreshOrderList}
-            name={user?.name}
+            webId={user?.webId}
+            role={user?.role}
             state={state}
             handleChange={handleChange}
           />

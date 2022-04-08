@@ -18,13 +18,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
   handleCloseUserMenu: () => void;
+  webId: string | undefined;
 };
 
 function LogOut(props: LogOutFuncProps): JSX.Element {
   let navigate = useNavigate();
 
   const logOutUser = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); // TODO: refactor this
     props.logCurrentUserOut();
     props.handleCloseUserMenu();
     navigate("/");
@@ -32,7 +33,7 @@ function LogOut(props: LogOutFuncProps): JSX.Element {
 
   return (
     <React.Fragment>
-      {localStorage.getItem("token") !== null && (
+      {props.webId !== undefined && ( // If a user has been authenticated
         <React.Fragment>
           <MenuItem onClick={logOutUser}>
             <ListItemIcon>
@@ -59,7 +60,7 @@ export default function UserMenuButton(props: any): JSX.Element {
     setAnchorElUser(null);
   };
 
-  if (localStorage.getItem("token") !== null)
+  if (props.webId !== undefined)
     return (
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="User management options">
@@ -97,6 +98,7 @@ export default function UserMenuButton(props: any): JSX.Element {
           <LogOut
             logCurrentUserOut={props.logCurrentUserOut}
             handleCloseUserMenu={handleCloseUserMenu}
+            webId={props.webId}
           />
         </Menu>
       </Box>

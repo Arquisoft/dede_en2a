@@ -2,7 +2,6 @@ require("dotenv").config();
 
 import { RequestHandler } from "express";
 import { sendVerificationEmail } from "../utils/emailSender";
-import { generateToken } from "../utils/generateToken";
 import { userModel } from "./User";
 import { userVerificationModel } from "./UserVerification";
 
