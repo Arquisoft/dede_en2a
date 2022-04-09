@@ -71,6 +71,7 @@ describe("prodcuts", () => {
         name: "Super SUS T-Shirt",
         price: 9.5,
         image: "0001.png",
+        category: "Clothes",
       })
     );
   });
@@ -91,6 +92,7 @@ describe("prodcuts", () => {
       price: 0.99,
       description: "Another test product",
       stock: 0,
+      category: "Clothes",
     });
     expect(response.statusCode).toBe(403);
   });
@@ -110,6 +112,7 @@ describe("prodcuts", () => {
         price: 0.99,
         description: "Another test product",
         stock: 0,
+        category: "Clothes",
       });
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toBe("testProduct");
@@ -128,6 +131,7 @@ describe("prodcuts", () => {
         price: 0.99,
         description: "A failure insert test product",
         stock: 0,
+        category: "Clothes",
       });
     expect(response.statusCode).toBe(409);
   });
@@ -144,6 +148,23 @@ describe("prodcuts", () => {
     expect(response.statusCode).toBe(412);
   });
 
+  it("Can't create a product with incorrect or missing category", async () => {
+    let userToken = await getToken();
+    const response: Response = await request(app)
+      .post("/products")
+      .set("token", userToken)
+      .set("email", "test")
+      .send({
+        code: uuidv4(),
+        name: "testFailProduct",
+        price: 0.99,
+        description: "A failure insert test product",
+        stock: 0,
+        category: "Nothing",
+      });
+    expect(response.statusCode).toBe(412);
+  });
+
   it("Can update a product correctly", async () => {
     let userToken = await getToken();
     const response: Response = await request(app)
@@ -151,23 +172,25 @@ describe("prodcuts", () => {
       .set("token", userToken)
       .set("email", "test")
       .send({
-        stock: 1000,
+        stock: 10,
       });
     expect(response.statusCode).toBe(200);
-    expect(response.body.stock).toBe(1000);
+    expect(response.body.stock).toBe(10);
   });
 
   it("Can't update a product without being admin or manager", async () => {
-    const token: Response = await request(app).post("/users/requestToken/").send({
-      email: "test1",
-      password: "test",
-    });
+    const token: Response = await request(app)
+      .post("/users/requestToken/")
+      .send({
+        email: "test1",
+        password: "test",
+      });
     const response: Response = await request(app)
       .post("/products/update/" + productCode)
       .set("token", token.body)
       .set("email", "test1")
       .send({
-        stock: 1000,
+        stock: 10,
       });
     expect(response.statusCode).toBe(403);
   });
@@ -176,7 +199,7 @@ describe("prodcuts", () => {
     const response: Response = await request(app)
       .post("/products/update/" + productCode)
       .send({
-        stock: 1000,
+        stock: 10,
       });
     expect(response.statusCode).toBe(403);
   });
@@ -196,6 +219,53 @@ describe("prodcuts", () => {
       .post("/products/delete/" + productCode)
       .send();
     expect(response.statusCode).toBe(403);
+  });
+
+  /*
+   Testing filtering and ordering products
+   */
+  it("Can filter by category", async () => {
+    const response: Response = await request(app)
+      .get("/products/filter&order/Electronics&A")
+      .send();
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ category: "Electronics" }),
+      ])
+    );
+  });
+
+  it("Can filter by category and order by price", async () => {
+    const response: Response = await request(app)
+      .get("/products/filter&order/Electronics&asc")
+      .send();
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ category: "Electronics" }),
+      ])
+    );
+    expect(response.body[0].price).toBe(20.99);
+  });
+
+  it("Can order by price", async () => {
+    const response: Response = await request(app)
+      .get("/products/filter&order/Category&asc")
+      .send();
+    expect(response.statusCode).toBe(200);
+    expect(response.body[0].price).toBe(1.99);
+  });
+
+  it("Check normal order when 'wrong' input", async () => {
+    const response: Response = await request(app)
+      .get("/products/filter&order/a&a")
+      .send();
+    expect(response.statusCode).toBe(200);
+    expect(response.body[0].price).toBe(12.95);
+    expect(response.body[0].code).toBe("1234");
+    expect(response.body[1].price).toBe(9.5);
+    expect(response.body[1].code).toBe("0001");
   });
 });
 

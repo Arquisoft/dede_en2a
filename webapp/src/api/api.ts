@@ -2,6 +2,8 @@ import { Order, Product, Review, User } from "../shared/shareddtypes";
 
 const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
+// USERS
+
 export async function addUser(user: User): Promise<boolean> {
   let response = await fetch(apiEndPoint + "/users", {
     method: "POST",
@@ -44,6 +46,8 @@ export async function getUser(userEmail: String): Promise<User> {
   return response.json();
 }
 
+// PRODUCTS
+
 export async function getProducts(): Promise<Product[]> {
   let response = await fetch(apiEndPoint + "/products/");
   return response.json();
@@ -54,35 +58,6 @@ export async function getProduct(productCode: string): Promise<Product> {
     apiEndPoint + "/products/findByCode/" + productCode
   );
   return response.json();
-}
-
-export async function getPlaces(
-  x: number,
-  y: number,
-  radiusMeters: number,
-  maxResults: number
-): Promise<any> {
-  const url =
-    "https://api.geoapify.com/v2/places?categories=commercial&filter=circle:" +
-    x +
-    "," +
-    y +
-    "," +
-    radiusMeters +
-    "&bias=proximity:" +
-    x +
-    "," +
-    y +
-    "&limit=" +
-    maxResults +
-    "&apiKey=" +
-    process.env.REACT_APP_GEOAPIFY_KEY;
-
-  let places;
-  await fetch(url, {
-    method: "GET",
-  }).then((response) => (places = response.json()));
-  return places;
 }
 
 export async function updateProduct(product: Product) {
@@ -132,6 +107,20 @@ export async function deleteProduct(code: string) {
     },
   });
 }
+
+// Mode must be desc or asc. If not default order
+// Category must be Clothes, Decoration, Elecrtonics or Miscellaneous. If not all categories
+export async function filterProductsByCategory(
+  category: string,
+  mode: string
+): Promise<Product[]> {
+  let response = await fetch(
+    apiEndPoint + "/products/filter&order/" + category + "&" + mode
+  );
+  return response.json();
+}
+
+// ORDERS
 
 export async function createOrder(body: any) {
   await fetch(apiEndPoint + "/orders", {
@@ -191,6 +180,8 @@ export async function getOrders(): Promise<Order[]> {
   return response.json();
 }
 
+// REVIEWS
+
 export async function getReviewsByCode(code: string): Promise<Review[]> {
   let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
   return response.json();
@@ -223,4 +214,35 @@ export async function addReview(review: Review): Promise<boolean> {
   if (response.status === 200) {
     return true;
   } else return false;
+}
+
+// PLACES
+
+export async function getPlaces(
+  x: number,
+  y: number,
+  radiusMeters: number,
+  maxResults: number
+): Promise<any> {
+  const url =
+    "https://api.geoapify.com/v2/places?categories=commercial&filter=circle:" +
+    x +
+    "," +
+    y +
+    "," +
+    radiusMeters +
+    "&bias=proximity:" +
+    x +
+    "," +
+    y +
+    "&limit=" +
+    maxResults +
+    "&apiKey=" +
+    process.env.REACT_APP_GEOAPIFY_KEY;
+
+  let places;
+  await fetch(url, {
+    method: "GET",
+  }).then((response) => (places = response.json()));
+  return places;
 }

@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-
 import { createOrder } from "../api/api";
 import { CartItem, Order, Product } from "../shared/shareddtypes";
 
@@ -25,8 +24,16 @@ export async function saveOrder(
   let productCosts: number = calculateTotal(products, 0);
   var orderProducts: Product[] = [];
   products.forEach((item) => {
-    item.product.stock = item.amount;
-    orderProducts.push(item.product);
+    let p: Product = {
+      code: item.product.code,
+      name: item.product.name,
+      description: item.product.description,
+      price: item.product.price,
+      stock: item.amount,
+      image: item.product.image,
+      category: item.product.category
+    };
+    orderProducts.push(p);
   });
 
   let order: Order = {

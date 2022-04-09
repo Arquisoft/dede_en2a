@@ -11,10 +11,11 @@ sgMail.setApiKey(
 
 export const sendInvoiceEmail: Function = (
   email: string,
-  orderCode: string
+  orderCode: string,
+  message: string
 ) => {
-  const pathToAttachment = `${__dirname}/pdf/` + orderCode + ".pdf";
-  const attachment = fs.readFileSync(pathToAttachment).toString("base64");
+  /*const pathToAttachment = `${__dirname}/pdf/` + orderCode + ".pdf";
+  const attachment = fs.readFileSync(pathToAttachment).toString("base64");*/
 
   const mailOptions = {
     to: email,
@@ -22,15 +23,16 @@ export const sendInvoiceEmail: Function = (
     subject: "DeDe Order Invoice",
     html:
       "<p>Thank you for trusting in DeDe and buying with us.<br><br>Here you have the receipt of your purchase." +
-      "<br><br>We hope to see you soon :)</p>",
-    attachments: [
+      "<br><br>We hope to see you soon :)</p><br><br><br><br><br>" +
+      message,
+    /*attachments: [
       {
         content: attachment,
         filename: orderCode + ".pdf",
         type: "application/pdf",
         disposition: "attachment",
       },
-    ],
+    ],*/
   };
   sgMail.send(mailOptions);
 };
@@ -39,6 +41,7 @@ export const sendVerificationEmail: Function = async (
   email: string,
   uniqueString: string
 ) => {
+
   const currentUrl = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
   const mailOptions = {

@@ -1,5 +1,5 @@
 import { orderModel } from "../orders/Order";
-import { userModel } from "../users/User";
+import { sendInvoiceEmail } from "./emailSender";
 
 const fs = require("fs");
 const PDFGenerator = require("pdfkit");
@@ -11,7 +11,7 @@ export const createPDF = async (code: string) => {
   const orderFound = await orderModel.findOne({
     orderCode: code,
   });
-  const user = await userModel.findOne({ email: orderFound.userEmail });
+  /*const user = await userModel.findOne({ email: orderFound.userEmail });
   const invoiceData = {
     addresses: {
       shipping: {
@@ -29,19 +29,9 @@ export const createPDF = async (code: string) => {
   };
 
   const ig = new InvoiceGenerator(invoiceData);
-  ig.generate();
-
-  /*var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
+  ig.generate();*/
+  var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
   const parse = require("node-html-parser").parse;
-
-  const options: CreateOptions = {
-    format: "A4",
-    orientation: "portrait",
-  };
-
-  const orderFound = await orderModel.findOne({
-    orderCode: code,
-  });
 
   const root = parse(html);
   const body = root.querySelector("body");
@@ -49,7 +39,7 @@ export const createPDF = async (code: string) => {
     '<header class="clearfix">' +
     '<div id="company">' +
     '<h2 class="name">DeDe</h2>' +
-    '<div><a href="mailto:aswdedeen2a@gmail.com">aswdedeen2a@gmail.com</a></div>' +
+    '<div><a href="mailto:aswdedeen2a@gmail.com">aswdedeen2a@gmail.com</a></div><br><br>' +
     "</div> </div>" +
     "</header>" +
     "<main>" +
@@ -146,12 +136,5 @@ export const createPDF = async (code: string) => {
 
   body.insertAdjacentHTML("beforeend", aux);
 
-  pdf
-    .create(root.toString(), options)
-    .toFile("./pdf/" + orderFound.orderCode + ".pdf", function (err, res) {
-      if (err) console.log(err);
-      else {
-        sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
-      }
-    });*/
+  sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode, root.toString());
 };
