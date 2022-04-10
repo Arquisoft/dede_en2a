@@ -60,7 +60,7 @@ export default function Checkout(props: any) {
       props.productsCart,
       costs,
       props.userEmail,
-      "Get address not implemented yet"
+      address
     );
     props.deleteCart();
   };

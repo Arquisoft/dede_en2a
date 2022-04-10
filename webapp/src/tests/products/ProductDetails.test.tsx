@@ -1,6 +1,6 @@
-import { fireEvent, prettyDOM, render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import ProductDetails from "../../components/products/ProductDetails";
-import { Product, CartItem } from "../../shared/shareddtypes";
+import { Product } from "../../shared/shareddtypes";
 
 //Test that the product details page renders correctly
 test("Renders product details page", () => {
@@ -11,6 +11,7 @@ test("Renders product details page", () => {
     price: 9.99,
     stock: 15,
     image: "",
+    category: 'Electronics'
   };
 
   const { getByText, getAllByText } = render(
@@ -38,6 +39,7 @@ test("Adds product to cart", () => {
     price: 9.99,
     stock: 15,
     image: "",
+    category: 'Electronics'
   };
 
   const onAdd = jest.fn();

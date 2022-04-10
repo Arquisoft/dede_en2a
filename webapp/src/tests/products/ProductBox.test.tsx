@@ -1,9 +1,8 @@
-import React from "react";
-        
 import { fireEvent, render } from "@testing-library/react";
-import ProductBox from "../../components/products/ProductBox";
-import { Product, CartItem } from "../../shared/shareddtypes";
 import { BrowserRouter as Router } from "react-router-dom";
+import ProductBox from "../../components/products/ProductBox";
+import { CartItem, Product } from "../../shared/shareddtypes";
+        
 
 test("A product is rendered", async () => {
   const product: Product = {
@@ -13,6 +12,7 @@ test("A product is rendered", async () => {
     price: 10,
     stock: 20,
     image: "",
+    category: 'Electronics'
   };
 
   const { getByText, container } = render(
@@ -41,6 +41,7 @@ test("A product is added to the cart", async () => {
     price: 10,
     stock: 20,
     image: "",
+    category: 'Electronics'
   };
   const cart: CartItem[] = [];
 
@@ -69,6 +70,7 @@ test("URL to product details works", async () => {
     price: 10,
     stock: 20,
     image: "",
+    category: 'Electronics'
   };
   const cart: CartItem[] = [];
 

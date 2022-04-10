@@ -32,6 +32,11 @@ export const product = new Schema(
       type: String,
       required: false,
     },
+    category: {
+      type:String,
+      required: true,
+      enum: ['Clothes', 'Decoration', 'Electronics', 'Miscellaneous']
+    }
   },
   {
     versionKey: false,
