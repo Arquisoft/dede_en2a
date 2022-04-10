@@ -1,5 +1,8 @@
 import {
-  Alert, Box, Button, Card,
+  Alert,
+  Box,
+  Button,
+  Card,
   Container,
   MenuItem,
   Paper,
@@ -9,6 +12,7 @@ import {
   TextField
 } from "@mui/material";
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
@@ -95,139 +99,134 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
   };
-  return (
-    <React.Fragment>
-      <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <h1 style={{ margin: 8 }}>Delete a product</h1>
-
-          <TextField
-            id="outlined-select-currency"
-            select
-            label="Select"
-            fullWidth
-            style={{ margin: 8 }}
-            onChange={handleChange}
+  if (
+    localStorage.getItem("user.email") === null ||
+    (localStorage.getItem("user.role") !== "admin" &&
+      localStorage.getItem("user.role") !== "manager")
+  )
+    return <Navigate to="/" />;
+  else
+    return (
+      <React.Fragment>
+        <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
           >
-            {products.map((product) => (
-              <MenuItem key={product.code} value={product.code}>
-                {product.code + " - " + product.name}
-              </MenuItem>
-            ))}
-          </TextField>
+            <h1 style={{ margin: 8 }}>Delete a product</h1>
 
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="space-evenly"
-            alignItems="stretch"
-          >
-            <div>
-              <TextField
-                disabled
-                value={code}
-                id="outlined-full-width"
-                label="Product code"
-                style={{ margin: 8 }}
-                type="number"
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-              />
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="Select"
+              fullWidth
+              style={{ margin: 8 }}
+              onChange={handleChange}
+            >
+              {products.map((product) => (
+                <MenuItem key={product.code} value={product.code}>
+                  {product.name + " (" + product.description + ")"}
+                </MenuItem>
+              ))}
+            </TextField>
 
-              <TextField
-                disabled
-                value={name}
-                id="outlined-full-width"
-                label="Product name"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-              />
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="space-evenly"
+              alignItems="stretch"
+            >
+              <div>
+                <TextField
+                  disabled
+                  value={code}
+                  id="outlined-full-width"
+                  label="Product code"
+                  style={{ margin: 8 }}
+                  type="number"
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
 
-              <TextField
-                disabled
-                value={description}
-                id="outlined-full-width"
-                label="Product description"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-              />
+                <TextField
+                  disabled
+                  value={name}
+                  id="outlined-full-width"
+                  label="Product name"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
 
-              <TextField
-                value={category}
-                id="outlined-full-width"
-                label="Product category"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-                onChange={(event) => setCategory(event.target.value)}
-              />
+                <TextField
+                  disabled
+                  value={description}
+                  id="outlined-full-width"
+                  label="Product description"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
 
-              <TextField
-                disabled
-                value={price}
-                id="outlined-full-width"
-                label="Product price"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                type="number"
-                variant="outlined"
-              />
+                <TextField
+                  disabled
+                  value={price}
+                  id="outlined-full-width"
+                  label="Product price"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  type="number"
+                  variant="outlined"
+                />
 
-              <TextField
-                disabled
-                value={stock}
-                id="outlined-full-width"
-                label="Product stock"
-                style={{ margin: 8 }}
-                fullWidth
-                type="number"
-                required
-                margin="normal"
-                variant="outlined"
-              />
-            </div>
-            <Box>
-              <Card style={{ margin: 8, display: "block" }}>
-                <Img src={image} />
-              </Card>
+                <TextField
+                  disabled
+                  value={stock}
+                  id="outlined-full-width"
+                  label="Product stock"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  type="number"
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
+              </div>
+              <Box>
+                <Card style={{ margin: 8, display: "block" }}>
+                  <Img src={image} />
+                </Card>
+              </Box>
+            </Stack>
+            <Box textAlign="center">
+              <Button onClick={handleDeleteProduct}> Delete </Button>
             </Box>
-          </Stack>
-          <Box textAlign="center">
-            <Button onClick={handleDeleteProduct}> Delete </Button>
-          </Box>
-        </Paper>
-      </Container>
+          </Paper>
+        </Container>
 
-      <Snackbar
-        open={notificationStatus}
-        autoHideDuration={3000}
-        onClose={() => {
-          setNotificationStatus(false);
-        }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <Alert severity={notification.severity} sx={{ width: "100%" }}>
-          {notification.message}
-        </Alert>
-      </Snackbar>
-    </React.Fragment>
-  );
+        <Snackbar
+          open={notificationStatus}
+          autoHideDuration={3000}
+          onClose={() => {
+            setNotificationStatus(false);
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Alert severity={notification.severity} sx={{ width: "100%" }}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
+      </React.Fragment>
+    );
 }

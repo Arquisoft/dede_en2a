@@ -5,6 +5,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { Navigate } from "react-router";
 import { updateProduct } from "../../api/api";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import { CartItem } from "../../shared/shareddtypes";
@@ -65,6 +66,7 @@ export default function Checkout(props: any) {
   };
 
   const getStepContent = (stepIndex: number) => {
+    if (localStorage.getItem("user.email") === null) return <Navigate to="/sign-in" />;
     switch (stepIndex) {
       case 0:
         return (
