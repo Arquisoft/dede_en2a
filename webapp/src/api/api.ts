@@ -167,7 +167,16 @@ export async function getOrdersForUser(): Promise<Order[]> {
 }
 
 export async function getOrders(): Promise<Order[]> {
-  let response = await fetch(apiEndPoint + "/orders/list/");
+  let headers = {};
+    headers = {
+      token: localStorage.getItem("token"),
+      email: localStorage.getItem("user.email"),
+    };
+
+  let response = await fetch(apiEndPoint + "/orders/list/", {
+    method: "GET",
+    headers: headers,
+  });
   return response.json();
 }
 

@@ -1,31 +1,18 @@
+import { Add, Autorenew, Remove } from "@mui/icons-material";
+import {
+  Container, IconButton, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer,
+  TableHead, TablePagination, TableRow, Tooltip, Typography
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableCell,
-  TableRow,
-  TableBody,
-  Typography,
-  Container,
-  Stack,
-  IconButton,
-  Tooltip,
-  TablePagination,
-  styled,
-  tableCellClasses,
-} from "@mui/material";
-
-import { Autorenew, Add, Remove } from "@mui/icons-material";
-
-import { Product } from "../../../shared/shareddtypes";
 import { getProducts } from "../../../api/api";
 import {
-  isRenderForModeratorAtLeast,
-  isRenderForAdminOnly,
+  isRenderForAdminOnly, isRenderForModeratorAtLeast
 } from "../../../helpers/RoleHelper";
+import { Product } from "../../../shared/shareddtypes";
+
+
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -91,7 +78,7 @@ function ProductTableItem(props: any): JSX.Element {
 
 function ProductsTable(props: any): JSX.Element {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage] = React.useState(5);
+  const [rowsPerPage] = React.useState(10);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,

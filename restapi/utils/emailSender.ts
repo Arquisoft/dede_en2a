@@ -41,7 +41,8 @@ export const sendVerificationEmail: Function = async (
   email: string,
   uniqueString: string
 ) => {
-  const currentUrl = "http://localhost:5000";
+
+  const currentUrl = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
   const mailOptions = {
     to: email,
