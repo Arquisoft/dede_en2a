@@ -64,7 +64,22 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
   const handleDeleteProduct = async () => {
     if (code !== "") {
-      openDialog();
+      const deleted = await deleteProduct(code);
+      if (deleted) {
+        setNotificationStatus(true);
+        setNotification({
+          severity: "success",
+          message: "Product deleted correctly",
+        });
+        props.createShop()
+        emptyFields()
+      } else {
+        setNotificationStatus(true);
+        setNotification({
+          severity: "error",
+          message: "There was a problem while deleting",
+        });
+      }
     } else {
       setNotificationStatus(true);
       setNotification({
@@ -98,6 +113,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
   };
+  
   if (
     localStorage.getItem("user.email") === null ||
     (localStorage.getItem("user.role") !== "admin" &&
@@ -166,6 +182,18 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   value={description}
                   id="outlined-full-width"
                   label="Product description"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  value={category}
+                  id="outlined-full-width"
+                  label="Product category"
                   style={{ margin: 8 }}
                   fullWidth
                   required

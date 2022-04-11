@@ -105,12 +105,14 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
       category: category,
     });
     if (created) {
+      setNotificationStatus(true);
+      setNotification({
+        severity: "success",
+        message: "Product added correctly",
+      });
       emptyFields();
       props.createShop();
-    } else
-      sendErrorNotification(
-        "That product code already exists! You should change it"
-      );
+    } else sendErrorNotification("The product coudn't be added");
   };
 
   const sendErrorNotification = (msg: string) => {
