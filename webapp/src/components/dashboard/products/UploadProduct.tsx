@@ -43,6 +43,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
   const [file, setFile] = useState("");
   const [code, setCode] = useState("");
+  const [minCode, setMinCode] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
@@ -61,8 +62,10 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
       topProduct = sortedProducts.at(0);
 
-      if (topProduct !== undefined)
+      if (topProduct !== undefined) {
         setCode((Number(topProduct.code) + 1).toString());
+        setMinCode((Number(topProduct.code) + 1).toString());
+      }
     }
   };
 
@@ -170,7 +173,12 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   required
                   margin="normal"
                   variant="outlined"
-                  onChange={(event) => setCode(event.target.value)}
+                  onChange={(event) => {
+                    console.log(event.target.value + " - " + minCode);
+                    if (Number(event.target.value) >= Number(minCode))
+                      setCode(event.target.value);
+                    else setCode(minCode);
+                  }}
                 />
 
                 <TextField
