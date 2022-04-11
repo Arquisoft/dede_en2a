@@ -71,8 +71,8 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           severity: "success",
           message: "Product deleted correctly",
         });
-        props.createShop()
-        emptyFields()
+        props.createShop();
+        emptyFields();
       } else {
         setNotificationStatus(true);
         setNotification({
@@ -113,7 +113,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
   };
-  
+
   if (
     localStorage.getItem("user.email") === null ||
     (localStorage.getItem("user.role") !== "admin" &&
@@ -140,7 +140,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
             >
               {products.map((product) => (
                 <MenuItem key={product.code} value={product.code}>
-                  {product.name + " (" + product.description + ")"}
+                  {product.code + " - " + product.name}
                 </MenuItem>
               ))}
             </TextField>
