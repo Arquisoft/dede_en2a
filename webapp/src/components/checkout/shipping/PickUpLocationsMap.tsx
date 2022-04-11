@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 
 import { calculateCoordinates } from "../../../helpers/ComputeDistanceHelper";
 import { getPickUpPlacesNearby } from "../../../helpers/ShippingMethodHelper";
@@ -21,7 +21,8 @@ export default function PickUpLocationsMap(props: any) {
     lon: number,
     name: string,
     street_address: string,
-    map: any
+    map: any,
+    isHouse: boolean
   ) => {
     let pickUpPointIcon = document.createElement("div");
     pickUpPointIcon.classList.add("pickUpPoint");
@@ -30,7 +31,10 @@ export default function PickUpLocationsMap(props: any) {
     pickUpPointIcon.style.width = "16px";
     pickUpPointIcon.style.height = "23px";
     pickUpPointIcon.style.backgroundSize = "contain";
-    pickUpPointIcon.style.backgroundImage = `url(https://api.geoapify.com/v1/icon/?type=awesome&color=%233900ff&icon=truck&scaleFactor=2&apiKey=${process.env.REACT_APP_GEOAPIFY_KEY})`;
+    if (!isHouse)
+      pickUpPointIcon.style.backgroundImage = `url(https://api.geoapify.com/v1/icon/?type=awesome&color=%233900ff&icon=truck&scaleFactor=2&apiKey=${process.env.REACT_APP_GEOAPIFY_KEY})`;
+    else
+      pickUpPointIcon.style.backgroundImage = `url(https://api.geoapify.com/v1/icon/?type=material&color=red&icon=landmark&scaleFactor=2&apiKey=${process.env.REACT_APP_GEOAPIFY_KEY})`;
     pickUpPointIcon.style.cursor = "pointer";
 
     let pickUpPopup = new maplibre.Popup({
@@ -48,15 +52,24 @@ export default function PickUpLocationsMap(props: any) {
       .setPopup(pickUpPopup)
       .addTo(map);
 
-    marker.getElement().addEventListener("click", function () {
-      props.setAddress(street_address);
-      props.setPickUpLocation(name);
-    });
+    if (!isHouse)
+      marker.getElement().addEventListener("click", function () {
+        props.setAddress(street_address);
+        props.setPickUpLocation(name);
+      });
   };
 
   const refreshMap = async () => {
     let coords = await calculateCoordinates(props.address);
-    let pickUpPlaces = await getPickUpPlacesNearby(props.address, 500, 10);
+    let dist = 500;
+    let reps = 0;
+
+    let pickUpPlaces = await getPickUpPlacesNearby(props.address, dist, 10);
+    while (pickUpPlaces.length === 0) {
+      dist *= 2;
+      pickUpPlaces = await getPickUpPlacesNearby(props.address, dist, 10);
+      reps++
+    }
 
     const key = process.env.REACT_APP_GEOAPIFY_KEY;
     const style = "https://maps.geoapify.com/v1/styles/positron/style.json";
@@ -64,7 +77,7 @@ export default function PickUpLocationsMap(props: any) {
     const initialState = {
       lng: coords.features[0].geometry.coordinates[0],
       lat: coords.features[0].geometry.coordinates[1],
-      zoom: 16,
+      zoom: 16 - reps * 3,
     };
 
     const map = new maplibre.Map({
@@ -75,8 +88,19 @@ export default function PickUpLocationsMap(props: any) {
     });
 
     pickUpPlaces.forEach((place) =>
-      createMarker(place.lat, place.lon, place.name, place.street_address, map)
+      createMarker(
+        place.lat,
+        place.lon,
+        place.name,
+        place.street_address,
+        map,
+        false
+      )
     );
+
+    const x = coords.features[0].geometry.coordinates[0];
+    const y = coords.features[0].geometry.coordinates[1];
+    createMarker(x, y, "Your house", props.address, map, true);
 
     setMap(map);
   };
