@@ -20,7 +20,8 @@ import {
 } from "../../../helpers/CheckFieldsHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-const DEF_IMAGE: string = require("../../../images/not-found.png");
+const DEF_IMAGE: string = require(process.env.REACT_APP_API_URI || "http://localhost:5000"+
+  "/not-found.png");
 
 type UploadProductProps = {
   createShop: () => void;
@@ -182,7 +183,6 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   onChange={(event) => setName(event.target.value)}
                 />
 
-
                 <TextField
                   value={description}
                   id="outlined-full-width"
@@ -195,31 +195,31 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   onChange={(event) => setDescription(event.target.value)}
                 />
 
-              <TextField
-                value={category}
-                select
-                id="outlined-full-width"
-                label="Product category"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-                onChange={(event) => setCategory(event.target.value)}
-              >
-                <MenuItem key="Clothes" value="Clothes">
-                  Clothes
-                </MenuItem>
-                <MenuItem key="Decoration" value="Decoration">
-                  Decoration
-                </MenuItem>
-                <MenuItem key="Electronics" value="Electronics">
-                  Electronics
-                </MenuItem>
-                <MenuItem key="Miscellaneous" value="Miscellaneous">
-                  Miscellaneous
-                </MenuItem>
-              </TextField>
+                <TextField
+                  value={category}
+                  select
+                  id="outlined-full-width"
+                  label="Product category"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                  onChange={(event) => setCategory(event.target.value)}
+                >
+                  <MenuItem key="Clothes" value="Clothes">
+                    Clothes
+                  </MenuItem>
+                  <MenuItem key="Decoration" value="Decoration">
+                    Decoration
+                  </MenuItem>
+                  <MenuItem key="Electronics" value="Electronics">
+                    Electronics
+                  </MenuItem>
+                  <MenuItem key="Miscellaneous" value="Miscellaneous">
+                    Miscellaneous
+                  </MenuItem>
+                </TextField>
 
                 <TextField
                   value={price}

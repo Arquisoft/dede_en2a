@@ -17,9 +17,8 @@ import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-
-
-const DEF_IMAGE: string = require("../../../images/not-found.png");
+const DEF_IMAGE: string = require(process.env.REACT_APP_API_URI || "http://localhost:5000"+
+  "/not-found.png");
 
 const Img = styled("img")({
   display: "block",
@@ -56,7 +55,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       setCode(p.code);
       setName(p.name);
       setDescription(p.description);
-      setCategory(p.category)
+      setCategory(p.category);
       setPrice(p.price.toString());
       setStock(p.stock.toString());
       setImage(checkImageExists(p.image));
@@ -90,7 +89,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setCode("");
     setName("");
     setDescription("");
-    setCategory("")
+    setCategory("");
     setStock("");
     setPrice("");
     setImage(DEF_IMAGE);
