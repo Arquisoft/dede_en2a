@@ -43,7 +43,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
   const [file, setFile] = useState("");
   const [code, setCode] = useState("");
-  const [minCode, setMinCode] = useState("");
+  const [minCode, setMinCode] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
@@ -64,7 +64,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
       if (topProduct !== undefined) {
         setCode((Number(topProduct.code) + 1).toString());
-        setMinCode((Number(topProduct.code) + 1).toString());
+        setMinCode((Number(topProduct.code) + 1));
       }
     }
   };
@@ -175,9 +175,9 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   variant="outlined"
                   onChange={(event) => {
                     console.log(event.target.value + " - " + minCode);
-                    if (Number(event.target.value) >= Number(minCode))
+                    if (Number(event.target.value) >= minCode)
                       setCode(event.target.value);
-                    else setCode(minCode);
+                    else setCode(minCode.toString());
                   }}
                 />
 
