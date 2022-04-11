@@ -17,8 +17,8 @@ import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-const DEF_IMAGE: string = require(process.env.REACT_APP_API_URI || "http://localhost:5000"+
-  "/not-found.png");
+const DEF_IMAGE: string =
+  process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
 
 const Img = styled("img")({
   display: "block",
