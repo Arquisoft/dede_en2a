@@ -60,8 +60,8 @@ export async function getProduct(productCode: string): Promise<Product> {
   return response.json();
 }
 
-export async function updateProduct(product: Product) {
-  await fetch(apiEndPoint + "/products/update/" + product.code, {
+export async function updateProduct(product: Product): Promise<boolean> {
+  let response = await fetch(apiEndPoint + "/products/update/" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -75,17 +75,24 @@ export async function updateProduct(product: Product) {
       stock: product.stock,
     }),
   });
+  if (response.status === 200) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-export async function createProduct(image: any, body: any) {
+export async function createProduct(image: any, body: any): Promise<boolean> {
   var data = new FormData();
   data.append("image", image, body.code + ".png");
   for (let key in body) {
     data.append(key, body[key]);
   }
+  // We must send authorization through body because form-data request do not allow headers
+  data.append("token", localStorage.getItem("token") + "");
+  data.append("email", localStorage.getItem("user.email") + "");
 
   let response = await fetch(apiEndPoint + "/products", {
-    //TODO - Pass token and email to verify identity
     method: "POST",
     body: data,
   });
@@ -97,8 +104,8 @@ export async function createProduct(image: any, body: any) {
   }
 }
 
-export async function deleteProduct(code: string) {
-  await fetch(apiEndPoint + "/products/delete/" + code, {
+export async function deleteProduct(code: string): Promise<boolean> {
+  let response = await fetch(apiEndPoint + "/products/delete/" + code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -106,6 +113,11 @@ export async function deleteProduct(code: string) {
       email: localStorage.getItem("user.email") + "",
     },
   });
+  if (response.status === 200) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // Mode must be desc or asc. If not default order
@@ -168,10 +180,10 @@ export async function getOrdersForUser(): Promise<Order[]> {
 
 export async function getOrders(): Promise<Order[]> {
   let headers = {};
-    headers = {
-      token: localStorage.getItem("token"),
-      email: localStorage.getItem("user.email"),
-    };
+  headers = {
+    token: localStorage.getItem("token"),
+    email: localStorage.getItem("user.email"),
+  };
 
   let response = await fetch(apiEndPoint + "/orders/list/", {
     method: "GET",

@@ -20,8 +20,8 @@ export const getProduct: RequestHandler = async (req, res) => {
 
 export const createProduct: RequestHandler = async (req, res) => {
   const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
+    req.body.token + "",
+    req.body.email + ""
   );
   if (isVerified) {
     try {

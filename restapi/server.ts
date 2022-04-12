@@ -1,14 +1,14 @@
 //require("dotenv").config();
 
-import express, { Application, RequestHandler } from "express";
-import cors from "cors";
 import bp from "body-parser";
+import cors from "cors";
+import express, { Application, RequestHandler } from "express";
 import promBundle from "express-prom-bundle";
 import morgan from "morgan";
-import apiUser from "./users/UserRoutes";
-import apiProduct from "./products/ProductRoutes";
 import apiOrders from "./orders/OrderRoutes";
+import apiProduct from "./products/ProductRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
+import apiUser from "./users/UserRoutes";
 
 const path = require("path");
 
@@ -39,8 +39,7 @@ app.use(apiReviews);
 
 app.use(helmet.hidePoweredBy());
 
-app.use('/uploads', express.static(path.resolve('uploads')))
-app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')))
 
 app
   .listen(5000, (): void => {
