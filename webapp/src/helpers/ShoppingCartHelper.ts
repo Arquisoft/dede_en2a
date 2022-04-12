@@ -44,9 +44,9 @@ export async function saveOrder(
     userAddress: userAddress,
     products: orderProducts,
     date: new Date(),
-    subtotalPrice: productCosts,
-    shippingPrice: shippingCosts,
-    totalPrice: productCosts + shippingCosts,
+    subtotalPrice: Number((Math.round(productCosts * 100) / 100).toFixed(2)),
+    shippingPrice: Number((Math.round(shippingCosts * 100) / 100).toFixed(2)),
+    totalPrice: Number((Math.round((productCosts + shippingCosts) * 100) / 100).toFixed(2)),
     receivedDate: receivingDate,
   };
 
