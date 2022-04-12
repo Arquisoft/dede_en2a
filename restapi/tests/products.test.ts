@@ -104,8 +104,6 @@ describe("prodcuts", () => {
     let userToken = await getToken();
     const response: Response = await request(app)
       .post("/products")
-      .set("token", userToken)
-      .set("email", "test")
       .send({
         code: productCode,
         name: "testProduct",
@@ -113,6 +111,8 @@ describe("prodcuts", () => {
         description: "Another test product",
         stock: 0,
         category: "Clothes",
+        token: userToken,
+        email: 'test'
       });
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toBe("testProduct");
@@ -123,8 +123,6 @@ describe("prodcuts", () => {
     let userToken = await getToken();
     const response: Response = await request(app)
       .post("/products")
-      .set("token", userToken)
-      .set("email", "test")
       .send({
         code: productCode,
         name: "testFailProduct",
@@ -132,6 +130,8 @@ describe("prodcuts", () => {
         description: "A failure insert test product",
         stock: 0,
         category: "Clothes",
+        token: userToken,
+        email: 'test'
       });
     expect(response.statusCode).toBe(409);
   });
@@ -140,10 +140,10 @@ describe("prodcuts", () => {
     let userToken = await getToken();
     const response: Response = await request(app)
       .post("/products")
-      .set("token", userToken)
-      .set("email", "test")
       .send({
         name: "testFailProduct",
+        token: userToken,
+        email: 'test'
       });
     expect(response.statusCode).toBe(412);
   });
@@ -152,8 +152,6 @@ describe("prodcuts", () => {
     let userToken = await getToken();
     const response: Response = await request(app)
       .post("/products")
-      .set("token", userToken)
-      .set("email", "test")
       .send({
         code: uuidv4(),
         name: "testFailProduct",
@@ -161,6 +159,8 @@ describe("prodcuts", () => {
         description: "A failure insert test product",
         stock: 0,
         category: "Nothing",
+        token: userToken,
+        email: 'test'
       });
     expect(response.statusCode).toBe(412);
   });

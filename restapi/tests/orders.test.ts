@@ -81,7 +81,7 @@ describe("orders", () => {
         subtotalPrice: 12.95,
         shippingPrice: 75.87,
         totalPrice: 88.82,
-        recievedDate: new Date(),
+        receivedDate: new Date(),
       });
     expect(response.statusCode).toBe(200);
     expect(response.body.orderCode).toBe(orderCode);
@@ -103,7 +103,7 @@ describe("orders", () => {
         subtotalPrice: 0,
         shippingPrice: 0,
         totalPrice: 0,
-        recievedDate: date
+        receivedDate: date
       });
     expect(response.statusCode).toBe(412);
   });
@@ -133,7 +133,7 @@ describe("orders", () => {
         subtotalPrice: 0,
         shippingPrice: 0,
         totalPrice: 0,
-        recievedDate: date,
+        receivedDate: date,
       });
     expect(response.statusCode).toBe(403);
   });
