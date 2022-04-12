@@ -262,10 +262,10 @@ describe("prodcuts", () => {
       .get("/products/filter&order/a&a")
       .send();
     expect(response.statusCode).toBe(200);
-    expect(response.body[0].price).toBe(12.95);
-    expect(response.body[0].code).toBe("1234");
-    expect(response.body[1].price).toBe(9.5);
-    expect(response.body[1].code).toBe("0001");
+    expect(response.body[0].price).toBe(9.5);
+    expect(response.body[0].code).toBe("0001");
+    expect(response.body[1].price).toBe(33.99);
+    expect(response.body[1].code).toBe("0002");
   });
 });
 

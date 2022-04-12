@@ -51,6 +51,9 @@ afterAll(async () => {
 
 describe("orders", () => {
   let orderCode = uuidv4();
+  
+  let date = new Date()
+  date.setDate(date.getDate() + 2)
 
   it("Can create order", async () => {
     const token = await getToken();
@@ -78,7 +81,7 @@ describe("orders", () => {
         subtotalPrice: 12.95,
         shippingPrice: 75.87,
         totalPrice: 88.82,
-        isOrderReceived: false,
+        recievedDate: new Date(),
       });
     expect(response.statusCode).toBe(200);
     expect(response.body.orderCode).toBe(orderCode);
@@ -100,7 +103,7 @@ describe("orders", () => {
         subtotalPrice: 0,
         shippingPrice: 0,
         totalPrice: 0,
-        isOrderReceived: false,
+        recievedDate: date
       });
     expect(response.statusCode).toBe(412);
   });
@@ -130,7 +133,7 @@ describe("orders", () => {
         subtotalPrice: 0,
         shippingPrice: 0,
         totalPrice: 0,
-        isOrderReceived: false,
+        recievedDate: date,
       });
     expect(response.statusCode).toBe(403);
   });

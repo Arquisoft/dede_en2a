@@ -38,8 +38,8 @@ const orderSchema = new Schema(
       type: Number,
       required: true,
     },
-    isOrderReceived: {
-      type: Boolean,
+    receivedDate: {
+      type: Date,
       required: true,
     },
   },
