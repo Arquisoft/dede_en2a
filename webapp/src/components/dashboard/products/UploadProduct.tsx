@@ -20,7 +20,8 @@ import {
 } from "../../../helpers/CheckFieldsHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-const DEF_IMAGE: string = require("../../../images/not-found.png");
+const DEF_IMAGE: string =
+  process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
 
 type UploadProductProps = {
   createShop: () => void;
@@ -42,6 +43,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
   const [file, setFile] = useState("");
   const [code, setCode] = useState("");
+  const [minCode, setMinCode] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
@@ -60,8 +62,10 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
       topProduct = sortedProducts.at(0);
 
-      if (topProduct !== undefined)
+      if (topProduct !== undefined) {
         setCode((Number(topProduct.code) + 1).toString());
+        setMinCode((Number(topProduct.code) + 1));
+      }
     }
   };
 
@@ -104,12 +108,14 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
       category: category,
     });
     if (created) {
+      setNotificationStatus(true);
+      setNotification({
+        severity: "success",
+        message: "Product added correctly",
+      });
       emptyFields();
       props.createShop();
-    } else
-      sendErrorNotification(
-        "That product code already exists! You should change it"
-      );
+    } else sendErrorNotification("The product coudn't be added");
   };
 
   const sendErrorNotification = (msg: string) => {
@@ -167,7 +173,12 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   required
                   margin="normal"
                   variant="outlined"
-                  onChange={(event) => setCode(event.target.value)}
+                  onChange={(event) => {
+                    console.log(event.target.value + " - " + minCode);
+                    if (Number(event.target.value) >= minCode)
+                      setCode(event.target.value);
+                    else setCode(minCode.toString());
+                  }}
                 />
 
                 <TextField
@@ -182,7 +193,6 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   onChange={(event) => setName(event.target.value)}
                 />
 
-
                 <TextField
                   value={description}
                   id="outlined-full-width"
@@ -195,31 +205,31 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   onChange={(event) => setDescription(event.target.value)}
                 />
 
-              <TextField
-                value={category}
-                select
-                id="outlined-full-width"
-                label="Product category"
-                style={{ margin: 8 }}
-                fullWidth
-                required
-                margin="normal"
-                variant="outlined"
-                onChange={(event) => setCategory(event.target.value)}
-              >
-                <MenuItem key="Clothes" value="Clothes">
-                  Clothes
-                </MenuItem>
-                <MenuItem key="Decoration" value="Decoration">
-                  Decoration
-                </MenuItem>
-                <MenuItem key="Electronics" value="Electronics">
-                  Electronics
-                </MenuItem>
-                <MenuItem key="Miscellaneous" value="Miscellaneous">
-                  Miscellaneous
-                </MenuItem>
-              </TextField>
+                <TextField
+                  value={category}
+                  select
+                  id="outlined-full-width"
+                  label="Product category"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                  onChange={(event) => setCategory(event.target.value)}
+                >
+                  <MenuItem key="Clothes" value="Clothes">
+                    Clothes
+                  </MenuItem>
+                  <MenuItem key="Decoration" value="Decoration">
+                    Decoration
+                  </MenuItem>
+                  <MenuItem key="Electronics" value="Electronics">
+                    Electronics
+                  </MenuItem>
+                  <MenuItem key="Miscellaneous" value="Miscellaneous">
+                    Miscellaneous
+                  </MenuItem>
+                </TextField>
 
                 <TextField
                   value={price}

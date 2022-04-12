@@ -17,9 +17,8 @@ import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
-
-
-const DEF_IMAGE: string = require("../../../images/not-found.png");
+const DEF_IMAGE: string =
+  process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
 
 const Img = styled("img")({
   display: "block",
@@ -56,7 +55,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       setCode(p.code);
       setName(p.name);
       setDescription(p.description);
-      setCategory(p.category)
+      setCategory(p.category);
       setPrice(p.price.toString());
       setStock(p.stock.toString());
       setImage(checkImageExists(p.image));
@@ -65,7 +64,22 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
   const handleDeleteProduct = async () => {
     if (code !== "") {
-      openDialog();
+      const deleted = await deleteProduct(code);
+      if (deleted) {
+        setNotificationStatus(true);
+        setNotification({
+          severity: "success",
+          message: "Product deleted correctly",
+        });
+        props.createShop();
+        emptyFields();
+      } else {
+        setNotificationStatus(true);
+        setNotification({
+          severity: "error",
+          message: "There was a problem while deleting",
+        });
+      }
     } else {
       setNotificationStatus(true);
       setNotification({
@@ -90,7 +104,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setCode("");
     setName("");
     setDescription("");
-    setCategory("")
+    setCategory("");
     setStock("");
     setPrice("");
     setImage(DEF_IMAGE);
@@ -99,6 +113,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const openDialog = () => {
     setDialogOpen(dialogOpen + 1);
   };
+
   if (
     localStorage.getItem("user.email") === null ||
     (localStorage.getItem("user.role") !== "admin" &&
@@ -125,7 +140,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
             >
               {products.map((product) => (
                 <MenuItem key={product.code} value={product.code}>
-                  {product.name + " (" + product.description + ")"}
+                  {product.code + " - " + product.name}
                 </MenuItem>
               ))}
             </TextField>
@@ -167,6 +182,18 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   value={description}
                   id="outlined-full-width"
                   label="Product description"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  value={category}
+                  id="outlined-full-width"
+                  label="Product category"
                   style={{ margin: 8 }}
                   fullWidth
                   required
