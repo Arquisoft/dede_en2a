@@ -154,7 +154,10 @@ export async function getOrder(orderCode: string): Promise<Order> {
   };
   let response = await fetch(
     apiEndPoint + "/orders/findByOrderCode/" + orderCode,
-    { method: "GET", headers: headers }
+    {
+      method: "GET",
+      headers: headers,
+    }
   );
   return response.json();
 }

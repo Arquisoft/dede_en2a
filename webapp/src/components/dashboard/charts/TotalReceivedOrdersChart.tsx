@@ -10,7 +10,7 @@ export default function Chart() {
   React.useEffect(() => {
     getOrders().then((orders) =>
       orders.forEach((order) => {
-        if (order.isOrderReceived) setData(data + 1);
+        if (order.receivedDate < new Date()) setData(data + 1);
       })
     );
   }, []);

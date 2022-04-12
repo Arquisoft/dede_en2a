@@ -119,7 +119,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
       <TableCell align="center">
-        <StatusMessage isOrderReceived={props.order.isOrderReceived} />
+        <StatusMessage receivedDate={props.order.receivedDate} />
       </TableCell>
       <TableCell align="center">
         <Button
@@ -182,11 +182,11 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.orders.forEach((order) => {
-                if (props.state === RECEIVED && order.isOrderReceived === true)
+                if (props.state === RECEIVED && order.receivedDate < new Date())
                   orders.push(order);
                 else if (
                   props.state === SHIPPING &&
-                  order.isOrderReceived === false
+                  order.receivedDate > new Date()
                 ) {
                   orders.push(order);
                 } else if (props.state === ALL || props.state === null) {
