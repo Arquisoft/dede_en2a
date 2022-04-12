@@ -4,7 +4,8 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 export default function StatusMessage(props: any) {
-  if (new Date > props.receivedDate)
+  if (new Date().getTime() > new Date(props.receivedDate).getTime())
+  
     return (
       <Stack
         direction="row"

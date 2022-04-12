@@ -174,7 +174,6 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                   margin="normal"
                   variant="outlined"
                   onChange={(event) => {
-                    console.log(event.target.value + " - " + minCode);
                     if (Number(event.target.value) >= minCode)
                       setCode(event.target.value);
                     else setCode(minCode.toString());
