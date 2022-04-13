@@ -41,7 +41,7 @@ app.use(apiReviews);
 app.use(helmet.hidePoweredBy());
 
 // Method to serve correct images and not-found in case it does not exists
-app.get('/*.png', function(req, res) {
+app.get(['/*.png', '/undefined'], function(req, res) {
   const a = path.join(__dirname, 'public', 'not-found.png')
   const ipath = path.join(__dirname, 'public', req.originalUrl)
 
