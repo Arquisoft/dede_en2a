@@ -14,10 +14,11 @@ export const getOrder: RequestHandler = async (req, res) => {
   const orderFound = await orderModel.findOne({
     orderCode: req.params.orderCode,
   });
+  const user = await userModel.findOne({ email: req.headers.email });
 
   if (isVerified) {
     if (orderFound) {
-      if (orderFound.userEmail === req.headers.email) {
+      if (orderFound.userEmail === req.headers.email || user.role === "admin") {
         return res.json(orderFound);
       } else {
         return res.status(403).json();

@@ -2,30 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { getProduct, getReviewsByCode } from "../../api/api";
+import { checkImageExists } from "../../helpers/ImageHelper";
 import { getReviewMean } from "../../helpers/ReviewHelper";
 import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
-import { checkImageExists } from "../../helpers/ImageHelper";
 
-import { Product, Review, CartItem } from "../../shared/shareddtypes";
+import { CartItem, Product, Review } from "../../shared/shareddtypes";
 
-import ProductCommentList from "./ProductCommentList";
 import StockAlert from "../StockAlert";
+import ProductCommentList from "./ProductCommentList";
 import ProductSpeedDial from "./ProductSpeedDial";
 import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";
 
 import {
-  Paper,
-  Typography,
-  Grid,
-  Button,
-  styled,
-  Rating,
-  Breadcrumbs,
-  Stack,
-  Divider,
-  LinearProgress,
-  Link,
+  Breadcrumbs, Button, Divider, Grid, LinearProgress,
+  Link, Paper, Rating, Stack, styled, Typography
 } from "@mui/material";
 
 export type ProductProps = {
@@ -118,7 +109,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
         </Typography>
 
         <Img
-          src={checkImageExists("")}
+          src={checkImageExists("undefined")}
           alt="Product not found image"
           sx={{ width: "50%", p: 2, m: "auto" }}
         />

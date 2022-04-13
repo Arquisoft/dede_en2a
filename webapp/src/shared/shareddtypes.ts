@@ -45,7 +45,7 @@ export type Order = {
   subtotalPrice: number;
   shippingPrice: number;
   totalPrice: number;
-  isOrderReceived: boolean;
+  receivedDate: Date;
 };
 
 export type Review = {

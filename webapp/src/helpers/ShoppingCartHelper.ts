@@ -31,21 +31,23 @@ export async function saveOrder(
       price: item.product.price,
       stock: item.amount,
       image: item.product.image,
-      category: item.product.category
+      category: item.product.category,
     };
     orderProducts.push(p);
   });
 
+  let receivingDate = new Date();
+  receivingDate.setDate(receivingDate.getDate() + 3);
   let order: Order = {
     orderCode: uuidv4(),
     userEmail: userEmail,
     userAddress: userAddress,
     products: orderProducts,
     date: new Date(),
-    subtotalPrice: productCosts,
-    shippingPrice: shippingCosts,
-    totalPrice: productCosts + shippingCosts,
-    isOrderReceived: false,
+    subtotalPrice: Number((Math.round(productCosts * 100) / 100).toFixed(2)),
+    shippingPrice: Number((Math.round(shippingCosts * 100) / 100).toFixed(2)),
+    totalPrice: Number((Math.round((productCosts + shippingCosts) * 100) / 100).toFixed(2)),
+    receivedDate: receivingDate,
   };
 
   await createOrder(JSON.stringify(order));

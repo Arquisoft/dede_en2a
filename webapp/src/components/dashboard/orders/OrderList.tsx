@@ -1,7 +1,28 @@
 import { Autorenew } from "@mui/icons-material";
 import {
-  Button, Container, Divider, FormControl, Grid, IconButton, InputLabel, LinearProgress, MenuItem, Select, SelectChangeEvent, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer,
-  TableHead, TablePagination, TableRow, Tooltip, Typography
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  LinearProgress,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Tooltip,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +31,6 @@ import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
 import { Order, User } from "../../../shared/shareddtypes";
 import FeaturedProducts from "../../home/FeaturedProducts";
 import StatusMessage from "./StatusMessage";
-
-
-
-
 
 const ALL = "all";
 const RECEIVED = "received";
@@ -113,13 +130,13 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   return (
     <TableRow hover key={props.order.orderCode}>
       <TableCell align="center" component="th" scope="row">
-        {props.order.orderCode}
+        {new Date(props.order.date || new Date()).toDateString()}
       </TableCell>
       <TableCell align="center">{props.order.subtotalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
       <TableCell align="center">
-        <StatusMessage isOrderReceived={props.order.isOrderReceived} />
+        <StatusMessage receivedDate={props.order.receivedDate} />
       </TableCell>
       <TableCell align="center">
         <Button
@@ -172,7 +189,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell align="center">Order</StyledTableCell>
+                <StyledTableCell align="center">Order date</StyledTableCell>
                 <StyledTableCell align="center">Subtotal</StyledTableCell>
                 <StyledTableCell align="center">Shipping price</StyledTableCell>
                 <StyledTableCell align="center">Price</StyledTableCell>
@@ -182,11 +199,14 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.orders.forEach((order) => {
-                if (props.state === RECEIVED && order.isOrderReceived === true)
+                if (
+                  props.state === RECEIVED &&
+                  new Date(order.receivedDate).getTime() < new Date().getTime()
+                )
                   orders.push(order);
                 else if (
                   props.state === SHIPPING &&
-                  order.isOrderReceived === false
+                  new Date(order.receivedDate).getTime() > new Date().getTime()
                 ) {
                   orders.push(order);
                 } else if (props.state === ALL || props.state === null) {

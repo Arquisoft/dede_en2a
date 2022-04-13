@@ -186,8 +186,6 @@ class InvoiceGenerator {
   generate() {
     let theOutput = new PDFGenerator();
 
-    // console.log(this.invoice);
-
     const fileName = `Invoice ${this.invoice.invoiceNumber}.pdf`;
 
     // pipe to a writable stream which would save the result into the same directory

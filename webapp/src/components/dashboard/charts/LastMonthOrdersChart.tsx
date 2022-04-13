@@ -1,17 +1,13 @@
 import React from "react";
 
-import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 import {
-  LineChart,
-  Line,
-  Tooltip,
+  Label, Line, LineChart, ResponsiveContainer, Tooltip,
   XAxis,
-  YAxis,
-  Label,
-  ResponsiveContainer,
+  YAxis
 } from "recharts";
 
 import { getOrders } from "../../../api/api";
