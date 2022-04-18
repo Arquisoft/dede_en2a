@@ -23,9 +23,8 @@ function ShippingMethodRadioGroup(props: any) {
     ShippingMethodType[]
   >([]);
 
-  const handleChange = (title: string, price: number) => {
+  const handleChange = (title: string) => {
     props.setShippingMethod(title);
-    props.setCosts(price);
     props.handleNext(title);
   };
 
@@ -51,7 +50,7 @@ function ShippingMethodRadioGroup(props: any) {
               <ListItem key={method.title}>
                 <IconButton
                   sx={{ mr: 2 }}
-                  onClick={() => handleChange(method.title, method.price)}
+                  onClick={() => handleChange(method.title)}
                 >
                   <LocalShippingIcon />
                 </IconButton>

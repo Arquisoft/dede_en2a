@@ -54,3 +54,9 @@ export type Review = {
   rating: number;
   comment: string;
 };
+
+export type Rate = {
+  name: string;
+  price: number;
+  time: number;
+};
