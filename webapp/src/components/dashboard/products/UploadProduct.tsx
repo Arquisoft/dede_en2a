@@ -18,6 +18,7 @@ import {
   checkNumericField,
   checkTextField
 } from "../../../helpers/CheckFieldsHelper";
+import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 
 const DEF_IMAGE: string =
@@ -25,6 +26,8 @@ const DEF_IMAGE: string =
 
 type UploadProductProps = {
   createShop: () => void;
+  isForUpdate: boolean;
+  products: Product[];
 };
 
 const Img = styled("img")({
@@ -34,7 +37,56 @@ const Img = styled("img")({
   objectFit: "cover",
 });
 
-export default function UploadImage(props: UploadProductProps): JSX.Element {
+type ProductCodeFieldProps = {
+  products: Product[];
+  isForUpdate: boolean;
+  handleSelection: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setCode: (value: string) => void;
+  code: String;
+  minCode: Number;
+};
+
+function ProductCodeField(props: ProductCodeFieldProps): JSX.Element {
+  if (props.isForUpdate) {
+    return (
+      <TextField
+        id="outlined-select-currency"
+        select
+        label="Select"
+        fullWidth
+        style={{ margin: 8 }}
+        onChange={props.handleSelection}
+      >
+        {props.products.map((product: Product) => (
+          <MenuItem key={product.code} value={product.code}>
+            {product.code + " - " + product.name}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+  } else {
+    return (
+      <TextField
+        value={props.code}
+        id="outlined-full-width"
+        label="Product code"
+        style={{ margin: 8 }}
+        type="number"
+        fullWidth
+        required
+        margin="normal"
+        variant="outlined"
+        onChange={(event) => {
+          if (Number(event.target.value) >= props.minCode)
+            props.setCode(event.target.value);
+          else props.setCode(props.minCode.toString());
+        }}
+      />
+    );
+  }
+}
+
+export default function UploadProduct(props: UploadProductProps): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
   const [notification, setNotification] = useState<NotificationType>({
     severity: "success",
@@ -64,7 +116,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
 
       if (topProduct !== undefined) {
         setCode((Number(topProduct.code) + 1).toString());
-        setMinCode((Number(topProduct.code) + 1));
+        setMinCode(Number(topProduct.code) + 1);
       }
     }
   };
@@ -140,6 +192,21 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
     };
   }
 
+  function handleSelection(event: React.ChangeEvent<HTMLInputElement>) {
+    const p = props.products.find(
+      (product) => product.code === event.target.value
+    );
+    if (p !== undefined) {
+      setCode(p.code);
+      setName(p.name);
+      setDescription(p.description);
+      setCategory(p.category);
+      setPrice(p.price.toString());
+      setStock(p.stock.toString());
+      setImage(p.image);
+    }
+  }
+
   if (
     localStorage.getItem("user.email") === null ||
     (localStorage.getItem("user.role") !== "admin" &&
@@ -154,7 +221,10 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
             variant="outlined"
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
           >
-            <h1 style={{ margin: 8 }}>Upload a product</h1>
+            <h1 style={{ margin: 8 }}>
+              {" "}
+              {props.isForUpdate == false ? "Upload product" : "Update product"}
+            </h1>
 
             <Stack
               direction="row"
@@ -163,21 +233,13 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
               alignItems="stretch"
             >
               <div id="textInput">
-                <TextField
-                  value={code}
-                  id="outlined-full-width"
-                  label="Product code"
-                  style={{ margin: 8 }}
-                  type="number"
-                  fullWidth
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  onChange={(event) => {
-                    if (Number(event.target.value) >= minCode)
-                      setCode(event.target.value);
-                    else setCode(minCode.toString());
-                  }}
+                <ProductCodeField
+                  products={props.products}
+                  isForUpdate={props.isForUpdate}
+                  handleSelection={handleSelection}
+                  setCode={setCode}
+                  code={code}
+                  minCode={minCode}
                 />
 
                 <TextField
@@ -282,7 +344,7 @@ export default function UploadImage(props: UploadProductProps): JSX.Element {
                 />
 
                 <Card style={{ margin: 8 }}>
-                  <Img src={image} />
+                  <Img src={checkImageExists(image)} />
                 </Card>
               </Box>
             </Stack>

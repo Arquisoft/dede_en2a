@@ -57,7 +57,7 @@ function App(): JSX.Element {
     if (userRole === "" && localStorage.getItem("user.email") != null) {
       const user: User = await getUser(localStorage.getItem("user.email") + "");
       setUserRole(user.role);
-      setUserName(user.name)
+      setUserName(user.name);
     }
   };
 
@@ -300,12 +300,28 @@ function App(): JSX.Element {
               <Route path="products" element={<ProductList />} />
               <Route
                 path="products/add"
-                element={<UploadProduct createShop={createShop} />}
+                element={
+                  <UploadProduct
+                    createShop={createShop}
+                    isForUpdate={false}
+                    products={products}
+                  />
+                }
               />
               <Route
                 path="products/delete"
                 element={
                   <DeleteProduct products={products} createShop={createShop} />
+                }
+              />
+              <Route
+                path="products/update"
+                element={
+                  <UploadProduct
+                    createShop={createShop}
+                    isForUpdate={true}
+                    products={products}
+                  />
                 }
               />
             </Route>
