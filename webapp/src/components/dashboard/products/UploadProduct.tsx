@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { createProduct, getProducts } from "../../../api/api";
+import { createProduct, getProducts, updateProduct } from "../../../api/api";
 import {
   checkNumericField,
   checkTextField
@@ -36,55 +36,6 @@ const Img = styled("img")({
   height: "18vw",
   objectFit: "cover",
 });
-
-type ProductCodeFieldProps = {
-  products: Product[];
-  isForUpdate: boolean;
-  handleSelection: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  setCode: (value: string) => void;
-  code: String;
-  minCode: Number;
-};
-
-function ProductCodeField(props: ProductCodeFieldProps): JSX.Element {
-  if (props.isForUpdate) {
-    return (
-      <TextField
-        id="outlined-select-currency"
-        select
-        label="Select"
-        fullWidth
-        style={{ margin: 8 }}
-        onChange={props.handleSelection}
-      >
-        {props.products.map((product: Product) => (
-          <MenuItem key={product.code} value={product.code}>
-            {product.code + " - " + product.name}
-          </MenuItem>
-        ))}
-      </TextField>
-    );
-  } else {
-    return (
-      <TextField
-        value={props.code}
-        id="outlined-full-width"
-        label="Product code"
-        style={{ margin: 8 }}
-        type="number"
-        fullWidth
-        required
-        margin="normal"
-        variant="outlined"
-        onChange={(event) => {
-          if (Number(event.target.value) >= props.minCode)
-            props.setCode(event.target.value);
-          else props.setCode(props.minCode.toString());
-        }}
-      />
-    );
-  }
-}
 
 export default function UploadProduct(props: UploadProductProps): JSX.Element {
   const [notificationStatus, setNotificationStatus] = useState(false);
@@ -126,18 +77,21 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   }, []);
 
   const emptyFields = () => {
-    setImage(DEF_IMAGE);
-    setFile("");
-    getCode();
-    setName("");
-    setDescription("");
-    setStock("");
-    setPrice("");
-    setCategory("");
+    if (!props.isForUpdate) {
+      setImage(DEF_IMAGE);
+      setFile("");
+      getCode();
+      setName("");
+      setDescription("");
+      setStock("");
+      setPrice("");
+      setCategory("");
+    }
   };
 
   const checkFields = () => {
-    if (file === "") return sendErrorNotification("Incorrect file");
+    if (file === "" && !props.isForUpdate)
+      return sendErrorNotification("Incorrect file");
     if (!checkNumericField(Number(code)))
       return sendErrorNotification("Incorrect code");
     if (!checkTextField(name)) return sendErrorNotification("Incorrect name");
@@ -151,19 +105,35 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   };
 
   const handleSumbit = async () => {
-    const created = await createProduct(file, {
-      code: code,
-      name: name,
-      description: description,
-      price: Number(price),
-      stock: Number(stock),
-      category: category,
-    });
+    let created;
+    if (props.isForUpdate) {
+      created = await updateProduct({
+        code: code,
+        name: name,
+        description: description,
+        price: Number(price),
+        stock: Number(stock),
+        category: category,
+        image: code + ".png",
+      });
+    } else {
+      created = await createProduct(file, {
+        code: code,
+        name: name,
+        description: description,
+        price: Number(price),
+        stock: Number(stock),
+        category: category,
+      });
+    }
     if (created) {
       setNotificationStatus(true);
       setNotification({
         severity: "success",
-        message: "Product added correctly",
+        message:
+          "Product " +
+          (props.isForUpdate ? "updated " : "added ") +
+          "correctly",
       });
       emptyFields();
       props.createShop();
@@ -223,9 +193,27 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
           >
             <h1 style={{ margin: 8 }}>
               {" "}
-              {props.isForUpdate == false ? "Upload product" : "Update product"}
+              {props.isForUpdate == false ? "Add product" : "Update product"}
             </h1>
 
+            {props.isForUpdate ? (
+              <TextField
+                id="outlined-select-currency"
+                select
+                label="Select"
+                fullWidth
+                style={{ margin: 8 }}
+                onChange={handleSelection}
+              >
+                {props.products.map((product: Product) => (
+                  <MenuItem key={product.code} value={product.code}>
+                    {product.code + " - " + product.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            ) : (
+              <></>
+            )}
             <Stack
               direction="row"
               spacing={2}
@@ -233,14 +221,26 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
               alignItems="stretch"
             >
               <div id="textInput">
-                <ProductCodeField
-                  products={props.products}
-                  isForUpdate={props.isForUpdate}
-                  handleSelection={handleSelection}
-                  setCode={setCode}
-                  code={code}
-                  minCode={minCode}
-                />
+                {props.isForUpdate ? (
+                  <></>
+                ) : (
+                  <TextField
+                    value={code}
+                    id="outlined-full-width"
+                    label="Product code"
+                    style={{ margin: 8 }}
+                    type="number"
+                    fullWidth
+                    required
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(event) => {
+                      if (Number(event.target.value) >= minCode)
+                        setCode(event.target.value);
+                      else setCode(minCode.toString());
+                    }}
+                  />
+                )}
 
                 <TextField
                   value={name}
@@ -328,23 +328,31 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
               </div>
 
               <Box alignItems="center">
-                <TextField
-                  id="outlined-full-width"
-                  label="Image Upload"
-                  style={{ margin: 8 }}
-                  name="upload-photo"
-                  type="file"
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="outlined"
-                  onChange={handleChange}
-                />
+                {!props.isForUpdate ? (
+                  <TextField
+                    id="outlined-full-width"
+                    label="Image Upload"
+                    style={{ margin: 8 }}
+                    name="upload-photo"
+                    type="file"
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant="outlined"
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <></>
+                )}
 
                 <Card style={{ margin: 8 }}>
-                  <Img src={checkImageExists(image)} />
+                  {props.isForUpdate ? (
+                    <Img src={checkImageExists(image)} />
+                  ) : (
+                    <Img src={image} />
+                  )}
                 </Card>
               </Box>
             </Stack>
