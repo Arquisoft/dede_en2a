@@ -29,6 +29,6 @@ export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {
     productCode: req.params.productCode,
     userEmail: req.params.email,
   });
-  if (review) return res.json(review);
-  else return res.status(412).json();
+  if (review !== null) return res.json(review);
+  else return res.status(204).json();
 };

@@ -1,14 +1,14 @@
 import * as React from "react";
 
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
+import { Alert, Divider, Snackbar, TextField } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
 import Rating from "@mui/material/Rating";
-import {Alert, Divider, Snackbar, TextField} from "@mui/material";
-import {AlertColor} from "@mui/material/Alert";
+import Typography from "@mui/material/Typography";
 
-import {Product, Review} from "../../shared/shareddtypes";
-import {addReview, getReviewsByCodeAndEmail} from "../../api/api";
+import { addReview, getReviewsByCodeAndEmail } from "../../api/api";
+import { Product, Review } from "../../shared/shareddtypes";
 import DialogWrapper from "../dialogs/Dialog";
 
 type ReviewDialogProps = {
