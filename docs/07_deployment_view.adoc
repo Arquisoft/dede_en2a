@@ -39,37 +39,45 @@ when your infrastructure is more complex.
 [plantuml, "07_DeploymentView", png]
 ----
 node AzureServer{
-    node DockerContainer {
+    node DockerContainer2 {
+        component CarrierAPI
+    }
+    node DockerContainer1 {
         component RestApi
     }
+    node DockerContainer3 {
+        component WebApp
+    }
+    
 }
 
 node UserDevice {
     node WebBrowser {
-        component WebApp
+        component WebAppImage
     }
 }
 
-database DatabaseServer {
+database MongoDBAtlas {
     component MongoDB
 }
 
 Actor User
 
 cloud SOLID_POD
-cloud CarrierAPI
 cloud BingMaps
 cloud Geoapify
 cloud PayPalAPI
 
+
+User -r-> WebAppImage
 RestApi -u-> MongoDB : "access information"
-WebApp -l-> SOLID_POD : "access user data"
-WebApp -l-> BingMaps : "provides maps and route image"
-WebApp -r-> Geoapify : "get near places"
-WebApp -r-> PayPalAPI : "provides paying system"
-RestApi -d-> WebApp : "supply data"
-RestApi -r-> CarrierAPI : "calculate routes prices"
-WebApp <-d- User
+WebAppImage -d-> SOLID_POD : "access user data"
+WebAppImage -d-> BingMaps : "provides maps and route image"
+WebAppImage -r-> Geoapify : "get near places"
+WebAppImage -d-> PayPalAPI : "provides paying system"
+RestApi -r-> WebApp : "supply data"
+WebApp -d-> WebAppImage : "shows on user device"
+RestApi -l-> CarrierAPI : "calculate routes prices"
 ----
 
 .Motivation
