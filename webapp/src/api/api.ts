@@ -4,12 +4,12 @@ const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
 // -*- USERS -*-
 
-export async function addUser(user: User): Promise<boolean> {
+export async function addUser(webId: string): Promise<boolean> {
   let response = await fetch(apiEndPoint + "/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      webId: user.webId,
+      webId: window.btoa(webId),
     }),
   });
   if (response.status === 200) {
@@ -17,25 +17,10 @@ export async function addUser(user: User): Promise<boolean> {
   } else return false;
 }
 
-export async function checkUser( // TODO: this should be refactored
-  email: String,
-  password: String
-): Promise<boolean> {
-  let response = await fetch(apiEndPoint + "/users/requestToken", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-  });
-
-  if (response.status === 200) return true;
-  else return false;
-}
-
-export async function getUser(webId: String): Promise<User> {
-  let response = await fetch(apiEndPoint + "/users/findByWebId/" + webId); // TODO: change controller
+export async function getUser(webId: string): Promise<User> {
+  let response = await fetch(
+    apiEndPoint + "/users/findByWebId/" + window.btoa(webId)
+  );
   return response.json();
 }
 
@@ -89,7 +74,7 @@ export async function updateProduct(webId: string, product: Product) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: webId,
+      webId: window.btoa(webId),
     },
 
     body: JSON.stringify({
@@ -126,7 +111,7 @@ export async function deleteProduct(webId: string, code: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: webId,
+      webId: window.btoa(webId),
     },
   });
 }
@@ -138,15 +123,10 @@ export async function createOrder(webId: string, body: any) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: webId,
+      webId: window.btoa(webId),
     },
     body: body,
   });
-}
-
-export async function getOrders(): Promise<Order[]> {
-  let response = await fetch(apiEndPoint + "/orders/list/");
-  return response.json();
 }
 
 export async function getOrderByCode(
@@ -159,6 +139,7 @@ export async function getOrderByCode(
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        webId: window.btoa(webId),
       },
     }
   );
@@ -169,17 +150,28 @@ export async function getOrdersForUser(
   webId: string,
   role: string
 ): Promise<Order[]> {
-  if (role === "admin") return getOrders(); // TODO: make role a type
-  else {
-    const apiEndPoint =
-      process.env.REACT_APP_API_URI || "http://localhost:5000";
-    let response = await fetch(apiEndPoint + "/orders", {
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
+  if (role === "admin") {
+    // In case the user is an admin: return THE WHOLE collection
+    let response = await fetch(apiEndPoint + "/orders/list/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        webId: webId,
+        webId: window.btoa(webId), // we have to check if the user is authenticated
       },
     });
+
+    return response.json();
+  } else {
+    // In case the user is a normal one: return HIS orders
+    let response = await fetch(apiEndPoint + "/orders/list", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        webId: window.btoa(webId),
+      },
+    });
+
     return response.json();
   }
 }
@@ -196,7 +188,11 @@ export async function getReviewsByCodeAndWebId(
   webId: string
 ): Promise<Review[]> {
   let response = await fetch(
-    apiEndPoint + "/reviews/listByCodeAndWebId/" + code + "/" + webId
+    apiEndPoint +
+      "/reviews/listByCodeAndWebId/" +
+      code +
+      "/" +
+      window.btoa(webId)
   );
   return response.json();
 }
@@ -206,12 +202,12 @@ export async function addReview(review: Review): Promise<boolean> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: review.webId,
+      webId: window.btoa(review.webId),
     },
     body: JSON.stringify({
       rating: review.rating,
       comment: review.comment,
-      userEmail: review.webId,
+      webId: window.btoa(review.webId),
       productCode: review.productCode,
     }),
   });

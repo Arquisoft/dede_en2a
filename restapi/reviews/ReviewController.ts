@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { verifyToken } from "../utils/WebIDValidation";
+import { verifyWebID } from "../utils/WebIDValidation";
 import { reviewModel } from "./Review";
 
 export const getReviewsByProduct: RequestHandler = async (req, res) => {
@@ -15,17 +15,15 @@ export const getReviewsByProduct: RequestHandler = async (req, res) => {
 
 export const createReview: RequestHandler = async (req, res) => {
   const review = new reviewModel(req.body);
-  const isVerified = verifyToken(req.headers.token + "", review.userEmail);
-  if (isVerified) {
+
+  if (verifyWebID(req.headers.webId + ""))
     try {
       const reviewSaved = await review.save();
       res.json(reviewSaved);
     } catch (error) {
       res.status(412).json({ message: "The data is not valid " + error });
     }
-  } else {
-    res.status(203).json({ message: "Invalid token " });
-  }
+  else res.status(203).json({ message: "Invalid token " });
 };
 
 export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {

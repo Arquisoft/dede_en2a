@@ -30,13 +30,6 @@ test("Sign in with incorrect values not found", async () => {
   } as User;
 
   jest
-    .spyOn(api, "checkUser")
-    .mockImplementation(
-      (email: String, password: String): Promise<boolean> =>
-        Promise.resolve(false)
-    );
-
-  jest
     .spyOn(api, "getUser")
     .mockImplementation(
       (email: String): Promise<User> => Promise.resolve(user)
@@ -70,13 +63,6 @@ test("Sign in with incorrect values not found", async () => {
     role: "user",
     isVerified: false,
   } as User;
-
-  jest
-    .spyOn(api, "checkUser")
-    .mockImplementation(
-      (email: String, password: String): Promise<boolean> =>
-        Promise.resolve(false)
-    );
 
   jest
     .spyOn(api, "getUser")

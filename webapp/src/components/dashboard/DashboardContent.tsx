@@ -16,7 +16,7 @@ import {
 } from "../../helpers/RoleHelper";
 
 type DashboardContentProps = {
-  webId: string | undefined;
+  webId: string;
   role: string;
 };
 
@@ -41,7 +41,7 @@ export default function DashboardContent(props: DashboardContentProps) {
                 height: 260,
               }}
             >
-              <LastMonthOrdersChart />
+              <LastMonthOrdersChart webId={props.webId} role={props.role} />
             </Paper>
           </Grid>
         )}
@@ -57,7 +57,7 @@ export default function DashboardContent(props: DashboardContentProps) {
                   height: { xs: 160, md: 140 },
                 }}
               >
-                <TotalOrdersChart />
+                <TotalOrdersChart webId={props.webId} role={props.role} />
               </Paper>
             </Grid>
 
@@ -70,7 +70,10 @@ export default function DashboardContent(props: DashboardContentProps) {
                   height: { xs: 160, md: 140 },
                 }}
               >
-                <TotalReceivedOrdersChart />
+                <TotalReceivedOrdersChart
+                  webId={props.webId}
+                  role={props.role}
+                />
               </Paper>
             </Grid>
 
@@ -83,7 +86,7 @@ export default function DashboardContent(props: DashboardContentProps) {
                   height: { xs: 160, md: 140 },
                 }}
               >
-                <UniqueBuyersChart />
+                <UniqueBuyersChart webId={props.webId} role={props.role} />
               </Paper>
             </Grid>
           </React.Fragment>

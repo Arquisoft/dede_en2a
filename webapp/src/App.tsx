@@ -35,7 +35,7 @@ import {
 } from "./helpers/ShoppingCartHelper";
 import { getNameFromPod } from "./helpers/SolidHelper";
 
-import { getProducts, getUser } from "./api/api";
+import { getProducts, getUser, addUser } from "./api/api";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -55,8 +55,8 @@ export default function App(): JSX.Element {
   const [products, setProducts] = React.useState<Product[]>([]); // We store the whole set of products of the APP
   const [productsInCart, setProductsInCart] = React.useState<CartItem[]>([]); // We store the products that are IN the cart
   const [totalUnitsInCart, setTotalUnitsInCart] = React.useState(Number()); // We compute the total number of units in the cart
-  const [role, setRole] = React.useState(""); // TODO: probably this could be deleted
-  const [webId, setWebId] = React.useState(getDefaultSession().info.webId);
+  const [role, setRole] = React.useState("");
+  const [webId, setWebId] = React.useState("");
   const [mode, setMode] = React.useState<"light" | "dark">(
     prefersDarkMode ? "dark" : "light"
   ); // We establish the actual mode based in the prefered color scheme
@@ -122,7 +122,7 @@ export default function App(): JSX.Element {
     logout();
 
     // The following has no impact on the logout, it just resets the UI.
-    setWebId(undefined);
+    setWebId("");
     setRole("");
 
     // We send a notification giving the user information
@@ -142,7 +142,7 @@ export default function App(): JSX.Element {
     if (localStorage.getItem("mode") === null)
       localStorage.setItem("mode", mode);
     // In case we have stored a theme: set the actual mode to the user preference
-    else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark"); // TODO: make this work
+    else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark");
 
     // We have to handle just-in-case we are redirected from a SOLID POD provider
     // After redirect, the current URL contains login information.
@@ -150,15 +150,23 @@ export default function App(): JSX.Element {
       restorePreviousSession: true,
     }).then(
       (info: any) => {
+        // We encrypt the webId: for us to query with it
         // If everything is OK
         setWebId(info.webId); // We store user's WebID
-        getUser(info.webId).then((user) => setRole(user.role)); // we update the role of the user
+        getUser(info.webId).then((user) => {
+          if (user === undefined) {
+            // If the user is not registered
+            addUser(info.webIds); // we add the user to the DB
+          } else {
+            // The user has already been registered in the system
+            setRole(user.role); // we update the role of the user
+          }
+        });
 
-        // Inform the user his actual status
-        sendNotification(
-          "success",
-          `Welcome to DeDe ${getNameFromPod(info.webId)}!`
-        );
+        getNameFromPod(info.webId).then((name: string) => {
+          // Inform the user his actual status
+          sendNotification("success", `Welcome to DeDe ${name}!`);
+        });
       },
       () => {
         // In case something went wrong
@@ -166,7 +174,7 @@ export default function App(): JSX.Element {
       }
     );
 
-    // Retrive the cart from the session in case the user refreshes the page
+    // Retrieve the cart from the session in case the user refreshes the page
     const sessionCart = localStorage.getItem("cart"); // TODO: check if something can be modified
     if (sessionCart) {
       let cart: CartItem[] = JSON.parse(sessionCart);
@@ -193,6 +201,7 @@ export default function App(): JSX.Element {
             logCurrentUserOut={logCurrentUserOut}
             mode={mode}
             toggleColorMode={toggleColorMode}
+            webId={webId}
           />
           <Routes>
             <Route path="/" element={<DedeApp />}>

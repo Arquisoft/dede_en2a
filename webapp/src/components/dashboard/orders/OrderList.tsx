@@ -29,19 +29,20 @@ import {
 
 import { Autorenew } from "@mui/icons-material";
 
-import { Order, User } from "../../../shared/shareddtypes";
+import { Order } from "../../../shared/shareddtypes";
 import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
 import { getOrdersForUser, getUser } from "../../../api/api";
 
 import FeaturedProducts from "../../home/FeaturedProducts";
 import StatusMessage from "./StatusMessage";
+import { getNameFromPod } from "../../../helpers/SolidHelper";
 
 const ALL = "all";
 const RECEIVED = "received";
 const SHIPPING = "shipping";
 
 type OrdersProps = {
-  webId: string | undefined;
+  webId: string;
   role: string;
 };
 
@@ -118,7 +119,7 @@ function OrderHeader(props: any) {
         <OrderTitle
           state={props.state}
           handleChange={props.handleChange}
-          title={"Your orders, " + props.webId} // TODO: refactor this
+          title={"Your orders, " + props.name} // TODO: refactor this
           refreshOrderList={props.refreshOrderList}
         />
       );
@@ -174,7 +175,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 function OrderTable(props: OrderTableProps): JSX.Element {
   let orders: Order[] = [];
-
   const [page, setPage] = React.useState(0);
   const [rowsPerPage] = React.useState(5);
 
@@ -248,8 +248,8 @@ function OrderTable(props: OrderTableProps): JSX.Element {
 }
 
 function Orders(props: OrdersProps): JSX.Element {
+  const [name, setName] = React.useState("");
   const [orders, setOrders] = useState<Order[]>([]);
-  const [user, setUser] = useState<User>();
   const [loading, setLoading] = React.useState(false);
   const [state, setState] = React.useState(ALL);
 
@@ -262,26 +262,22 @@ function Orders(props: OrdersProps): JSX.Element {
       setOrders(await getOrdersForUser(props.webId, props.role));
   };
 
-  const refreshUser = async () => {
-    if (props.webId !== undefined) setUser(await getUser(props.webId));
-  };
-
   useEffect(() => {
     setLoading(true); // we start with the loading process
-    refreshUser();
+    getNameFromPod(props.webId).then((name) => setName(name));
     refreshOrderList().finally(() => setLoading(false)); // loading process must be finished
   }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <React.Fragment>
           <OrderHeader
             isOrder={orders.length > 0}
             refreshOrderList={refreshOrderList}
-            webId={user?.webId}
-            role={user?.role}
+            name={name}
+            role={props.role}
             state={state}
             handleChange={handleChange}
           />

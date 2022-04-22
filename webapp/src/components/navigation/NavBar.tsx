@@ -20,6 +20,7 @@ type NavBarProps = {
   logCurrentUserOut: () => void;
   toggleColorMode: () => void;
   mode: "dark" | "light";
+  webId: string | undefined;
 };
 
 function Logo() {
@@ -83,7 +84,10 @@ export default function NavBar(props: NavBarProps): JSX.Element {
             checked={props.mode === "dark"}
           />
           <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
-          <UserMenuButton logCurrentUserOut={props.logCurrentUserOut} />
+          <UserMenuButton
+            logCurrentUserOut={props.logCurrentUserOut}
+            webId={props.webId}
+          />
         </Stack>
       </Stack>
     </AppBar>

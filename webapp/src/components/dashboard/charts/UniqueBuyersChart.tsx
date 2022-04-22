@@ -3,7 +3,7 @@ import React from "react";
 import Subtitle from "../utils/Subtitle";
 import Title from "../utils/Title";
 
-export default function Chart() {
+export default function Chart(props: any) {
   const [data, setData] = React.useState(0);
   const [orderWebIDs] = React.useState<string[]>([]);
 

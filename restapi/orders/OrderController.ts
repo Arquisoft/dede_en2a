@@ -1,63 +1,34 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
-import { verifyToken } from "../utils/WebIDValidation";
+import { verifyWebID } from "../utils/WebIDValidation";
 import { createPDF } from "../utils/PDFHelper";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.webId + ""
-  );
-  if (isVerified) {
+  if (verifyWebID(req.headers.webId + "")) {
     const orderFound = await orderModel.findOne({
-      orderCode: req.params.orderCode,
+      code: req.params.code,
     });
-    if (orderFound) {
-      return res.json(orderFound);
-    } else {
-      return res.status(204).json();
-    }
-  } else {
-    return res.status(203).json();
-  }
+
+    if (orderFound) return res.json(orderFound);
+    else return res.status(204).json();
+  } else return res.status(203).json();
 };
 
 export const getOrders: RequestHandler = async (req, res) => {
-  //TODO CHECK TOKEN AND USER=ADMIN
-  try {
-    const orders = await orderModel.find();
-    return res.json(orders);
-  } catch (error) {
-    res.json(error);
-  }
-};
-
-export const getUserOrders: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.webId + ""
-  );
+  const isVerified = verifyWebID(req.headers.webId + "");
   if (isVerified) {
-    const orderFound = await orderModel.find({
-      userEmail: req.headers.email,
+    const ordersFound = await orderModel.find({
+      webId: req.headers.webId,
     });
-    if (orderFound) {
-      return res.json(orderFound);
-    } else {
-      return res.status(204).json();
-    }
-  } else {
-    return res.status(203).json();
-  }
+
+    // If we have found orders... return them
+    if (ordersFound) return res.json(ordersFound);
+    else return res.status(204).json(); // No order has been found
+  } else return res.status(203).json();
 };
 
 export const createOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-
   const updateStock = async (products: any) => {
     for (var i = 0; i < products.length; i++) {
       let product = await productModel.findOne({ code: products[i].code });
@@ -66,7 +37,7 @@ export const createOrder: RequestHandler = async (req, res) => {
     }
   };
 
-  if (isVerified) {
+  if (verifyWebID(req.headers.webId + ""))
     try {
       const order = new orderModel(req.body);
       updateStock(order.products);
@@ -76,7 +47,5 @@ export const createOrder: RequestHandler = async (req, res) => {
     } catch (error) {
       res.status(412).json();
     }
-  } else {
-    res.status(203).json();
-  }
+  else res.status(203).json();
 };
