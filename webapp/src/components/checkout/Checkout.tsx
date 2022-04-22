@@ -20,7 +20,7 @@ import OrderConfirmation from "./OrderConfirmation";
 type CheckoutProps = {
   productsInCart: CartItem[];
   handleDeleteCart: () => void;
-  webId: string | undefined;
+  webId: string;
 };
 
 function getSteps() {
@@ -81,7 +81,7 @@ export default function Checkout(props: CheckoutProps) {
           <ShippingAddress
             address={address}
             setAddress={setAddress}
-            userEmail={""} // TODO: use the WEBID
+            webId={props.webId}
             handleNext={handleNext}
           />
         );

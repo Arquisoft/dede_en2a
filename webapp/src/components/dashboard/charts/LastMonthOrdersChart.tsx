@@ -86,7 +86,7 @@ export default function Chart(props: any) {
   return (
     <React.Fragment>
       <Title>Orders performed during the last month</Title>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <ResponsiveContainer>
           <LineChart

@@ -50,13 +50,15 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
               </Button>
             </Link>
 
-            <Button
-              variant="contained"
-              disabled={props.productsInCart.length === 0} // TODO: check no user is logged in
-              className="m-1"
-            >
-              Proceed to checkout
-            </Button>
+            <Link to="/checkout" style={{ textDecoration: "none" }}>
+              <Button
+                variant="contained"
+                disabled={props.productsInCart.length === 0} // TODO: check no user is logged in
+                className="m-1"
+              >
+                Proceed to checkout
+              </Button>
+            </Link>
           </Stack>
         </Paper>
       </Container>

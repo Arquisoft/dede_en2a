@@ -35,7 +35,7 @@ export default function ShippingRouteMap(props: any) {
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Delivery</Divider>
 
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <React.Fragment>
           <Card>
