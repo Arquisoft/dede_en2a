@@ -209,7 +209,8 @@ export async function getReviewsByCodeAndEmail(
   let response = await fetch(
     apiEndPoint + "/reviews/listByCodeAndEmail/" + code + "/" + email
   );
-  return response.json();
+  if (response.status === 200) return response.json();
+  else return [];
 }
 
 export async function addReview(review: Review): Promise<boolean> {

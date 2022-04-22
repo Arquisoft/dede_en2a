@@ -1,18 +1,29 @@
 import { Add, Autorenew, Remove } from "@mui/icons-material";
+import EditIcon from '@mui/icons-material/Edit';
 import {
-  Container, IconButton, Stack, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer,
-  TableHead, TablePagination, TableRow, Tooltip, Typography
+  Container,
+  IconButton,
+  Stack,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Tooltip,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProducts } from "../../../api/api";
 import {
-  isRenderForAdminOnly, isRenderForModeratorAtLeast
+  isRenderForAdminOnly,
+  isRenderForModeratorAtLeast
 } from "../../../helpers/RoleHelper";
 import { Product } from "../../../shared/shareddtypes";
-
-
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,11 +57,18 @@ function ProductsHeader(props: any) {
       <AutorenewOrders refreshOrderList={props.refreshOrderList} />
 
       {isRenderForModeratorAtLeast() && (
-        <IconButton edge="end">
-          <Tooltip title="Add a new product" arrow>
-            <Add onClick={() => navigate("/dashboard/products/add")} />
-          </Tooltip>
-        </IconButton>
+        <>
+          <IconButton edge="end">
+            <Tooltip title="Add a new product" arrow>
+              <Add onClick={() => navigate("/dashboard/products/add")} />
+            </Tooltip>
+          </IconButton>
+          <IconButton edge="end">
+            <Tooltip title="Update a product" arrow>
+              <EditIcon onClick={() => navigate("/dashboard/products/update")} />
+            </Tooltip>
+          </IconButton>
+        </>
       )}
 
       {isRenderForAdminOnly() && (
