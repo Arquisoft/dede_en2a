@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Typography,
@@ -19,9 +19,12 @@ type ShoppingCartProps = {
   totalUnitsInCart: number;
   addToCart: (product: Product) => void;
   removeFromCart: (product: Product) => void;
+  webId: string;
 };
 
 export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
+  let navigate = useNavigate();
+
   if (props.totalUnitsInCart > 0)
     return (
       <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
@@ -50,15 +53,14 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
               </Button>
             </Link>
 
-            <Link to="/checkout" style={{ textDecoration: "none" }}>
-              <Button
-                variant="contained"
-                disabled={props.productsInCart.length === 0} // TODO: check no user is logged in
-                className="m-1"
-              >
-                Proceed to checkout
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              disabled={props.productsInCart.length === 0 || props.webId === ""}
+              onClick={() => navigate("/checkout")}
+              className="m-1"
+            >
+              Proceed to checkout
+            </Button>
           </Stack>
         </Paper>
       </Container>

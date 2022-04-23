@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 
 import {
   CssBaseline,
@@ -45,6 +50,7 @@ import {
   handleIncomingRedirect,
   logout,
 } from "@inrupt/solid-client-authn-browser";
+import { DocumentScannerOutlined } from "@mui/icons-material";
 
 export default function App(): JSX.Element {
   // Some variables to perform calculations in an easier way
@@ -134,6 +140,9 @@ export default function App(): JSX.Element {
 
     // We send a notification giving the user information
     sendNotification("success", "You signed out correctly. See you soon!");
+
+    // We go to the home page
+    document.location.href = "/";
   };
 
   React.useEffect(() => {
@@ -224,6 +233,7 @@ export default function App(): JSX.Element {
                     totalUnitsInCart={totalUnitsInCart}
                     addToCart={addToCart}
                     removeFromCart={removeFromCart}
+                    webId={webId}
                   />
                 }
               />
@@ -281,7 +291,7 @@ export default function App(): JSX.Element {
                     products={products}
                     refreshShop={refreshShop}
                     webId={webId}
-                    sendNotification={sendNotification}
+                    role={role}
                   />
                 }
               />

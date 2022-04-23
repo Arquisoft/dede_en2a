@@ -199,7 +199,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
           >
             <h1 style={{ margin: 8 }}>
               {" "}
-              {props.isForUpdate == false ? "Add product" : "Update product"}
+              {props.isForUpdate === false ? "Add product" : "Update product"}
             </h1>
 
             {props.isForUpdate ? (

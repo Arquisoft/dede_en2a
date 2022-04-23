@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 import Footer from "./navigation/Footer";
 
-export default function Dashboard(props: any) {
+export default function MainOutlet() {
   return (
     <React.Fragment>
       <Outlet />

@@ -9,7 +9,7 @@ type DashboardProps = {
   role: string;
 };
 
-export default function Dashboard(props: DashboardProps) {
+export default function DashboardOutlet(props: DashboardProps) {
   return (
     <React.Fragment>
       <Grid component="main" sx={{ mb: 10 }}>

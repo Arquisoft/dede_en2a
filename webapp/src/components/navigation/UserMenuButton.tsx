@@ -1,9 +1,13 @@
+import * as React from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -11,8 +15,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
-import { Link, useNavigate } from "react-router-dom";
+
+import { getNameFromPod } from "../../helpers/SolidHelper";
 
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
@@ -24,7 +28,6 @@ function LogOut(props: LogOutFuncProps): JSX.Element {
   let navigate = useNavigate();
 
   const logOutUser = () => {
-    localStorage.removeItem("token"); // TODO: refactor this
     props.logCurrentUserOut();
     props.handleCloseUserMenu();
     navigate("/");
@@ -47,6 +50,7 @@ function LogOut(props: LogOutFuncProps): JSX.Element {
 }
 
 export default function UserMenuButton(props: any): JSX.Element {
+  const [name, setName] = React.useState("");
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -58,6 +62,10 @@ export default function UserMenuButton(props: any): JSX.Element {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  React.useEffect(() => {
+    getNameFromPod(props.webId).then((name) => setName(name));
+  }, [props.webId]);
 
   if (props.webId !== undefined)
     return (
@@ -83,20 +91,13 @@ export default function UserMenuButton(props: any): JSX.Element {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <MenuItem>
-            <ListItemIcon>
-              <FaceIcon fontSize="small" />
-            </ListItemIcon>
+          <Stack direction="row" sx={{ p: 2 }} spacing={1}>
+            <FaceIcon fontSize="small" />
+            <Typography>{name}</Typography>
+          </Stack>
 
-            <TextField
-              value={props.userName + "\n" + localStorage.getItem("user.email")}
-              fullWidth
-              multiline
-              id="input-with-sx"
-              variant="standard"
-              InputProps={{ style: { fontSize: 10 } }}
-            />
-          </MenuItem>
+          <Divider />
+
           <MenuItem
             component={Link}
             to="/dashboard"

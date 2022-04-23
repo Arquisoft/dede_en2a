@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   Card,
@@ -9,7 +8,6 @@ import {
   Stack,
   styled,
   TextField,
-  AlertColor,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
@@ -31,9 +29,9 @@ const Img = styled("img")({
 
 type DeleteProductProps = {
   products: Product[];
-  refreshShop: () => void;
   webId: string;
-  sendNotification: (severity: AlertColor, message: string) => void;
+  role: string;
+  refreshShop: () => void;
 };
 
 export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
@@ -43,21 +41,12 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(0);
   const [image, setImage] = useState("");
   const [notificationStatus, setNotificationStatus] = React.useState(false);
   const [notification, setNotification] = React.useState<NotificationType>({
     severity: "success",
     message: "",
   });
-
-  function sendNotification(severity: AlertColor, message: string) {
-    setNotificationStatus(true);
-    setNotification({
-      severity: severity,
-      message: message,
-    });
-  }
 
   const products = props.products;
 
@@ -107,8 +96,6 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       await deleteProduct(props.webId, code);
       emptyFields();
       props.refreshShop();
-
-      props.sendNotification("success", "Product deleted successfully!");
     }
   };
 
@@ -122,16 +109,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setImage(checkImageExists("")); // We find the empty image: not-found
   };
 
-  const openDialog = () => {
-    setDialogOpen(dialogOpen + 1);
-  };
-
-  if (
-    localStorage.getItem("user.email") === null ||
-    (localStorage.getItem("user.role") !== "admin" &&
-      localStorage.getItem("user.role") !== "manager")
-  )
-    return <Navigate to="/" />;
+  if (props.webId === "" || props.role === "user") return <Navigate to="/" />;
   else
     return (
       <React.Fragment>

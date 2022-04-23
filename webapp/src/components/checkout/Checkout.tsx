@@ -1,14 +1,15 @@
+import * as React from "react";
+
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
-import { Navigate } from "react-router";
-import { updateProduct } from "../../api/api";
+
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
 import { CartItem } from "../../shared/shareddtypes";
+
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
 import Review from "./Review";
@@ -62,7 +63,6 @@ export default function Checkout(props: CheckoutProps) {
   };
 
   const getStepContent = (stepIndex: number) => {
-    if (localStorage.getItem("user.email") === null) return <Navigate to="/sign-in" />;
     switch (stepIndex) {
       case 0:
         return (
