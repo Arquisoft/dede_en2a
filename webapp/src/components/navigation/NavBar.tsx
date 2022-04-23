@@ -1,22 +1,19 @@
+import { Link } from "react-router-dom";
+
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import ThemeSlider from "./ThemeSlider";
 import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
-import UserMenuButton from "./UserMenuButton";
 
-import { checkImageExists } from "../../helpers/ImageHelper";
+import { checkImageExistsLocally } from "../../helpers/ImageHelper";
 
 type NavBarProps = {
   totalUnitsInCart: number;
@@ -36,7 +33,10 @@ function Logo() {
 
   return (
     <Link to="/shop" color="inherit" style={{ textDecoration: "none" }}>
-      <Img alt="DEDE - Fast services" src={checkImageExists("dede_logo.png")} />
+      <Img
+        alt="DEDE - Fast services"
+        src={checkImageExistsLocally("dede_logo.png")}
+      />
     </Link>
   );
 }

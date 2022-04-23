@@ -13,9 +13,7 @@ import Typography from "@mui/material/Typography";
 import { getOrderByCode } from "../../../api/api";
 import { Order, Product } from "../../../shared/shareddtypes";
 import Divider from "@mui/material/Divider";
-import { getOrder } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
-import { Order, Product } from "../../../shared/shareddtypes";
 import StatusMessage from "./StatusMessage";
 
 type OrderDetailsProps = {

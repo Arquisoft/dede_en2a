@@ -33,10 +33,10 @@ export const product = new Schema(
       required: false,
     },
     category: {
-      type:String,
+      type: String,
       required: true,
-      enum: ['Clothes', 'Decoration', 'Electronics', 'Miscellaneous']
-    }
+      enum: ["Clothes", "Decoration", "Electronics", "Miscellaneous"],
+    },
   },
   {
     versionKey: false,

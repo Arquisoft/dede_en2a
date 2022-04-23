@@ -1,5 +1,5 @@
 import { Add, Autorenew, Remove } from "@mui/icons-material";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Container,
   IconButton,
@@ -14,14 +14,14 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProducts } from "../../../api/api";
 import {
   isRenderForAdminOnly,
-  isRenderForModeratorAtLeast
+  isRenderForModeratorAtLeast,
 } from "../../../helpers/RoleHelper";
 import { Product } from "../../../shared/shareddtypes";
 
@@ -61,16 +61,20 @@ function ProductsHeader(props: any) {
       <AutorenewOrders refreshOrderList={props.refreshOrderList} />
 
       {isRenderForModeratorAtLeast(props.role) && (
-        <IconButton edge="end">
-          <Tooltip title="Add a new product" arrow>
-            <Add onClick={() => navigate("/dashboard/products/add")} />
-          </Tooltip>
-        </IconButton>
+        <React.Fragment>
           <IconButton edge="end">
-            <Tooltip title="Update a product" arrow>
-              <EditIcon onClick={() => navigate("/dashboard/products/update")} />
+            <Tooltip title="Add a new product" arrow>
+              <Add onClick={() => navigate("/dashboard/products/add")} />
             </Tooltip>
           </IconButton>
+          <IconButton edge="end">
+            <Tooltip title="Update a product" arrow>
+              <EditIcon
+                onClick={() => navigate("/dashboard/products/update")}
+              />
+            </Tooltip>
+          </IconButton>
+        </React.Fragment>
       )}
 
       {isRenderForAdminOnly(props.role) && (

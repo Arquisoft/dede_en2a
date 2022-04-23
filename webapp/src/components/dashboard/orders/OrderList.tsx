@@ -1,4 +1,6 @@
-import { Autorenew } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Button,
   Container,
@@ -22,21 +24,18 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 
 import { Autorenew } from "@mui/icons-material";
 
-import { Order } from "../../../shared/shareddtypes";
-import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getOrdersForUser, getUser } from "../../../api/api";
-import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
-import { Order, User } from "../../../shared/shareddtypes";
-import FeaturedProducts from "../../home/FeaturedProducts";
 import StatusMessage from "./StatusMessage";
+import FeaturedProducts from "../../home/FeaturedProducts";
+
+import { getOrdersForUser } from "../../../api/api";
+import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
 import { getNameFromPod } from "../../../helpers/SolidHelper";
+import { Order } from "../../../shared/shareddtypes";
 
 const ALL = "all";
 const RECEIVED = "received";

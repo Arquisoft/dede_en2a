@@ -7,14 +7,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Theme } from "@mui/material/styles";
 
-import { checkImageExists } from "../../helpers/ImageHelper";
+import { checkImageExistsLocally } from "../../helpers/ImageHelper";
 
 export default function Hero() {
   return (
     <React.Fragment>
       <Stack
         sx={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url(${checkImageExists(
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url(${checkImageExistsLocally(
             "hero.jpg"
           )})`,
           backgroundAttachment: "fixed",

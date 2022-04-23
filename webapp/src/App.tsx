@@ -267,9 +267,10 @@ export default function App(): JSX.Element {
                 path="products/add"
                 element={
                   <UploadProduct
-                    createShop={createShop}
+                    refreshShop={refreshShop}
                     isForUpdate={false}
                     products={products}
+                    webId={webId}
                   />
                 }
               />
@@ -288,9 +289,10 @@ export default function App(): JSX.Element {
                 path="products/update"
                 element={
                   <UploadProduct
-                    createShop={createShop}
+                    refreshShop={refreshShop}
                     isForUpdate={true}
                     products={products}
+                    webId={webId}
                   />
                 }
               />

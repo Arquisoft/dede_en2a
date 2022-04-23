@@ -20,7 +20,7 @@ export const ProductCategories = {
   Clothes: "Clothes",
   Decoration: "Decoration",
   Electronics: "Electronics",
-  Misccellaneous: "Miscellaneous",
+  Miscellaneous: "Miscellaneous",
 };
 
 export type NotificationType = {

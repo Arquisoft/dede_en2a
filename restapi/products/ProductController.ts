@@ -20,10 +20,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 };
 
 export const createProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.body.token + "",
-    req.body.email + ""
-  );
+  const isVerified = verifyWebID(req.headers.webId + "");
   if (isVerified) {
     try {
       let product = new productModel(req.body);
@@ -62,7 +59,9 @@ export const deleteProduct: RequestHandler = async (req, res) => {
         return res.json(productFound);
       }
     } catch (error) {
-      res.status(301).json({ message: "The operation didn't succed " + error });
+      res
+        .status(301)
+        .json({ message: "The operation didn't succeed " + error });
     }
   else res.status(203).json();
 };
@@ -85,4 +84,32 @@ export const updateProduct: RequestHandler = async (req, res) => {
       res.json(error);
     }
   else res.status(203).json();
+};
+
+export const filterAndOrderBy: RequestHandler = async (req, res) => {
+  let mode = req.params.mode;
+  const category = req.params.category;
+  let products;
+
+  if (
+    category !== "Clothes" &&
+    category !== "Decoration" &&
+    category !== "Electronics" &&
+    category !== "Miscellaneous"
+  ) {
+    if (mode !== "asc" && mode !== "desc") {
+      products = await productModel.find();
+    } else {
+      products = await productModel.find().sort({ price: mode });
+    }
+  } else {
+    if (mode !== "asc" && mode !== "desc") {
+      products = await productModel.find({ category: category });
+    } else {
+      products = await productModel
+        .find({ category: category })
+        .sort({ price: mode });
+    }
+  }
+  return res.json(products);
 };

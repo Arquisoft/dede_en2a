@@ -9,14 +9,14 @@ import {
   Stack,
   styled,
   TextField,
-  Button,
   AlertColor,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
-import { Product } from "../../../shared/shareddtypes";
+import { NotificationType, Product } from "../../../shared/shareddtypes";
+import NotificationAlert from "../../misc/NotificationAlert";
 
 const DEF_IMAGE: string =
   process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
@@ -45,6 +45,19 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [category, setCategory] = useState("");
   const [dialogOpen, setDialogOpen] = useState(0);
   const [image, setImage] = useState("");
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
+  function sendNotification(severity: AlertColor, message: string) {
+    setNotificationStatus(true);
+    setNotification({
+      severity: severity,
+      message: message,
+    });
+  }
 
   const products = props.products;
 
@@ -63,14 +76,14 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
   const handleDeleteProduct = async () => {
     if (code !== "") {
-      const deleted = await deleteProduct(code);
+      const deleted = await deleteProduct(props.webId, code);
       if (deleted) {
         setNotificationStatus(true);
         setNotification({
           severity: "success",
           message: "Product deleted correctly",
         });
-        props.createShop();
+        props.refreshShop();
         emptyFields();
       } else {
         setNotificationStatus(true);
@@ -238,21 +251,11 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           </Paper>
         </Container>
 
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
+        <NotificationAlert
+          notification={notification}
+          notificationStatus={notificationStatus}
+          setNotificationStatus={setNotificationStatus}
+        />
       </React.Fragment>
     );
 }

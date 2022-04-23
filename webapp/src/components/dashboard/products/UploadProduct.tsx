@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+
 import {
   Alert,
   Box,
@@ -9,14 +12,13 @@ import {
   Snackbar,
   Stack,
   styled,
-  TextField
+  TextField,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+
 import { createProduct, getProducts, updateProduct } from "../../../api/api";
 import {
   checkNumericField,
-  checkTextField
+  checkTextField,
 } from "../../../helpers/CheckFieldsHelper";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
@@ -28,6 +30,7 @@ type UploadProductProps = {
   isForUpdate: boolean;
   products: Product[];
   refreshShop: () => void;
+  webId: string;
 };
 
 const Img = styled("img")({
@@ -101,13 +104,13 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       return sendErrorNotification("Incorrect price");
     if (!checkNumericField(Number(stock)))
       return sendErrorNotification("Incorrect stock");
-    handleSumbit();
+    handleSubmit();
   };
 
-  const handleSumbit = async () => {
+  const handleSubmit = async () => {
     let created;
     if (props.isForUpdate) {
-      created = await updateProduct({
+      created = await updateProduct(props.webId, {
         code: code,
         name: name,
         description: description,

@@ -10,8 +10,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { checkImageExists } from "../../helpers/ImageHelper";
 
-
-
 const tiers = [
   {
     code: "10",

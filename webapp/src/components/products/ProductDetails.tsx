@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { getProduct, getReviewsByCode } from "../../api/api";
 import { checkImageExists } from "../../helpers/ImageHelper";
 import { getReviewMean } from "../../helpers/ReviewHelper";
-import { checkImageExists } from "../../helpers/ImageHelper";
 
 import { Product, Review } from "../../shared/shareddtypes";
 
@@ -15,10 +14,18 @@ import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";
 
 import {
-  Breadcrumbs, Button, Divider, Grid, LinearProgress,
-  Link, Paper, Rating, Stack, styled, Typography
+  Breadcrumbs,
+  Button,
+  Divider,
+  Grid,
+  LinearProgress,
+  Link,
+  Paper,
+  Rating,
+  Stack,
+  styled,
+  Typography,
 } from "@mui/material";
-import { AlertColor } from "@mui/material/Alert";
 
 export type ProductProps = {
   product: Product;
