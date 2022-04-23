@@ -14,8 +14,10 @@ import {
 import { AlertColor } from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 
-import { Product, Review } from "../../shared/shareddtypes";
+import { Product, NotificationType, Review } from "../../shared/shareddtypes";
 import { addReview, getReviewsByCodeAndWebId } from "../../api/api";
+
+import NotificationAlert from "../misc/NotificationAlert";
 
 type ReviewDialogProps = {
   product: Product;
@@ -25,18 +27,30 @@ type ReviewDialogProps = {
   open: boolean;
   handleOpen: () => void;
   handleClose: () => void;
-  sendNotification: (severity: AlertColor, message: string) => void;
 };
 
 export default function ReviewDialog(props: ReviewDialogProps) {
   const [btnDisabled, setBtnDisabled] = React.useState(false);
   const [rating, setRating] = React.useState(0);
   const [comment, setComment] = React.useState("");
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
+  function sendNotification(severity: AlertColor, message: string) {
+    setNotificationStatus(true);
+    setNotification({
+      severity: severity,
+      message: message,
+    });
+  }
 
   const handleConfirm = async () => {
     // In case the user hasn't completed all the fields
     if (btnDisabled) {
-      props.sendNotification("error", "You must complete the fields!");
+      sendNotification("error", "You must complete the fields!");
       return;
     }
 
@@ -45,7 +59,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
 
     // If no user has logged in
     if (props.webId === "") {
-      props.sendNotification("error", "You must log in first!");
+      sendNotification("error", "You must log in first!");
     } else {
       let reviews = await getReviewsByCodeAndWebId(
         props.product.code,
@@ -54,10 +68,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
 
       // In case the user has reviewed this product
       if (reviews.length > 0)
-        props.sendNotification(
-          "error",
-          "You have already reviewed this product!"
-        );
+        sendNotification("error", "You have already reviewed this product!");
 
       // We create the review
       let createdReview: Review = {
@@ -67,14 +78,10 @@ export default function ReviewDialog(props: ReviewDialogProps) {
         productCode: props.product.code,
       };
 
-      if (await addReview(createdReview)) {
-        props.sendNotification("success", "Review added correctly!");
-        window.location.reload(); // TODO: refactor this
-      } else
-        props.sendNotification(
-          "error",
-          "There was an error creating your review!"
-        );
+      if (await addReview(createdReview))
+        sendNotification("success", "Review added correctly!");
+      else
+        sendNotification("error", "There was an error creating your review!");
     }
   };
 
@@ -115,11 +122,21 @@ export default function ReviewDialog(props: ReviewDialogProps) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirm} startIcon={<SendIcon />}>
+          <Button
+            disabled={rating === 0 || comment === ""}
+            onClick={handleConfirm}
+            startIcon={<SendIcon />}
+          >
             Send your Review
           </Button>
         </DialogActions>
       </Dialog>
+
+      <NotificationAlert
+        notification={notification}
+        notificationStatus={notificationStatus}
+        setNotificationStatus={setNotificationStatus}
+      />
     </React.Fragment>
   );
 }

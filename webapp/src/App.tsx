@@ -2,9 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import {
-  Alert,
   CssBaseline,
-  Snackbar,
   ThemeProvider,
   createTheme,
   useMediaQuery,
@@ -26,6 +24,7 @@ import NavBar from "./components/navigation/NavBar";
 import ProductDetails from "./components/products/ProductDetails";
 import SignIn from "./components/userManagement/SignIn";
 import Shop from "./components/Shop";
+import NotificationAlert from "./components/misc/NotificationAlert";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
@@ -64,6 +63,14 @@ export default function App(): JSX.Element {
     severity: "success",
     message: "",
   });
+
+  function sendNotification(severity: AlertColor, message: string) {
+    setNotificationStatus(true);
+    setNotification({
+      severity: severity,
+      message: message,
+    });
+  }
 
   // We establish a button for us to toggle the actual mode
   const toggleColorMode = () => {
@@ -126,14 +133,6 @@ export default function App(): JSX.Element {
 
     // We send a notification giving the user information
     sendNotification("success", "You signed out correctly. See you soon!");
-  };
-
-  const sendNotification = (severity: AlertColor, message: string) => {
-    setNotificationStatus(true);
-    setNotification({
-      severity: severity,
-      message: message,
-    });
   };
 
   React.useEffect(() => {
@@ -244,7 +243,6 @@ export default function App(): JSX.Element {
                   <ProductDetails
                     product={null as any}
                     addToCart={addToCart}
-                    sendNotification={sendNotification}
                     webId={webId}
                   />
                 }
@@ -282,21 +280,11 @@ export default function App(): JSX.Element {
             </Route>
           </Routes>
 
-          <Snackbar // TODO: try and refactor this
-            open={notificationStatus}
-            autoHideDuration={3000}
-            onClose={() => {
-              setNotificationStatus(false);
-            }}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-          >
-            <Alert severity={notification.severity} sx={{ width: "100%" }}>
-              {notification.message}
-            </Alert>
-          </Snackbar>
+          <NotificationAlert
+            notification={notification}
+            notificationStatus={notificationStatus}
+            setNotificationStatus={setNotificationStatus}
+          />
         </Router>
       </PayPalScriptProvider>
     </ThemeProvider>

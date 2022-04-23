@@ -31,7 +31,6 @@ import { AlertColor } from "@mui/material/Alert";
 export type ProductProps = {
   product: Product;
   addToCart: (product: Product) => void;
-  sendNotification: (severity: AlertColor, message: string) => void;
   webId: string;
 };
 
@@ -217,7 +216,6 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
             open={openReviewDialog}
             handleOpen={handleClickOpenReviewDialog}
             handleClose={handleCloseReviewDialog}
-            sendNotification={props.sendNotification}
           />
 
           <ShareDialog

@@ -30,7 +30,7 @@ export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {
   try {
     const reviews = await reviewModel.find({
       productCode: req.params.productCode,
-      userEmail: req.params.email,
+      webId: req.params.webId,
     });
     return res.json(reviews);
   } catch (error) {
