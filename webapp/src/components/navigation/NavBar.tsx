@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
-
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
@@ -13,6 +14,7 @@ import ThemeSlider from "./ThemeSlider";
 import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
+import UserMenuButton from "./UserMenuButton";
 
 import { checkImageExists } from "../../helpers/ImageHelper";
 

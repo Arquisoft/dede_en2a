@@ -1,4 +1,4 @@
-import { Order, Review, User, Product } from "../shared/shareddtypes";
+import { Order, Product, Review, User } from "../shared/shareddtypes";
 
 const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
@@ -84,17 +84,24 @@ export async function updateProduct(webId: string, product: Product) {
       stock: product.stock,
     }),
   });
+  if (response.status === 200) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-export async function createProduct(image: any, body: any) {
+export async function createProduct(image: any, body: any): Promise<boolean> {
   var data = new FormData();
   data.append("image", image, body.code + ".png");
   for (let key in body) {
     data.append(key, body[key]);
   }
+  // We must send authorization through body because form-data request do not allow headers
+  data.append("token", localStorage.getItem("token") + "");
+  data.append("email", localStorage.getItem("user.email") + "");
 
   let response = await fetch(apiEndPoint + "/products", {
-    //TODO - Pass token and email to verify identity
     method: "POST",
     body: data,
   });
@@ -114,11 +121,31 @@ export async function deleteProduct(webId: string, code: string) {
       webId: window.btoa(webId),
     },
   });
+  if (response.status === 200) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // -*- ORDERS -*-
 
 export async function createOrder(webId: string, body: any) {
+// Mode must be desc or asc. If not default order
+// Category must be Clothes, Decoration, Elecrtonics or Miscellaneous. If not all categories
+export async function filterProductsByCategory(
+  category: string,
+  mode: string
+): Promise<Product[]> {
+  let response = await fetch(
+    apiEndPoint + "/products/filter&order/" + category + "&" + mode
+  );
+  return response.json();
+}
+
+// ORDERS
+
+export async function createOrder(body: any) {
   await fetch(apiEndPoint + "/orders", {
     method: "POST",
     headers: {
@@ -178,6 +205,8 @@ export async function getOrdersForUser(
 
 // -*- REVIEWS -*-
 
+// REVIEWS
+
 export async function getReviewsByCode(code: string): Promise<Review[]> {
   let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
   return response.json();
@@ -194,7 +223,8 @@ export async function getReviewsByCodeAndWebId(
       "/" +
       window.btoa(webId)
   );
-  return response.json();
+  if (response.status === 200) return response.json();
+  else return [];
 }
 
 export async function addReview(review: Review): Promise<boolean> {
@@ -214,4 +244,35 @@ export async function addReview(review: Review): Promise<boolean> {
   if (response.status === 200) {
     return true;
   } else return false;
+}
+
+// PLACES
+
+export async function getPlaces(
+  x: number,
+  y: number,
+  radiusMeters: number,
+  maxResults: number
+): Promise<any> {
+  const url =
+    "https://api.geoapify.com/v2/places?categories=commercial&filter=circle:" +
+    x +
+    "," +
+    y +
+    "," +
+    radiusMeters +
+    "&bias=proximity:" +
+    x +
+    "," +
+    y +
+    "&limit=" +
+    maxResults +
+    "&apiKey=" +
+    process.env.REACT_APP_GEOAPIFY_KEY;
+
+  let places;
+  await fetch(url, {
+    method: "GET",
+  }).then((response) => (places = response.json()));
+  return places;
 }

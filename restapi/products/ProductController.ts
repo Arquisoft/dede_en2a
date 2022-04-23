@@ -6,12 +6,8 @@ import { productModel } from "./Product";
 
 // Obtaining products are unauthorized operations: everybody can list the products of the shop
 export const getProducts: RequestHandler = async (req, res) => {
-  try {
-    const products = await productModel.find();
-    return res.json(products);
-  } catch (error) {
-    res.json(error);
-  }
+  const products = await productModel.find();
+  return res.json(products);
 };
 
 export const getProduct: RequestHandler = async (req, res) => {
@@ -19,31 +15,38 @@ export const getProduct: RequestHandler = async (req, res) => {
   if (productFound) {
     return res.json(productFound);
   } else {
-    return res.status(204).json();
+    return res.status(412).json();
   }
 };
 
 export const createProduct: RequestHandler = async (req, res) => {
-  try {
-    let product = new productModel(req.body);
-    if (process.env.MONGO_DB_URI !== undefined)
+  const isVerified = verifyToken(
+    req.body.token + "",
+    req.body.email + ""
+  );
+  if (isVerified) {
+    try {
+      let product = new productModel(req.body);
       product.image = path.basename(req.file?.path + "");
-    const productSaved = await product.save();
-    res.json(productSaved);
-  } catch (error) {
-    if (error.name === "ValidationError") {
-      // Empty field that must have content since it is required
-      // 412 erorr is usually used for Precondition Failed
-      res.status(412).json({
-        message: "Icomplete data",
-      });
-    } else if (error.name === "MongoServerError" && error.code === 11000) {
-      // Duplicated key that must be unique
-      // 409 error is usually used for Conflict
-      res.status(409).json({
-        message: "The product code already exists.",
-      });
+      const productSaved = await product.save();
+      res.json(productSaved);
+    } catch (error) {
+      if (error.name === "ValidationError") {
+        // Empty field that must have content since it is required
+        // 412 erorr is usually used for Precondition Failed
+        res.status(412).json({
+          message: "Icomplete data",
+        });
+      } else if (error.name === "MongoServerError" && error.code === 11000) {
+        // Duplicated key that must be unique
+        // 409 error is usually used for Conflict
+        res.status(409).json({
+          message: "The product code already exists.",
+        });
+      }
     }
+  } else {
+    return res.status(403).json();
   }
 };
 

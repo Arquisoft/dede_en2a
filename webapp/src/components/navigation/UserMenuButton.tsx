@@ -1,19 +1,18 @@
-import * as React from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import ListItemIcon from "@mui/material/ListItemIcon";
-
+import FaceIcon from "@mui/icons-material/Face";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { TextField } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
@@ -84,6 +83,20 @@ export default function UserMenuButton(props: any): JSX.Element {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
+          <MenuItem>
+            <ListItemIcon>
+              <FaceIcon fontSize="small" />
+            </ListItemIcon>
+
+            <TextField
+              value={props.userName + "\n" + localStorage.getItem("user.email")}
+              fullWidth
+              multiline
+              id="input-with-sx"
+              variant="standard"
+              InputProps={{ style: { fontSize: 10 } }}
+            />
+          </MenuItem>
           <MenuItem
             component={Link}
             to="/dashboard"

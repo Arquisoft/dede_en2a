@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 import { getOrderByCode } from "../../../api/api";
 import { Order, Product } from "../../../shared/shareddtypes";
-import { checkImageExists } from "../../../helpers/ImageHelper";
 import Divider from "@mui/material/Divider";
+import { getOrder } from "../../../api/api";
+import { checkImageExists } from "../../../helpers/ImageHelper";
+import { Order, Product } from "../../../shared/shareddtypes";
 import StatusMessage from "./StatusMessage";
 
 type OrderDetailsProps = {
@@ -121,7 +123,7 @@ function OrderList(props: OrderListProps): JSX.Element {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Status:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            <StatusMessage isOrderReceived={props.order.isOrderReceived} />
+            <StatusMessage receivedDate={props.order.receivedDate} />
           </Typography>
         </ListItem>
       </List>

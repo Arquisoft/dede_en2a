@@ -23,6 +23,7 @@ import Home from "./components/home/Home";
 import NavBar from "./components/navigation/NavBar";
 import ProductDetails from "./components/products/ProductDetails";
 import SignIn from "./components/userManagement/SignIn";
+import RedirectHome from "./components/RedirectHome";
 import Shop from "./components/Shop";
 import NotificationAlert from "./components/misc/NotificationAlert";
 
@@ -264,7 +265,13 @@ export default function App(): JSX.Element {
               <Route path="products" element={<ProductList role={role} />} />
               <Route
                 path="products/add"
-                element={<UploadProduct refreshShop={refreshShop} />}
+                element={
+                  <UploadProduct
+                    createShop={createShop}
+                    isForUpdate={false}
+                    products={products}
+                  />
+                }
               />
               <Route
                 path="products/delete"
@@ -277,7 +284,18 @@ export default function App(): JSX.Element {
                   />
                 }
               />
+              <Route
+                path="products/update"
+                element={
+                  <UploadProduct
+                    createShop={createShop}
+                    isForUpdate={true}
+                    products={products}
+                  />
+                }
+              />
             </Route>
+            <Route path="*" element={<RedirectHome />}></Route>
           </Routes>
 
           <NotificationAlert

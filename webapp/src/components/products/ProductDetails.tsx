@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { getProduct, getReviewsByCode } from "../../api/api";
+import { checkImageExists } from "../../helpers/ImageHelper";
 import { getReviewMean } from "../../helpers/ReviewHelper";
 import { checkImageExists } from "../../helpers/ImageHelper";
 
@@ -14,17 +15,8 @@ import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";
 
 import {
-  Paper,
-  Typography,
-  Grid,
-  Button,
-  styled,
-  Rating,
-  Breadcrumbs,
-  Stack,
-  Divider,
-  LinearProgress,
-  Link,
+  Breadcrumbs, Button, Divider, Grid, LinearProgress,
+  Link, Paper, Rating, Stack, styled, Typography
 } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
@@ -120,7 +112,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
         </Typography>
 
         <Img
-          src={checkImageExists("")}
+          src={checkImageExists("undefined")}
           alt="Product not found image"
           sx={{ width: "50%", p: 2, m: "auto" }}
         />

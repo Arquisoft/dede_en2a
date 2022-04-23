@@ -3,14 +3,14 @@
 GET {{url}}/products/list
 
 ###
-GET {{url}}/products/findByCode/1
+GET {{url}}/products/findByCode/0007
 
 ###
 POST  {{url}}/products/create
 Content-Type: application/json
 
 {
-    "code": "1347",
+    "code": "1447",
     "name": "Camiseta Real Sporting Jony",
     "price": 10.99,
     "description": "Ni de coña chaval",
@@ -21,9 +21,16 @@ Content-Type: application/json
 DELETE {{url}}/products/delete/1
 
 ###
-POST {{url}}/products/update/1347
+POST {{url}}/products/update/0050
 Content-Type: application/json
 
 {
-    "name": "Camiseta del Sporting chacho"
+    "code": "50",
+    "image": "50.png"
 }
+
+###
+GET {{url}}/products/order/desc
+
+###
+GET {{url}}/products/filter&order/Electronics&asc

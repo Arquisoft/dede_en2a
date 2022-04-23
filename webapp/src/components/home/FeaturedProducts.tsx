@@ -1,36 +1,36 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
 import StarIcon from "@mui/icons-material/StarBorder";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardMedia from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { checkImageExists } from "../../helpers/ImageHelper";
+
+
 
 const tiers = [
   {
-    code: "0010",
+    code: "10",
     title: "AMONG US™ CryptoBro",
     price: "129.99",
-    image: "0010.png",
+    image: "10.png",
   },
   {
-    code: "1234",
+    code: "52",
     title: "AMONG US™ T-shirt",
     subheader: "The most popular among all",
     price: "12.95",
-    image: "1234.png",
+    image: "52.png",
   },
   {
-    code: "0029",
+    code: "29",
     title: "AMONG US™ Seat Covers",
     price: "99.99",
-    image: "0029.png",
+    image: "29.png",
   },
 ];
 
