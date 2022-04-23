@@ -56,15 +56,21 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                       <TableCell>
                         <Stack
                           direction={{ xs: "column", sm: "row" }}
-                          spacing={{ xs: 1, sm: 2, md: 4 }}
-                          justifyContent="flex-start"
                           alignItems="center"
                         >
                           <Img
                             alt="Imagen del producto en el carrito"
                             src={checkImageExists(cartItem.product.image)}
+                            sx={{ display: { xs: "none", md: "block" } }}
                           />
-                          {cartItem.product.name}
+                          <Stack direction="column" sx={{ p: 1 }}>
+                            <Typography variant="subtitle1">
+                              {cartItem.product.name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {cartItem.product.description}
+                            </Typography>
+                          </Stack>
                         </Stack>
                       </TableCell>
                       <TableCell>
