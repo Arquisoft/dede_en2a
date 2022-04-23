@@ -34,16 +34,6 @@ export default function Checkout(props: CheckoutProps) {
 
   const steps = getSteps();
 
-  const handleUpdateStock = () => {
-    props.productsInCart.forEach((cartItem: CartItem) => {
-      let productUnits: number = cartItem.amount;
-      cartItem.product.stock -= productUnits;
-
-      if (props.webId !== undefined)
-        updateProduct(props.webId, cartItem.product);
-    });
-  };
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -62,8 +52,7 @@ export default function Checkout(props: CheckoutProps) {
   };
 
   const saveOrderToDB = () => {
-    if (props.webId !== undefined) {
-      handleUpdateStock();
+    if (props.webId !== "") {
       saveOrder(
         props.productsInCart,
         costs,

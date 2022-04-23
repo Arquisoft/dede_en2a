@@ -41,10 +41,10 @@ export const createOrder: RequestHandler = async (req, res) => {
     try {
       const order = new orderModel(req.body);
       updateStock(order.products);
-      const ordersaved = await order.save();
-      await createPDF(req.body.orderCode);
-      res.json(ordersaved);
+      const orderSaved = await order.save();
+      res.json(orderSaved);
     } catch (error) {
+      console.log(error);
       res.status(412).json();
     }
   else res.status(203).json();

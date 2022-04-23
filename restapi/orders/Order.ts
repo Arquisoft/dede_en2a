@@ -8,6 +8,9 @@ const orderSchema = new Schema(
     code: {
       type: String,
       required: true,
+      trim: true,
+      unique: true,
+      index: true,
     },
     address: {
       type: String,
