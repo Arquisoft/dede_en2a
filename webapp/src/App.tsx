@@ -43,7 +43,6 @@ import "./App.css";
 
 import {
   handleIncomingRedirect,
-  getDefaultSession,
   logout,
 } from "@inrupt/solid-client-authn-browser";
 

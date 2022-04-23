@@ -32,7 +32,7 @@ export type ProductProps = {
   product: Product;
   addToCart: (product: Product) => void;
   sendNotification: (severity: AlertColor, message: string) => void;
-  webId: string | undefined;
+  webId: string;
 };
 
 type ProductDets = {
@@ -67,11 +67,31 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
 
   const [product, setProduct] = useState<Product>();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [dialogOpen, setDialogOpen] = useState(0);
-  const [shareDialogOpen, setShareDialogOpen] = useState(0);
   const [starsSelected, setSelectedStars] = useState(0);
   const [currentCartAmount] = useState(0);
   const [loading, setLoading] = React.useState(false);
+
+  // We manage the share dialog as intended
+  const [openShareDialog, setOpenShareDialog] = React.useState(false);
+
+  const handleClickOpenShareDialog = () => {
+    setOpenShareDialog(true);
+  };
+
+  const handleCloseShareDialog = () => {
+    setOpenShareDialog(false);
+  };
+
+  // We manage the review dialog as intended
+  const [openReviewDialog, setOpenReviewDialog] = React.useState(false);
+
+  const handleClickOpenReviewDialog = () => {
+    setOpenReviewDialog(true);
+  };
+
+  const handleCloseReviewDialog = () => {
+    setOpenReviewDialog(false);
+  };
 
   const obtainProductDetails = async (code: string) => {
     // We obtain the product
@@ -80,14 +100,6 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
 
     // And then set the reviews
     setReviews(await getReviewsByCode(code));
-  };
-
-  const openDialog = () => {
-    setDialogOpen(dialogOpen + 1);
-  };
-
-  const openShareDialog = () => {
-    setShareDialogOpen(shareDialogOpen + 1);
   };
 
   useEffect(() => {
@@ -128,7 +140,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
       <React.Fragment>
         <ShopBreadcrumbs product={product.name} />
         <Grid>
-          <Paper elevation={8} style={{ margin: "3vh 5vw", padding: "1em" }}>
+          <Paper elevation={8} sx={{ m: 3, p: 2 }}>
             <Grid
               container
               direction="row"
@@ -158,7 +170,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                     name="hover-feedback"
                     value={getReviewMean(reviews)}
                     precision={0.5}
-                    onClick={openDialog}
+                    onClick={handleClickOpenReviewDialog}
                     onChange={(event, newValue) => {
                       if (newValue != null) setSelectedStars(newValue);
                     }}
@@ -197,22 +209,28 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
               </Grid>
             </Grid>
           </Paper>
-          <ProductCommentList reviews={reviews}></ProductCommentList>
+          <ProductCommentList reviews={reviews} />
           <ReviewDialog
             product={product}
-            show={dialogOpen}
             stars={starsSelected}
-            sendNotification={props.sendNotification}
             webId={props.webId}
+            open={openReviewDialog}
+            handleOpen={handleClickOpenReviewDialog}
+            handleClose={handleCloseReviewDialog}
+            sendNotification={props.sendNotification}
           />
 
-          <ShareDialog show={shareDialogOpen} />
+          <ShareDialog
+            open={openShareDialog}
+            handleOpen={handleClickOpenShareDialog}
+            handleClose={handleCloseShareDialog}
+          />
         </Grid>
 
         <ProductSpeedDial
           addToCart={props.addToCart}
-          review={openDialog}
-          share={openShareDialog}
+          review={handleClickOpenReviewDialog}
+          share={handleClickOpenShareDialog}
         />
       </React.Fragment>
     );

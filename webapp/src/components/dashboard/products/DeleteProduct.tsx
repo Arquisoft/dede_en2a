@@ -28,7 +28,7 @@ const Img = styled("img")({
 type DeleteProductProps = {
   products: Product[];
   refreshShop: () => void;
-  webId: string | undefined;
+  webId: string;
   sendNotification: (severity: AlertColor, message: string) => void;
 };
 

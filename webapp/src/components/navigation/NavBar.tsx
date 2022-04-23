@@ -1,12 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
@@ -15,31 +14,28 @@ import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
 
+import { checkImageExists } from "../../helpers/ImageHelper";
+
 type NavBarProps = {
   totalUnitsInCart: number;
   logCurrentUserOut: () => void;
   toggleColorMode: () => void;
   mode: "dark" | "light";
-  webId: string | undefined;
+  webId: string;
 };
 
 function Logo() {
+  const Img = styled("img")({
+    display: "block",
+    height: 75,
+    width: 200,
+    objectFit: "cover",
+  });
+
   return (
-    <Typography
-      variant="h6"
-      component={Link}
-      to="/shop"
-      color="inherit"
-      sx={{
-        flexGrow: 1,
-        textDecoration: "none",
-        ":hover": {
-          color: "white",
-        },
-      }}
-    >
-      Dede
-    </Typography>
+    <Link to="/shop" color="inherit" style={{ textDecoration: "none" }}>
+      <Img alt="DEDE - Fast services" src={checkImageExists("dede_logo.png")} />
+    </Link>
   );
 }
 
@@ -66,7 +62,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ px: 2, py: 1 }}
+        sx={{ px: 2 }}
       >
         <Stack direction="row" alignItems="center">
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

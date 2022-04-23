@@ -18,7 +18,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
   handleCloseUserMenu: () => void;
-  webId: string | undefined;
+  webId: string;
 };
 
 function LogOut(props: LogOutFuncProps): JSX.Element {

@@ -17,7 +17,7 @@ import Divider from "@mui/material/Divider";
 import StatusMessage from "./StatusMessage";
 
 type OrderDetailsProps = {
-  webId: string | undefined;
+  webId: string;
 };
 
 type OrderListProps = {
