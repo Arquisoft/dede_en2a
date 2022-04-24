@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
 import { verifyWebID } from "../utils/WebIDValidation";
-import { createPDF } from "../utils/PDFHelper";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
@@ -15,7 +14,21 @@ export const getOrder: RequestHandler = async (req, res) => {
   } else return res.status(203).json();
 };
 
-export const getOrders: RequestHandler = async (req, res) => {
+export const getOrdersForAdminOrModerator: RequestHandler = async (
+  req,
+  res
+) => {
+  const isVerified = verifyWebID(req.headers.webId + "");
+  if (isVerified) {
+    const ordersFound = await orderModel.find({});
+
+    // If we have found orders... return them
+    if (ordersFound) return res.json(ordersFound);
+    else return res.status(204).json(); // No order has been found
+  } else return res.status(203).json();
+};
+
+export const getOrdersForUser: RequestHandler = async (req, res) => {
   const isVerified = verifyWebID(req.headers.webId + "");
   if (isVerified) {
     const ordersFound = await orderModel.find({

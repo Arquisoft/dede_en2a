@@ -13,7 +13,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { login } from "@inrupt/solid-client-authn-browser";
 
-export default function SignIn() {
+export default function SignIn(props: any) {
   const [identityProvider, setIdentityProvider] = React.useState("");
 
   // We change the value of the identity provider to the one given by the user

@@ -12,6 +12,10 @@ const orderSchema = new Schema(
       unique: true,
       index: true,
     },
+    webId: {
+      type: String,
+      required: true,
+    },
     address: {
       type: String,
       required: true,

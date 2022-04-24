@@ -165,13 +165,13 @@ export default function App(): JSX.Element {
               // The user has already been registered in the system
               setRole(user.role); // we update the role of the user
             }
+
+            getNameFromPod(info.webId).then((name: string) => {
+              // Inform the user his actual status
+              sendNotification("success", `Welcome to DEDE, ${name}!`);
+            });
           });
         } catch (error) {}
-
-        getNameFromPod(info.webId).then((name: string) => {
-          // Inform the user his actual status
-          sendNotification("success", `Welcome to DEDE, ${name}!`);
-        });
       },
       () => {
         // In case something went wrong
@@ -244,7 +244,7 @@ export default function App(): JSX.Element {
                   />
                 }
               />
-              <Route path="sign-in" element={<SignIn />} />
+              <Route path="sign-in" element={<SignIn webId={webId} />} />
               <Route
                 path="product/:id"
                 element={

@@ -150,20 +150,23 @@ export async function getOrdersForUser(
   role: string
 ): Promise<Order[]> {
   const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
-  if (role === "admin") {
+  if (role === "admin" || role === "moderator") {
     // In case the user is an admin: return THE WHOLE collection
-    let response = await fetch(apiEndPoint + "/orders/list/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        webId: window.btoa(webId), // we have to check if the user is authenticated
-      },
-    });
+    let response = await fetch(
+      apiEndPoint + "/orders/listForAdminOrModerator",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          webId: window.btoa(webId), // we have to check if the user is authenticated
+        },
+      }
+    );
 
     return response.json();
   } else {
     // In case the user is a normal one: return HIS orders
-    let response = await fetch(apiEndPoint + "/orders/list", {
+    let response = await fetch(apiEndPoint + "/orders/listForUser", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
