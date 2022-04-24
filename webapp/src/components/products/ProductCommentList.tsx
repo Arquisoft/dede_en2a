@@ -13,7 +13,9 @@ export default function ProductCommentList(
 ): JSX.Element {
   return (
     <Paper elevation={8} sx={{ m: 3, p: 2 }}>
-      <Typography variant="h5">User opinions about this product!</Typography>
+      <Typography variant="h5" sx={{ mb: 1 }}>
+        User opinions about this product!
+      </Typography>
       {props.reviews.length > 0 && (
         <Grid container rowSpacing={5}>
           {props.reviews.map((review: Review) => (

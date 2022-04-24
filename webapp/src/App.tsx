@@ -157,20 +157,23 @@ export default function App(): JSX.Element {
         // If everything is OK
         setWebId(info.webId); // We store user's WebID
         try {
-          getUser(info.webId).then((user) => {
-            if (user === undefined) {
-              // If the user is not registered
-              addUser(info.webId); // we add the user to the DB
-            } else {
-              // The user has already been registered in the system
-              setRole(user.role); // we update the role of the user
-            }
+          getUser(info.webId).then(
+            (user) => {
+              if (user === undefined) {
+                // If the user is not registered
+                addUser(info.webId); // we add the user to the DB
+              } else {
+                // The user has already been registered in the system
+                setRole(user.role); // we update the role of the user
+              }
 
-            getNameFromPod(info.webId).then((name: string) => {
-              // Inform the user his actual status
-              sendNotification("success", `Welcome to DEDE, ${name}!`);
-            });
-          });
+              getNameFromPod(info.webId).then((name: string) => {
+                // Inform the user his actual status
+                sendNotification("success", `Welcome to DEDE, ${name}!`);
+              });
+            },
+            () => {}
+          );
         } catch (error) {}
       },
       () => {
@@ -261,7 +264,10 @@ export default function App(): JSX.Element {
                 index
                 element={<DashboardContent webId={webId} role={role} />}
               />
-              <Route path="account" element={<AccountDetails />} />
+              <Route
+                path="account"
+                element={<AccountDetails webId={webId} />}
+              />
               <Route
                 path="orders"
                 element={<OrderList webId={webId} role={role} />}

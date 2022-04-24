@@ -21,7 +21,7 @@ export default function ProductComment(
   }, []);
 
   return (
-    <Paper elevation={3} style={{ margin: "1vh 2vw", padding: "1em" }}>
+    <Paper elevation={3} style={{ padding: "1em" }}>
       <Grid container spacing={0} direction="row" style={{ minHeight: "30vh" }}>
         <Grid item xs={12}>
           <Stack

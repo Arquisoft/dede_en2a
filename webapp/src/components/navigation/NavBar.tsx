@@ -26,8 +26,8 @@ type NavBarProps = {
 function Logo() {
   const Img = styled("img")({
     display: "block",
-    height: 75,
-    width: 200,
+    height: "9vh",
+    maxHeight: 100,
     objectFit: "cover",
   });
 
@@ -43,13 +43,7 @@ function Logo() {
 
 function ShoppingCartButton(props: any) {
   return (
-    <IconButton
-      size="large"
-      color="inherit"
-      component={Link}
-      to="cart"
-      sx={{ mx: 1 }}
-    >
+    <IconButton size="large" color="inherit" component={Link} to="cart">
       <Badge badgeContent={props.totalUnitsInCart} color="error">
         <ShoppingCartIcon />
       </Badge>
@@ -64,14 +58,14 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ px: 2 }}
+        sx={{ px: 1 }}
       >
         <Stack direction="row" alignItems="center">
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <Drawer orientation="vertical" />
           </Box>
           <Logo />
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, pl: 5 }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <NavMenu orientation="horizontal" color="white" />
           </Box>
         </Stack>
