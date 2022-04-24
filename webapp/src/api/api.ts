@@ -17,11 +17,17 @@ export async function addUser(webId: string): Promise<boolean> {
   } else return false;
 }
 
-export async function getUser(webId: string): Promise<User> {
+export async function getUser(webId: string): Promise<User | undefined> {
+  if (webId === "" || webId === undefined)
+    throw new Error("Provided WebID is empty"); // If no webId is provided
+
   let response = await fetch(
     apiEndPoint + "/users/findByWebId/" + window.btoa(webId)
   );
-  return response.json();
+
+  if (response.status === 204)
+    return Promise.resolve(undefined); // In case no user has been found
+  else return response.json(); // we return the obtained user
 }
 
 // -*- PRODUCTS -*-

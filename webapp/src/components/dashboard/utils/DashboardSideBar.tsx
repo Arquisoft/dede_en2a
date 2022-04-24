@@ -7,6 +7,7 @@ import Paper from "@mui/material/Paper";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 import { isRenderForModeratorAtLeast } from "../../../helpers/RoleHelper";
 
@@ -41,6 +42,12 @@ export default function DashboardSideBar(props: DashboardSideBarProps) {
             icon={<LocalOfferIcon />}
           />
         )}
+        <BottomNavigationAction
+          component={Link}
+          to="account"
+          label="Account Details"
+          icon={<ManageAccountsIcon />}
+        />
       </BottomNavigation>
     </Paper>
   );

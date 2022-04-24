@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import {
   CssBaseline,
@@ -31,6 +26,7 @@ import SignIn from "./components/userManagement/SignIn";
 import RedirectHome from "./components/RedirectHome";
 import Shop from "./components/Shop";
 import NotificationAlert from "./components/misc/NotificationAlert";
+import AccountDetails from "./components/dashboard/account/AccountDetails";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
@@ -50,7 +46,6 @@ import {
   handleIncomingRedirect,
   logout,
 } from "@inrupt/solid-client-authn-browser";
-import { DocumentScannerOutlined } from "@mui/icons-material";
 
 export default function App(): JSX.Element {
   // Some variables to perform calculations in an easier way
@@ -161,15 +156,17 @@ export default function App(): JSX.Element {
         // We encrypt the webId: for us to query with it
         // If everything is OK
         setWebId(info.webId); // We store user's WebID
-        getUser(info.webId).then((user) => {
-          if (user === undefined) {
-            // If the user is not registered
-            addUser(info.webIds); // we add the user to the DB
-          } else {
-            // The user has already been registered in the system
-            setRole(user.role); // we update the role of the user
-          }
-        });
+        try {
+          getUser(info.webId).then((user) => {
+            if (user === undefined) {
+              // If the user is not registered
+              addUser(info.webId); // we add the user to the DB
+            } else {
+              // The user has already been registered in the system
+              setRole(user.role); // we update the role of the user
+            }
+          });
+        } catch (error) {}
 
         getNameFromPod(info.webId).then((name: string) => {
           // Inform the user his actual status
@@ -264,6 +261,7 @@ export default function App(): JSX.Element {
                 index
                 element={<DashboardContent webId={webId} role={role} />}
               />
+              <Route path="account" element={<AccountDetails />} />
               <Route
                 path="orders"
                 element={<OrderList webId={webId} role={role} />}
