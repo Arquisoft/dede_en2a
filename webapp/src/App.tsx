@@ -170,7 +170,7 @@ export default function App(): JSX.Element {
 
         getNameFromPod(info.webId).then((name: string) => {
           // Inform the user his actual status
-          sendNotification("success", `Welcome to DeDe ${name}!`);
+          sendNotification("success", `Welcome to DEDE, ${name}!`);
         });
       },
       () => {
