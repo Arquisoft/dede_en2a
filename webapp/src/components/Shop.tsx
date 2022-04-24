@@ -144,11 +144,11 @@ export default function Shop(props: HomeProps): JSX.Element {
     setInitOrder("null");
     
     if(event.target.value == PRICEASC || event.target.value == PRICEDESC){
-      orderPrice = event.target.value as string;
+      orderPrice = event.target.value;
     }else if(event.target.value == ALLP){
-      orderPrice = "none";
+      orderPrice = "all";
     }else if(event.target.value == ALLC){
-      category = "none";
+      category = "all";
     }else{
       category = event.target.value;
     }
@@ -222,3 +222,4 @@ export default function Shop(props: HomeProps): JSX.Element {
     </React.Fragment>
   );
 }
+
