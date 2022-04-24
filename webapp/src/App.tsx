@@ -156,25 +156,23 @@ export default function App(): JSX.Element {
         // We encrypt the webId: for us to query with it
         // If everything is OK
         setWebId(info.webId); // We store user's WebID
-        try {
-          getUser(info.webId).then(
-            (user) => {
-              if (user === undefined) {
-                // If the user is not registered
-                addUser(info.webId); // we add the user to the DB
-              } else {
-                // The user has already been registered in the system
-                setRole(user.role); // we update the role of the user
-              }
+        getUser(info.webId).then(
+          (user) => {
+            if (user === undefined) {
+              // If the user is not registered
+              addUser(info.webId); // we add the user to the DB
+            } else {
+              // The user has already been registered in the system
+              setRole(user.role); // we update the role of the user
+            }
 
-              getNameFromPod(info.webId).then((name: string) => {
-                // Inform the user his actual status
-                sendNotification("success", `Welcome to DEDE, ${name}!`);
-              });
-            },
-            () => {}
-          );
-        } catch (error) {}
+            getNameFromPod(info.webId).then((name: string) => {
+              // Inform the user his actual status
+              sendNotification("success", `Welcome to DEDE, ${name}!`);
+            });
+          },
+          () => {}
+        );
       },
       () => {
         // In case something went wrong
@@ -285,6 +283,7 @@ export default function App(): JSX.Element {
                     isForUpdate={false}
                     products={products}
                     webId={webId}
+                    role={role}
                   />
                 }
               />
@@ -307,6 +306,7 @@ export default function App(): JSX.Element {
                     isForUpdate={true}
                     products={products}
                     webId={webId}
+                    role={role}
                   />
                 }
               />

@@ -31,6 +31,7 @@ type UploadProductProps = {
   products: Product[];
   refreshShop: () => void;
   webId: string;
+  role: string;
 };
 
 const Img = styled("img")({
@@ -183,12 +184,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
     }
   }
 
-  if (
-    localStorage.getItem("user.email") === null ||
-    (localStorage.getItem("user.role") !== "admin" &&
-      localStorage.getItem("user.role") !== "manager")
-  )
-    return <Navigate to="/" />;
+  if (props.webId === "" || props.role === "user") return <Navigate to="/" />;
   else
     return (
       <React.Fragment>
@@ -198,7 +194,6 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
           >
             <h1 style={{ margin: 8 }}>
-              {" "}
               {props.isForUpdate === false ? "Add product" : "Update product"}
             </h1>
 
