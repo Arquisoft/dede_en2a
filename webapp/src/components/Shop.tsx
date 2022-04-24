@@ -23,6 +23,7 @@ import { CartItem, Product } from "../shared/shareddtypes";
 import ProductList from "./products/ProductList";
 import { ArrowDownward } from "@mui/icons-material";
 import { filterProductsByCategory } from "../api/api";
+import { Target } from "puppeteer";
 
 type HomeProps = {
   products: Product[];
@@ -39,10 +40,24 @@ const Filter = styled("div")({
   marginLeft: "30px",
 });
 
-const ALL = "all";
+const Categories = styled("div")({
+  position: "absolute",
+  margin: "30px",
+  marginLeft: "350px",
+  marginTop: "-78px",
+});
+
+const ALLP = "allp";
+const ALLC = "allc";
 const PRICEASC = "asc";
 const PRICEDESC = "desc";
+const CLO = "Clothes";
+const DEC = "Decoration";
+const ELEC = "Electronics";
+const MIS = "Miscellaneous"
 
+let orderPrice : string = "allp";
+let category : string = "allc";
 
 function ProductsFilter(props: any) {
   return (
@@ -51,13 +66,13 @@ function ProductsFilter(props: any) {
       <Select
         labelId="select-product"
         id="select-product"
-        value={props}
+        value={orderPrice}
         onChange={props.handleChange}
         label="filter"
         sx={{ width: 300 }}        
       >
         
-      <MenuItem value={ALL}>
+      <MenuItem value={ALLP}>
           <em>All</em>
         </MenuItem>
         <MenuItem value={PRICEASC}>
@@ -68,19 +83,40 @@ function ProductsFilter(props: any) {
           <Typography>Price </Typography>
           <ArrowDownward color="primary" />
         </MenuItem>
-        <MenuItem>
+      </Select>
+    </FormControl>
+  );
+}
+
+function CategoriesFilter(props: any) {
+  return (
+    <FormControl variant="standard" >
+      <InputLabel id="select-categories">See categories</InputLabel>    
+      <Select
+        labelId="select-categories"
+        id="select-categories"
+        value={category}
+        onChange={props.handleChange}
+        label="categories"
+        sx={{ width: 300 }}   
+      >
+        
+      <MenuItem value={ALLC}>
+          <em>All</em>
+        </MenuItem>
+        <MenuItem value={CLO}>
           <Typography>Clothes </Typography>
           <CheckroomIcon color="primary"></CheckroomIcon>
         </MenuItem>
-        <MenuItem>
+        <MenuItem value={DEC}>
           <Typography>Decoration </Typography>
           <ChairIcon color="primary"></ChairIcon>
         </MenuItem>
-        <MenuItem>
+        <MenuItem value={ELEC}>
           <Typography>Electronics </Typography>
           <PhoneAndroidIcon color="primary"></PhoneAndroidIcon>
         </MenuItem>
-        <MenuItem>
+        <MenuItem value={MIS}>
           <Typography>Miscellaneous </Typography>
           <AutoAwesomeIcon color="primary"></AutoAwesomeIcon>
         </MenuItem>
@@ -88,7 +124,6 @@ function ProductsFilter(props: any) {
     </FormControl>
   );
 }
-
 
 
 export default function Shop(props: HomeProps): JSX.Element {
@@ -105,15 +140,21 @@ export default function Shop(props: HomeProps): JSX.Element {
     window.scroll(0,0);
   };
 
-  const handleChange = async (event: SelectChangeEvent) => {  
-    setInitOrder("null"); 
-    if(event.target.value == "all"){
-      setFilteredProducts(await filterProductsByCategory("none","none"));
-    }else if(event.target.value == "desc" || event.target.value == "asc"){
-      setFilteredProducts(await filterProductsByCategory("none",event.target.value));
+  const handleFilterChanges = async (event : SelectChangeEvent) => {
+    setInitOrder("null");
+    
+    if(event.target.value == PRICEASC || event.target.value == PRICEDESC){
+      orderPrice = event.target.value as string;
+    }else if(event.target.value == ALLP){
+      orderPrice = "none";
+    }else if(event.target.value == ALLC){
+      category = "none";
     }else{
-      setFilteredProducts(await filterProductsByCategory(event.target.value,"none"));
+      category = event.target.value;
     }
+
+    setFilteredProducts(await filterProductsByCategory(category, orderPrice));
+
     
   };
 
@@ -132,8 +173,7 @@ export default function Shop(props: HomeProps): JSX.Element {
         sx={{ mb: 4, mt: 4 }}
       >
         Shop
-      </Typography>
-      
+      </Typography>      
       <Search>
         <TextField
           type="text"
@@ -142,12 +182,14 @@ export default function Shop(props: HomeProps): JSX.Element {
           variant="standard"
           onChange={(event) => setSearchTerm(event.target.value)}
         />
-      </Search>
-      <Stack spacing={3} sx={{width: 500}}>
+      </Search>      
       <Filter>
-        <ProductsFilter state={props} handleChange={handleChange}/>   
+        <ProductsFilter state={props} handleChange={handleFilterChanges}/>           
       </Filter>
-      </Stack>
+      <Categories>
+        <CategoriesFilter state={props} handleChange={handleFilterChanges}/>
+      </Categories>
+    
       
       {props.products.filter((val) => {
         if(initOrder == "init"){
