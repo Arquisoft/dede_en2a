@@ -49,7 +49,7 @@ export async function updateProduct(webId: string, product: Product) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: window.btoa(webId),
+      token: window.btoa(webId),
     },
 
     body: JSON.stringify({
@@ -66,15 +66,14 @@ export async function updateProduct(webId: string, product: Product) {
   }
 }
 
-export async function createProduct(image: any, body: any): Promise<boolean> {
+export async function createProduct(image: any, body: any, webId : string): Promise<boolean> {
   var data = new FormData();
   data.append("image", image, body.code + ".png");
   for (let key in body) {
     data.append(key, body[key]);
   }
   // We must send authorization through body because form-data request do not allow headers
-  data.append("token", localStorage.getItem("token") + "");
-  data.append("email", localStorage.getItem("user.email") + "");
+  data.append("token", window.btoa(webId));
 
   let response = await fetch(apiEndPoint + "/products", {
     method: "POST",
@@ -93,7 +92,7 @@ export async function deleteProduct(webId: string, code: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: window.btoa(webId),
+      token: window.btoa(webId),
     },
   });
   if (response.status === 200) {

@@ -20,7 +20,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 };
 
 export const createProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebID(req.headers.webId + "");
+  const isVerified = await verifyWebID(req.body.webId + "");
   if (isVerified) {
     try {
       let product = new productModel(req.body);
@@ -48,42 +48,37 @@ export const createProduct: RequestHandler = async (req, res) => {
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-  const user = await userModel.findOne({ email: req.headers.email });
+  const webId = req.headers.token;
+  const user = await userModel.findOne({ webId: webId });
+  const isVerified = await verifyWebID(webId + "");
 
-  if (verifyWebID(req.headers.webId + "") && user.role === "admin")
-    try {
-      const productFound = await productModel.deleteOne({
-        code: req.params.code,
-      });
-      if (productFound) {
-        return res.json(productFound);
-      }
-    } catch (error) {
-      res
-        .status(301)
-        .json({ message: "The operation didn't succeed " + error });
+  if (isVerified && user.role === "admin") {
+    const productFound = await productModel.deleteOne({
+      code: req.params.code,
+    });
+    if (productFound) {
+      return res.json(productFound);
     }
-  else res.status(203).json();
+  } else {
+    res.status(403).json();
+  }
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
-  const user = await userModel.findOne({ webId: req.headers.webId });
+  const webId = req.headers.token;
+  const user = await userModel.findOne({ webId: webId });
+  const isVerified = await verifyWebID(webId + "");
 
-  if (
-    verifyWebID(req.headers.webId + "") &&
-    (user.role === "admin" || user.role === "manager")
-  )
-    try {
-      const product = await productModel.findOneAndUpdate(
-        { code: req.params.code },
-        req.body,
-        { new: true }
-      );
-      res.json(product);
-    } catch (error) {
-      res.json(error);
-    }
-  else res.status(203).json();
+  if (isVerified && (user.role === "admin" || user.role === "manager")) {
+    const product = await productModel.findOneAndUpdate(
+      { code: req.params.code },
+      req.body,
+      { new: true }
+    );
+    res.json(product);
+  } else {
+    res.status(403).json();
+  }
 };
 
 export const filterAndOrderBy: RequestHandler = async (req, res) => {

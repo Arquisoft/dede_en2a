@@ -4,7 +4,7 @@ import { verifyWebID } from "../utils/WebIDValidation";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
-  if (verifyWebID(req.headers.webId + "")) {
+  if (await verifyWebID(req.headers.webId + "")) {
     const orderFound = await orderModel.findOne({
       code: req.params.code,
     });
@@ -18,7 +18,7 @@ export const getOrdersForAdminOrModerator: RequestHandler = async (
   req,
   res
 ) => {
-  const isVerified = verifyWebID(req.headers.webId + "");
+  const isVerified = await verifyWebID(req.headers.webId + "");
   if (isVerified) {
     const ordersFound = await orderModel.find({});
 
@@ -29,7 +29,7 @@ export const getOrdersForAdminOrModerator: RequestHandler = async (
 };
 
 export const getOrdersForUser: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebID(req.headers.webId + "");
+  const isVerified = await verifyWebID(req.headers.webId + "");
   if (isVerified) {
     const ordersFound = await orderModel.find({
       webId: req.headers.webId,
@@ -50,7 +50,7 @@ export const createOrder: RequestHandler = async (req, res) => {
     }
   };
 
-  if (verifyWebID(req.headers.webId + ""))
+  if (await verifyWebID(req.headers.webId + ""))
     try {
       const order = new orderModel(req.body);
       updateStock(order.products);

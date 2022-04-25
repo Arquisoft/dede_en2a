@@ -12,13 +12,13 @@ import {
   Snackbar,
   Stack,
   styled,
-  TextField,
+  TextField
 } from "@mui/material";
 
 import { createProduct, getProducts, updateProduct } from "../../../api/api";
 import {
   checkNumericField,
-  checkTextField,
+  checkTextField
 } from "../../../helpers/CheckFieldsHelper";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
@@ -128,7 +128,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
         price: Number(price),
         stock: Number(stock),
         category: category,
-      });
+      }, props.webId);
     }
     if (created) {
       setNotificationStatus(true);
