@@ -94,8 +94,6 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   };
 
   const checkFields = () => {
-    if (file === "" && !props.isForUpdate)
-      return sendErrorNotification("Incorrect file");
     if (!checkNumericField(Number(code)))
       return sendErrorNotification("Incorrect code");
     if (!checkTextField(name)) return sendErrorNotification("Incorrect name");
@@ -105,6 +103,10 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       return sendErrorNotification("Incorrect price");
     if (!checkNumericField(Number(stock)))
       return sendErrorNotification("Incorrect stock");
+    if (file === "" && !props.isForUpdate) {
+      return sendErrorNotification("Incorrect file");
+    }
+
     handleSubmit();
   };
 
@@ -199,6 +201,8 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
             {props.isForUpdate ? (
               <TextField
+                name="selection"
+                data-testid="select-product"
                 id="outlined-select-currency"
                 select
                 label="Select"
@@ -245,6 +249,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={name}
+                  name="name"
                   id="outlined-full-width"
                   label="Product name"
                   style={{ margin: 8 }}
@@ -257,6 +262,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={description}
+                  name="description"
                   id="outlined-full-width"
                   label="Product description"
                   style={{ margin: 8 }}
@@ -269,6 +275,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={category}
+                  name="category"
                   select
                   id="outlined-full-width"
                   label="Product category"
@@ -295,6 +302,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={price}
+                  name="price"
                   id="outlined-full-width"
                   label="Product price"
                   style={{ margin: 8 }}
@@ -312,6 +320,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={stock}
+                  name="stock"
                   id="outlined-full-width"
                   label="Product stock"
                   style={{ margin: 8 }}
