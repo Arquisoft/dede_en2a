@@ -154,6 +154,7 @@ export default function Shop(props: HomeProps): JSX.Element {
     }
 
     setFilteredProducts(await filterProductsByCategory(category, orderPrice));
+    setPage(1);
 
     
   };
