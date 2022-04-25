@@ -139,6 +139,7 @@ export default function App(): JSX.Element {
   };
 
   React.useEffect(() => {
+    refreshShop()
     // We establish the stored color mode as the active one: if the user reloads we have to remember the preferences
     if (localStorage.getItem("mode") === null)
       localStorage.setItem("mode", mode);

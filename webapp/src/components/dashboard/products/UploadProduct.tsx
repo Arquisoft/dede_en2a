@@ -233,13 +233,9 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                     type="number"
                     fullWidth
                     required
+                    disabled
                     margin="normal"
                     variant="outlined"
-                    onChange={(event) => {
-                      if (Number(event.target.value) >= minCode)
-                        setCode(event.target.value);
-                      else setCode(minCode.toString());
-                    }}
                   />
                 )}
 

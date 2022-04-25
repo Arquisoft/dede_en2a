@@ -20,7 +20,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 };
 
 export const createProduct: RequestHandler = async (req, res) => {
-  const isVerified = await verifyWebID(req.body.webId + "");
+  const isVerified = await verifyWebID(req.body.token + "");
   if (isVerified) {
     try {
       let product = new productModel(req.body);
