@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+
 import {
   Alert,
   Box,
@@ -9,14 +12,13 @@ import {
   Snackbar,
   Stack,
   styled,
-  TextField
+  TextField,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+
 import { createProduct, getProducts, updateProduct } from "../../../api/api";
 import {
   checkNumericField,
-  checkTextField
+  checkTextField,
 } from "../../../helpers/CheckFieldsHelper";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
@@ -25,9 +27,11 @@ const DEF_IMAGE: string =
   process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
 
 type UploadProductProps = {
-  createShop: () => void;
   isForUpdate: boolean;
   products: Product[];
+  refreshShop: () => void;
+  webId: string;
+  role: string;
 };
 
 const Img = styled("img")({
@@ -101,13 +105,13 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       return sendErrorNotification("Incorrect price");
     if (!checkNumericField(Number(stock)))
       return sendErrorNotification("Incorrect stock");
-    handleSumbit();
+    handleSubmit();
   };
 
-  const handleSumbit = async () => {
+  const handleSubmit = async () => {
     let created;
     if (props.isForUpdate) {
-      created = await updateProduct({
+      created = await updateProduct(props.webId, {
         code: code,
         name: name,
         description: description,
@@ -136,8 +140,11 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
           "correctly",
       });
       emptyFields();
-      props.createShop();
-    } else sendErrorNotification("The product coudn't be added");
+      props.refreshShop();
+    } else
+      sendErrorNotification(
+        "That product code already exists! You should change it"
+      );
   };
 
   const sendErrorNotification = (msg: string) => {
@@ -177,12 +184,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
     }
   }
 
-  if (
-    localStorage.getItem("user.email") === null ||
-    (localStorage.getItem("user.role") !== "admin" &&
-      localStorage.getItem("user.role") !== "manager")
-  )
-    return <Navigate to="/" />;
+  if (props.webId === "" || props.role === "user") return <Navigate to="/" />;
   else
     return (
       <React.Fragment>
@@ -192,8 +194,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
           >
             <h1 style={{ margin: 8 }}>
-              {" "}
-              {props.isForUpdate == false ? "Add product" : "Update product"}
+              {props.isForUpdate === false ? "Add product" : "Update product"}
             </h1>
 
             {props.isForUpdate ? (

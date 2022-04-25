@@ -14,7 +14,7 @@ test("A list of two cart items is rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
-        category: 'Electronics'
+        category: "Electronics",
       },
       amount: 1,
     },
@@ -26,7 +26,7 @@ test("A list of two cart items is rendered", async () => {
         price: 15,
         stock: 10,
         image: "",
-        category: 'Clothes'
+        category: "Clothes",
       },
       amount: 2,
     },
@@ -35,11 +35,11 @@ test("A list of two cart items is rendered", async () => {
   const { getByText } = render(
     <Router>
       <ShoppingCart
-        products={cart}
+        productsInCart={cart}
         totalUnitsInCart={2}
-        userEmail={null}
-        onIncrementUnit={() => {}}
-        onDecrementUnit={() => {}}
+        addToCart={() => {}}
+        removeFromCart={() => {}}
+        webId=""
       />
     </Router>
   );
@@ -65,11 +65,11 @@ test("An empty list of cart items is rendered", async () => {
   const { getByText } = render(
     <Router>
       <ShoppingCart
-        products={cart}
+        productsInCart={cart}
         totalUnitsInCart={0}
-        userEmail={null}
-        onDecrementUnit={() => {}}
-        onIncrementUnit={() => {}}
+        addToCart={() => {}}
+        removeFromCart={() => {}}
+        webId=""
       />
     </Router>
   );

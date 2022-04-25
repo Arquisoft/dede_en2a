@@ -43,7 +43,7 @@ function ShippingMethodRadioGroup(props: any) {
 
   return (
     <React.Fragment>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <List>
           {shippingMethods.map(

@@ -1,71 +1,47 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
-import { userModel } from "../users/User";
-import { verifyToken } from "../utils/generateToken";
-import { createPDF } from "../utils/PDFHelper";
+import { verifyWebID } from "../utils/WebIDValidation";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-
-  const orderFound = await orderModel.findOne({
-    orderCode: req.params.orderCode,
-  });
-  const user = await userModel.findOne({ email: req.headers.email });
-
-  if (isVerified) {
-    if (orderFound) {
-      if (orderFound.userEmail === req.headers.email || user.role === "admin") {
-        return res.json(orderFound);
-      } else {
-        return res.status(403).json();
-      }
-    } else {
-      return res.status(412).json();
-    }
-  } else {
-    return res.status(403).json();
-  }
-};
-
-export const getOrders: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-  const user = await userModel.findOne({ email: req.headers.email });
-  if (isVerified && user.role === "admin") {
-    const orders = await orderModel.find();
-    return res.json(orders);
-  } else {
-    return res.status(403).json();
-  }
-};
-
-export const getUserOrders: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-  if (isVerified) {
-    const orderFound = await orderModel.find({
-      userEmail: req.headers.email,
+  if (verifyWebID(req.headers.webId + "")) {
+    const orderFound = await orderModel.findOne({
+      code: req.params.code,
     });
-    return res.json(orderFound);
-  } else {
-    return res.status(403).json();
-  }
+
+    if (orderFound) return res.json(orderFound);
+    else return res.status(204).json();
+  } else return res.status(203).json();
+};
+
+export const getOrdersForAdminOrModerator: RequestHandler = async (
+  req,
+  res
+) => {
+  const isVerified = verifyWebID(req.headers.webId + "");
+  if (isVerified) {
+    const ordersFound = await orderModel.find({});
+
+    // If we have found orders... return them
+    if (ordersFound) return res.json(ordersFound);
+    else return res.status(204).json(); // No order has been found
+  } else return res.status(203).json();
+};
+
+export const getOrdersForUser: RequestHandler = async (req, res) => {
+  const isVerified = verifyWebID(req.headers.webId + "");
+  if (isVerified) {
+    const ordersFound = await orderModel.find({
+      webId: req.headers.webId,
+    });
+
+    // If we have found orders... return them
+    if (ordersFound) return res.json(ordersFound);
+    else return res.status(204).json(); // No order has been found
+  } else return res.status(203).json();
 };
 
 export const createOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-
   const updateStock = async (products: any) => {
     for (var i = 0; i < products.length; i++) {
       let product = await productModel.findOne({ code: products[i].code });
@@ -74,17 +50,15 @@ export const createOrder: RequestHandler = async (req, res) => {
     }
   };
 
-  if (isVerified) {
+  if (verifyWebID(req.headers.webId + ""))
     try {
       const order = new orderModel(req.body);
       updateStock(order.products);
-      const ordersaved = await order.save();
-      await createPDF(req.body.orderCode);
-      res.json(ordersaved);
+      const orderSaved = await order.save();
+      res.json(orderSaved);
     } catch (error) {
+      console.log(error);
       res.status(412).json();
     }
-  } else {
-    res.status(403).json();
-  }
+  else res.status(203).json();
 };

@@ -1,5 +1,5 @@
 import { Add, Autorenew, Remove } from "@mui/icons-material";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Container,
   IconButton,
@@ -14,16 +14,20 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProducts } from "../../../api/api";
 import {
   isRenderForAdminOnly,
-  isRenderForModeratorAtLeast
+  isRenderForModeratorAtLeast,
 } from "../../../helpers/RoleHelper";
 import { Product } from "../../../shared/shareddtypes";
+
+type ProductsProps = {
+  role: string;
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -56,8 +60,8 @@ function ProductsHeader(props: any) {
       </Typography>
       <AutorenewOrders refreshOrderList={props.refreshOrderList} />
 
-      {isRenderForModeratorAtLeast() && (
-        <>
+      {isRenderForModeratorAtLeast(props.role) && (
+        <React.Fragment>
           <IconButton edge="end">
             <Tooltip title="Add a new product" arrow>
               <Add onClick={() => navigate("/dashboard/products/add")} />
@@ -65,13 +69,15 @@ function ProductsHeader(props: any) {
           </IconButton>
           <IconButton edge="end">
             <Tooltip title="Update a product" arrow>
-              <EditIcon onClick={() => navigate("/dashboard/products/update")} />
+              <EditIcon
+                onClick={() => navigate("/dashboard/products/update")}
+              />
             </Tooltip>
           </IconButton>
-        </>
+        </React.Fragment>
       )}
 
-      {isRenderForAdminOnly() && (
+      {isRenderForAdminOnly(props.role) && (
         <IconButton edge="end">
           <Tooltip title="Delete a product" arrow>
             <Remove onClick={() => navigate("/dashboard/products/delete")} />
@@ -148,7 +154,7 @@ function ProductsTable(props: any): JSX.Element {
   );
 }
 
-export default function Products(props: any): JSX.Element {
+export default function Products(props: ProductsProps): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
 
   const refreshProductList = async () => {
@@ -161,7 +167,10 @@ export default function Products(props: any): JSX.Element {
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <ProductsHeader refreshProductList={refreshProductList} />
+      <ProductsHeader
+        refreshProductList={refreshProductList}
+        role={props.role}
+      />
       <ProductsTable products={products} />
     </Container>
   );

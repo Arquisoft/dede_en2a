@@ -1,64 +1,49 @@
+import { Link } from "react-router-dom";
+
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
-import MUISwitch from "../ThemeSlider";
+import { styled } from "@mui/material/styles";
+
+import ThemeSlider from "./ThemeSlider";
+import UserMenuButton from "./UserMenuButton";
 import Drawer from "./Drawer";
 import NavMenu from "./NavMenu";
-import UserMenuButton from "./UserMenuButton";
+
+import { checkImageExistsLocally } from "../../helpers/ImageHelper";
 
 type NavBarProps = {
   totalUnitsInCart: number;
   logCurrentUserOut: () => void;
-  changeTheme: Function;
-  initialState: boolean;
-  userName: string;
+  toggleColorMode: () => void;
+  mode: "dark" | "light";
+  webId: string;
 };
 
 function Logo() {
-  return (
-    <Typography
-      variant="h6"
-      component={Link}
-      to="/shop"
-      color="inherit"
-      sx={{
-        flexGrow: 1,
-        textDecoration: "none",
-        ":hover": {
-          color: "white",
-        },
-      }}
-    >
-      Dede
-    </Typography>
-  );
-}
+  const Img = styled("img")({
+    display: "block",
+    height: "9vh",
+    maxHeight: 100,
+    objectFit: "cover",
+  });
 
-function ThemeModeSwitch(props: any) {
   return (
-    <MUISwitch
-      onChange={(e) => {
-        props.changeTheme();
-      }}
-      checked={props.initialState}
-    />
+    <Link to="/shop" color="inherit" style={{ textDecoration: "none" }}>
+      <Img
+        alt="DEDE - Fast services"
+        src={checkImageExistsLocally("dede_logo.png")}
+      />
+    </Link>
   );
 }
 
 function ShoppingCartButton(props: any) {
   return (
-    <IconButton
-      size="large"
-      color="inherit"
-      component={Link}
-      to="cart"
-      sx={{ mx: 1 }}
-    >
+    <IconButton size="large" color="inherit" component={Link} to="cart">
       <Badge badgeContent={props.totalUnitsInCart} color="error">
         <ShoppingCartIcon />
       </Badge>
@@ -73,27 +58,27 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ px: 2, py: 1 }}
+        sx={{ px: 1 }}
       >
         <Stack direction="row" alignItems="center">
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <Drawer orientation="vertical" />
           </Box>
           <Logo />
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, pl: 5 }}>
-            <NavMenu orientation="horizontal" />
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <NavMenu orientation="horizontal" color="white" />
           </Box>
         </Stack>
 
         <Stack direction="row" alignItems="center">
-          <ThemeModeSwitch
-            changeTheme={props.changeTheme}
-            initialState={props.initialState}
+          <ThemeSlider
+            onChange={props.toggleColorMode}
+            checked={props.mode === "dark"}
           />
           <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
           <UserMenuButton
             logCurrentUserOut={props.logCurrentUserOut}
-            userName={props.userName}
+            webId={props.webId}
           />
         </Stack>
       </Stack>

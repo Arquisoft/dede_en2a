@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Typography,
@@ -15,14 +15,16 @@ import { CartItem, Product } from "../../shared/shareddtypes";
 import ShoppingCartTable from "./ShoppingCartTable";
 
 type ShoppingCartProps = {
-  products: CartItem[];
+  productsInCart: CartItem[];
   totalUnitsInCart: number;
-  userEmail: string | null;
-  onIncrementUnit: (product: Product) => void;
-  onDecrementUnit: (product: Product) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (product: Product) => void;
+  webId: string;
 };
 
 export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
+  let navigate = useNavigate();
+
   if (props.totalUnitsInCart > 0)
     return (
       <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
@@ -34,10 +36,10 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
             Shopping cart
           </Typography>
           <ShoppingCartTable
-            products={props.products}
+            productsInCart={props.productsInCart}
             totalUnitsInCart={props.totalUnitsInCart}
-            onIncrementUnit={props.onIncrementUnit}
-            onDecrementUnit={props.onDecrementUnit}
+            addToCart={props.addToCart}
+            removeFromCart={props.removeFromCart}
           />
           <Stack
             direction={{ xs: "column", sm: "row" }}
@@ -53,9 +55,8 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
 
             <Button
               variant="contained"
-              disabled={props.products.length === 0 || !props.userEmail}
-              component={Link}
-              to="/checkout"
+              disabled={props.productsInCart.length === 0 || props.webId === ""}
+              onClick={() => navigate("/checkout")}
               className="m-1"
             >
               Proceed to checkout

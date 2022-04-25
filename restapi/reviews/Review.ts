@@ -5,7 +5,7 @@ const { model, Schema } = mongoose;
 
 export const reviewSchema = new Schema(
   {
-    userEmail: {
+    webId: {
       type: String,
       required: true,
       trim: true,

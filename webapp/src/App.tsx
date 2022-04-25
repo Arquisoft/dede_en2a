@@ -1,214 +1,196 @@
-import {
-  Alert,
-  createTheme,
-  CssBaseline,
-  PaletteMode,
-  Snackbar,
-  ThemeProvider,
-  useMediaQuery
-} from "@mui/material";
-import { grey, lightBlue } from "@mui/material/colors";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import "bootstrap/dist/css/bootstrap.css";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { getProducts, getUser } from "./api/api";
-import "./App.css";
+
+import {
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
+
 import ShoppingCart from "./components/cart/ShoppingCart";
 import Checkout from "./components/checkout/Checkout";
-import Dashboard from "./components/dashboard/Dashboard";
+import DashboardOutlet from "./components/DashboardOutlet";
 import DashboardContent from "./components/dashboard/DashboardContent";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
 import DeleteProduct from "./components/dashboard/products/DeleteProduct";
 import ProductList from "./components/dashboard/products/ProductList";
 import UploadProduct from "./components/dashboard/products/UploadProduct";
-import DedeApp from "./components/DedeApp";
-import Home from "./components/Home";
+import DedeApp from "./components/MainOutlet";
+import Home from "./components/home/Home";
 import NavBar from "./components/navigation/NavBar";
 import ProductDetails from "./components/products/ProductDetails";
+import SignIn from "./components/userManagement/SignIn";
 import RedirectHome from "./components/RedirectHome";
-import SignIn from "./components/register/SignIn";
-import SignUp from "./components/register/SignUp";
 import Shop from "./components/Shop";
-import {
-  CartItem,
-  NotificationType,
-  Product,
-  User
-} from "./shared/shareddtypes";
+import NotificationAlert from "./components/misc/NotificationAlert";
+import AccountDetails from "./components/dashboard/account/AccountDetails";
 
-function App(): JSX.Element {
-  const [notificationStatus, setNotificationStatus] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productsCart, setProductsCart] = useState<CartItem[]>([]);
-  const [totalUnitsInCart, setTotalUnitsInCart] = useState<number>(Number());
-  const [notification, setNotification] = useState<NotificationType>({
+import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
+
+import {
+  addProductToCart,
+  removeProductFromCart,
+} from "./helpers/ShoppingCartHelper";
+import { getNameFromPod } from "./helpers/SolidHelper";
+
+import { getProducts, getUser, addUser } from "./api/api";
+
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
+import "./App.css";
+
+import {
+  handleIncomingRedirect,
+  logout,
+} from "@inrupt/solid-client-authn-browser";
+
+export default function App(): JSX.Element {
+  // Some variables to perform calculations in an easier way
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  // React.useState
+  const [products, setProducts] = React.useState<Product[]>([]); // We store the whole set of products of the APP
+  const [productsInCart, setProductsInCart] = React.useState<CartItem[]>([]); // We store the products that are IN the cart
+  const [totalUnitsInCart, setTotalUnitsInCart] = React.useState(Number()); // We compute the total number of units in the cart
+  const [role, setRole] = React.useState("");
+  const [webId, setWebId] = React.useState("");
+  const [mode, setMode] = React.useState<"light" | "dark">(
+    prefersDarkMode ? "dark" : "light"
+  ); // We establish the actual mode based in the prefered color scheme
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
     severity: "success",
     message: "",
   });
 
-  const [userRole, setUserRole] = useState<string>("");
-  const [userName, setUserName] = useState<string>("");
-
-  const createShop = async () => {
-    const dbProducts: Product[] = await getProducts(); // and obtain the products
-    setProducts(dbProducts);
-    if (userRole === "" && localStorage.getItem("user.email") != null) {
-      const user: User = await getUser(localStorage.getItem("user.email") + "");
-      setUserRole(user.role);
-      setUserName(user.name);
-    }
-  };
-
-  const setCurrentUser = (user: User) => {
-    localStorage.setItem("user.email", user.email);
-    localStorage.setItem("user.role", user.role);
+  function sendNotification(severity: AlertColor, message: string) {
     setNotificationStatus(true);
     setNotification({
-      severity: "success",
-      message: "Welcome to DeDe application " + user.name,
+      severity: severity,
+      message: message,
     });
-    setUserRole(user.role);
+  }
+
+  // We establish a button for us to toggle the actual mode
+  const toggleColorMode = () => {
+    let modeToChange: "light" | "dark" = mode === "light" ? "dark" : "light";
+    setMode(modeToChange);
+    localStorage.setItem("mode", modeToChange);
   };
 
-  const logCurrentUserOut = () => {
-    localStorage.removeItem("user.email");
-    localStorage.removeItem("user.role");
-    localStorage.removeItem("token");
-    setNotificationStatus(true);
-    setNotification({
-      severity: "success",
-      message: "You signed out correctly. See you soon!",
-    });
-    setUserRole("");
+  // We establish the theme of the site based on the actual preference
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
+
+  // We create two functions in order to add and remove products from cart
+  const addToCart = (product: Product) => {
+    addProductToCart(
+      product,
+      productsInCart,
+      setProductsInCart,
+      setTotalUnitsInCart
+    );
   };
 
-  const handleAddCart = (product: Product) => {
-    let products = productsCart.slice();
-    let found: number = -1;
-    products.forEach((cartItem, index) => {
-      if (cartItem.product.code === product.code) {
-        found = index;
-      }
-    });
-
-    //We check if the product is in the cart. In this case we add 1 to the amount,
-    //otherwise we push the product with amount 1
-    if (found >= 0) {
-      products[found].amount += 1;
-    } else {
-      products.push({ product: product, amount: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(products));
-    setProductsCart(products); // we update the products in the cart
-    setTotalUnitsInCart(totalUnitsInCart + 1);
+  const removeFromCart = (product: Product) => {
+    removeProductFromCart(
+      product,
+      productsInCart,
+      setProductsInCart,
+      setTotalUnitsInCart
+    );
   };
 
-  const handleDecrementUnit = (product: Product) => {
-    let products = productsCart.slice();
-    let found: number = -1;
-    products.forEach((cartItem, index) => {
-      if (cartItem.product.code === product.code) {
-        found = index;
-      }
-    });
-
-    products[found].amount -= 1;
-    if (products[found].amount === 0) {
-      delete products[found];
-    }
-
-    products = products.filter(Boolean);
-
-    localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
-
-    setProductsCart(products);
-    setTotalUnitsInCart(totalUnitsInCart - 1);
-  };
-
+  // We have to restore the cart also
   const handleDeleteCart = () => {
-    setProductsCart([]);
+    setProductsInCart([]);
     setTotalUnitsInCart(0);
     localStorage.setItem("cart", JSON.stringify([]));
   };
 
-  useEffect(() => {
-    createShop();
+  // We define a function for refreshing the shop itself
+  const refreshShop = React.useCallback(async () => {
+    // We obtain the products from the Database
+    const dbProducts: Product[] = await getProducts();
+    setProducts(dbProducts); // and set the products to the state
+  }, []);
 
-    //Retrive the cart from the session.
-    const sessionCart = localStorage.getItem("cart");
+  const logCurrentUserOut = () => {
+    // We logout from SOLID
+    logout();
+
+    // The following has no impact on the logout, it just resets the UI.
+    setWebId("");
+    setRole("");
+
+    // We send a notification giving the user information
+    sendNotification("success", "You signed out correctly. See you soon!");
+
+    // We go to the home page
+    document.location.href = "/";
+  };
+
+  React.useEffect(() => {
+    // We establish the stored color mode as the active one: if the user reloads we have to remember the preferences
+    if (localStorage.getItem("mode") === null)
+      localStorage.setItem("mode", mode);
+    // In case we have stored a theme: set the actual mode to the user preference
+    else setMode(localStorage.getItem("mode") === "light" ? "light" : "dark");
+
+    // We have to handle just-in-case we are redirected from a SOLID POD provider
+    // After redirect, the current URL contains login information.
+    handleIncomingRedirect({
+      restorePreviousSession: true,
+    }).then(
+      (info: any) => {
+        // We encrypt the webId: for us to query with it
+        // If everything is OK
+        setWebId(info.webId); // We store user's WebID
+        getUser(info.webId).then(
+          (user) => {
+            if (user === undefined) {
+              // If the user is not registered
+              addUser(info.webId); // we add the user to the DB
+            } else {
+              // The user has already been registered in the system
+              setRole(user.role); // we update the role of the user
+            }
+
+            getNameFromPod(info.webId).then((name: string) => {
+              // Inform the user his actual status
+              sendNotification("success", `Welcome to DEDE, ${name}!`);
+            });
+          },
+          () => {}
+        );
+      },
+      () => {
+        // In case something went wrong
+        sendNotification("error", "Something went wrong while logging-in!");
+      }
+    );
+
+    // Retrieve the cart from the session in case the user refreshes the page
+    const sessionCart = localStorage.getItem("cart"); // TODO: check if something can be modified
     if (sessionCart) {
       let cart: CartItem[] = JSON.parse(sessionCart);
 
       let units: number = 0;
-      cart.forEach((cartItem) => {
-        units += cartItem.amount;
-      });
+      cart.forEach((cartItem) => (units += cartItem.amount));
       setTotalUnitsInCart(units);
-      setProductsCart(cart); //Set the cart when the componenet is rendered
-    } else {
-      localStorage.setItem("cart", JSON.stringify([]));
-    }
+      setProductsInCart(cart); //Set the cart when the componenet is rendered
+    } else localStorage.setItem("cart", JSON.stringify([]));
   }, []);
-
-  const themeString = (b: boolean) => (b ? "dark" : "light");
-
-  const getDesignTokens = (mode: PaletteMode) => ({
-    palette: {
-      mode,
-      ...(mode === "light"
-        ? {
-            // palette values for light mode
-            primary: { main: lightBlue[600] },
-            secondary: { main: lightBlue[800] },
-            background: {
-              default: grey[50],
-              paper: grey[200],
-              card: grey[400],
-            },
-            text: {
-              primary: grey[900],
-              secondary: grey[800],
-            },
-          }
-        : {
-            // palette values for dark mode
-            primary: { main: lightBlue[600] },
-            secondary: { main: lightBlue[800] },
-            background: {
-              default: grey[900],
-              paper: grey[800],
-              card: grey[700],
-            },
-            text: {
-              primary: "#fff",
-              secondary: grey[500],
-            },
-          }),
-    },
-  });
-
-  // We get the users browser prefered theme.
-  let initialTheme: boolean = useMediaQuery("(prefers-color-scheme: dark)");
-
-  if (localStorage.getItem("theme") === null) {
-    localStorage.setItem("theme", String(initialTheme));
-  } else {
-    initialTheme = localStorage.getItem("theme") === "true";
-  }
-
-  const [mode, setMode] = React.useState<PaletteMode>(
-    themeString(!initialTheme)
-  );
-
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
-  const toggleDarkMode = () => {
-    setMode(themeString(mode === "light"));
-    localStorage.setItem("theme", String(mode === "dark"));
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -223,9 +205,9 @@ function App(): JSX.Element {
           <NavBar
             totalUnitsInCart={totalUnitsInCart}
             logCurrentUserOut={logCurrentUserOut}
-            changeTheme={toggleDarkMode}
-            initialState={mode === "dark"}
-            userName={userName}
+            mode={mode}
+            toggleColorMode={toggleColorMode}
+            webId={webId}
           />
           <Routes>
             <Route path="/" element={<DedeApp />}>
@@ -235,8 +217,9 @@ function App(): JSX.Element {
                 element={
                   <Shop
                     products={products}
-                    cartProducts={productsCart}
-                    onAdd={handleAddCart}
+                    productsInCart={productsInCart}
+                    refreshShop={refreshShop}
+                    addToCart={addToCart}
                   />
                 }
               />
@@ -244,11 +227,11 @@ function App(): JSX.Element {
                 path="cart"
                 element={
                   <ShoppingCart
-                    products={productsCart}
+                    productsInCart={productsInCart}
                     totalUnitsInCart={totalUnitsInCart}
-                    userEmail={localStorage.getItem("user.email")}
-                    onDecrementUnit={handleDecrementUnit}
-                    onIncrementUnit={handleAddCart}
+                    addToCart={addToCart}
+                    removeFromCart={removeFromCart}
+                    webId={webId}
                   />
                 }
               />
@@ -256,71 +239,74 @@ function App(): JSX.Element {
                 path="checkout"
                 element={
                   <Checkout
-                    productsCart={productsCart.slice()}
-                    userEmail={localStorage.getItem("user.email")}
-                    deleteCart={handleDeleteCart}
+                    productsInCart={productsInCart}
+                    handleDeleteCart={handleDeleteCart}
+                    webId={webId}
                   />
                 }
               />
-              <Route
-                path="sign-in"
-                element={<SignIn setCurrentUser={setCurrentUser} />}
-              />
-              <Route
-                path="sign-up"
-                element={<SignUp setCurrentUser={setCurrentUser} />}
-              />
+              <Route path="sign-in" element={<SignIn webId={webId} />} />
               <Route
                 path="product/:id"
                 element={
                   <ProductDetails
                     product={null as any}
-                    cartItems={productsCart}
-                    onAdd={handleAddCart}
+                    addToCart={addToCart}
+                    webId={webId}
                   />
                 }
               />
             </Route>
-            <Route path="dashboard" element={<Dashboard />}>
+            <Route path="dashboard" element={<DashboardOutlet role={role} />}>
               <Route
                 index
-                element={
-                  <DashboardContent
-                    userEmail={localStorage.getItem("user.email")}
-                  />
-                }
+                element={<DashboardContent webId={webId} role={role} />}
+              />
+              <Route
+                path="account"
+                element={<AccountDetails webId={webId} />}
               />
               <Route
                 path="orders"
-                element={
-                  <OrderList userEmail={localStorage.getItem("user.email")} />
-                }
+                element={<OrderList webId={webId} role={role} />}
               />
-              <Route path="order/:code" element={<OrderDetails />} />
-              <Route path="products" element={<ProductList />} />
+              <Route
+                path="order/:code"
+                element={<OrderDetails webId={webId} />}
+              />
+              <Route path="products" element={<ProductList role={role} />} />
               <Route
                 path="products/add"
                 element={
                   <UploadProduct
-                    createShop={createShop}
+                    refreshShop={refreshShop}
                     isForUpdate={false}
                     products={products}
+                    webId={webId}
+                    role={role}
                   />
                 }
               />
               <Route
                 path="products/delete"
                 element={
-                  <DeleteProduct products={products} createShop={createShop} />
+                  <DeleteProduct
+                    products={products}
+                    refreshShop={refreshShop}
+                    webId={webId}
+                    role={role}
+                  />
                 }
               />
               <Route
                 path="products/update"
                 element={
                   <UploadProduct
-                    createShop={createShop}
+                    refreshShop={refreshShop}
                     isForUpdate={true}
                     products={products}
+                    webId={webId}
+                    role={role}
                   />
                 }
               />
@@ -328,25 +314,13 @@ function App(): JSX.Element {
             <Route path="*" element={<RedirectHome />}></Route>
           </Routes>
 
-          <Snackbar
-            open={notificationStatus}
-            autoHideDuration={3000}
-            onClose={() => {
-              setNotificationStatus(false);
-            }}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-          >
-            <Alert severity={notification.severity} sx={{ width: "100%" }}>
-              {notification.message}
-            </Alert>
-          </Snackbar>
+          <NotificationAlert
+            notification={notification}
+            notificationStatus={notificationStatus}
+            setNotificationStatus={setNotificationStatus}
+          />
         </Router>
       </PayPalScriptProvider>
     </ThemeProvider>
   );
 }
-
-export default App;

@@ -1,4 +1,4 @@
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 
 import { Review } from "../../shared/shareddtypes";
 
@@ -12,20 +12,24 @@ export default function ProductCommentList(
   props: ProductListProps
 ): JSX.Element {
   return (
-    <Paper elevation={8} style={{ margin: "3vh 5vw", padding: "1em" }}>
-      <h2>User opinions about this product!</h2>
-      <Grid container rowSpacing={5} className="mt-2 mb-2">
-        {props.reviews.map((review: Review) => (
-          <Grid
-            item
-            xs={12}
-            md={6}
-            key={`${review.userEmail}${review.productCode}`}
-          >
-            <ProductComment review={review} />
-          </Grid>
-        ))}
-      </Grid>
+    <Paper elevation={8} sx={{ m: 3, p: 2 }}>
+      <Typography variant="h5" sx={{ mb: 1 }}>
+        User opinions about this product!
+      </Typography>
+      {props.reviews.length > 0 && (
+        <Grid container rowSpacing={5}>
+          {props.reviews.map((review: Review) => (
+            <Grid
+              item
+              xs={12}
+              md={6}
+              key={`${review.webId}${review.productCode}`}
+            >
+              <ProductComment review={review} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Paper>
   );
 }

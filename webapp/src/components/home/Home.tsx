@@ -1,7 +1,7 @@
 import Stack from "@mui/material/Stack";
 
-import FeaturedProducts from "./home/FeaturedProducts";
-import Hero from "./home/Hero";
+import FeaturedProducts from "./FeaturedProducts";
+import Hero from "./Hero";
 
 export default function Home() {
   return (

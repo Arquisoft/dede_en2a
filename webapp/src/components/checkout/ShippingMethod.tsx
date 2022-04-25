@@ -35,7 +35,7 @@ export default function ShippingMethod(props: any): JSX.Element {
 
   const handleBack = () => {
     if (activeStep === 0) props.handleBack();
-    else setActiveStep(activeStep - 1);
+    else setActiveStep(0); // We go back to the main place where locations can be chosen
   };
 
   const getStepContent = (stepIndex: number) => {

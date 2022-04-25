@@ -1,9 +1,9 @@
-export function isRenderForModeratorAtLeast() {
-  const role = localStorage.getItem("user.role");
+export function isRenderForModeratorAtLeast(role: string) {
+  // TODO: make this a type
   return role === "admin" || role === "moderator";
 }
 
-export function isRenderForAdminOnly() {
-  const role = localStorage.getItem("user.role");
+export function isRenderForAdminOnly(role: string) {
+  // TODO: make this a type
   return role === "admin";
 }

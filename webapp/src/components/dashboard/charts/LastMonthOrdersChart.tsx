@@ -10,7 +10,7 @@ import {
   YAxis
 } from "recharts";
 
-import { getOrders } from "../../../api/api";
+import { getOrdersForUser } from "../../../api/api";
 import { Order } from "../../../shared/shareddtypes";
 
 import moment from "moment";
@@ -42,7 +42,7 @@ function dateFormatter(tickItem: Date) {
   return moment(tickItem).format("MMM Do YY");
 }
 
-export default function Chart() {
+export default function Chart(props: any) {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState<{ date: Date; amount: number }[]>([]);
 
@@ -51,7 +51,7 @@ export default function Chart() {
 
     let data: { date: Date; amount: number }[] = [];
     let now = new Date();
-    getOrders()
+    getOrdersForUser(props.webId, props.role)
       .then((orders: Order[]) => {
         orders.forEach((order: Order) => {
           let date: Date = new Date(order.date);
@@ -82,7 +82,7 @@ export default function Chart() {
   return (
     <React.Fragment>
       <Title>Orders performed during the last month</Title>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <ResponsiveContainer>
           <LineChart

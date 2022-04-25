@@ -1,11 +1,14 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
 import * as OrderController from "./OrderController";
 
 const api: Router = express.Router();
 
-api.get("/orders", OrderController.getUserOrders);
+api.get("/orders/listForUser", OrderController.getOrdersForUser);
 
-api.get("/orders/list", OrderController.getOrders);
+api.get(
+  "/orders/listForAdminOrModerator",
+  OrderController.getOrdersForAdminOrModerator
+);
 
 api.get("/orders/findByOrderCode/:orderCode", OrderController.getOrder);
 

@@ -28,7 +28,11 @@ test("A list of products is rendered", async () => {
 
   const { getAllByText } = render(
     <Router>
-      <ProductList products={products} cartProducts={[]} OnAddCart={() => {}} />
+      <ProductList
+        products={products}
+        productsInCart={[]}
+        addToCart={() => {}}
+      />
     </Router>
   );
 

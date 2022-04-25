@@ -1,4 +1,7 @@
+import * as React from "react";
+
 import { Stack, Grid, Paper, Rating, Typography } from "@mui/material";
+import { getNameFromPod } from "../../helpers/SolidHelper";
 
 import { Review } from "../../shared/shareddtypes";
 
@@ -9,8 +12,16 @@ type ProductCommentProps = {
 export default function ProductComment(
   props: ProductCommentProps
 ): JSX.Element {
+  const [name, setName] = React.useState("");
+
+  React.useEffect(() => {
+    getNameFromPod(window.atob(props.review.webId)).then((name) =>
+      setName(name)
+    );
+  }, []);
+
   return (
-    <Paper elevation={3} style={{ margin: "1vh 2vw", padding: "1em" }}>
+    <Paper elevation={3} style={{ padding: "1em" }}>
       <Grid container spacing={0} direction="row" style={{ minHeight: "30vh" }}>
         <Grid item xs={12}>
           <Stack
@@ -18,9 +29,7 @@ export default function ProductComment(
             alignItems="center"
             justifyContent="space-between"
           >
-            <Typography variant="h6" component="h6">
-              {props.review.userEmail}
-            </Typography>
+            <Typography variant="h6">{name}</Typography>
 
             <Rating
               name="read-only"

@@ -16,6 +16,7 @@ async function getProfile(webId: string): Promise<Thing> {
 }
 
 export async function getNameFromPod(webId: string) {
+  if (webId === "" || webId === undefined) return "Name not found"; // we return the empty string
   return getStringNoLocale(await getProfile(webId), FOAF.name) as string;
 }
 

@@ -1,137 +1,142 @@
 import * as React from "react";
 
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Divider, Snackbar, TextField } from "@mui/material";
+import {
+  Divider,
+  TextField,
+  Rating,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
-import IconButton from "@mui/material/IconButton";
-import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
+import SendIcon from "@mui/icons-material/Send";
 
-import { addReview, getReviewsByCodeAndEmail } from "../../api/api";
-import { Product, Review } from "../../shared/shareddtypes";
-import DialogWrapper from "../dialogs/Dialog";
+import { Product, NotificationType, Review } from "../../shared/shareddtypes";
+import { addReview, getReviewsByCodeAndWebId } from "../../api/api";
+
+import NotificationAlert from "../misc/NotificationAlert";
 
 type ReviewDialogProps = {
-    product: Product;
-    initialValue?: number;
-    show: number;
-    stars: number;
+  product: Product;
+  initialValue?: number;
+  stars: number;
+  webId: string;
+  open: boolean;
+  handleOpen: () => void;
+  handleClose: () => void;
 };
 
 export default function ReviewDialog(props: ReviewDialogProps) {
-    const [open, setOpen] = React.useState(0);
-    const [close, setClose] = React.useState(0);
-    const [show, showInfo] = React.useState(false);
-    const [btnDisabled, setBtnDisabled] = React.useState(false);
-    const [rating, setRating] = React.useState(0);
-    const [comment, setComment] = React.useState("");
+  const [btnDisabled, setBtnDisabled] = React.useState(false);
+  const [rating, setRating] = React.useState(0);
+  const [comment, setComment] = React.useState("");
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
 
-    const [infoMessage, setInfoMessage] = React.useState("");
-    const [infoType, setInfoType] = React.useState<AlertColor>("success");
+  function sendNotification(severity: AlertColor, message: string) {
+    setNotificationStatus(true);
+    setNotification({
+      severity: severity,
+      message: message,
+    });
+  }
 
-    React.useEffect(() => {
-        setRating(props.stars);
-        if (props.show > 1)
-            setOpen(props.show + 1);
-    }, [props.stars]);
+  const handleConfirm = async () => {
+    // In case the user hasn't completed all the fields
+    if (btnDisabled) {
+      sendNotification("error", "You must complete the fields!");
+      return;
+    }
 
-    React.useEffect(() => {
-        setRating(props.stars);
-        if (props.show > 1)
-            setOpen(props.show + 1);
-    }, [props.show]);
+    // We close the dialog as we have finished the operations
+    props.handleClose();
 
-    const handleCloseInfo = () => {
-        showInfo(false);
-    };
+    // If no user has logged in
+    if (props.webId === "") {
+      sendNotification("error", "You must log in first!");
+    } else {
+      let reviews = await getReviewsByCodeAndWebId(
+        props.product.code,
+        props.webId
+      );
 
-    const showMessage = (infotype: AlertColor, infomessage: string) => {
-        setInfoMessage(infomessage);
-        setInfoType(infotype);
-        showInfo(true);
-    };
+      // In case the user has reviewed this product
+      if (reviews.length > 0)
+        sendNotification("error", "You have already reviewed this product!");
 
-    const handleConfirm = async () => {
-        if (btnDisabled) {
-            showMessage("error", "You must complete the forms!");
-            return;
-        }
+      // We create the review
+      let createdReview: Review = {
+        rating: rating,
+        comment: comment,
+        webId: props.webId,
+        productCode: props.product.code,
+      };
 
-        setClose(close+1);
+      if (await addReview(createdReview))
+        sendNotification("success", "Review added correctly!");
+      else
+        sendNotification("error", "There was an error creating your review!");
+    }
+  };
 
-        let userEmail = localStorage.getItem("user.email");
+  return (
+    <React.Fragment>
+      <Dialog maxWidth="sm" open={props.open} onClose={props.handleClose}>
+        <DialogTitle>
+          In this dialog you can give us a review of the product!
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Rank the product from 0 to 5 stars:
+          </DialogContentText>
+          <Rating
+            value={rating}
+            onChange={(event, newValue) => {
+              if (newValue != null) {
+                setRating(newValue);
+                setBtnDisabled(false);
+              }
+            }}
+            size="large"
+            precision={0.5}
+          />
+          <Divider />
+          <TextField
+            autoFocus
+            id="outlined-basic"
+            label="Comment"
+            multiline
+            variant="outlined"
+            onChange={(event) => {
+              setComment(event.target.value);
+            }}
+            style={{ margin: "2vh .2vw" }}
+            sx={{ width: "100%" }}
+            minRows={5}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            disabled={rating === 0 || comment === ""}
+            onClick={handleConfirm}
+            startIcon={<SendIcon />}
+          >
+            Send your Review
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        if (userEmail == null) {
-            showMessage("error", "You must log in first!");
-        } else if (
-            (await getReviewsByCodeAndEmail(props.product.code, userEmail)).length > 0
-        ) {
-            showMessage("error", "You have already reviewed this product!");
-        } else {
-            let createdReview: Review = {
-                rating: rating,
-                comment: comment,
-                userEmail: userEmail,
-                productCode: props.product.code,
-            };
-            let addStatus: boolean = await addReview(createdReview);
-
-            if (addStatus) {
-                showMessage("success", "Review added correctly!");
-                window.location.reload();
-            } else {
-                showMessage("error", "There was an error creating your review!");
-            }
-        }
-    };
-
-    return (
-        <React.Fragment>
-            <DialogWrapper show={open} hide={close} titleText="Rate this product" handleConfirm={handleConfirm}>
-                <Typography> Your rating is: </Typography>
-                <Rating
-                    value={rating}
-                    onChange={(event, newValue) => {
-                        if (newValue != null) {
-                            setRating(newValue);
-                            setBtnDisabled(false);
-                        }
-                    }}
-                    size="large"
-                    precision={0.5}
-                />
-                <Divider/>
-                <TextField
-                    autoFocus
-                    id="outlined-basic"
-                    label="Comment"
-                    multiline
-                    variant="outlined"
-                    onChange={(event) => {
-                        setComment(event.target.value);
-                    }}
-                    style={{margin: "2vh .2vw"}}
-                    sx={{width: "100%"}}
-                    minRows={5}
-                />
-            </DialogWrapper>
-            <Snackbar open={show} autoHideDuration={6000} onClose={handleCloseInfo}>
-                <Alert
-                    severity={infoType}
-                    action={
-                        <IconButton
-                            size="small"
-                            aria-label="close"
-                            color="inherit"
-                            onClick={handleCloseInfo}
-                        >
-                            <CloseIcon fontSize="small"/>
-                        </IconButton>
-                    }
-                >
-                    {infoMessage}
-                </Alert>
-            </Snackbar>
-        </React.Fragment>
-    );
+      <NotificationAlert
+        notification={notification}
+        notificationStatus={notificationStatus}
+        setNotificationStatus={setNotificationStatus}
+      />
+    </React.Fragment>
+  );
 }

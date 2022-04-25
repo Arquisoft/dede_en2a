@@ -48,7 +48,7 @@ export default function StreetAddress(props: any) {
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Street Address</Divider>
 
-      <LinearProgress hidden={!props.loading} />
+      <LinearProgress sx={{ display: props.loading ? "block" : "none" }} />
       {!props.loading && (
         <React.Fragment>
           <Typography sx={{ pb: 2 }}>

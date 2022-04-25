@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import path from "path";
 import { userModel } from "../users/User";
-import { verifyToken } from "../utils/generateToken";
+import { verifyWebID } from "../utils/WebIDValidation";
 import { productModel } from "./Product";
 
+// Obtaining products are unauthorized operations: everybody can list the products of the shop
 export const getProducts: RequestHandler = async (req, res) => {
   const products = await productModel.find();
   return res.json(products);
@@ -19,10 +20,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 };
 
 export const createProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.body.token + "",
-    req.body.email + ""
-  );
+  const isVerified = verifyWebID(req.headers.webId + "");
   if (isVerified) {
     try {
       let product = new productModel(req.body);
@@ -50,39 +48,42 @@ export const createProduct: RequestHandler = async (req, res) => {
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
   const user = await userModel.findOne({ email: req.headers.email });
-  if (isVerified && user.role === "admin") {
-    const productFound = await productModel.deleteOne({
-      code: req.params.code,
-    });
-    if (productFound) {
-      return res.json(productFound);
+
+  if (verifyWebID(req.headers.webId + "") && user.role === "admin")
+    try {
+      const productFound = await productModel.deleteOne({
+        code: req.params.code,
+      });
+      if (productFound) {
+        return res.json(productFound);
+      }
+    } catch (error) {
+      res
+        .status(301)
+        .json({ message: "The operation didn't succeed " + error });
     }
-  } else {
-    res.status(403).json();
-  }
+  else res.status(203).json();
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-  const user = await userModel.findOne({ email: req.headers.email });
-  if (isVerified && (user.role === "admin" || user.role === "manager")) {
-    const product = await productModel.findOneAndUpdate(
-      { code: req.params.code },
-      req.body,
-      { new: true }
-    );
-    res.json(product);
-  } else {
-    res.status(403).json();
-  }
+  const user = await userModel.findOne({ webId: req.headers.webId });
+
+  if (
+    verifyWebID(req.headers.webId + "") &&
+    (user.role === "admin" || user.role === "manager")
+  )
+    try {
+      const product = await productModel.findOneAndUpdate(
+        { code: req.params.code },
+        req.body,
+        { new: true }
+      );
+      res.json(product);
+    } catch (error) {
+      res.json(error);
+    }
+  else res.status(203).json();
 };
 
 export const filterAndOrderBy: RequestHandler = async (req, res) => {

@@ -1,5 +1,5 @@
 import { act, fireEvent, render } from "@testing-library/react";
-import SignIn from "../../components/register/SignIn";
+import SignIn from "../../components/userManagement/SignIn";
 import { User } from "../../shared/shareddtypes";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as api from "../../api/api";
@@ -8,7 +8,7 @@ import * as api from "../../api/api";
 test("SignIn component renders correctly", () => {
   const { getByText } = render(
     <Router>
-      <SignIn setCurrentUser={() => {}} />
+      <SignIn />
     </Router>
   );
 
@@ -24,20 +24,10 @@ test("SignIn component renders correctly", () => {
 //Test that the sign in with incorrect values not found
 test("Sign in with incorrect values not found", async () => {
   let user: User = {
-    name: "Test",
-    email: "test@email.com",
     webId: "https://test.com/",
-    password: "password",
     role: "user",
-    verified: true,
+    isVerified: true,
   } as User;
-
-  jest
-    .spyOn(api, "checkUser")
-    .mockImplementation(
-      (email: String, password: String): Promise<boolean> =>
-        Promise.resolve(false)
-    );
 
   jest
     .spyOn(api, "getUser")
@@ -47,7 +37,7 @@ test("Sign in with incorrect values not found", async () => {
 
   const { getByText, container, getByTestId } = render(
     <Router>
-      <SignIn setCurrentUser={() => {}} />
+      <SignIn />
     </Router>
   );
 
@@ -69,20 +59,10 @@ test("Sign in with incorrect values not found", async () => {
 //Test sign in with correct values but no verified user
 test("Sign in with incorrect values not found", async () => {
   let user: User = {
-    name: "Test",
-    email: "test@email.com",
     webId: "https://test.com/",
-    password: "password",
     role: "user",
-    verified: false,
+    isVerified: false,
   } as User;
-
-  jest
-    .spyOn(api, "checkUser")
-    .mockImplementation(
-      (email: String, password: String): Promise<boolean> =>
-        Promise.resolve(false)
-    );
 
   jest
     .spyOn(api, "getUser")
@@ -92,7 +72,7 @@ test("Sign in with incorrect values not found", async () => {
 
   const { getByText, container, getByTestId } = render(
     <Router>
-      <SignIn setCurrentUser={() => {}} />
+      <SignIn />
     </Router>
   );
 
@@ -117,7 +97,7 @@ test("Sign in with incorrect values not found", async () => {
 test("Sign in with empty email", async () => {
   const { getByText, container, getByTestId } = render(
     <Router>
-      <SignIn setCurrentUser={() => {}} />
+      <SignIn />
     </Router>
   );
 
@@ -139,7 +119,7 @@ test("Sign in with empty email", async () => {
 test("Sign in with empty password", async () => {
   const { getByText, container, getByTestId } = render(
     <Router>
-      <SignIn setCurrentUser={() => {}} />
+      <SignIn />
     </Router>
   );
 
