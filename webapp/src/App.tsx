@@ -2,41 +2,39 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import {
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
-  useMediaQuery,
+  createTheme, CssBaseline,
+  ThemeProvider, useMediaQuery
 } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
 import ShoppingCart from "./components/cart/ShoppingCart";
 import Checkout from "./components/checkout/Checkout";
-import DashboardOutlet from "./components/DashboardOutlet";
+import AccountDetails from "./components/dashboard/account/AccountDetails";
 import DashboardContent from "./components/dashboard/DashboardContent";
 import OrderDetails from "./components/dashboard/orders/OrderDetails";
 import OrderList from "./components/dashboard/orders/OrderList";
 import DeleteProduct from "./components/dashboard/products/DeleteProduct";
 import ProductList from "./components/dashboard/products/ProductList";
 import UploadProduct from "./components/dashboard/products/UploadProduct";
-import DedeApp from "./components/MainOutlet";
+import DashboardOutlet from "./components/DashboardOutlet";
 import Home from "./components/home/Home";
+import DedeApp from "./components/MainOutlet";
+import NotificationAlert from "./components/misc/NotificationAlert";
 import NavBar from "./components/navigation/NavBar";
 import ProductDetails from "./components/products/ProductDetails";
-import SignIn from "./components/userManagement/SignIn";
 import RedirectHome from "./components/RedirectHome";
 import Shop from "./components/Shop";
-import NotificationAlert from "./components/misc/NotificationAlert";
-import AccountDetails from "./components/dashboard/account/AccountDetails";
+import SignIn from "./components/userManagement/SignIn";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
 import {
   addProductToCart,
-  removeProductFromCart,
+  removeProductFromCart
 } from "./helpers/ShoppingCartHelper";
 import { getNameFromPod } from "./helpers/SolidHelper";
 
-import { getProducts, getUser, addUser } from "./api/api";
+import { addUser, getProducts, getUser } from "./api/api";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
@@ -44,7 +42,7 @@ import "./App.css";
 
 import {
   handleIncomingRedirect,
-  logout,
+  logout
 } from "@inrupt/solid-client-authn-browser";
 
 export default function App(): JSX.Element {

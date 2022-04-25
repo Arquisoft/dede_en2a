@@ -40,6 +40,7 @@ export async function saveOrder(
   receivingDate.setDate(receivingDate.getDate() + 3);
   let order: Order = {
     code: uuidv4(),
+    webId: window.btoa(webId),
     address: address,
     products: orderProducts,
     date: new Date(),

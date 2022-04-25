@@ -35,6 +35,7 @@ export type CartItem = {
 
 export type Order = {
   code: string;
+  webId: string
   address: string;
   date: Date;
   products: Product[];

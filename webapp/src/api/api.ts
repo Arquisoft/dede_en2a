@@ -121,7 +121,7 @@ export async function createOrder(webId: string, body: any) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: window.btoa(webId),
+      token: window.btoa(webId),
     },
     body: body,
   });
@@ -137,7 +137,7 @@ export async function getOrderByCode(
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        webId: window.btoa(webId),
+        token: window.btoa(webId),
       },
     }
   );
@@ -157,7 +157,7 @@ export async function getOrdersForUser(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          webId: window.btoa(webId), // we have to check if the user is authenticated
+          token: window.btoa(webId), // we have to check if the user is authenticated
         },
       }
     );
@@ -169,7 +169,7 @@ export async function getOrdersForUser(
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        webId: window.btoa(webId),
+        token: window.btoa(webId),
       },
     });
 

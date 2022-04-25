@@ -56,7 +56,7 @@ export default function Checkout(props: CheckoutProps) {
         props.productsInCart,
         costs,
         props.webId,
-        "Get address not implemented yet"
+        address
       );
       props.handleDeleteCart();
     }
@@ -91,6 +91,7 @@ export default function Checkout(props: CheckoutProps) {
             shippingCosts={costs}
             handleReset={handleReset}
             handleNext={handleNext}
+            address={address}
           />
         );
       case 3:
