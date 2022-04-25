@@ -259,6 +259,19 @@ test("A product is added correctly", async () => {
     ).container;
   });
 
+  //Fill in the product code
+  await act(async () => {
+    fireEvent.change(container.querySelector("input[name='code']"), {
+      target: { value: "01" },
+    });
+  });
+
+  await act(async () => {
+    fireEvent.change(container.querySelector("input[name='code']"), {
+      target: { value: "05" },
+    });
+  });
+
   //Fill in the product name
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='name']"), {
@@ -280,6 +293,12 @@ test("A product is added correctly", async () => {
     });
   });
 
+  //Fill in the product description
+  await act(async () => {
+    fireEvent.change(container.querySelector("input[name='category']"), {
+      target: { value: "Clothes" },
+    });
+  });
   //Fill in the product stock
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='stock']"), {
@@ -342,6 +361,7 @@ test("UploadPoduct component for updating a product renders correctly", () => {
 //Test for upload when a product is selected all the fields are filled correctly
 test("UploadPoduct component for updating a product is filled correctly", async () => {
   let container: any;
+
   await act(async () => {
     container = render(
       <UploadProduct

@@ -231,6 +231,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                 ) : (
                   <TextField
                     value={code}
+                    name="code"
                     id="outlined-full-width"
                     label="Product code"
                     style={{ margin: 8 }}
