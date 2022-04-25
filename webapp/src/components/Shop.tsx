@@ -16,14 +16,15 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Autocomplete,
+  makeStyles,
+  Chip,
+  Box,
 } from "@mui/material";
 
 import { CartItem, Product } from "../shared/shareddtypes";
 import ProductList from "./products/ProductList";
 import { ArrowDownward } from "@mui/icons-material";
 import { filterProductsByCategory } from "../api/api";
-import { Target } from "puppeteer";
 
 type HomeProps = {
   products: Product[];
@@ -38,6 +39,7 @@ const Search = styled("div")({
 const Filter = styled("div")({
   margin: "30px",
   marginLeft: "30px",
+  
 });
 
 const Categories = styled("div")({
@@ -54,14 +56,14 @@ const PRICEDESC = "desc";
 const CLO = "Clothes";
 const DEC = "Decoration";
 const ELEC = "Electronics";
-const MIS = "Miscellaneous"
+const MIS = "Miscellaneous";
 
 let orderPrice : string = "allp";
 let category : string = "allc";
 
 function ProductsFilter(props: any) {
   return (
-    <FormControl variant="standard" >
+    <FormControl variant="standard">
       <InputLabel id="select-order-status">Filter by...</InputLabel>    
       <Select
         labelId="select-product"
@@ -69,28 +71,27 @@ function ProductsFilter(props: any) {
         value={orderPrice}
         onChange={props.handleChange}
         label="filter"
-        sx={{ width: 300 }}        
+        sx={{ width: 300 }} 
+        defaultValue={ALLP}       
       >
         
       <MenuItem value={ALLP}>
           <em>All</em>
-        </MenuItem>
-        <MenuItem value={PRICEASC}>
-          <Typography>Price </Typography>
-          <ArrowUpwardIcon color="primary" />
-        </MenuItem>
-        <MenuItem value={PRICEDESC}>
-          <Typography>Price </Typography>
-          <ArrowDownward color="primary" />
-        </MenuItem>
+      </MenuItem>
+      <MenuItem value={PRICEASC}>
+        <Typography>Price: Lower to Higher <ArrowUpwardIcon color="primary" /></Typography>        
+      </MenuItem>
+      <MenuItem value={PRICEDESC}>
+        <Typography>Price: Higher to Lower <ArrowDownward color="primary"/></Typography>        
+      </MenuItem>
       </Select>
     </FormControl>
   );
 }
 
-function CategoriesFilter(props: any) {
+function CategoriesFilter(props: any) {  
   return (
-    <FormControl variant="standard" >
+    <FormControl variant="standard">
       <InputLabel id="select-categories">See categories</InputLabel>    
       <Select
         labelId="select-categories"
@@ -98,27 +99,24 @@ function CategoriesFilter(props: any) {
         value={category}
         onChange={props.handleChange}
         label="categories"
-        sx={{ width: 300 }}   
+        sx={{ width: 300}} 
+        defaultValue={ALLC}  
       >
         
       <MenuItem value={ALLC}>
           <em>All</em>
         </MenuItem>
         <MenuItem value={CLO}>
-          <Typography>Clothes </Typography>
-          <CheckroomIcon color="primary"></CheckroomIcon>
+          <Typography>Clothes <CheckroomIcon color="primary"></CheckroomIcon></Typography>
         </MenuItem>
         <MenuItem value={DEC}>
-          <Typography>Decoration </Typography>
-          <ChairIcon color="primary"></ChairIcon>
+          <Typography>Decoration <ChairIcon color="primary"></ChairIcon></Typography>          
         </MenuItem>
         <MenuItem value={ELEC}>
-          <Typography>Electronics </Typography>
-          <PhoneAndroidIcon color="primary"></PhoneAndroidIcon>
+          <Typography>Electronics <PhoneAndroidIcon color="primary"></PhoneAndroidIcon></Typography>          
         </MenuItem>
         <MenuItem value={MIS}>
-          <Typography>Miscellaneous </Typography>
-          <AutoAwesomeIcon color="primary"></AutoAwesomeIcon>
+          <Typography>Miscellaneous <AutoAwesomeIcon color="primary"></AutoAwesomeIcon></Typography>          
         </MenuItem>
       </Select>
     </FormControl>
@@ -146,17 +144,15 @@ export default function Shop(props: HomeProps): JSX.Element {
     if(event.target.value == PRICEASC || event.target.value == PRICEDESC){
       orderPrice = event.target.value;
     }else if(event.target.value == ALLP){
-      orderPrice = "all";
+      orderPrice = "allp";
     }else if(event.target.value == ALLC){
-      category = "all";
+      category = "allc";
     }else{
       category = event.target.value;
     }
 
     setFilteredProducts(await filterProductsByCategory(category, orderPrice));
-    setPage(1);
-
-    
+    setPage(1);    
   };
 
   const obtainNumberOfPages = () => {
