@@ -205,7 +205,7 @@ export async function addReview(review: Review): Promise<boolean> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      webId: window.btoa(review.webId),
+      token: window.btoa(review.webId),
     },
     body: JSON.stringify({
       rating: review.rating,

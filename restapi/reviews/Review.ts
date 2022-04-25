@@ -1,5 +1,3 @@
-import { productModel } from "../products/Product";
-
 const mongoose = require("mongoose");
 const { model, Schema } = mongoose;
 
@@ -18,7 +16,7 @@ export const reviewSchema = new Schema(
     rating: {
       type: Number,
       required: true,
-      min: 1,
+      min: 0,
       max: 5,
     },
     comment: {
@@ -32,6 +30,6 @@ export const reviewSchema = new Schema(
   }
 );
 
-reviewSchema.index({ userEmail: 1, productCode: 1 }, { unique: true });
+reviewSchema.index({ webId: 1, productCode: 1 }, { unique: true });
 
 export const reviewModel = model("Review", reviewSchema);

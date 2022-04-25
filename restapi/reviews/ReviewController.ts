@@ -11,25 +11,23 @@ export const getReviewsByProduct: RequestHandler = async (req, res) => {
 
 export const createReview: RequestHandler = async (req, res) => {
   const review = new reviewModel(req.body);
-
-  if (verifyWebID(req.headers.webId + ""))
+  const webId = req.headers.token + "";
+  const verfied = await verifyWebID(webId);
+  console.log("--------------------------------" + webId);
+  if (verfied)
     try {
       const reviewSaved = await review.save();
       res.json(reviewSaved);
     } catch (error) {
       res.status(412).json({ message: "The data is not valid" });
     }
-  else res.status(203).json({ message: "Invalid token " });
+  else res.status(403).json({ message: "Invalid webId" });
 };
 
 export const getReviewsByProductAndUser: RequestHandler = async (req, res) => {
-  try {
-    const reviews = await reviewModel.find({
-      productCode: req.params.productCode,
-      webId: req.params.webId,
-    });
-    return res.json(reviews);
-  } catch (error) {
-    res.json(error);
-  }
+  const reviews = await reviewModel.find({
+    productCode: req.params.productCode,
+    webId: req.params.webId,
+  });
+  return res.json(reviews);
 };
