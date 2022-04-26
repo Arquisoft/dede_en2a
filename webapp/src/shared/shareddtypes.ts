@@ -14,6 +14,7 @@ export type Product = {
   stock: number;
   image: string;
   category: string;
+  weight: number;
 };
 
 export const ProductCategories = {

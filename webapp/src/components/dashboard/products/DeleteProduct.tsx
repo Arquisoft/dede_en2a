@@ -7,7 +7,7 @@ import {
   Paper,
   Stack,
   styled,
-  TextField,
+  TextField
 } from "@mui/material";
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
@@ -41,6 +41,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [weight, setWeight] = useState("");
   const [image, setImage] = useState("");
   const [notificationStatus, setNotificationStatus] = React.useState(false);
   const [notification, setNotification] = React.useState<NotificationType>({
@@ -60,6 +61,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       setPrice(p.price.toString());
       setStock(p.stock.toString());
       setImage(checkImageExists(p.image));
+      setWeight(p.weight.toString());
     }
   };
 
@@ -106,6 +108,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setCategory("");
     setStock("");
     setPrice("");
+    setWeight("");
     setImage(checkImageExists("")); // We find the empty image: not-found
   };
 
@@ -207,6 +210,19 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={stock}
+                  id="outlined-full-width"
+                  label="Product stock"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  type="number"
+                  required
+                  margin="normal"
+                  variant="outlined"
+                />
+
+                <TextField
+                  disabled
+                  value={weight}
                   id="outlined-full-width"
                   label="Product stock"
                   style={{ margin: 8 }}
