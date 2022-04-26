@@ -13,7 +13,6 @@ export const createReview: RequestHandler = async (req, res) => {
   const review = new reviewModel(req.body);
   const webId = req.headers.token + "";
   const verfied = await verifyWebID(webId);
-  console.log("--------------------------------" + webId);
   if (verfied)
     try {
       const reviewSaved = await review.save();

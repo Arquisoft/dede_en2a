@@ -73,6 +73,7 @@ describe("orders", () => {
             stock: 1,
             image: "1.png",
             category: "Clothes",
+            weight: 1,
           },
         ],
         date: new Date(),

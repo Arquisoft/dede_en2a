@@ -61,9 +61,7 @@ describe("prodcuts", () => {
    * Test that we can get a concrete product
    */
   it("Can get a product", async () => {
-    const response: Response = await request(app).get(
-      "/products/listByCode/1"
-    );
+    const response: Response = await request(app).get("/products/listByCode/1");
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -93,6 +91,7 @@ describe("prodcuts", () => {
       description: "Another test product",
       stock: 0,
       category: "Clothes",
+      weight: 1,
     });
     expect(response.statusCode).toBe(403);
   });
@@ -101,59 +100,54 @@ describe("prodcuts", () => {
   To create a product the user must be registered and also be a manager or admin role
   */
   it("Can create a product correctly", async () => {
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        code: productCode,
-        name: "testProduct",
-        price: 10.99,
-        description: "Another test product",
-        stock: 0,
-        category: "Clothes",
-        webId: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      code: productCode,
+      webId: "test",
+      name: "testProduct",
+      price: 10.99,
+      description: "Another test product",
+      stock: 0,
+      category: "Clothes",
+      weight: 1,
+    });
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toBe("testProduct");
     expect(response.body.stock).toBe(0);
   });
 
   it("Can't create a product with same code", async () => {
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        code: productCode,
-        name: "testFailProduct",
-        price: 10.99,
-        description: "A failure insert test product",
-        stock: 0,
-        category: "Clothes",
-        webId: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      code: productCode,
+      webId: "test",
+      name: "testFailProduct",
+      price: 10.99,
+      description: "A failure insert test product",
+      stock: 0,
+      category: "Clothes",
+      weight: 1,
+    });
     expect(response.statusCode).toBe(409);
   });
 
   it("Can't create a product without all values", async () => {
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        name: "testFailProduct",
-        webId: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      name: "testFailProduct",
+      webId: "test",
+    });
     expect(response.statusCode).toBe(412);
   });
 
   it("Can't create a product with incorrect or missing category", async () => {
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        code: uuidv4(),
-        name: "testFailProduct",
-        price: 10.99,
-        description: "A failure insert test product",
-        stock: 0,
-        category: "Nothing",
-        webId: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      code: uuidv4(),
+      webId: "test",
+      name: "testFailProduct",
+      price: 10.99,
+      description: "A failure insert test product",
+      stock: 0,
+      category: "Nothing",
+      weight: 1,
+    });
     expect(response.statusCode).toBe(412);
   });
 
