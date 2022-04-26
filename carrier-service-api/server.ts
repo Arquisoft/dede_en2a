@@ -1,9 +1,10 @@
 require("dotenv").config();
 
-import express, { Application, RequestHandler } from "express";
-import cors from "cors";
-import promBundle from "express-prom-bundle";
 import bp from "body-parser";
+import cors from "cors";
+import express, { Application, RequestHandler } from "express";
+import promBundle from "express-prom-bundle";
+import morgan from "morgan";
 import ratesRoutes from "./src/routes/RatesRoutes";
 
 const app: Application = express();
@@ -17,6 +18,8 @@ app.use(metricsMiddleware);
 
 app.use(cors());
 app.use(bp.json());
+
+app.use(morgan("dev"));
 
 app.use(ratesRoutes);
 
@@ -39,3 +42,4 @@ mongoose
   .catch((err: Error) => {
     console.error(err);
   });
+

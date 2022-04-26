@@ -3,10 +3,10 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-import ShippingMethodForm from "./shipping/ShippingMethodForm";
-import PickUpLocationsMap from "./shipping/PickUpLocationsMap";
-import ShippingRouteMap from "./shipping/ShippingRouteMap";
 import CarriersRatesForm from "./shipping/CarriersRatesForm";
+import PickUpLocationsMap from "./shipping/PickUpLocationsMap";
+import ShippingMethodForm from "./shipping/ShippingMethodForm";
+import ShippingRouteMap from "./shipping/ShippingRouteMap";
 
 export default function ShippingMethod(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -68,6 +68,7 @@ export default function ShippingMethod(props: any): JSX.Element {
             setCosts={props.setCosts}
             address={props.address}
             price={props.price}
+            cart={props.cart}
           />
         );
       case 2:

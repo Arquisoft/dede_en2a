@@ -82,6 +82,7 @@ export default function Checkout(props: CheckoutProps) {
             setCosts={setCosts}
             handleBack={handleBack}
             handleNext={handleNext}
+            cart={props.productsInCart}
           />
         );
       case 2:

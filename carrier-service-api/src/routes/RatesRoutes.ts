@@ -1,7 +1,7 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
 import {
   createCarrierRates,
-  getCarrierRates,
+  getCarrierRates
 } from "../controllers/RatesController";
 
 const api: Router = express.Router();
