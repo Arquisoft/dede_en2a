@@ -32,6 +32,7 @@ export async function saveOrder(
       stock: item.amount,
       image: item.product.image,
       category: item.product.category,
+      weight: item.product.weight,
     };
     orderProducts.push(p);
   });

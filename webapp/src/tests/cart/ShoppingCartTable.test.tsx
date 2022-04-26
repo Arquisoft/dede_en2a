@@ -13,7 +13,8 @@ test("A list of two cart items is rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
-        category: 'Electronics'
+        category: "Electronics",
+        weight: 1,
       },
       amount: 1,
     },
@@ -25,7 +26,8 @@ test("A list of two cart items is rendered", async () => {
         price: 15,
         stock: 10,
         image: "",
-        category: 'Clothes'
+        category: "Clothes",
+        weight: 1,
       },
       amount: 2,
     },
@@ -75,7 +77,8 @@ test("A list of one cart item with amount 0 is not rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
-        category: 'Electronics'
+        category: "Electronics",
+        weight: 1,
       },
       amount: 0,
     },
@@ -105,7 +108,8 @@ test("The increment button is disabled when the amount is equal or higher to the
         price: 10,
         stock: 20,
         image: "",
-        category: 'Electronics'
+        category: "Electronics",
+        weight: 1,
       },
       amount: 20,
     },
@@ -134,7 +138,8 @@ test("Increment and decrement buttons work well.", async () => {
         price: 10,
         stock: 20,
         image: "",
-        category: 'Electronics'
+        category: "Electronics",
+        weight: 1,
       },
       amount: 1,
     },
