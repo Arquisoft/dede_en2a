@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 export const userVerificationSchema = new Schema(
   {
-    email: {
+    webId: {
       type: String,
       required: true,
       trim: true,

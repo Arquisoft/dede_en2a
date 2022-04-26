@@ -2,17 +2,14 @@ import { Order, Product, Review, User } from "../shared/shareddtypes";
 
 const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
 
-// USERS
+// -*- USERS -*-
 
-export async function addUser(user: User): Promise<boolean> {
+export async function addUser(webId: string): Promise<boolean> {
   let response = await fetch(apiEndPoint + "/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      name: user.name,
-      webId: user.webId,
-      email: user.email,
-      password: user.password,
+      webId: window.btoa(webId),
     }),
   });
   if (response.status === 200) {
@@ -20,33 +17,20 @@ export async function addUser(user: User): Promise<boolean> {
   } else return false;
 }
 
-export async function checkUser(
-  email: String,
-  password: String
-): Promise<boolean> {
-  let response = await fetch(apiEndPoint + "/users/requestToken", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-  });
+export async function getUser(webId: string): Promise<User | undefined> {
+  if (webId === "" || webId === undefined)
+    throw new Error("Provided WebID is empty"); // If no webId is provided
 
-  if (response.status === 200) {
-    localStorage.setItem("token", await response.json());
-    return true;
-  } else {
-    return false;
-  }
+  let response = await fetch(
+    apiEndPoint + "/users/findByWebId/" + window.btoa(webId)
+  );
+
+  if (response.status === 204)
+    return Promise.resolve(undefined); // In case no user has been found
+  else return response.json(); // we return the obtained user
 }
 
-export async function getUser(userEmail: String): Promise<User> {
-  let response = await fetch(apiEndPoint + "/users/findByEmail/" + userEmail);
-  return response.json();
-}
-
-// PRODUCTS
+// -*- PRODUCTS -*-
 
 export async function getProducts(): Promise<Product[]> {
   let response = await fetch(apiEndPoint + "/products/");
@@ -55,19 +39,19 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProduct(productCode: string): Promise<Product> {
   let response = await fetch(
-    apiEndPoint + "/products/findByCode/" + productCode
+    apiEndPoint + "/products/listByCode/" + productCode
   );
   return response.json();
 }
 
-export async function updateProduct(product: Product): Promise<boolean> {
+export async function updateProduct(webId: string, product: Product) {
   let response = await fetch(apiEndPoint + "/products/update/" + product.code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
+      token: window.btoa(webId),
     },
+
     body: JSON.stringify({
       name: product.name,
       price: product.price,
@@ -82,15 +66,14 @@ export async function updateProduct(product: Product): Promise<boolean> {
   }
 }
 
-export async function createProduct(image: any, body: any): Promise<boolean> {
+export async function createProduct(image: any, body: any, webId : string): Promise<boolean> {
   var data = new FormData();
   data.append("image", image, body.code + ".png");
   for (let key in body) {
     data.append(key, body[key]);
   }
   // We must send authorization through body because form-data request do not allow headers
-  data.append("token", localStorage.getItem("token") + "");
-  data.append("email", localStorage.getItem("user.email") + "");
+  data.append("token", window.btoa(webId));
 
   let response = await fetch(apiEndPoint + "/products", {
     method: "POST",
@@ -104,13 +87,12 @@ export async function createProduct(image: any, body: any): Promise<boolean> {
   }
 }
 
-export async function deleteProduct(code: string): Promise<boolean> {
+export async function deleteProduct(webId: string, code: string) {
   let response = await fetch(apiEndPoint + "/products/delete/" + code, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
+      token: window.btoa(webId),
     },
   });
   if (response.status === 200) {
@@ -132,84 +114,89 @@ export async function filterProductsByCategory(
   return response.json();
 }
 
-// ORDERS
+// -*- ORDERS -*-
 
-export async function createOrder(body: any) {
+export async function createOrder(webId: string, body: any) {
   await fetch(apiEndPoint + "/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
-      email: localStorage.getItem("user.email") + "",
+      token: window.btoa(webId),
     },
     body: body,
   });
 }
 
-export async function getOrder(orderCode: string): Promise<Order> {
-  var headers = {};
-  headers = {
-    token: localStorage.getItem("token"),
-    email: localStorage.getItem("user.email"),
-  };
+export async function getOrderByCode(
+  webId: string,
+  orderCode: string
+): Promise<Order> {
   let response = await fetch(
     apiEndPoint + "/orders/findByOrderCode/" + orderCode,
     {
       method: "GET",
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        token: window.btoa(webId),
+      },
     }
   );
   return response.json();
 }
 
-export async function getOrdersForUser(): Promise<Order[]> {
-  if (localStorage.getItem("user.role") === "admin") return getOrders();
-  else {
-    let headers = {};
-    headers = {
-      token: localStorage.getItem("token"),
-      email: localStorage.getItem("user.email"),
-    };
+export async function getOrdersForUser(
+  webId: string,
+  role: string
+): Promise<Order[]> {
+  const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
+  if (role === "admin" || role === "moderator") {
+    // In case the user is an admin: return THE WHOLE collection
+    let response = await fetch(
+      apiEndPoint + "/orders/listForAdminOrModerator",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: window.btoa(webId), // we have to check if the user is authenticated
+        },
+      }
+    );
 
-    const apiEndPoint =
-      process.env.REACT_APP_API_URI || "http://localhost:5000";
-    let response = await fetch(apiEndPoint + "/orders", {
+    return response.json();
+  } else {
+    // In case the user is a normal one: return HIS orders
+    let response = await fetch(apiEndPoint + "/orders/listForUser", {
       method: "GET",
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        token: window.btoa(webId),
+      },
     });
+
     return response.json();
   }
 }
 
-export async function getOrders(): Promise<Order[]> {
-  let headers = {};
-  headers = {
-    token: localStorage.getItem("token"),
-    email: localStorage.getItem("user.email"),
-  };
-
-  let response = await fetch(apiEndPoint + "/orders/list/", {
-    method: "GET",
-    headers: headers,
-  });
-  return response.json();
-}
-
-// REVIEWS
+// -*- REVIEWS -*-
 
 export async function getReviewsByCode(code: string): Promise<Review[]> {
   let response = await fetch(apiEndPoint + "/reviews/listByCode/" + code);
   return response.json();
 }
 
-export async function getReviewsByCodeAndEmail(
+export async function getReviewsByCodeAndWebId(
   code: string,
-  email: string
+  webId: string
 ): Promise<Review[]> {
   let response = await fetch(
-    apiEndPoint + "/reviews/listByCodeAndEmail/" + code + "/" + email
+    apiEndPoint +
+      "/reviews/listByCodeAndWebId/" +
+      code +
+      "/" +
+      window.btoa(webId)
   );
-  return response.json();
+  if (response.status === 200) return response.json();
+  else return [];
 }
 
 export async function addReview(review: Review): Promise<boolean> {
@@ -217,12 +204,12 @@ export async function addReview(review: Review): Promise<boolean> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      token: localStorage.getItem("token") + "",
+      token: window.btoa(review.webId),
     },
     body: JSON.stringify({
       rating: review.rating,
       comment: review.comment,
-      userEmail: review.userEmail,
+      webId: window.btoa(review.webId),
       productCode: review.productCode,
     }),
   });

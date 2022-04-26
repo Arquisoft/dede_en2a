@@ -1,23 +1,14 @@
 import React from "react";
 
-import { getOrders } from "../../../api/api";
 import Subtitle from "../utils/Subtitle";
 import Title from "../utils/Title";
 
-export default function Chart() {
+export default function Chart(props: any) {
   const [data, setData] = React.useState(0);
-  const [orderEmails] = React.useState<string[]>([]);
+  const [orderWebIDs] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    getOrders()
-      .then((orders) =>
-        orders.forEach((order) => {
-          if (!orderEmails.includes(order.userEmail)) {
-            orderEmails.push(order.userEmail);
-          }
-        })
-      )
-      .finally(() => setData(orderEmails.length));
+    // TODO: Refactor this
   }, []);
 
   return (

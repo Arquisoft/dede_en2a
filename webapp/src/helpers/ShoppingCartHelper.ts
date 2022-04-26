@@ -18,8 +18,8 @@ export function calculateTotal(
 export async function saveOrder(
   products: CartItem[],
   shippingCosts: number,
-  userEmail: string,
-  userAddress: string
+  webId: string,
+  address: string
 ) {
   let productCosts: number = calculateTotal(products, 0);
   var orderProducts: Product[] = [];
@@ -39,9 +39,9 @@ export async function saveOrder(
   let receivingDate = new Date();
   receivingDate.setDate(receivingDate.getDate() + 3);
   let order: Order = {
-    orderCode: uuidv4(),
-    userEmail: userEmail,
-    userAddress: userAddress,
+    code: uuidv4(),
+    webId: window.btoa(webId),
+    address: address,
     products: orderProducts,
     date: new Date(),
     subtotalPrice: Number((Math.round(productCosts * 100) / 100).toFixed(2)),
@@ -50,7 +50,7 @@ export async function saveOrder(
     receivedDate: receivingDate,
   };
 
-  await createOrder(JSON.stringify(order));
+  await createOrder(webId, JSON.stringify(order));
 }
 
 export function getCurrentCartAmount(
@@ -64,4 +64,59 @@ export function getCurrentCartAmount(
     }
   });
   return currentAmount;
+}
+
+export function addProductToCart(
+  product: Product,
+  productsInCart: CartItem[],
+  setProductsInCart: React.Dispatch<React.SetStateAction<CartItem[]>>,
+  setTotalUnitsInCart: React.Dispatch<React.SetStateAction<number>>
+) {
+  if (product !== undefined) {
+    // We have to check the parameters we pass
+    let products = productsInCart.slice();
+    let found: number = -1;
+    products.forEach((cartItem, index) => {
+      if (cartItem.product.code === product.code) found = index;
+    });
+
+    //We check if the product is in the cart. In this case we add 1 to the amount,
+    //otherwise we push the product with amount 1
+    if (found >= 0) products[found].amount += 1;
+    else products.push({ product: product, amount: 1 });
+
+    localStorage.setItem("cart", JSON.stringify(products));
+    setProductsInCart(products); // we update the products in the cart
+    setTotalUnitsInCart((prevNumberOfUnits) => prevNumberOfUnits + 1);
+  }
+}
+
+export function removeProductFromCart(
+  product: Product,
+  productsCart: CartItem[],
+  setProductsCart: React.Dispatch<React.SetStateAction<CartItem[]>>,
+  setTotalUnitsInCart: React.Dispatch<React.SetStateAction<number>>
+) {
+  let products = productsCart.slice();
+  let found: number = -1;
+  products.forEach((cartItem, index) => {
+    if (cartItem.product.code === product.code) found = index;
+  });
+
+  products[found].amount -= 1;
+  if (products[found].amount === 0) delete products[found];
+
+  products = products.filter(Boolean);
+  localStorage.setItem("cart", JSON.stringify(products)); //Update the cart in session
+  setProductsCart(products);
+  setTotalUnitsInCart((prevNumberOfUnits) => prevNumberOfUnits - 1);
+}
+
+export function removeAllFromCart(
+  setProductsCart: React.Dispatch<React.SetStateAction<CartItem[]>>,
+  setTotalUnitsInCart: React.Dispatch<React.SetStateAction<number>>
+) {
+  setProductsCart([]);
+  setTotalUnitsInCart(0);
+  localStorage.setItem("cart", JSON.stringify([]));
 }

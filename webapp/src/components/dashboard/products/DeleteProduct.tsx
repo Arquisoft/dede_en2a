@@ -1,26 +1,26 @@
 import {
-  Alert,
   Box,
   Button,
   Card,
   Container,
   MenuItem,
   Paper,
-  Snackbar,
   Stack,
   styled,
-  TextField
+  TextField,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
+import NotificationAlert from "../../misc/NotificationAlert";
 
 const DEF_IMAGE: string =
   process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
 
 const Img = styled("img")({
+  // TODO: check if this is working as intended
   display: "block",
   width: "22.2vw",
   height: "22.2vw",
@@ -29,20 +29,21 @@ const Img = styled("img")({
 
 type DeleteProductProps = {
   products: Product[];
-  createShop: () => void;
+  webId: string;
+  role: string;
+  refreshShop: () => void;
 };
 
 export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
-  const [notificationStatus, setNotificationStatus] = useState(false);
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(0);
-  const [image, setImage] = useState(DEF_IMAGE);
-  const [notification, setNotification] = useState<NotificationType>({
+  const [image, setImage] = useState("");
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
     severity: "success",
     message: "",
   });
@@ -64,14 +65,14 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
   const handleDeleteProduct = async () => {
     if (code !== "") {
-      const deleted = await deleteProduct(code);
+      const deleted = await deleteProduct(props.webId, code);
       if (deleted) {
         setNotificationStatus(true);
         setNotification({
           severity: "success",
           message: "Product deleted correctly",
         });
-        props.createShop();
+        props.refreshShop();
         emptyFields();
       } else {
         setNotificationStatus(true);
@@ -90,14 +91,12 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
   };
 
   const handleDeleteConfirmed = async () => {
-    await deleteProduct(code);
-    setNotificationStatus(true);
-    setNotification({
-      severity: "success",
-      message: "Product deleted correctly",
-    });
-    emptyFields();
-    props.createShop();
+    // TODO: not working
+    if (props.webId !== undefined) {
+      await deleteProduct(props.webId, code);
+      emptyFields();
+      props.refreshShop();
+    }
   };
 
   const emptyFields = () => {
@@ -107,19 +106,10 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     setCategory("");
     setStock("");
     setPrice("");
-    setImage(DEF_IMAGE);
+    setImage(checkImageExists("")); // We find the empty image: not-found
   };
 
-  const openDialog = () => {
-    setDialogOpen(dialogOpen + 1);
-  };
-
-  if (
-    localStorage.getItem("user.email") === null ||
-    (localStorage.getItem("user.role") !== "admin" &&
-      localStorage.getItem("user.role") !== "manager")
-  )
-    return <Navigate to="/" />;
+  if (props.webId === "" || props.role === "user") return <Navigate to="/" />;
   else
     return (
       <React.Fragment>
@@ -239,21 +229,11 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
           </Paper>
         </Container>
 
-        <Snackbar
-          open={notificationStatus}
-          autoHideDuration={3000}
-          onClose={() => {
-            setNotificationStatus(false);
-          }}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "center",
-          }}
-        >
-          <Alert severity={notification.severity} sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
+        <NotificationAlert
+          notification={notification}
+          notificationStatus={notificationStatus}
+          setNotificationStatus={setNotificationStatus}
+        />
       </React.Fragment>
     );
 }

@@ -7,10 +7,15 @@ import Paper from "@mui/material/Paper";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
-import { isRenderForModeratorAtLeast } from "../../helpers/RoleHelper";
+import { isRenderForModeratorAtLeast } from "../../../helpers/RoleHelper";
 
-export default function DashboardSideBar() {
+type DashboardSideBarProps = {
+  role: string;
+};
+
+export default function DashboardSideBar(props: DashboardSideBarProps) {
   return (
     <Paper
       sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
@@ -29,7 +34,7 @@ export default function DashboardSideBar() {
           label="Orders"
           icon={<MoveToInboxIcon />}
         />
-        {isRenderForModeratorAtLeast() && (
+        {isRenderForModeratorAtLeast(props.role) && (
           <BottomNavigationAction
             component={Link}
             to="products"
@@ -37,6 +42,12 @@ export default function DashboardSideBar() {
             icon={<LocalOfferIcon />}
           />
         )}
+        <BottomNavigationAction
+          component={Link}
+          to="account"
+          label="Account Details"
+          icon={<ManageAccountsIcon />}
+        />
       </BottomNavigation>
     </Paper>
   );

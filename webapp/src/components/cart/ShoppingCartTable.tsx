@@ -16,10 +16,10 @@ import { CartItem, Product } from "../../shared/shareddtypes";
 import { checkImageExists } from "../../helpers/ImageHelper";
 
 type ShoppingCartProps = {
-  products: CartItem[];
+  productsInCart: CartItem[];
   totalUnitsInCart: number;
-  onIncrementUnit: (product: Product) => void;
-  onDecrementUnit: (product: Product) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (product: Product) => void;
 };
 
 function ShoppingCart(props: ShoppingCartProps): JSX.Element {
@@ -49,22 +49,28 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.products.map((cartItem: CartItem) => {
+              {props.productsInCart.map((cartItem: CartItem) => {
                 if (cartItem.amount > 0)
                   return (
                     <TableRow key={cartItem.product.code}>
                       <TableCell>
                         <Stack
                           direction={{ xs: "column", sm: "row" }}
-                          spacing={{ xs: 1, sm: 2, md: 4 }}
-                          justifyContent="flex-start"
                           alignItems="center"
                         >
                           <Img
                             alt="Imagen del producto en el carrito"
                             src={checkImageExists(cartItem.product.image)}
+                            sx={{ display: { xs: "none", md: "block" } }}
                           />
-                          {cartItem.product.name}
+                          <Stack direction="column" sx={{ p: 1 }}>
+                            <Typography variant="subtitle1">
+                              {cartItem.product.name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {cartItem.product.description}
+                            </Typography>
+                          </Stack>
                         </Stack>
                       </TableCell>
                       <TableCell>
@@ -75,7 +81,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                         >
                           <Button
                             onClick={() =>
-                              props.onDecrementUnit(cartItem.product)
+                              props.removeFromCart(cartItem.product)
                             }
                             className="m-1"
                           >
@@ -85,9 +91,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
                             {cartItem.amount}
                           </Typography>
                           <Button
-                            onClick={() =>
-                              props.onIncrementUnit(cartItem.product)
-                            }
+                            onClick={() => props.addToCart(cartItem.product)}
                             disabled={!handleButton(cartItem)}
                             className="m-1"
                           >
@@ -109,7 +113,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
         <Typography variant="h6" className="m-2">
           Total Price -{" "}
           {
-            calculateTotal(props.products, 0) // There are no shipping costs yet here
+            calculateTotal(props.productsInCart, 0) // There are no shipping costs yet here
           }
           €
         </Typography>

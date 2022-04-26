@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import path from "path";
 import { userModel } from "../users/User";
-import { verifyToken } from "../utils/generateToken";
+import { verifyWebID } from "../utils/WebIDValidation";
 import { productModel } from "./Product";
 
+// Obtaining products are unauthorized operations: everybody can list the products of the shop
 export const getProducts: RequestHandler = async (req, res) => {
   const products = await productModel.find();
   return res.json(products);
@@ -19,10 +20,7 @@ export const getProduct: RequestHandler = async (req, res) => {
 };
 
 export const createProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.body.token + "",
-    req.body.email + ""
-  );
+  const isVerified = await verifyWebID(req.body.token + "");
   if (isVerified) {
     try {
       let product = new productModel(req.body);
@@ -50,11 +48,10 @@ export const createProduct: RequestHandler = async (req, res) => {
 };
 
 export const deleteProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-  const user = await userModel.findOne({ email: req.headers.email });
+  const webId = req.headers.token;
+  const user = await userModel.findOne({ webId: webId });
+  const isVerified = await verifyWebID(webId + "");
+
   if (isVerified && user.role === "admin") {
     const productFound = await productModel.deleteOne({
       code: req.params.code,
@@ -68,12 +65,11 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-  const user = await userModel.findOne({ email: req.headers.email });
-  if (isVerified && (user.role === "admin" || user.role === "manager")) {
+  const webId = req.headers.token;
+  const user = await userModel.findOne({ webId: webId });
+  const isVerified = await verifyWebID(webId + "");
+
+  if (isVerified && (user.role === "admin" || user.role === "moderator")) {
     const product = await productModel.findOneAndUpdate(
       { code: req.params.code },
       req.body,

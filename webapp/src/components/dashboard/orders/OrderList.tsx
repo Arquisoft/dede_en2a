@@ -1,4 +1,6 @@
-import { Autorenew } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Button,
   Container,
@@ -22,19 +24,27 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getOrdersForUser, getUser } from "../../../api/api";
-import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
-import { Order, User } from "../../../shared/shareddtypes";
-import FeaturedProducts from "../../home/FeaturedProducts";
+
+import { Autorenew } from "@mui/icons-material";
+
 import StatusMessage from "./StatusMessage";
+import FeaturedProducts from "../../home/FeaturedProducts";
+
+import { getOrdersForUser } from "../../../api/api";
+import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
+import { getNameFromPod } from "../../../helpers/SolidHelper";
+import { Order } from "../../../shared/shareddtypes";
 
 const ALL = "all";
 const RECEIVED = "received";
 const SHIPPING = "shipping";
+
+type OrdersProps = {
+  webId: string;
+  role: string;
+};
 
 type OrderTableItemProps = {
   order: Order;
@@ -95,7 +105,7 @@ function OrderTitle(props: any) {
 
 function OrderHeader(props: any) {
   if (props.isOrder) {
-    if (isRenderForAdminOnly()) {
+    if (isRenderForAdminOnly(props.role)) {
       return (
         <OrderTitle
           state={props.state}
@@ -109,7 +119,7 @@ function OrderHeader(props: any) {
         <OrderTitle
           state={props.state}
           handleChange={props.handleChange}
-          title={"Your orders, " + props.name}
+          title={"Your orders, " + props.name} // TODO: refactor this
           refreshOrderList={props.refreshOrderList}
         />
       );
@@ -128,7 +138,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
 
   return (
-    <TableRow hover key={props.order.orderCode}>
+    <TableRow hover key={props.order.code}>
       <TableCell align="center" component="th" scope="row">
         {new Date(props.order.date || new Date()).toDateString()}
       </TableCell>
@@ -143,7 +153,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
           variant="contained"
           color="secondary"
           className="m-1"
-          onClick={() => navigate("/dashboard/order/" + props.order.orderCode)}
+          onClick={() => navigate("/dashboard/order/" + props.order.code)}
         >
           See details
         </Button>
@@ -165,7 +175,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 function OrderTable(props: OrderTableProps): JSX.Element {
   let orders: Order[] = [];
-
   const [page, setPage] = React.useState(0);
   const [rowsPerPage] = React.useState(10);
 
@@ -216,7 +225,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               {orders
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((order: Order) => {
-                  return <OrderTableItem key={order.orderCode} order={order} />;
+                  return <OrderTableItem key={order.code} order={order} />;
                 })}
             </TableBody>
           </Table>
@@ -241,9 +250,9 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
 }
 
-function Orders(props: any): JSX.Element {
+function Orders(props: OrdersProps): JSX.Element {
+  const [name, setName] = React.useState("");
   const [orders, setOrders] = useState<Order[]>([]);
-  const [user, setUser] = useState<User>();
   const [loading, setLoading] = React.useState(false);
   const [state, setState] = React.useState(ALL);
 
@@ -252,28 +261,26 @@ function Orders(props: any): JSX.Element {
   };
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser());
-  };
-
-  const refreshUser = async () => {
-    setUser(await getUser(props.userEmail));
+    if (props.webId !== undefined)
+      setOrders(await getOrdersForUser(props.webId, props.role));
   };
 
   useEffect(() => {
     setLoading(true); // we start with the loading process
-    refreshUser();
+    getNameFromPod(props.webId).then((name) => setName(name));
     refreshOrderList().finally(() => setLoading(false)); // loading process must be finished
   }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <React.Fragment>
           <OrderHeader
             isOrder={orders.length > 0}
             refreshOrderList={refreshOrderList}
-            name={user?.name}
+            name={name}
+            role={props.role}
             state={state}
             handleChange={handleChange}
           />

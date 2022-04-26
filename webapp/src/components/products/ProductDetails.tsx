@@ -4,25 +4,33 @@ import { useParams } from "react-router-dom";
 import { getProduct, getReviewsByCode } from "../../api/api";
 import { checkImageExists } from "../../helpers/ImageHelper";
 import { getReviewMean } from "../../helpers/ReviewHelper";
-import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
 
-import { CartItem, Product, Review } from "../../shared/shareddtypes";
+import { Product, Review } from "../../shared/shareddtypes";
 
-import StockAlert from "../StockAlert";
 import ProductCommentList from "./ProductCommentList";
+import StockAlert from "./StockAlert";
 import ProductSpeedDial from "./ProductSpeedDial";
 import ReviewDialog from "./ReviewDialog";
 import ShareDialog from "./ShareDialog";
 
 import {
-  Breadcrumbs, Button, Divider, Grid, LinearProgress,
-  Link, Paper, Rating, Stack, styled, Typography
+  Breadcrumbs,
+  Button,
+  Divider,
+  Grid,
+  LinearProgress,
+  Link,
+  Paper,
+  Rating,
+  Stack,
+  styled,
+  Typography,
 } from "@mui/material";
 
 export type ProductProps = {
   product: Product;
-  cartItems: CartItem[];
-  onAdd: (product: Product) => void;
+  addToCart: (product: Product) => void;
+  webId: string;
 };
 
 type ProductDets = {
@@ -57,11 +65,31 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
 
   const [product, setProduct] = useState<Product>();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [dialogOpen, setDialogOpen] = useState(0);
-  const [shareDialogOpen, setShareDialogOpen] = useState(0);
   const [starsSelected, setSelectedStars] = useState(0);
-  const [currentCartAmount, setCurrentCartAmount] = useState(0);
+  const [currentCartAmount] = useState(0);
   const [loading, setLoading] = React.useState(false);
+
+  // We manage the share dialog as intended
+  const [openShareDialog, setOpenShareDialog] = React.useState(false);
+
+  const handleClickOpenShareDialog = () => {
+    setOpenShareDialog(true);
+  };
+
+  const handleCloseShareDialog = () => {
+    setOpenShareDialog(false);
+  };
+
+  // We manage the review dialog as intended
+  const [openReviewDialog, setOpenReviewDialog] = React.useState(false);
+
+  const handleClickOpenReviewDialog = () => {
+    setOpenReviewDialog(true);
+  };
+
+  const handleCloseReviewDialog = () => {
+    setOpenReviewDialog(false);
+  };
 
   const obtainProductDetails = async (code: string) => {
     // We obtain the product
@@ -72,27 +100,9 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     setReviews(await getReviewsByCode(code));
   };
 
-  const openDialog = () => {
-    setDialogOpen(dialogOpen + 1);
-  };
-
-  const openShareDialog = () => {
-    setShareDialogOpen(shareDialogOpen + 1);
-  };
-
-  const addProductToCart = () => {
-    if (product !== undefined) {
-      props.onAdd(product);
-    }
-  };
-
   useEffect(() => {
     setLoading(true);
-    obtainProductDetails(id + "").finally(() => setLoading(false));
-
-    // In case we have obtained a product
-    if (product !== undefined)
-      setCurrentCartAmount(getCurrentCartAmount(product, props.cartItems));
+    obtainProductDetails(id + "").finally(() => setLoading(false)); // TODO: check that removing setCurrentCart works
   }, []);
 
   // In case we are retrieving the elements from the db...
@@ -128,7 +138,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
       <React.Fragment>
         <ShopBreadcrumbs product={product.name} />
         <Grid>
-          <Paper elevation={8} style={{ margin: "3vh 5vw", padding: "1em" }}>
+          <Paper elevation={8} sx={{ m: 3, p: 2 }}>
             <Grid
               container
               direction="row"
@@ -158,7 +168,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                     name="hover-feedback"
                     value={getReviewMean(reviews)}
                     precision={0.5}
-                    onClick={openDialog}
+                    onClick={handleClickOpenReviewDialog}
                     onChange={(event, newValue) => {
                       if (newValue != null) setSelectedStars(newValue);
                     }}
@@ -189,7 +199,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                 <Button
                   variant="contained"
                   disabled={product.stock <= currentCartAmount}
-                  onClick={addProductToCart}
+                  onClick={() => props.addToCart(product)}
                   sx={{ my: 1, width: "100%" }}
                 >
                   Add product to cart
@@ -197,20 +207,27 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
               </Grid>
             </Grid>
           </Paper>
-          <ProductCommentList reviews={reviews}></ProductCommentList>
+          <ProductCommentList reviews={reviews} />
           <ReviewDialog
             product={product}
-            show={dialogOpen}
             stars={starsSelected}
+            webId={props.webId}
+            open={openReviewDialog}
+            handleOpen={handleClickOpenReviewDialog}
+            handleClose={handleCloseReviewDialog}
           />
 
-          <ShareDialog show={shareDialogOpen} />
+          <ShareDialog
+            open={openShareDialog}
+            handleOpen={handleClickOpenShareDialog}
+            handleClose={handleCloseShareDialog}
+          />
         </Grid>
 
         <ProductSpeedDial
-          addToCart={addProductToCart}
-          review={openDialog}
-          share={openShareDialog}
+          addToCart={props.addToCart}
+          review={handleClickOpenReviewDialog}
+          share={handleClickOpenShareDialog}
         />
       </React.Fragment>
     );

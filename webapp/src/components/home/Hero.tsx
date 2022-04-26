@@ -5,13 +5,22 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { Theme } from "@mui/material/styles";
+
+import { checkImageExistsLocally } from "../../helpers/ImageHelper";
 
 export default function Hero() {
   return (
     <React.Fragment>
       <Stack
         sx={{
-          bgcolor: "background.paper",
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url(${checkImageExistsLocally(
+            "hero.jpg"
+          )})`,
+          backgroundAttachment: "fixed",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
           width: "100%",
           height: "91vh",
         }}
@@ -23,17 +32,12 @@ export default function Hero() {
             component="h1"
             variant="h2"
             align="center"
-            color="text.primary"
+            color="white"
             gutterBottom
           >
             Welcome to DeDe
           </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            color="text.secondary"
-            paragraph
-          >
+          <Typography variant="h5" align="center" color="white" paragraph>
             We are creating an app for you to order the products you want - as
             in any other site - with privacy in mind
           </Typography>
@@ -54,10 +58,10 @@ export default function Hero() {
             <Button
               variant="outlined"
               component={Link}
-              to="sign-up"
+              to="sign-in"
               sx={{ textAlign: "center" }}
             >
-              Create an account
+              Log to your POD
             </Button>
           </Stack>
         </Container>
