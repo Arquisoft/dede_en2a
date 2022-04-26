@@ -224,7 +224,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   disabled
                   value={weight}
                   id="outlined-full-width"
-                  label="Product stock"
+                  label="Product weight (kg)"
                   style={{ margin: 8 }}
                   fullWidth
                   type="number"

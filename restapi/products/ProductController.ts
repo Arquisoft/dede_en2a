@@ -65,20 +65,20 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 };
 
 export const updateProduct: RequestHandler = async (req, res) => {
-  const webId = req.headers.token;
+  /*const webId = req.headers.token;
   const user = await userModel.findOne({ webId: webId });
   const isVerified = await verifyWebID(webId + "");
 
-  if (isVerified && (user.role === "admin" || user.role === "moderator")) {
+  if (isVerified && (user.role === "admin" || user.role === "moderator")) {*/
     const product = await productModel.findOneAndUpdate(
       { code: req.params.code },
       req.body,
       { new: true }
     );
     res.json(product);
-  } else {
+ /* } else {
     res.status(403).json();
-  }
+  }*/
 };
 
 export const filterAndOrderBy: RequestHandler = async (req, res) => {

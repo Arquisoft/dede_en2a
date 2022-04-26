@@ -336,7 +336,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                 <TextField
                   value={weight}
                   id="outlined-full-width"
-                  label="Product stock"
+                  label="Product weight (kg)"
                   style={{ margin: 8 }}
                   fullWidth
                   type="number"
