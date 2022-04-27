@@ -13,6 +13,8 @@ test("A list of two cart items is rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
+        category: "Electronics",
+        weight: 1,
       },
       amount: 1,
     },
@@ -24,6 +26,8 @@ test("A list of two cart items is rendered", async () => {
         price: 15,
         stock: 10,
         image: "",
+        category: "Clothes",
+        weight: 1,
       },
       amount: 2,
     },
@@ -31,10 +35,10 @@ test("A list of two cart items is rendered", async () => {
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={2}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -52,10 +56,10 @@ test("An empty list of cart items is rendered", async () => {
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={0}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -73,6 +77,8 @@ test("A list of one cart item with amount 0 is not rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
+        category: "Electronics",
+        weight: 1,
       },
       amount: 0,
     },
@@ -80,14 +86,15 @@ test("A list of one cart item with amount 0 is not rendered", async () => {
 
   const { queryByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={1}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
   expect(queryByText("Producto 1")).not.toBeInTheDocument();
+
   expect(queryByText("0")).not.toBeInTheDocument();
 });
 
@@ -102,6 +109,8 @@ test("The increment button is disabled when the amount is equal or higher to the
         price: 10,
         stock: 20,
         image: "",
+        category: "Electronics",
+        weight: 1,
       },
       amount: 20,
     },
@@ -109,10 +118,10 @@ test("The increment button is disabled when the amount is equal or higher to the
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={1}
-      onIncrementUnit={() => {}}
-      onDecrementUnit={() => {}}
+      addToCart={() => {}}
+      removeFromCart={() => {}}
     />
   );
 
@@ -130,26 +139,28 @@ test("Increment and decrement buttons work well.", async () => {
         price: 10,
         stock: 20,
         image: "",
+        category: "Electronics",
+        weight: 1,
       },
       amount: 1,
     },
   ];
 
-  const onIncrementUnit = jest.fn();
-  const onDecrementUnit = jest.fn();
+  const addToCart = jest.fn();
+  const removeFromCart = jest.fn();
 
   const { getByText } = render(
     <ShoppingCartTable
-      products={cart}
+      productsInCart={cart}
       totalUnitsInCart={1}
-      onIncrementUnit={onIncrementUnit}
-      onDecrementUnit={onDecrementUnit}
+      addToCart={addToCart}
+      removeFromCart={removeFromCart}
     />
   );
 
   fireEvent.click(getByText("+"));
-  expect(onIncrementUnit).toHaveBeenCalled();
+  expect(addToCart).toHaveBeenCalled();
 
   fireEvent.click(getByText("-"));
-  expect(onDecrementUnit).toHaveBeenCalled();
+  expect(removeFromCart).toHaveBeenCalled();
 });

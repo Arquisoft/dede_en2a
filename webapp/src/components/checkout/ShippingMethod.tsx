@@ -3,39 +3,51 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
-import ShippingMethodForm from "./shipping/ShippingMethodForm";
+import CarriersRatesForm from "./shipping/CarriersRatesForm";
 import PickUpLocationsMap from "./shipping/PickUpLocationsMap";
+import ShippingMethodForm from "./shipping/ShippingMethodForm";
 import ShippingRouteMap from "./shipping/ShippingRouteMap";
 
 export default function ShippingMethod(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0);
   const [pickUpLocation, setPickUpLocation] = React.useState("");
   const [shippingMethod, setShippingMethod] = React.useState("");
+  const [carrierSelected, setCarrierSelected] = React.useState(false);
 
   // We manage the button for going back and forth
   const handleNext = (shippingMethodTitle: string) => {
     setActiveStep(activeStep + 1);
 
-    // In case the shipping method is not Pick UP go directly to the last step
-    if (activeStep === 0 && shippingMethodTitle !== "Pick UP") setActiveStep(2);
+    // In case the shipping method is Pick UP go direclty the carriers rates step
+    if (activeStep === 0 && shippingMethodTitle === "Pick UP") {
+      setActiveStep(2);
+    }
+
+    //When a carrier rates is selected, go directly to the last step
+    if (activeStep === 1) {
+      setActiveStep(3);
+    }
+
     // The user has completed all the steps sucessfully
-    if (activeStep === 2) props.handleNext();
+    if (activeStep === 3) props.handleNext();
   };
 
   const isForward = () => {
     // We are at the first step: in case no shipping method has been selected
     if (activeStep === 0) return shippingMethod !== "";
+    // In case we are at the rates selector: no carrier has been selected
+    if (activeStep === 1) return carrierSelected;
     // In case we are at the pickUp location selector: no address has been selected
-    if (activeStep === 1) return pickUpLocation !== "";
+    if (activeStep === 2) return pickUpLocation !== "";
     // We are at the last step: viewing the delivery details
-    if (activeStep === 2) return true;
+    if (activeStep === 3) return true;
     // By default we will disable it
     return false;
   };
 
   const handleBack = () => {
     if (activeStep === 0) props.handleBack();
-    else setActiveStep(activeStep - 1);
+    else setActiveStep(0); // We go back to the main place where locations can be chosen
   };
 
   const getStepContent = (stepIndex: number) => {
@@ -45,12 +57,21 @@ export default function ShippingMethod(props: any): JSX.Element {
           <ShippingMethodForm
             shippingMethod={shippingMethod}
             setShippingMethod={setShippingMethod}
-            setCosts={props.setCosts}
             address={props.address}
             handleNext={handleNext}
           />
         );
       case 1:
+        return (
+          <CarriersRatesForm
+            setCarrierSelected={setCarrierSelected}
+            setCosts={props.setCosts}
+            address={props.address}
+            price={props.price}
+            cart={props.cart}
+          />
+        );
+      case 2:
         return (
           <PickUpLocationsMap
             address={props.address}
@@ -59,7 +80,7 @@ export default function ShippingMethod(props: any): JSX.Element {
             setPickUpLocation={setPickUpLocation}
           />
         );
-      case 2:
+      case 3:
         return <ShippingRouteMap address={props.address} costs={props.costs} />;
     }
   };

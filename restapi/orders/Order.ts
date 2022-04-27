@@ -5,25 +5,28 @@ import { product } from "../products/Product";
 
 const orderSchema = new Schema(
   {
-    orderCode: {
+    code: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      index: true,
+    },
+    webId: {
       type: String,
       required: true,
     },
-    userEmail: {
+    address: {
       type: String,
       required: true,
-    },
-    userAddress:{
-      type: String,
-      required: true
     },
     products: {
       type: [product],
-      required: true
+      required: true,
     },
     date: {
       type: Date,
-      required: true
+      required: true,
     },
     subtotalPrice: {
       type: Number,
@@ -37,8 +40,8 @@ const orderSchema = new Schema(
       type: Number,
       required: true,
     },
-    isOrderReceived: {
-      type: Boolean,
+    receivedDate: {
+      type: Date,
       required: true,
     },
   },

@@ -88,6 +88,23 @@ jobs:
           registry: ghcr.io
           workdir: restapi
           buildargs: PORT, MONGO_DB_URI, NODE_ENV, JWT_SECRET, AUTH_EMAIL, AUTH_PASS, SENDGRID_API_KEY
+  docker-push-carriers:
+    name: Push carriers restapi Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    env:
+      CARRIERS_DB_URI: ${{ secrets.CARRIERS_DB_URI}}
+    needs: [unit-test-webapp, unit-test-restapi]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: arquisoft/dede_en2a/carriersapi
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_PUSH_TOKEN }}
+          registry: ghcr.io
+          workdir: carrier-service-api
+          buildargs: CARRIERS_DB_URI
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest

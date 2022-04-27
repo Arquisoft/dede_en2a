@@ -2,43 +2,49 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  LinearProgress,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  styled,
   Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
   TableContainer,
   TableHead,
-  TableCell,
-  TableRow,
-  TableBody,
-  Typography,
-  Container,
-  LinearProgress,
-  Stack,
-  Grid,
-  Button,
-  IconButton,
-  Divider,
-  Tooltip,
   TablePagination,
-  styled,
-  tableCellClasses,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
+  TableRow,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 
 import { Autorenew } from "@mui/icons-material";
 
-import { Order, User } from "../../../shared/shareddtypes";
-import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
-import { getOrdersForUser, getUser } from "../../../api/api";
-
-import FeaturedProducts from "../../home/FeaturedProducts";
 import StatusMessage from "./StatusMessage";
+import FeaturedProducts from "../../home/FeaturedProducts";
+
+import { getOrdersForUser } from "../../../api/api";
+import { isRenderForAdminOnly } from "../../../helpers/RoleHelper";
+import { getNameFromPod } from "../../../helpers/SolidHelper";
+import { Order } from "../../../shared/shareddtypes";
 
 const ALL = "all";
 const RECEIVED = "received";
 const SHIPPING = "shipping";
+
+type OrdersProps = {
+  webId: string;
+  role: string;
+};
 
 type OrderTableItemProps = {
   order: Order;
@@ -99,7 +105,7 @@ function OrderTitle(props: any) {
 
 function OrderHeader(props: any) {
   if (props.isOrder) {
-    if (isRenderForAdminOnly()) {
+    if (isRenderForAdminOnly(props.role)) {
       return (
         <OrderTitle
           state={props.state}
@@ -113,7 +119,7 @@ function OrderHeader(props: any) {
         <OrderTitle
           state={props.state}
           handleChange={props.handleChange}
-          title={"Your orders, " + props.name}
+          title={"Your orders, " + props.name} // TODO: refactor this
           refreshOrderList={props.refreshOrderList}
         />
       );
@@ -132,22 +138,22 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
   let navigate = useNavigate();
 
   return (
-    <TableRow hover key={props.order.orderCode}>
+    <TableRow hover key={props.order.code}>
       <TableCell align="center" component="th" scope="row">
-        {props.order.orderCode}
+        {new Date(props.order.date || new Date()).toDateString()}
       </TableCell>
       <TableCell align="center">{props.order.subtotalPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.shippingPrice + " €"}</TableCell>
       <TableCell align="center">{props.order.totalPrice + " €"}</TableCell>
       <TableCell align="center">
-        <StatusMessage isOrderReceived={props.order.isOrderReceived} />
+        <StatusMessage receivedDate={props.order.receivedDate} />
       </TableCell>
       <TableCell align="center">
         <Button
           variant="contained"
           color="secondary"
           className="m-1"
-          onClick={() => navigate("/dashboard/order/" + props.order.orderCode)}
+          onClick={() => navigate("/dashboard/order/" + props.order.code)}
         >
           See details
         </Button>
@@ -169,9 +175,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 function OrderTable(props: OrderTableProps): JSX.Element {
   let orders: Order[] = [];
-
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage] = React.useState(5);
+  const [rowsPerPage] = React.useState(10);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -193,7 +198,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell align="center">Order</StyledTableCell>
+                <StyledTableCell align="center">Order date</StyledTableCell>
                 <StyledTableCell align="center">Subtotal</StyledTableCell>
                 <StyledTableCell align="center">Shipping price</StyledTableCell>
                 <StyledTableCell align="center">Price</StyledTableCell>
@@ -203,11 +208,14 @@ function OrderTable(props: OrderTableProps): JSX.Element {
             </TableHead>
             <TableBody>
               {props.orders.forEach((order) => {
-                if (props.state === RECEIVED && order.isOrderReceived === true)
+                if (
+                  props.state === RECEIVED &&
+                  new Date(order.receivedDate).getTime() < new Date().getTime()
+                )
                   orders.push(order);
                 else if (
                   props.state === SHIPPING &&
-                  order.isOrderReceived === false
+                  new Date(order.receivedDate).getTime() > new Date().getTime()
                 ) {
                   orders.push(order);
                 } else if (props.state === ALL || props.state === null) {
@@ -217,7 +225,7 @@ function OrderTable(props: OrderTableProps): JSX.Element {
               {orders
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((order: Order) => {
-                  return <OrderTableItem key={order.orderCode} order={order} />;
+                  return <OrderTableItem key={order.code} order={order} />;
                 })}
             </TableBody>
           </Table>
@@ -242,9 +250,9 @@ function OrderTable(props: OrderTableProps): JSX.Element {
     );
 }
 
-function Orders(props: any): JSX.Element {
+function Orders(props: OrdersProps): JSX.Element {
+  const [name, setName] = React.useState("");
   const [orders, setOrders] = useState<Order[]>([]);
-  const [user, setUser] = useState<User>();
   const [loading, setLoading] = React.useState(false);
   const [state, setState] = React.useState(ALL);
 
@@ -253,28 +261,26 @@ function Orders(props: any): JSX.Element {
   };
 
   const refreshOrderList = async () => {
-    setOrders(await getOrdersForUser());
-  };
-
-  const refreshUser = async () => {
-    setUser(await getUser(props.userEmail));
+    if (props.webId !== undefined)
+      setOrders(await getOrdersForUser(props.webId, props.role));
   };
 
   useEffect(() => {
     setLoading(true); // we start with the loading process
-    refreshUser();
+    getNameFromPod(props.webId).then((name) => setName(name));
     refreshOrderList().finally(() => setLoading(false)); // loading process must be finished
   }, []);
 
   return (
     <Container component="main" sx={{ mb: 4, mt: 4 }}>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <React.Fragment>
           <OrderHeader
             isOrder={orders.length > 0}
             refreshOrderList={refreshOrderList}
-            name={user?.name}
+            name={name}
+            role={props.role}
             state={state}
             handleChange={handleChange}
           />

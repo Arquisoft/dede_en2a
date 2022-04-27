@@ -3,15 +3,19 @@ import { Outlet } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 
-import DashboardSideBar from "./DashboardSideBar";
+import DashboardSideBar from "./dashboard/utils/DashboardSideBar";
 
-export default function Dashboard(props: any) {
+type DashboardProps = {
+  role: string;
+};
+
+export default function DashboardOutlet(props: DashboardProps) {
   return (
     <React.Fragment>
       <Grid component="main" sx={{ mb: 10 }}>
         <Outlet />
       </Grid>
-      <DashboardSideBar />
+      <DashboardSideBar role={props.role} />
     </React.Fragment>
   );
 }

@@ -12,7 +12,7 @@
     "@sendgrid/mail": "^7.6.2",
     "@types/axios": "^0.14.0",
     "@types/html-pdf": "^3.0.0",
-    "@types/pdfkit": "^0.12.3",
+    "@types/pdfkit": "^0.12.4",
     "@types/uuid": "^8.3.4",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",

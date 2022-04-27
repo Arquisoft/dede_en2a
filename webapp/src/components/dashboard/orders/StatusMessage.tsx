@@ -1,10 +1,11 @@
-import { Typography, Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 export default function StatusMessage(props: any) {
-  if (props.isOrderReceived)
+  if (new Date().getTime() > new Date(props.receivedDate).getTime())
+  
     return (
       <Stack
         direction="row"

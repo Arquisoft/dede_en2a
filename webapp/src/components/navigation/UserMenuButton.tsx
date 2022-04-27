@@ -1,30 +1,33 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-import IconButton from "@mui/material/IconButton";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import ListItemIcon from "@mui/material/ListItemIcon";
-
+import FaceIcon from "@mui/icons-material/Face";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+
+import { getNameFromPod } from "../../helpers/SolidHelper";
 
 type LogOutFuncProps = {
   logCurrentUserOut: () => void;
   handleCloseUserMenu: () => void;
+  webId: string;
 };
 
 function LogOut(props: LogOutFuncProps): JSX.Element {
   let navigate = useNavigate();
 
   const logOutUser = () => {
-    localStorage.removeItem("token");
     props.logCurrentUserOut();
     props.handleCloseUserMenu();
     navigate("/");
@@ -32,7 +35,7 @@ function LogOut(props: LogOutFuncProps): JSX.Element {
 
   return (
     <React.Fragment>
-      {localStorage.getItem("token") !== null && (
+      {props.webId !== undefined && ( // If a user has been authenticated
         <React.Fragment>
           <MenuItem onClick={logOutUser}>
             <ListItemIcon>
@@ -47,6 +50,7 @@ function LogOut(props: LogOutFuncProps): JSX.Element {
 }
 
 export default function UserMenuButton(props: any): JSX.Element {
+  const [name, setName] = React.useState("");
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -59,7 +63,11 @@ export default function UserMenuButton(props: any): JSX.Element {
     setAnchorElUser(null);
   };
 
-  if (localStorage.getItem("token") !== null)
+  React.useEffect(() => {
+    getNameFromPod(props.webId).then((name) => setName(name));
+  }, [props.webId]);
+
+  if (props.webId !== undefined)
     return (
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="User management options">
@@ -83,6 +91,13 @@ export default function UserMenuButton(props: any): JSX.Element {
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
+          <Stack direction="row" sx={{ p: 2 }} spacing={1}>
+            <FaceIcon fontSize="small" />
+            <Typography>{name}</Typography>
+          </Stack>
+
+          <Divider />
+
           <MenuItem
             component={Link}
             to="/dashboard"
@@ -97,6 +112,7 @@ export default function UserMenuButton(props: any): JSX.Element {
           <LogOut
             logCurrentUserOut={props.logCurrentUserOut}
             handleCloseUserMenu={handleCloseUserMenu}
+            webId={props.webId}
           />
         </Menu>
       </Box>

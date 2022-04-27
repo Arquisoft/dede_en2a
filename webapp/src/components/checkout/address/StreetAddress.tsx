@@ -10,6 +10,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import { Address } from "../../../shared/shareddtypes";
 
 function CustomRadioGroup(props: any) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,21 +21,31 @@ function CustomRadioGroup(props: any) {
     <Grid item xs={12}>
       <FormControl>
         <RadioGroup value={props.value} onChange={handleChange}>
-          {props.radioItems.map((radioItem: string) => (
+          {props.radioItems.map((radioItem: Address) => (
             <FormControlLabel
               control={
                 <Radio icon={props.icon} checkedIcon={props.checkedIcon} />
               }
-              value={radioItem}
+              value={
+                radioItem.street +
+                "-" +
+                radioItem.postalCode +
+                "-" +
+                radioItem.locality +
+                "-" +
+                radioItem.region
+              }
               label={
                 <React.Fragment>
-                  <Typography>{radioItem.split("-")[0]}</Typography>
+                  <Typography>
+                    {radioItem.street + " - " + radioItem.postalCode}
+                  </Typography>
                   <Typography variant="subtitle2" color="text.secondary">
-                    {radioItem.split("-")[1] + " - " + radioItem.split("-")[2]}
+                    {radioItem.locality + " - " + radioItem.region}
                   </Typography>
                 </React.Fragment>
               }
-              key={radioItem}
+              key={radioItem.street + radioItem.postalCode}
             />
           ))}
         </RadioGroup>
@@ -48,7 +59,7 @@ export default function StreetAddress(props: any) {
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Street Address</Divider>
 
-      <LinearProgress hidden={!props.loading} />
+      <LinearProgress sx={{ display: props.loading ? "block" : "none" }} />
       {!props.loading && (
         <React.Fragment>
           <Typography sx={{ pb: 2 }}>

@@ -1,7 +1,7 @@
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import ShoppingCart from "../../components/cart/ShoppingCart";
 import { CartItem } from "../../shared/shareddtypes";
-import { BrowserRouter as Router } from "react-router-dom";
 
 //Test for the ShoppingCart component, receives a list of cart items and it is rendered properly.
 test("A list of two cart items is rendered", async () => {
@@ -14,6 +14,8 @@ test("A list of two cart items is rendered", async () => {
         price: 10,
         stock: 20,
         image: "",
+        category: "Electronics",
+        weight: 1,
       },
       amount: 1,
     },
@@ -25,6 +27,8 @@ test("A list of two cart items is rendered", async () => {
         price: 15,
         stock: 10,
         image: "",
+        category: "Clothes",
+        weight: 1,
       },
       amount: 2,
     },
@@ -33,11 +37,11 @@ test("A list of two cart items is rendered", async () => {
   const { getByText } = render(
     <Router>
       <ShoppingCart
-        products={cart}
+        productsInCart={cart}
         totalUnitsInCart={2}
-        userEmail={null}
-        onIncrementUnit={() => {}}
-        onDecrementUnit={() => {}}
+        addToCart={() => {}}
+        removeFromCart={() => {}}
+        webId="https://example.com/profile/card#me"
       />
     </Router>
   );
@@ -47,13 +51,13 @@ test("A list of two cart items is rendered", async () => {
   //Check that the buttons continue shopping and checkout are rendered
   expect(getByText("Continue shopping")).toBeInTheDocument();
   expect(getByText("Proceed to checkout")).toBeInTheDocument();
-  //Check that the proceed to checkout button is disabled
-  expect(getByText("Proceed to checkout").closest("a")?.className).toContain(
-    "disabled"
-  );
 
   //Check that the total price is rendered
   expect(getByText("Total Price - 40€")).toBeInTheDocument();
+
+  //Check that if we click the checkout button, it navigates to the checkout page
+  fireEvent.click(getByText("Proceed to checkout"));
+  expect(window.location.pathname).toBe("/checkout");
 });
 
 //Test for the ShoppingCart component, receives an empty list of cart items and it is rendered properly.
@@ -63,11 +67,11 @@ test("An empty list of cart items is rendered", async () => {
   const { getByText } = render(
     <Router>
       <ShoppingCart
-        products={cart}
+        productsInCart={cart}
         totalUnitsInCart={0}
-        userEmail={null}
-        onDecrementUnit={() => {}}
-        onIncrementUnit={() => {}}
+        addToCart={() => {}}
+        removeFromCart={() => {}}
+        webId=""
       />
     </Router>
   );

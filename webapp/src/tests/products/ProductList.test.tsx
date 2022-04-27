@@ -1,9 +1,7 @@
-import React from "react";
-
-import { fireEvent, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import ProductList from "../../components/products/ProductList";
 import { Product } from "../../shared/shareddtypes";
-import { BrowserRouter as Router } from "react-router-dom";
 
 test("A list of products is rendered", async () => {
   const products: Product[] = [
@@ -14,6 +12,8 @@ test("A list of products is rendered", async () => {
       price: 10,
       stock: 20,
       image: "",
+      category: "Electronics",
+      weight: 1,
     },
     {
       code: "9998",
@@ -22,12 +22,18 @@ test("A list of products is rendered", async () => {
       price: 15,
       stock: 10,
       image: "",
+      category: "Electronics",
+      weight: 1,
     },
   ];
 
   const { getAllByText } = render(
     <Router>
-      <ProductList products={products} cartProducts={[]} OnAddCart={() => {}} />
+      <ProductList
+        products={products}
+        productsInCart={[]}
+        addToCart={() => {}}
+      />
     </Router>
   );
 

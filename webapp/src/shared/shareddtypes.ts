@@ -1,12 +1,9 @@
 import type { AlertColor } from "@mui/material/Alert";
 
 export type User = {
-  name: string;
   webId: string;
-  email: string;
-  password: string;
   role: string;
-  verified: boolean;
+  isVerified: boolean;
 };
 
 export type Product = {
@@ -16,6 +13,15 @@ export type Product = {
   price: number;
   stock: number;
   image: string;
+  category: string;
+  weight: number;
+};
+
+export const ProductCategories = {
+  Clothes: "Clothes",
+  Decoration: "Decoration",
+  Electronics: "Electronics",
+  Miscellaneous: "Miscellaneous",
 };
 
 export type NotificationType = {
@@ -29,20 +35,33 @@ export type CartItem = {
 };
 
 export type Order = {
-  orderCode: string;
-  userEmail: string;
-  userAddress: string;
-  products: Product[];
+  code: string;
+  webId: string;
+  address: string;
   date: Date;
+  products: Product[];
   subtotalPrice: number;
   shippingPrice: number;
   totalPrice: number;
-  isOrderReceived: boolean;
+  receivedDate: Date;
 };
 
 export type Review = {
-  userEmail: string;
+  webId: string;
   productCode: string;
   rating: number;
   comment: string;
+};
+
+export type Rate = {
+  name: string;
+  price: number;
+  time: number;
+};
+
+export type Address = {
+  street: string;
+  postalCode: string;
+  locality: string;
+  region: string;
 };

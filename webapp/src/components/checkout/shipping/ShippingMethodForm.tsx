@@ -1,20 +1,19 @@
 import React from "react";
 
 import {
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
   Divider,
   IconButton,
-  LinearProgress,
+  LinearProgress, List,
+  ListItem,
+  ListItemText,
+  Typography
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 import {
   obtainShippingMethods,
-  ShippingMethodType,
+  ShippingMethodType
 } from "../../../helpers/ComputeDistanceHelper";
 
 function ShippingMethodRadioGroup(props: any) {
@@ -23,9 +22,8 @@ function ShippingMethodRadioGroup(props: any) {
     ShippingMethodType[]
   >([]);
 
-  const handleChange = (title: string, price: number) => {
+  const handleChange = (title: string) => {
     props.setShippingMethod(title);
-    props.setCosts(price);
     props.handleNext(title);
   };
 
@@ -43,15 +41,15 @@ function ShippingMethodRadioGroup(props: any) {
 
   return (
     <React.Fragment>
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <List>
           {shippingMethods.map(
-            (method: { title: string; subtitle: string; price: number }) => (
+            (method: { title: string; subtitle: string; price: string }) => (
               <ListItem key={method.title}>
                 <IconButton
                   sx={{ mr: 2 }}
-                  onClick={() => handleChange(method.title, method.price)}
+                  onClick={() => handleChange(method.title)}
                 >
                   <LocalShippingIcon />
                 </IconButton>
@@ -61,7 +59,7 @@ function ShippingMethodRadioGroup(props: any) {
                   secondary={method.subtitle}
                 />
 
-                <Typography>{method.price} €</Typography>
+                <Typography>{method.price}</Typography>
               </ListItem>
             )
           )}
@@ -75,7 +73,6 @@ export default function ShippingMethod(props: any) {
   return (
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Shipping method</Divider>
-
       <Typography sx={{ pb: 2 }}>
         Those are the shipping methods we have in our site; feel free to choose
         any of them:

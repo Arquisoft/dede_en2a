@@ -1,21 +1,37 @@
-import pdf, { CreateOptions } from "html-pdf";
 import { orderModel } from "../orders/Order";
 import { sendInvoiceEmail } from "./emailSender";
 
 const fs = require("fs");
+const PDFGenerator = require("pdfkit");
 
 export const createPDF = async (code: string) => {
-  var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
-  const parse = require("node-html-parser").parse;
-
-  const options: CreateOptions = {
-    format: "A4",
-    orientation: "portrait",
-  };
+  if (process.env.MONGO_DB_URI === undefined) return;
+  const InvoiceGenerator = require("./InvoiceGenerator");
 
   const orderFound = await orderModel.findOne({
     orderCode: code,
   });
+  /*const user = await userModel.findOne({ email: orderFound.userEmail });
+  const invoiceData = {
+    addresses: {
+      shipping: {
+        name: user.name,
+        address: orderFound.userAddress,
+        email: orderFound.userEmail,
+      },
+    },
+    items: orderFound.products,
+    subtotal: orderFound.subtotalPrice,
+    total: orderFound.totalPrice,
+    shippingPrice: orderFound.shippingPrice,
+    invoiceNumber: orderFound.orderCode,
+    dueDate: orderFound.date,
+  };
+
+  const ig = new InvoiceGenerator(invoiceData);
+  ig.generate();*/
+  var html = fs.readFileSync(process.cwd() + "/utils/template.html", "utf-8");
+  const parse = require("node-html-parser").parse;
 
   const root = parse(html);
   const body = root.querySelector("body");
@@ -23,7 +39,7 @@ export const createPDF = async (code: string) => {
     '<header class="clearfix">' +
     '<div id="company">' +
     '<h2 class="name">DeDe</h2>' +
-    '<div><a href="mailto:aswdedeen2a@gmail.com">aswdedeen2a@gmail.com</a></div>' +
+    '<div><a href="mailto:aswdedeen2a@gmail.com">aswdedeen2a@gmail.com</a></div><br><br>' +
     "</div> </div>" +
     "</header>" +
     "<main>" +
@@ -120,12 +136,5 @@ export const createPDF = async (code: string) => {
 
   body.insertAdjacentHTML("beforeend", aux);
 
-  pdf
-    .create(root.toString(), options)
-    .toFile("./pdf/" + orderFound.orderCode + ".pdf", function (err, res) {
-      if (err) console.log(err);
-      else {
-        sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode);
-      }
-    });
+  sendInvoiceEmail(orderFound.userEmail, orderFound.orderCode, root.toString());
 };

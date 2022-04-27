@@ -1,63 +1,54 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
-import { verifyToken } from "../utils/generateToken";
-import { createPDF } from "../utils/PDFHelper";
+import { userModel } from "../users/User";
+import { verifyWebID } from "../utils/WebIDValidation";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-  if (isVerified) {
+  const webId = req.headers.token + "";
+  if (await verifyWebID(webId)) {
     const orderFound = await orderModel.findOne({
-      orderCode: req.params.orderCode,
+      code: req.params.code,
     });
     if (orderFound) {
-      return res.json(orderFound);
+      if (webId === orderFound.webId) {
+        return res.json(orderFound);
+      } else {
+        return res.status(409).json();
+      }
     } else {
-      return res.status(204).json();
+      return res.status(412).json();
     }
   } else {
-    return res.status(203).json();
+    return res.status(403).json();
   }
 };
 
-export const getOrders: RequestHandler = async (req, res) => {
-  //TODO CHECK TOKEN AND USER=ADMIN
-  try {
-    const orders = await orderModel.find();
-    return res.json(orders);
-  } catch (error) {
-    res.json(error);
-  }
+export const getOrdersForAdminOrModerator: RequestHandler = async (
+  req,
+  res
+) => {
+  const webId = req.headers.token + "";
+  const user = await userModel.findOne({ webId: webId });
+  const isVerified = await verifyWebID(webId);
+  if (isVerified && (user.role === "admin" || user.role === "manager")) {
+    const ordersFound = await orderModel.find({});
+    return res.json(ordersFound);
+  } else return res.status(403).json();
 };
 
-export const getUserOrders: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
+export const getOrdersForUser: RequestHandler = async (req, res) => {
+  const webId = req.headers.token + "";
+  const isVerified = await verifyWebID(webId);
   if (isVerified) {
-    const orderFound = await orderModel.find({
-      userEmail: req.headers.email,
+    const ordersFound = await orderModel.find({
+      webId: webId,
     });
-    if (orderFound) {
-      return res.json(orderFound);
-    } else {
-      return res.status(204).json();
-    }
-  } else {
-    return res.status(203).json();
-  }
+    return res.json(ordersFound);
+  } else return res.status(403).json();
 };
 
 export const createOrder: RequestHandler = async (req, res) => {
-  const isVerified = verifyToken(
-    req.headers.token + "",
-    req.headers.email + ""
-  );
-
   const updateStock = async (products: any) => {
     for (var i = 0; i < products.length; i++) {
       let product = await productModel.findOne({ code: products[i].code });
@@ -66,17 +57,14 @@ export const createOrder: RequestHandler = async (req, res) => {
     }
   };
 
-  if (isVerified) {
+  if (await verifyWebID(req.headers.token + ""))
     try {
       const order = new orderModel(req.body);
       updateStock(order.products);
-      const ordersaved = await order.save();
-      await createPDF(req.body.orderCode);
-      res.json(ordersaved);
+      const orderSaved = await order.save();
+      res.json(orderSaved);
     } catch (error) {
       res.status(412).json();
     }
-  } else {
-    res.status(203).json();
-  }
+  else res.status(403).json();
 };

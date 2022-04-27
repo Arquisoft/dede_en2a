@@ -10,7 +10,7 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
-import StockAlert from "../StockAlert";
+import StockAlert from "./StockAlert";
 
 import { Product } from "../../shared/shareddtypes";
 import { checkImageExists } from "../../helpers/ImageHelper";

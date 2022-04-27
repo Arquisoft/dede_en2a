@@ -14,13 +14,13 @@ export const product = new Schema(
       required: true,
       trim: true,
     },
+    description: {
+      type: String,
+      trim: true,
+    },
     price: {
       type: Number,
       required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
       trim: true,
     },
     stock: {
@@ -31,6 +31,15 @@ export const product = new Schema(
     image: {
       type: String,
       required: false,
+    },
+    category: {
+      type: String,
+      required: true,
+      enum: ["Clothes", "Decoration", "Electronics", "Miscellaneous"],
+    },
+    weight: {
+      type: Number,
+      required: true,
     },
   },
   {

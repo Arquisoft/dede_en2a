@@ -1,12 +1,18 @@
-import express, { Request, Response, Router } from 'express';
-import * as ReviewController from './ReviewController';
+import express, { Request, Response, Router } from "express";
+import * as ReviewController from "./ReviewController";
 
-const api:Router = express.Router()
+const api: Router = express.Router();
 
-api.get('/reviews/listByCode/:productCode', ReviewController.getReviewsByProduct)
+api.get(
+  "/reviews/listByCode/:productCode",
+  ReviewController.getReviewsByProduct
+);
 
-api.post('/reviews', ReviewController.createReview)
+api.post("/reviews", ReviewController.createReview);
 
-api.get('/reviews/listByCodeAndEmail/:productCode/:email', ReviewController.getReviewsByProductAndUser)
+api.get(
+  "/reviews/listByCodeAndWebId/:productCode/:webId",
+  ReviewController.getReviewsByProductAndUser
+);
 
-export default api
+export default api;

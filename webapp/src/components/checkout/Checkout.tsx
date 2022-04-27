@@ -2,39 +2,36 @@ import * as React from "react";
 
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 
-import { updateProduct } from "../../api/api";
-import { CartItem } from "../../shared/shareddtypes";
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
+import { Address, CartItem } from "../../shared/shareddtypes";
 
-import ShippingAddress from "./ShippingAddress";
-import ShippingMethod from "./ShippingMethod";
-import Review from "./Review";
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
+import Review from "./Review";
+import ShippingAddress from "./ShippingAddress";
+import ShippingMethod from "./ShippingMethod";
+
+type CheckoutProps = {
+  productsInCart: CartItem[];
+  handleDeleteCart: () => void;
+  webId: string;
+};
 
 function getSteps() {
   return ["Address", "Shipping method", "Review", "Billing", "Confirm"];
 }
 
-export default function Checkout(props: any) {
+export default function Checkout(props: CheckoutProps) {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [address, setAddress] = React.useState("");
+  const [address, setAddress] = React.useState<Address>({} as Address);
   const [costs, setCosts] = React.useState<number>(Number());
 
   const steps = getSteps();
-
-  const handleUpdateStock = () => {
-    props.productsCart.forEach((cartItem: CartItem) => {
-      let productUnits: number = cartItem.amount;
-      cartItem.product.stock -= productUnits;
-      updateProduct(cartItem.product);
-    });
-  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -54,14 +51,10 @@ export default function Checkout(props: any) {
   };
 
   const saveOrderToDB = () => {
-    handleUpdateStock();
-    saveOrder(
-      props.productsCart,
-      costs,
-      props.userEmail,
-      "Get address not implemented yet"
-    );
-    props.deleteCart();
+    if (props.webId !== "") {
+      saveOrder(props.productsInCart, costs, props.webId, address);
+      props.handleDeleteCart();
+    }
   };
 
   const getStepContent = (stepIndex: number) => {
@@ -71,7 +64,7 @@ export default function Checkout(props: any) {
           <ShippingAddress
             address={address}
             setAddress={setAddress}
-            userEmail={props.userEmail}
+            webId={props.webId}
             handleNext={handleNext}
           />
         );
@@ -84,21 +77,23 @@ export default function Checkout(props: any) {
             setCosts={setCosts}
             handleBack={handleBack}
             handleNext={handleNext}
+            cart={props.productsInCart}
           />
         );
       case 2:
         return (
           <Review
-            productsCart={props.productsCart}
+            productsCart={props.productsInCart}
             shippingCosts={costs}
             handleReset={handleReset}
             handleNext={handleNext}
+            address={address}
           />
         );
       case 3:
         return (
           <Billing
-            products={props.productsCart}
+            products={props.productsInCart}
             shippingCosts={costs}
             handleBack={handleBack}
             onPayed={handlePayed}

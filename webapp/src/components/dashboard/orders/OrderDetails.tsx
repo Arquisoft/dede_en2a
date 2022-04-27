@@ -1,27 +1,39 @@
 import { useEffect, useState } from "react";
 
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
-import { getOrder } from "../../../api/api";
+import { getOrderByCode } from "../../../api/api";
 import { Order, Product } from "../../../shared/shareddtypes";
-import { checkImageExists } from "../../../helpers/ImageHelper";
 import Divider from "@mui/material/Divider";
+import { checkImageExists } from "../../../helpers/ImageHelper";
 import StatusMessage from "./StatusMessage";
+
+type OrderDetailsProps = {
+  webId: string;
+};
+
+type OrderListProps = {
+  order: Order | undefined;
+};
 
 type OrderListItemProps = {
   product: Product;
 };
 
+type ProductDets = {
+  code: string;
+};
+
 function OrderListItem(props: OrderListItemProps): JSX.Element {
-  const [product, setProduct] = useState<Product>(props.product);
+  const [product] = useState<Product>(props.product);
 
   const Img = styled("img")({
     display: "block",
@@ -50,7 +62,7 @@ function OrderListItem(props: OrderListItemProps): JSX.Element {
   }
 }
 
-function OrderList(props: any): JSX.Element {
+function OrderList(props: OrderListProps): JSX.Element {
   if (typeof props.order === "undefined")
     return (
       <Typography variant="h6" className="m-2">
@@ -102,32 +114,29 @@ function OrderList(props: any): JSX.Element {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Shipping address:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {props.order.userAddress}
+            {props.order.address}
           </Typography>
         </ListItem>
 
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Status:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            <StatusMessage isOrderReceived={props.order.isOrderReceived} />
+            <StatusMessage receivedDate={props.order.receivedDate} />
           </Typography>
         </ListItem>
       </List>
     );
 }
 
-export default function OrderDetails(): JSX.Element {
-  type ProductDets = {
-    code: string;
-  };
-
+export default function OrderDetails(props: OrderDetailsProps): JSX.Element {
   const { code } = useParams<keyof ProductDets>() as ProductDets;
 
-  const obtainOrder = async () => {
-    setOrder(await getOrder(code));
-  };
-
   const [order, setOrder] = useState<Order>();
+
+  const obtainOrder = async () => {
+    if (props.webId !== undefined)
+      setOrder(await getOrderByCode(props.webId, code));
+  };
 
   useEffect(() => {
     obtainOrder();

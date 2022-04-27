@@ -1,18 +1,22 @@
-import express, { Request, Response, Router } from "express";
-import * as ProdctController from "./ProductController";
-
+import express, { Router } from "express";
 import multer from "../utils/multer";
+import * as ProductController from "./ProductController";
 
 const api: Router = express.Router();
 
-api.get("/products", ProdctController.getProducts);
+api.get("/products", ProductController.getProducts);
 
-api.get("/products/findByCode/:code", ProdctController.getProduct);
+api.get("/products/listByCode/:code", ProductController.getProduct);
 
-api.post("/products", multer.single("image"), ProdctController.createProduct);
+api.get(
+  "/products/filter&order/:category&:mode",
+  ProductController.filterAndOrderBy
+);
 
-api.post("/products/delete/:code", ProdctController.deleteProduct);
+api.post("/products", multer.single("image"), ProductController.createProduct);
 
-api.post("/products/update/:code", ProdctController.updateProduct);
+api.post("/products/delete/:code", ProductController.deleteProduct);
+
+api.post("/products/update/:code", ProductController.updateProduct);
 
 export default api;
