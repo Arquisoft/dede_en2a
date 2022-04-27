@@ -55,6 +55,7 @@ test("UploadPoduct component for adding a product renders correctly", async () =
   expect(screen.getByText("Product price")).toBeInTheDocument();
   expect(screen.getByText("Product category")).toBeInTheDocument();
   expect(screen.getByText("Product stock")).toBeInTheDocument();
+  expect(screen.getByText("Product weight (kg)")).toBeInTheDocument();
 
   //Expect the submit button to be rendered
   expect(screen.getByText("Submit")).toBeInTheDocument();
@@ -161,6 +162,11 @@ test("File error is rendered correctly", async () => {
     target: { value: "10" },
   });
 
+  //Fill in the product weight
+  fireEvent.change(container.querySelector("input[name='weight']"), {
+    target: { value: "10" },
+  });
+
   //Click the submit button
   await act(async () => {
     fireEvent.click(screen.getByText("Submit"));
@@ -214,6 +220,13 @@ test("A product with a repeated code is tried to add, error message is rendered 
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='stock']"), {
       target: { value: "10" },
+    });
+  });
+
+  //Fill in the product weight
+  await act(async () => {
+    fireEvent.change(container.querySelector("input[name='weight']"), {
+      target: { value: "1" },
     });
   });
 
@@ -308,6 +321,13 @@ test("A product is added correctly", async () => {
     });
   });
 
+  //Fill in the product weight
+  await act(async () => {
+    fireEvent.change(container.querySelector("input[name='weight']"), {
+      target: { value: "1" },
+    });
+  });
+
   //Fill in the image
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='upload-photo']"), {
@@ -355,6 +375,7 @@ test("UploadPoduct component for updating a product renders correctly", () => {
   expect(getByText("Product price")).toBeInTheDocument();
   expect(getByText("Product category")).toBeInTheDocument();
   expect(getByText("Product stock")).toBeInTheDocument();
+  expect(getByText("Product weight (kg)")).toBeInTheDocument();
 
   //Expect the submit button to be rendered
   expect(getByText("Submit")).toBeInTheDocument();
@@ -401,6 +422,9 @@ test("UploadPoduct component for updating a product is filled correctly", async 
   expect(container.querySelector("input[name='category']").value).toBe(
     "Clothes"
   );
+
+  //Expect the product weight to be filled
+  expect(container.querySelector("input[name='weight']").value).toBe("1");
 
   //Mock the implementation for updateProduct
   jest

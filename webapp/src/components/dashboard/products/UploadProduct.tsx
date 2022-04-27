@@ -12,13 +12,13 @@ import {
   Snackbar,
   Stack,
   styled,
-  TextField
+  TextField,
 } from "@mui/material";
 
 import { createProduct, getProducts, updateProduct } from "../../../api/api";
 import {
   checkNumericField,
-  checkTextField
+  checkTextField,
 } from "../../../helpers/CheckFieldsHelper";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
@@ -107,7 +107,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       return sendErrorNotification("Incorrect stock");
     if (!checkNumericField(Number(weight)))
       return sendErrorNotification("Incorrect weight");
-    if (file === "" && !props.isForUpdate) 
+    if (file === "" && !props.isForUpdate)
       return sendErrorNotification("Incorrect file");
     handleSubmit();
   };
@@ -190,6 +190,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       setCategory(p.category);
       setPrice(p.price.toString());
       setStock(p.stock.toString());
+      setWeight(p.weight.toString());
       setImage(p.image);
     }
   }
@@ -343,6 +344,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={weight}
+                  name="weight"
                   id="outlined-full-width"
                   label="Product weight (kg)"
                   style={{ margin: 8 }}

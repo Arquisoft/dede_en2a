@@ -10,7 +10,7 @@ test("A product is rendered", async () => {
     description: "Descripcion Prueba 1",
     price: 10,
     stock: 20,
-    image: "",
+    image: "9999.png",
     category: "Electronics",
     weight: 1,
   };
