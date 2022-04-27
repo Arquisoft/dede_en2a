@@ -15,9 +15,9 @@ export default function ProductComment(
   const [name, setName] = React.useState("");
 
   React.useEffect(() => {
-    getNameFromPod(window.atob(props.review.webId)).then((name) =>
-      setName(name)
-    );
+    getNameFromPod(window.atob(props.review.webId)).then((name) => {
+      setName(name);
+    });
   }, []);
 
   return (

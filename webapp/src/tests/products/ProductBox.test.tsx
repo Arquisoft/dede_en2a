@@ -27,7 +27,7 @@ test("A product is rendered", async () => {
 
   //Check that the default image is rendered
   const image = container.querySelector("img") as HTMLImageElement;
-  expect(image.src).toContain("not-found.png");
+  expect(image.src).toContain("http://localhost:5000/9999.png");
 
   //Check that the info about stock is rendered correctly
   expect(getByText("Stock available!")).toBeInTheDocument();
@@ -83,6 +83,7 @@ test("URL to product details works", async () => {
   );
 
   const hrefDetails = container.querySelector("img") as HTMLElement;
+
   fireEvent.click(hrefDetails);
   expect(window.location.pathname).toEqual("/product/" + product.code);
 });

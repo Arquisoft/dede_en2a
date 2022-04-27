@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import ShoppingCart from "../../components/cart/ShoppingCart";
 import { CartItem } from "../../shared/shareddtypes";
@@ -41,7 +41,7 @@ test("A list of two cart items is rendered", async () => {
         totalUnitsInCart={2}
         addToCart={() => {}}
         removeFromCart={() => {}}
-        webId=""
+        webId="https://example.com/profile/card#me"
       />
     </Router>
   );
@@ -51,13 +51,13 @@ test("A list of two cart items is rendered", async () => {
   //Check that the buttons continue shopping and checkout are rendered
   expect(getByText("Continue shopping")).toBeInTheDocument();
   expect(getByText("Proceed to checkout")).toBeInTheDocument();
-  //Check that the proceed to checkout button is disabled
-  expect(getByText("Proceed to checkout").closest("a")?.className).toContain(
-    "disabled"
-  );
 
   //Check that the total price is rendered
   expect(getByText("Total Price - 40€")).toBeInTheDocument();
+
+  //Check that if we click the checkout button, it navigates to the checkout page
+  fireEvent.click(getByText("Proceed to checkout"));
+  expect(window.location.pathname).toBe("/checkout");
 });
 
 //Test for the ShoppingCart component, receives an empty list of cart items and it is rendered properly.

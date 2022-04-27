@@ -94,6 +94,7 @@ test("A list of one cart item with amount 0 is not rendered", async () => {
   );
 
   expect(queryByText("Producto 1")).not.toBeInTheDocument();
+
   expect(queryByText("0")).not.toBeInTheDocument();
 });
 
@@ -145,21 +146,21 @@ test("Increment and decrement buttons work well.", async () => {
     },
   ];
 
-  const onIncrementUnit = jest.fn();
-  const onDecrementUnit = jest.fn();
+  const addToCart = jest.fn();
+  const removeFromCart = jest.fn();
 
   const { getByText } = render(
     <ShoppingCartTable
       productsInCart={cart}
       totalUnitsInCart={1}
-      addToCart={() => {}}
-      removeFromCart={() => {}}
+      addToCart={addToCart}
+      removeFromCart={removeFromCart}
     />
   );
 
   fireEvent.click(getByText("+"));
-  expect(onIncrementUnit).toHaveBeenCalled();
+  expect(addToCart).toHaveBeenCalled();
 
   fireEvent.click(getByText("-"));
-  expect(onDecrementUnit).toHaveBeenCalled();
+  expect(removeFromCart).toHaveBeenCalled();
 });

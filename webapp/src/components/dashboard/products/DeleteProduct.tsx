@@ -92,6 +92,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
     }
   };
 
+  /*
   const handleDeleteConfirmed = async () => {
     // TODO: not working
     if (props.webId !== undefined) {
@@ -99,7 +100,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       emptyFields();
       props.refreshShop();
     }
-  };
+  };*/
 
   const emptyFields = () => {
     setCode("");
@@ -125,6 +126,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
             <TextField
               id="outlined-select-currency"
+              name="selection"
               select
               label="Select"
               fullWidth
@@ -148,6 +150,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={code}
+                  name="code"
                   id="outlined-full-width"
                   label="Product code"
                   style={{ margin: 8 }}
@@ -161,6 +164,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={name}
+                  name="name"
                   id="outlined-full-width"
                   label="Product name"
                   style={{ margin: 8 }}
@@ -173,6 +177,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={description}
+                  name="description"
                   id="outlined-full-width"
                   label="Product description"
                   style={{ margin: 8 }}
@@ -185,6 +190,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={category}
+                  name="category"
                   id="outlined-full-width"
                   label="Product category"
                   style={{ margin: 8 }}
@@ -197,6 +203,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={price}
+                  name="price"
                   id="outlined-full-width"
                   label="Product price"
                   style={{ margin: 8 }}
@@ -210,6 +217,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                 <TextField
                   disabled
                   value={stock}
+                  name="stock"
                   id="outlined-full-width"
                   label="Product stock"
                   style={{ margin: 8 }}
