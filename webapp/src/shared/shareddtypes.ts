@@ -14,6 +14,7 @@ export type Product = {
   stock: number;
   image: string;
   category: string;
+  weight: number;
 };
 
 export const ProductCategories = {
@@ -35,6 +36,7 @@ export type CartItem = {
 
 export type Order = {
   code: string;
+  webId: string;
   address: string;
   date: Date;
   products: Product[];
@@ -49,4 +51,17 @@ export type Review = {
   productCode: string;
   rating: number;
   comment: string;
+};
+
+export type Rate = {
+  name: string;
+  price: number;
+  time: number;
+};
+
+export type Address = {
+  street: string;
+  postalCode: string;
+  locality: string;
+  region: string;
 };

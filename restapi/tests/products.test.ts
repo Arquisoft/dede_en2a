@@ -61,16 +61,14 @@ describe("prodcuts", () => {
    * Test that we can get a concrete product
    */
   it("Can get a product", async () => {
-    const response: Response = await request(app).get(
-      "/products/findByCode/0001"
-    );
+    const response: Response = await request(app).get("/products/listByCode/1");
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
-        code: "0001",
+        code: "1",
         name: "Super SUS T-Shirt",
         price: 9.5,
-        image: "0001.png",
+        image: "1.png",
         category: "Clothes",
       })
     );
@@ -80,19 +78,20 @@ describe("prodcuts", () => {
    * Test that we can't get a non existing product'
    */
   it("Can't get non existing product", async () => {
-    const response: Response = await request(app).get("/products/findByCode/0");
+    const response: Response = await request(app).get("/products/listByCode/0");
     expect(response.statusCode).toBe(412);
   });
 
   let productCode = uuidv4();
-  it("Can't create a product without token", async () => {
+  it("Can't create a product without webId", async () => {
     const response: Response = await request(app).post("/products").send({
       code: productCode,
       name: "testProduct",
-      price: 0.99,
+      price: 10.99,
       description: "Another test product",
       stock: 0,
       category: "Clothes",
+      weight: 1,
     });
     expect(response.statusCode).toBe(403);
   });
@@ -101,76 +100,61 @@ describe("prodcuts", () => {
   To create a product the user must be registered and also be a manager or admin role
   */
   it("Can create a product correctly", async () => {
-    let userToken = await getToken();
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        code: productCode,
-        name: "testProduct",
-        price: 0.99,
-        description: "Another test product",
-        stock: 0,
-        category: "Clothes",
-        token: userToken,
-        email: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      code: productCode,
+      webId: "test",
+      name: "testProduct",
+      price: 10.99,
+      description: "Another test product",
+      stock: 0,
+      category: "Clothes",
+      weight: 1,
+    });
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toBe("testProduct");
     expect(response.body.stock).toBe(0);
   });
 
   it("Can't create a product with same code", async () => {
-    let userToken = await getToken();
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        code: productCode,
-        name: "testFailProduct",
-        price: 0.99,
-        description: "A failure insert test product",
-        stock: 0,
-        category: "Clothes",
-        token: userToken,
-        email: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      code: productCode,
+      webId: "test",
+      name: "testFailProduct",
+      price: 10.99,
+      description: "A failure insert test product",
+      stock: 0,
+      category: "Clothes",
+      weight: 1,
+    });
     expect(response.statusCode).toBe(409);
   });
 
   it("Can't create a product without all values", async () => {
-    let userToken = await getToken();
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        name: "testFailProduct",
-        token: userToken,
-        email: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      name: "testFailProduct",
+      webId: "test",
+    });
     expect(response.statusCode).toBe(412);
   });
 
   it("Can't create a product with incorrect or missing category", async () => {
-    let userToken = await getToken();
-    const response: Response = await request(app)
-      .post("/products")
-      .send({
-        code: uuidv4(),
-        name: "testFailProduct",
-        price: 0.99,
-        description: "A failure insert test product",
-        stock: 0,
-        category: "Nothing",
-        token: userToken,
-        email: 'test'
-      });
+    const response: Response = await request(app).post("/products").send({
+      code: uuidv4(),
+      webId: "test",
+      name: "testFailProduct",
+      price: 10.99,
+      description: "A failure insert test product",
+      stock: 0,
+      category: "Nothing",
+      weight: 1,
+    });
     expect(response.statusCode).toBe(412);
   });
 
   it("Can update a product correctly", async () => {
-    let userToken = await getToken();
     const response: Response = await request(app)
       .post("/products/update/" + productCode)
-      .set("token", userToken)
-      .set("email", "test")
+      .set("token", "test")
       .send({
         stock: 10,
       });
@@ -179,16 +163,9 @@ describe("prodcuts", () => {
   });
 
   it("Can't update a product without being admin or manager", async () => {
-    const token: Response = await request(app)
-      .post("/users/requestToken/")
-      .send({
-        email: "test1",
-        password: "test",
-      });
     const response: Response = await request(app)
       .post("/products/update/" + productCode)
-      .set("token", token.body)
-      .set("email", "test1")
+      .set("token", "webId")
       .send({
         stock: 10,
       });
@@ -205,11 +182,9 @@ describe("prodcuts", () => {
   });
 
   it("Can delete a product correctly", async () => {
-    let userToken = await getToken();
     const response: Response = await request(app)
       .post("/products/delete/" + productCode)
-      .set("token", userToken)
-      .set("email", "test")
+      .set("token", "test")
       .send();
     expect(response.statusCode).toBe(200);
   });
@@ -263,16 +238,8 @@ describe("prodcuts", () => {
       .send();
     expect(response.statusCode).toBe(200);
     expect(response.body[0].price).toBe(9.5);
-    expect(response.body[0].code).toBe("0001");
+    expect(response.body[0].code).toBe("1");
     expect(response.body[1].price).toBe(33.99);
-    expect(response.body[1].code).toBe("0002");
+    expect(response.body[1].code).toBe("2");
   });
 });
-
-async function getToken() {
-  const token: Response = await request(app).post("/users/requestToken/").send({
-    email: "test",
-    password: "test",
-  });
-  return token.body;
-}
