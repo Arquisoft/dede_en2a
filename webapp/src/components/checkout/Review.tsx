@@ -11,6 +11,8 @@ import Typography from "@mui/material/Typography";
 import { calculateTotal } from "../../helpers/ShoppingCartHelper";
 import { CartItem } from "../../shared/shareddtypes";
 
+import { toStringAddress } from "../../helpers/SolidHelper";
+
 export default function Review(props: any) {
   return (
     <React.Fragment>
@@ -71,7 +73,7 @@ export default function Review(props: any) {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Shipping address:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {props.address}
+            {toStringAddress(props.address)}
           </Typography>
         </ListItem>
       </List>

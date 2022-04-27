@@ -66,3 +66,7 @@ export async function getAddressesFromPod(webId: string): Promise<Address[]> {
 
   return addresses;
 }
+
+export function toStringAddress(address: Address): string {
+  return `${address.street}, ${address.postalCode}, ${address.locality}, ${address.region}`;
+}

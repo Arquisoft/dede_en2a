@@ -12,6 +12,8 @@ import {
   getCoordinatesFromAddress,
 } from "../../../helpers/ComputeDistanceHelper";
 
+import { toStringAddress } from "../../../helpers/SolidHelper";
+
 export default function ShippingRouteMap(props: any) {
   const [map, setMap] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -20,7 +22,9 @@ export default function ShippingRouteMap(props: any) {
   const refreshMap = async () => {
     setLoading(true); // we start with the loading process
 
-    let destCoords: string = await getCoordinatesFromAddress(props.address);
+    let destCoords: string = await getCoordinatesFromAddress(
+      toStringAddress(props.address)
+    );
 
     showMapRoute(destCoords)
       .then((response: string) => setMap(response))
@@ -46,7 +50,7 @@ export default function ShippingRouteMap(props: any) {
             />
             <CardContent>
               <Typography variant="h6">
-                Shipping rates for {props.address}
+                Shipping rates for {toStringAddress(props.address)}
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 After computing some calculations we have obtained that the
