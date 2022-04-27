@@ -11,7 +11,7 @@ const app: Application = express();
 const port: number = 8000;
 
 const mongoose = require("mongoose");
-const connectionString = process.env.MONGO_DB_URI;
+const connectionString = process.env.CARRIERS_DB_URI;
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
@@ -42,4 +42,3 @@ mongoose
   .catch((err: Error) => {
     console.error(err);
   });
-
