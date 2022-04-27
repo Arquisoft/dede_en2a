@@ -12,6 +12,7 @@ const products: Product[] = [
     stock: 10,
     image: "9999.png",
     category: "Clothes",
+    weight: 1,
   },
   {
     code: "02",
@@ -21,6 +22,7 @@ const products: Product[] = [
     stock: 20,
     image: "8888.png",
     category: "Decoration",
+    weight: 1,
   },
 ];
 
@@ -37,7 +39,7 @@ test("UploadPoduct component for adding a product renders correctly", async () =
         isForUpdate={false}
         products={products}
         refreshShop={() => {}}
-        webId="http://testId.com/"
+        webId="https://testId.com/"
         role="admin"
       />
     );
@@ -72,7 +74,7 @@ test("Error for product name is rendered correctly", async () => {
         isForUpdate={false}
         products={products}
         refreshShop={() => {}}
-        webId="http://testId.com/"
+        webId="https://testId.com/"
         role="admin"
       />
     ).container;
@@ -133,7 +135,7 @@ test("File error is rendered correctly", async () => {
         isForUpdate={false}
         products={products}
         refreshShop={() => {}}
-        webId="http://testId.com/"
+        webId="https://testId.com/"
         role="admin"
       />
     ).container;
@@ -181,7 +183,7 @@ test("A product with a repeated code is tried to add, error message is rendered 
         isForUpdate={false}
         products={products}
         refreshShop={() => {}}
-        webId="http://testId.com/"
+        webId="https://testId.com/"
         role="admin"
       />
     ).container;
@@ -253,7 +255,7 @@ test("A product is added correctly", async () => {
         isForUpdate={false}
         products={products}
         refreshShop={() => {}}
-        webId="http://testId.com/"
+        webId="https://testId.com/"
         role="admin"
       />
     ).container;
@@ -336,7 +338,7 @@ test("UploadPoduct component for updating a product renders correctly", () => {
       isForUpdate={true}
       products={products}
       refreshShop={() => {}}
-      webId="http://testId.com/"
+      webId="https://testId.com/"
       role="admin"
     />
   );
@@ -368,7 +370,7 @@ test("UploadPoduct component for updating a product is filled correctly", async 
         isForUpdate={true}
         products={products}
         refreshShop={() => {}}
-        webId="http://testId.com/"
+        webId="https://testId.com/"
         role="admin"
       />
     ).container;

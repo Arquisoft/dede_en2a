@@ -13,6 +13,7 @@ const products: Product[] = [
     stock: 10,
     image: "9999.png",
     category: "Clothes",
+    weight: 1,
   },
   {
     code: "02",
@@ -22,6 +23,7 @@ const products: Product[] = [
     stock: 20,
     image: "8888.png",
     category: "Decoration",
+    weight: 2,
   },
 ];
 

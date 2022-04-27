@@ -12,6 +12,7 @@ const products: Product[] = [
     stock: 10,
     image: "9999.png",
     category: "Clothes",
+    weight: 1,
   },
   {
     code: "02",
@@ -21,6 +22,7 @@ const products: Product[] = [
     stock: 20,
     image: "8888.png",
     category: "Decoration",
+    weight: 1,
   },
 ];
 
@@ -29,7 +31,7 @@ test("DeleteProduct renders correctly", () => {
   const { getByText } = render(
     <DeleteProduct
       products={products}
-      webId="http://test.com"
+      webId="https://test.com"
       role="admin"
       refreshShop={() => {}}
     />
@@ -58,7 +60,7 @@ test("DeleteProduct form is filled when a product is selected", async () => {
     container = render(
       <DeleteProduct
         products={products}
-        webId="http://test.com"
+        webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
@@ -93,7 +95,7 @@ test("DeleteProduct notification is shown when no product is selected", async ()
     container = render(
       <DeleteProduct
         products={products}
-        webId="http://test.com"
+        webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
@@ -117,7 +119,7 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
     container = render(
       <DeleteProduct
         products={products}
-        webId="http://test.com"
+        webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
@@ -155,7 +157,7 @@ test("DeleteProduct success is shown when trying to delete a product", async () 
     container = render(
       <DeleteProduct
         products={products}
-        webId="http://test.com"
+        webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
