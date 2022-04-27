@@ -11,7 +11,7 @@ import apiReviews from "./reviews/ReviewRoutes";
 import apiUser from "./users/UserRoutes";
 
 const path = require("path");
-const fs = require('fs')
+const fs = require("fs");
 
 let helmet = require("helmet");
 
@@ -19,10 +19,6 @@ const app: Application = express();
 
 const mongoose = require("mongoose");
 const connectionString = process.env.MONGO_DB_URI;
-
-const options: cors.CorsOptions = {
-  origin: ["http://localhost:3000"],
-};
 
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
@@ -41,18 +37,18 @@ app.use(apiReviews);
 app.use(helmet.hidePoweredBy());
 
 // Method to serve correct images and not-found in case it does not exists
-app.get(['/*.png', '/undefined'], function(req, res) {
-  const a = path.join(__dirname, 'public', 'not-found.png')
-  const ipath = path.join(__dirname, 'public', req.originalUrl)
+app.get(["/*.png", "/undefined"], function (req, res) {
+  const a = path.join(__dirname, "public", "not-found.png");
+  const ipath = path.join(__dirname, "public", req.originalUrl);
 
   if (fs.existsSync(ipath)) {
-    res.sendFile(ipath)
+    res.sendFile(ipath);
   } else {
-    res.sendFile(a)
+    res.sendFile(a);
   }
 });
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, "public")));
 
 app
   .listen(5000, (): void => {
