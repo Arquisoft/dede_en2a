@@ -74,7 +74,6 @@ export default function ShippingMethod(props: any) {
   return (
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Shipping method</Divider>
-
       <Typography sx={{ pb: 2 }}>
         Those are the shipping methods we have in our site; feel free to choose
         any of them:

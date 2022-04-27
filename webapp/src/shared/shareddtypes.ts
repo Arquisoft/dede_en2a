@@ -36,7 +36,7 @@ export type CartItem = {
 
 export type Order = {
   code: string;
-  webId: string
+  webId: string;
   address: string;
   date: Date;
   products: Product[];
@@ -57,4 +57,11 @@ export type Rate = {
   name: string;
   price: number;
   time: number;
+};
+
+export type Address = {
+  street: string;
+  postalCode: string;
+  locality: string;
+  region: string;
 };

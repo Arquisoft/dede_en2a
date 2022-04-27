@@ -1,3 +1,5 @@
+import { Address } from "../shared/shareddtypes";
+
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
 export type ShippingMethodType = {
@@ -7,10 +9,18 @@ export type ShippingMethodType = {
 };
 
 export async function obtainShippingMethods(
-  destAddress: String
+  destAddress: Address
 ): Promise<ShippingMethodType[]> {
   // We obtain the coordinates from the address
-  let coords = await getCoordinatesFromAddress(destAddress);
+  let stringAddress =
+    destAddress.street +
+    ", " +
+    destAddress.postalCode +
+    ", " +
+    destAddress.locality +
+    ", " +
+    destAddress.region;
+  let coords = await getCoordinatesFromAddress(stringAddress);
   // We compute the total distance that the package has to travel
   let distance = await getDistanceDriving(coords);
 
