@@ -1,20 +1,16 @@
 import React from "react";
-import { Rate } from "../../../shared/shareddtypes";
 import { getRates } from "../../../api/carriersApi";
+import { CartItem, Rate } from "../../../shared/shareddtypes";
 
 import {
-  List,
-  ListItem,
-  ListItemText,
   Divider,
-  Typography,
-  IconButton,
-  LinearProgress,
-  Grid,
-  RadioGroup,
   FormControl,
   FormControlLabel,
+  Grid,
+  LinearProgress,
   Radio,
+  RadioGroup,
+  Typography
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -48,7 +44,7 @@ function CarriersRatesGroup(props: CarriersRatesGroupProps): JSX.Element {
               label={
                 <React.Fragment>
                   <Typography>
-                    {rate.name + " - " + rate.price + " €"}
+                    {rate.name + " - " + rate.price.toFixed(2) + " €"}
                   </Typography>
                   <Typography variant="subtitle2" color="text.secondary">
                     {rate.time + " hours estimated"}
@@ -69,6 +65,7 @@ type CarriersRatesProps = {
   setCosts: (costs: number) => void;
   address: String;
   price: number;
+  cart: CartItem[];
 };
 
 export default function CarriersRatesForm(
@@ -78,23 +75,29 @@ export default function CarriersRatesForm(
   const [rates, setRates] = React.useState<Rate[]>([]);
 
   const refreshCarriersRates = async () => {
+    let weights = 0;
+    props.cart.forEach((item: CartItem) => {
+      weights += item.product.weight * item.amount;
+    });
     //Obtain the real weight and the postal code
-    return await getRates(0.5, "33209");
+    return await getRates(weights, "33209");
   };
 
   React.useEffect(() => {
     setLoading(true); // we start with the loading process
 
-    refreshCarriersRates()
-      .then((rates) => setRates(rates))
-      .finally(() => setLoading(false));
+    refreshCarriersRates().then((rates) => {
+      setRates(rates);
+    });
+
+    setLoading(false);
   }, []);
 
   return (
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Carriers Selection</Divider>
 
-      <LinearProgress hidden={!loading} />
+      <LinearProgress sx={{ display: loading ? "block" : "none" }}/>
       {!loading && (
         <React.Fragment>
           <Typography sx={{ pb: 2 }}>

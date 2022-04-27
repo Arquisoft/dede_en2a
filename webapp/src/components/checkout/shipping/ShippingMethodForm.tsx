@@ -1,20 +1,19 @@
 import React from "react";
 
 import {
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
   Divider,
   IconButton,
-  LinearProgress,
+  LinearProgress, List,
+  ListItem,
+  ListItemText,
+  Typography
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 import {
   obtainShippingMethods,
-  ShippingMethodType,
+  ShippingMethodType
 } from "../../../helpers/ComputeDistanceHelper";
 
 function ShippingMethodRadioGroup(props: any) {
@@ -46,7 +45,7 @@ function ShippingMethodRadioGroup(props: any) {
       {!loading && (
         <List>
           {shippingMethods.map(
-            (method: { title: string; subtitle: string; price: number }) => (
+            (method: { title: string; subtitle: string; price: string }) => (
               <ListItem key={method.title}>
                 <IconButton
                   sx={{ mr: 2 }}
@@ -60,7 +59,7 @@ function ShippingMethodRadioGroup(props: any) {
                   secondary={method.subtitle}
                 />
 
-                <Typography>{method.price} €</Typography>
+                <Typography>{method.price}</Typography>
               </ListItem>
             )
           )}

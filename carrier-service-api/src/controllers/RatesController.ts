@@ -9,15 +9,16 @@ export const getCarrierRates: RequestHandler = async (req, res) => {
     res.status(400).send("Missing weight");
     return;
   }
-  const weightNumber = parseFloat(weight as string);
+  let weightNumber = Math.round(parseFloat(weight as string));
   if (isNaN(weightNumber)) {
     res.status(400).send("Invalid weight");
     return;
   }
+  if (weightNumber > 10) weightNumber = 10;
   const rates = await ratesModel.findOne({ weight: weightNumber });
 
   if (!rates) {
-    res.status(404).send("No rates found");
+    res.status(403).send("No rates found");
     return;
   }
 

@@ -5,7 +5,7 @@ const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinate
 export type ShippingMethodType = {
   title: string;
   subtitle: string;
-  price: number;
+  price: string;
 };
 
 export async function obtainShippingMethods(
@@ -29,12 +29,12 @@ export async function obtainShippingMethods(
     {
       title: "Correos",
       subtitle: "The fastest shipping method we have!",
-      price: Math.round(distance * 2 * 100) / 100,
+      price: "Select",
     },
     {
       title: "Pick UP",
       subtitle: "The cheapest method on earth!",
-      price: 0,
+      price: "0 €",
     },
   ];
 }
