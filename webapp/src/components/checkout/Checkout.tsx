@@ -8,7 +8,7 @@ import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 
 import { saveOrder } from "../../helpers/ShoppingCartHelper";
-import { CartItem } from "../../shared/shareddtypes";
+import { Address, CartItem } from "../../shared/shareddtypes";
 
 import Billing from "./Billing";
 import OrderConfirmation from "./OrderConfirmation";
@@ -28,7 +28,7 @@ function getSteps() {
 
 export default function Checkout(props: CheckoutProps) {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [address, setAddress] = React.useState("");
+  const [address, setAddress] = React.useState<Address>({} as Address);
   const [costs, setCosts] = React.useState<number>(Number());
 
   const steps = getSteps();
@@ -52,12 +52,7 @@ export default function Checkout(props: CheckoutProps) {
 
   const saveOrderToDB = () => {
     if (props.webId !== "") {
-      saveOrder(
-        props.productsInCart,
-        costs,
-        props.webId,
-        "Get address not implemented yet"
-      );
+      saveOrder(props.productsInCart, costs, props.webId, address);
       props.handleDeleteCart();
     }
   };
@@ -82,6 +77,7 @@ export default function Checkout(props: CheckoutProps) {
             setCosts={setCosts}
             handleBack={handleBack}
             handleNext={handleNext}
+            cart={props.productsInCart}
           />
         );
       case 2:
@@ -91,6 +87,7 @@ export default function Checkout(props: CheckoutProps) {
             shippingCosts={costs}
             handleReset={handleReset}
             handleNext={handleNext}
+            address={address}
           />
         );
       case 3:

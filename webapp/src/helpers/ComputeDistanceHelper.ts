@@ -1,16 +1,26 @@
+import { Address } from "../shared/shareddtypes";
+
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
 export type ShippingMethodType = {
   title: string;
   subtitle: string;
-  price: number;
+  price: string;
 };
 
 export async function obtainShippingMethods(
-  destAddress: String
+  destAddress: Address
 ): Promise<ShippingMethodType[]> {
   // We obtain the coordinates from the address
-  let coords = await getCoordinatesFromAddress(destAddress);
+  let stringAddress =
+    destAddress.street +
+    ", " +
+    destAddress.postalCode +
+    ", " +
+    destAddress.locality +
+    ", " +
+    destAddress.region;
+  let coords = await getCoordinatesFromAddress(stringAddress);
   // We compute the total distance that the package has to travel
   let distance = await getDistanceDriving(coords);
 
@@ -19,12 +29,12 @@ export async function obtainShippingMethods(
     {
       title: "Correos",
       subtitle: "The fastest shipping method we have!",
-      price: Math.round(distance * 2 * 100) / 100,
+      price: "Select",
     },
     {
       title: "Pick UP",
       subtitle: "The cheapest method on earth!",
-      price: 0,
+      price: "0 €",
     },
   ];
 }

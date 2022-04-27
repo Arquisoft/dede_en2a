@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import ProductList from "../../components/products/ProductList";
 import { Product } from "../../shared/shareddtypes";
 
-
 test("A list of products is rendered", async () => {
   const products: Product[] = [
     {
@@ -13,7 +12,8 @@ test("A list of products is rendered", async () => {
       price: 10,
       stock: 20,
       image: "",
-      category: 'Electronics'
+      category: "Electronics",
+      weight: 1,
     },
     {
       code: "9998",
@@ -22,7 +22,8 @@ test("A list of products is rendered", async () => {
       price: 15,
       stock: 10,
       image: "",
-      category: 'Electronics'
+      category: "Electronics",
+      weight: 1,
     },
   ];
 

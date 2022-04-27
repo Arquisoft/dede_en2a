@@ -18,15 +18,14 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{url}}/products/delete/1
+DELETE {{url}}/products/delete/0
 
 ###
-POST {{url}}/products/update/0050
+POST {{url}}/products/update/46
 Content-Type: application/json
 
 {
-    "code": "50",
-    "image": "50.png"
+    "weight": 0.5
 }
 
 ###

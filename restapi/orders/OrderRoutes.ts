@@ -10,7 +10,7 @@ api.get(
   OrderController.getOrdersForAdminOrModerator
 );
 
-api.get("/orders/findByOrderCode/:orderCode", OrderController.getOrder);
+api.get("/orders/findByOrderCode/:code", OrderController.getOrder);
 
 api.post("/orders", OrderController.createOrder);
 

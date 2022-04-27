@@ -11,7 +11,8 @@ test("Renders product details page", () => {
     price: 9.99,
     stock: 15,
     image: "",
-    category: 'Electronics'
+    category: "Electronics",
+    weight: 1,
   };
 
   const { getByText, getAllByText } = render(
@@ -39,7 +40,8 @@ test("Adds product to cart", () => {
     price: 9.99,
     stock: 15,
     image: "",
-    category: 'Electronics'
+    category: "Electronics",
+    weight: 1,
   };
 
   const onAdd = jest.fn();

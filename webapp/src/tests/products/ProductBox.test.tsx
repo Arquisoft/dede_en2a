@@ -10,8 +10,9 @@ test("A product is rendered", async () => {
     description: "Descripcion Prueba 1",
     price: 10,
     stock: 20,
-    image: "9999.png",
+    image: "",
     category: "Electronics",
+    weight: 1,
   };
 
   const { getByText, container } = render(
@@ -41,6 +42,7 @@ test("A product is added to the cart", async () => {
     stock: 20,
     image: "",
     category: "Electronics",
+    weight: 1,
   };
   const cart: CartItem[] = [];
 
@@ -70,6 +72,7 @@ test("URL to product details works", async () => {
     stock: 20,
     image: "",
     category: "Electronics",
+    weight: 1,
   };
   const cart: CartItem[] = [];
 

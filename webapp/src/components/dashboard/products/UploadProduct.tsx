@@ -12,13 +12,13 @@ import {
   Snackbar,
   Stack,
   styled,
-  TextField,
+  TextField
 } from "@mui/material";
 
 import { createProduct, getProducts, updateProduct } from "../../../api/api";
 import {
   checkNumericField,
-  checkTextField,
+  checkTextField
 } from "../../../helpers/CheckFieldsHelper";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
@@ -56,6 +56,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [weight, setWeight] = useState("");
   const [image, setImage] = useState<string>(DEF_IMAGE);
 
   const getCode = async () => {
@@ -90,6 +91,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       setStock("");
       setPrice("");
       setCategory("");
+      setWeight("");
     }
   };
 
@@ -103,10 +105,10 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       return sendErrorNotification("Incorrect price");
     if (!checkNumericField(Number(stock)))
       return sendErrorNotification("Incorrect stock");
-    if (file === "" && !props.isForUpdate) {
+    if (!checkNumericField(Number(weight)))
+      return sendErrorNotification("Incorrect weight");
+    if (file === "" && !props.isForUpdate) 
       return sendErrorNotification("Incorrect file");
-    }
-
     handleSubmit();
   };
 
@@ -121,16 +123,22 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
         stock: Number(stock),
         category: category,
         image: code + ".png",
+        weight: Number(weight),
       });
     } else {
-      created = await createProduct(file, {
-        code: code,
-        name: name,
-        description: description,
-        price: Number(price),
-        stock: Number(stock),
-        category: category,
-      });
+      created = await createProduct(
+        file,
+        {
+          code: code,
+          name: name,
+          description: description,
+          price: Number(price),
+          stock: Number(stock),
+          category: category,
+          weight: Number(weight),
+        },
+        props.webId
+      );
     }
     if (created) {
       setNotificationStatus(true);
@@ -238,13 +246,9 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                     type="number"
                     fullWidth
                     required
+                    disabled
                     margin="normal"
                     variant="outlined"
-                    onChange={(event) => {
-                      if (Number(event.target.value) >= minCode)
-                        setCode(event.target.value);
-                      else setCode(minCode.toString());
-                    }}
                   />
                 )}
 
@@ -333,6 +337,23 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                   onChange={(event) => {
                     if (parseInt(event.target.value) < 0) setStock(0 + "");
                     else setStock(parseInt(event.target.value).toString());
+                  }}
+                  inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                />
+
+                <TextField
+                  value={weight}
+                  id="outlined-full-width"
+                  label="Product weight (kg)"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  type="number"
+                  required
+                  margin="normal"
+                  variant="outlined"
+                  onChange={(event) => {
+                    if (parseFloat(event.target.value) < 0.0) setWeight(0 + "");
+                    else setWeight(parseFloat(event.target.value).toString());
                   }}
                   inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 />

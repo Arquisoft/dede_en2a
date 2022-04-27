@@ -1,11 +1,12 @@
 import { getPlaces } from "../api/api";
+import { Address } from "../shared/shareddtypes";
 import { calculateCoordinates } from "./ComputeDistanceHelper";
 
 type PickupLocation = {
   lat: number;
   lon: number;
   name: string;
-  street_address: string;
+  street_address: Address;
 };
 
 export async function getPickUpPlacesNearby(
@@ -19,14 +20,19 @@ export async function getPickUpPlacesNearby(
   const y = coords.features[0].geometry.coordinates[1];
 
   const places = await getPlaces(x, y, radiusMeters, maxResults);
-  places.features.forEach((feature: any) =>
+  places.features.forEach((feature: any) => {
     locations.push({
       lat: feature.geometry.coordinates[0],
       lon: feature.geometry.coordinates[1],
       name: feature.properties.name,
-      street_address: feature.properties.address_line2,
-    })
-  );
+      street_address: {
+        street: feature.properties.street,
+        postalCode: feature.properties.postcode,
+        locality: feature.properties.city,
+        region: feature.properties.county,
+      },
+    });
+  });
 
   return locations;
 }

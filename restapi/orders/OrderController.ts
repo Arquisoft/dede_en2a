@@ -1,44 +1,51 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
+import { userModel } from "../users/User";
 import { verifyWebID } from "../utils/WebIDValidation";
 import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
-  if (verifyWebID(req.headers.webId + "")) {
+  const webId = req.headers.token + "";
+  if (await verifyWebID(webId)) {
     const orderFound = await orderModel.findOne({
       code: req.params.code,
     });
-
-    if (orderFound) return res.json(orderFound);
-    else return res.status(204).json();
-  } else return res.status(203).json();
+    if (orderFound) {
+      if (webId === orderFound.webId) {
+        return res.json(orderFound);
+      } else {
+        return res.status(409).json();
+      }
+    } else {
+      return res.status(412).json();
+    }
+  } else {
+    return res.status(403).json();
+  }
 };
 
 export const getOrdersForAdminOrModerator: RequestHandler = async (
   req,
   res
 ) => {
-  const isVerified = verifyWebID(req.headers.webId + "");
-  if (isVerified) {
+  const webId = req.headers.token + "";
+  const user = await userModel.findOne({ webId: webId });
+  const isVerified = await verifyWebID(webId);
+  if (isVerified && (user.role === "admin" || user.role === "manager")) {
     const ordersFound = await orderModel.find({});
-
-    // If we have found orders... return them
-    if (ordersFound) return res.json(ordersFound);
-    else return res.status(204).json(); // No order has been found
-  } else return res.status(203).json();
+    return res.json(ordersFound);
+  } else return res.status(403).json();
 };
 
 export const getOrdersForUser: RequestHandler = async (req, res) => {
-  const isVerified = verifyWebID(req.headers.webId + "");
+  const webId = req.headers.token + "";
+  const isVerified = await verifyWebID(webId);
   if (isVerified) {
     const ordersFound = await orderModel.find({
-      webId: req.headers.webId,
+      webId: webId,
     });
-
-    // If we have found orders... return them
-    if (ordersFound) return res.json(ordersFound);
-    else return res.status(204).json(); // No order has been found
-  } else return res.status(203).json();
+    return res.json(ordersFound);
+  } else return res.status(403).json();
 };
 
 export const createOrder: RequestHandler = async (req, res) => {
@@ -50,7 +57,7 @@ export const createOrder: RequestHandler = async (req, res) => {
     }
   };
 
-  if (verifyWebID(req.headers.webId + ""))
+  if (await verifyWebID(req.headers.token + ""))
     try {
       const order = new orderModel(req.body);
       updateStock(order.products);
@@ -60,5 +67,5 @@ export const createOrder: RequestHandler = async (req, res) => {
       console.log(error);
       res.status(412).json();
     }
-  else res.status(203).json();
+  else res.status(403).json();
 };

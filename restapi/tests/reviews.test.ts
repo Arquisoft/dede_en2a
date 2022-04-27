@@ -48,79 +48,65 @@ afterAll(async () => {
 });
 
 describe("reviews", () => {
+  const code = uuidv4();
+
   it("Can get all reviews for a product", async () => {
-    const response: Response = await request(app).get(
-      "/reviews/listByCode/0001"
-    );
+    const response: Response = await request(app).get("/reviews/listByCode/1");
     expect(response.statusCode).toBe(200);
     expect(response.type).toEqual("application/json");
-  });
-
-  it("Can get review of a user for a product", async () => {
-    const response: Response = await request(app).get(
-      "/reviews/listByCodeAndEmail/0001/test"
-    );
-    expect(response.statusCode).toBe(200);
-    expect(response.type).toEqual("application/json");
-  });
-
-  it("Can't get non-existing review of a user for a product", async () => {
-    const response: Response = await request(app).get(
-      "/reviews/listByCodeAndEmail/0000/pablo268la@gmail.com"
-    );
-    expect(response.statusCode).toBe(412);
-  });
-  
-
-  it("Can't get create a review without been verified", async () => {
-    const response: Response = await request(app).post("/reviews").send({
-      userEmail: "test",
-      productCode: "0001",
-      rating: 1,
-      comment: "Tuvo güena la cami",
-    });
-    expect(response.statusCode).toBe(403);
-    expect(response.body.message).toBe("Invalid token");
   });
 
   it("Can create a review ", async () => {
-    let userToken = await getToken();
     const response: Response = await request(app)
       .post("/reviews")
-      .set("token", userToken)
-      .set("email", "test")
+      .set("token", "test")
       .send({
-        userEmail: "test",
-        productCode: uuidv4(), //We use a random code so that way we can create different reviews as only 1 per person and product is allowed
+        webId: "test",
+        productCode: code, //We use a random code so that way we can create different reviews as only 1 per person and product is allowed
         rating: 1,
         comment: "Tuvo güena la cami",
       });
     expect(response.statusCode).toBe(200);
   });
 
+  it("Can get review of a user for a product. Response length 1", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCodeAndWebId/" + code + "/test"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toEqual("application/json");
+    expect(response.body.length).toBe(1)
+  });
+
+  it("Can get non-existing review of a user for a product. Response length 0", async () => {
+    const response: Response = await request(app).get(
+      "/reviews/listByCodeAndWebId/0/test"
+    );
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(0)
+  });
+
+  it("Can't get create a review without webId on headers for verification", async () => {
+    const response: Response = await request(app).post("/reviews").send({
+      webId: "test",
+      productCode: "1",
+      rating: 1,
+      comment: "Tuvo güena la cami",
+    });
+    expect(response.statusCode).toBe(403);
+    expect(response.body.message).toBe("Invalid webId");
+  });
+
   it("Can't create a review with invalid data", async () => {
-    let userToken = await getToken();
     const response: Response = await request(app)
       .post("/reviews")
-      .set("token", userToken)
-      .set("email", "test")
+      .set("token", "test")
       .send({
-        userEmail: "test",
+        webId: "test",
         productCode: "0001",
         rating: 1,
       });
-      expect(response.statusCode).toBe(412);
-      expect(response.body.message).toBe("The data is not valid");
+    expect(response.statusCode).toBe(412);
+    expect(response.body.message).toBe("The data is not valid");
   });
 });
-
-async function getToken() {
-    const token: Response = await request(app)
-    .post("/users/requestToken/")
-    .send({
-      email: "test",
-      password: "test",
-    });
-    return token.body
-}
-
