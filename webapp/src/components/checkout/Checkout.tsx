@@ -21,7 +21,7 @@ type CheckoutProps = {
   productsInCart: CartItem[];
   handleDeleteCart: () => void;
   webId: string;
-  sendNotification: (severity: AlertColor, message: string) => void
+  sendNotification: (severity: AlertColor, message: string) => void;
 };
 
 function getSteps() {
@@ -32,6 +32,7 @@ export default function Checkout(props: CheckoutProps) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [address, setAddress] = React.useState<Address>({} as Address);
   const [costs, setCosts] = React.useState<number>(Number());
+  const [orderCode, setOrderCode] = React.useState<string>("");
 
   const steps = getSteps();
 
@@ -50,12 +51,14 @@ export default function Checkout(props: CheckoutProps) {
   const handlePayed = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     saveOrderToDB();
-    props.sendNotification("success", "Order successfully created")
+    props.sendNotification("success", "Order successfully created");
   };
 
-  const saveOrderToDB = () => {
+  const saveOrderToDB = async () => {
     if (props.webId !== "") {
-      saveOrder(props.productsInCart, costs, props.webId, address);
+      setOrderCode(
+        await saveOrder(props.productsInCart, costs, props.webId, address)
+      );
       props.handleDeleteCart();
     }
   };
@@ -103,7 +106,7 @@ export default function Checkout(props: CheckoutProps) {
           />
         );
       case 4:
-        return <OrderConfirmation />;
+        return <OrderConfirmation pdf={orderCode} />;
     }
   };
 

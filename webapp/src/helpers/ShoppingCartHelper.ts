@@ -60,7 +60,8 @@ export async function saveOrder(
     receivedDate: receivingDate,
   };
 
-  await createOrder(webId, JSON.stringify(order));
+  let orderSaved = await createOrder(webId, JSON.stringify(order));
+  return orderSaved.code;
 }
 
 export function getCurrentCartAmount(

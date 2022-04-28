@@ -186,7 +186,7 @@ class InvoiceGenerator {
   generate() {
     let theOutput = new PDFGenerator();
 
-    const fileName = `Invoice ${this.invoice.invoiceNumber}.pdf`;
+    const fileName = this.invoice.invoiceNumber + ".pdf";
 
     // pipe to a writable stream which would save the result into the same directory
     theOutput.pipe(fs.createWriteStream("./utils/pdf/" + fileName));
