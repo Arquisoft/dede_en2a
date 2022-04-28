@@ -4,5 +4,5 @@ export default {
   },
   collectCoverage: true,
   collectCoverageFrom: ["**/*.tsx"],
-  testTimeout: 15000,
+  testTimeout: 150000,
 };
