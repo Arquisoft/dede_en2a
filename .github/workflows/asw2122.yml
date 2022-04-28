@@ -108,7 +108,7 @@ jobs:
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
-    needs: [docker-push-restapi, docker-push-webapp]
+    needs: [docker-push-restapi, docker-push-webapp, docker-push-carriers]
     steps:
       - name: Deploy over SSH
         uses: fifsky/ssh-action@master
