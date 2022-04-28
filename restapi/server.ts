@@ -26,7 +26,7 @@ app.use(metricsMiddleware);
 app.use(cors());
 app.use(bp.json());
 
-app.use(bp.urlencoded({ extended: true }));
+app.use(bp.urlencoded({ extended: true, limit:"8mb" }));
 app.use(morgan("dev"));
 
 app.use(apiUser);
@@ -40,9 +40,10 @@ app.use(helmet.hidePoweredBy());
 app.get(["/*.png", "/undefined"], function (req, res) {
   const a = path.join(__dirname, "public", "not-found.png");
   const ipath = path.join(__dirname, "public", req.originalUrl);
+  const savePath = path.resolve(ipath);
 
-  if (fs.existsSync(ipath)) {
-    res.sendFile(ipath);
+  if (savePath.startsWith(__dirname + "\\public") && fs.existsSync(savePath)) {
+    res.sendFile(savePath);
   } else {
     res.sendFile(a);
   }

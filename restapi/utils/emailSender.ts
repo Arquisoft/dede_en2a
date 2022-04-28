@@ -36,28 +36,3 @@ export const sendInvoiceEmail: Function = (
   };
   sgMail.send(mailOptions);
 };
-
-export const sendVerificationEmail: Function = async (
-  email: string,
-  uniqueString: string
-) => {
-
-  const currentUrl = process.env.REACT_APP_API_URI || "http://localhost:5000";
-
-  const mailOptions = {
-    to: email,
-    from: process.env.AUTH_EMAIL,
-    subject: "Verify your DeDe account",
-    html:
-      "<p> Verify your email account to complete the sign up and login into your account.</p>" +
-      '<p>This link <b>expires in 6 hours</b>.<p/><p>Press <a href="' +
-      currentUrl +
-      "/users/verify/" +
-      email +
-      "/" +
-      uniqueString +
-      '"}>here<a/> to proceed</p>',
-  };
-
-  if (process.env.MONGO_DB_URI !== undefined) sgMail.send(mailOptions);
-};
