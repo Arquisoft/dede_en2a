@@ -26,7 +26,7 @@ app.use(metricsMiddleware);
 app.use(cors());
 app.use(bp.json());
 
-app.use(bp.urlencoded({ extended: true, limit:"8mb" }));
+app.use(bp.urlencoded({ extended: true, limit: "8mb" }));
 app.use(morgan("dev"));
 
 app.use(apiUser);
@@ -49,7 +49,18 @@ app.get(["/*.png", "/undefined"], function (req, res) {
   }
 });
 
+app.get(["/*.pdf"], function (req, res) {
+  const ipath = path.join(__dirname, "utils", "pdf", req.originalUrl);
+  const savePath = path.resolve(ipath);
+  console.log(ipath);
+
+  if (savePath.startsWith(__dirname + "\\utils") && fs.existsSync(savePath)) {
+    res.sendFile(savePath);
+  }
+});
+
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "utils", "pdf")));
 
 app
   .listen(5000, (): void => {

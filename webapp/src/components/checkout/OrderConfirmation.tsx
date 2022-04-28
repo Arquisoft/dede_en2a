@@ -1,9 +1,10 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import DownloadButtton from "./DownloadButton";
 
 export default function OrderConfirmation(props: any) {
   let navigate = useNavigate();
@@ -23,6 +24,8 @@ export default function OrderConfirmation(props: any) {
         justifyContent="space-between"
         alignItems="center"
       >
+        <DownloadButtton pdf={props.pdf} />
+        
         <Button
           variant="contained"
           onClick={() => navigate("/")}

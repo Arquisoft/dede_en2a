@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { productModel } from "../products/Product";
 import { userModel } from "../users/User";
+import { createPDF } from "../utils/PDFHelper";
 import { verifyWebID } from "../utils/WebIDValidation";
 import { orderModel } from "./Order";
 
@@ -62,8 +63,10 @@ export const createOrder: RequestHandler = async (req, res) => {
       const order = new orderModel(req.body);
       updateStock(order.products);
       const orderSaved = await order.save();
+      createPDF(orderSaved.code);
       res.json(orderSaved);
     } catch (error) {
+      console.log(error)
       res.status(412).json();
     }
   else res.status(403).json();

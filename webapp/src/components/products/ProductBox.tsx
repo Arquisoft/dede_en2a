@@ -1,19 +1,19 @@
 import { useNavigate } from "react-router-dom";
 
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import CardActionArea from "@mui/material/CardActionArea";
-import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 import StockAlert from "./StockAlert";
 
-import { Product } from "../../shared/shareddtypes";
 import { checkImageExists } from "../../helpers/ImageHelper";
+import { Product } from "../../shared/shareddtypes";
 
 type ProductListProps = {
   product: Product;

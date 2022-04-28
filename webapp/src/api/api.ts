@@ -66,7 +66,11 @@ export async function updateProduct(webId: string, product: Product) {
   }
 }
 
-export async function createProduct(image: any, body: any, webId : string): Promise<boolean> {
+export async function createProduct(
+  image: any,
+  body: any,
+  webId: string
+): Promise<boolean> {
   var data = new FormData();
   data.append("image", image, body.code + ".png");
   for (let key in body) {
@@ -116,8 +120,8 @@ export async function filterProductsByCategory(
 
 // -*- ORDERS -*-
 
-export async function createOrder(webId: string, body: any) {
-  await fetch(apiEndPoint + "/orders", {
+export async function createOrder(webId: string, body: any): Promise<Order> {
+  let response = await fetch(apiEndPoint + "/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -125,6 +129,7 @@ export async function createOrder(webId: string, body: any) {
     },
     body: body,
   });
+  return response.json();
 }
 
 export async function getOrderByCode(

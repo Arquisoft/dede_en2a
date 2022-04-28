@@ -4,6 +4,12 @@ export const checkImageExists = (image: string) => {
   );
 };
 
+export const checkPDF = (image: string) => {
+  return (
+    (process.env.REACT_APP_API_URI || "http://localhost:5000") + "/" + image
+  );
+};
+
 export const checkImageExistsLocally = (image: string) => {
   let image_path = "";
   try {

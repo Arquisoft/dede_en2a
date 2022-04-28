@@ -26,7 +26,6 @@ beforeAll(async () => {
   const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
   app.use(metricsMiddleware);
 
-  app.use(cors());
   app.use(bp.json());
 
   app.use(bp.urlencoded({ extended: false }));

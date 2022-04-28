@@ -1,12 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 
 import {
-  Typography,
-  Stack,
   Button,
-  Container,
-  Paper,
-  Divider,
+  Container, Divider, Paper, Stack, Typography
 } from "@mui/material";
 
 import FeaturedProducts from "../home/FeaturedProducts";
