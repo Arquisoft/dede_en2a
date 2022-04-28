@@ -10,6 +10,8 @@ import ratesRoutes from "./src/routes/RatesRoutes";
 const app: Application = express();
 const port: number = 8000;
 
+let helmet = require("helmet");
+
 const mongoose = require("mongoose");
 const connectionString = process.env.CARRIERS_DB_URI;
 
@@ -22,6 +24,8 @@ app.use(bp.json());
 app.use(morgan("dev"));
 
 app.use(ratesRoutes);
+
+app.use(helmet.hidePoweredBy());
 
 app
   .listen(port, (): void => {
