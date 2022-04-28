@@ -1,5 +1,9 @@
 version: "3.5"
 services:
+  carriersapi: 
+    image: ghcr.io/arquisoft/dede_en2a/carriersapi:latest
+    ports:
+      - "8000:8000"
   restapi:
     image: ghcr.io/arquisoft/dede_en2a/restapi:latest
     ports:
@@ -10,3 +14,4 @@ services:
       - "3000:3000"
     depends_on:
       - restapi
+      - carriersapi
