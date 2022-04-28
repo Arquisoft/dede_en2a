@@ -1,4 +1,4 @@
-require("dotenv").config();
+//require("dotenv").config();
 
 import bp from "body-parser";
 import cors from "cors";
@@ -15,10 +15,15 @@ let helmet = require("helmet");
 const mongoose = require("mongoose");
 const connectionString = process.env.CARRIERS_DB_URI;
 
+var corsOptions = {
+  origin: "*",
+};
+
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
 
-app.use(cors());
+app.use(cors(corsOptions));
+
 app.use(bp.json());
 
 app.use(morgan("dev"));
