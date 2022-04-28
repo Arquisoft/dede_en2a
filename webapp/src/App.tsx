@@ -98,6 +98,7 @@ export default function App(): JSX.Element {
       setProductsInCart,
       setTotalUnitsInCart
     );
+    sendNotification("success", "Product added to the cart")
   };
 
   const removeFromCart = (product: Product) => {
@@ -241,6 +242,7 @@ export default function App(): JSX.Element {
                     productsInCart={productsInCart}
                     handleDeleteCart={handleDeleteCart}
                     webId={webId}
+                    sendNotification={sendNotification}
                   />
                 }
               />
@@ -267,7 +269,7 @@ export default function App(): JSX.Element {
               />
               <Route
                 path="orders"
-                element={<OrderList webId={webId} role={role} />}
+                element={<OrderList webId={webId} role={"user"} />}
               />
               <Route
                 path="order/:code"
