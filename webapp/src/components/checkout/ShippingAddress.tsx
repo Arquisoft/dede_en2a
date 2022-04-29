@@ -28,14 +28,6 @@ export default function ShippingAddress(props: any): JSX.Element {
     return stringAddress !== "";
   };
 
-  const handleBack = () => {
-    setActiveStep(0);
-
-    // We reset all values to default
-    setAddresses([]);
-    props.setAddress({});
-  };
-
   // We have to get the user and addresses from the DB
   const refreshUser = async () => {
     return await getUser(props.webId);
@@ -105,6 +97,7 @@ export default function ShippingAddress(props: any): JSX.Element {
               onClick={handleNext}
               variant="contained"
               className="m-1"
+              data-testid="next-button"
             >
               Next
             </Button>
