@@ -50,17 +50,26 @@ app.get(["/*.png", "/undefined"], function (req, res) {
 });
 
 app.get(["/*.pdf"], function (req, res) {
-  const ipath = path.join(__dirname, "utils", "pdf", req.originalUrl);
+  const ipath = path.join(__dirname, "public", "pdf", req.originalUrl);
   const savePath = path.resolve(ipath);
-  console.log(ipath);
 
-  if (savePath.startsWith(__dirname + "\\utils") && fs.existsSync(savePath)) {
+  if (fs.existsSync(savePath)) {
     res.sendFile(savePath);
+  } else {
+    fs.rename(
+      path.resolve("./utils/pdf/" + req.originalUrl),
+      path.resolve("./public/pdf/" + req.originalUrl),
+      function (err: Error) {
+        if (err) throw err;
+        console.log("Successfully renamed - AKA moved!");
+        res.sendFile(path.resolve("./public/pdf/" + req.originalUrl));
+      }
+    );
   }
 });
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "utils", "pdf")));
+app.use(express.static(path.join(__dirname, "public", "pdf")));
 
 app
   .listen(5000, (): void => {
