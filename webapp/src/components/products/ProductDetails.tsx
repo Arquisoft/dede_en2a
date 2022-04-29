@@ -5,7 +5,7 @@ import {getProduct, getReviewsByCode} from "../../api/api";
 import {checkImageExists} from "../../helpers/ImageHelper";
 import {getReviewMean} from "../../helpers/ReviewHelper";
 
-import {Product, Review} from "../../shared/shareddtypes";
+import {NotificationType, Product, Review} from "../../shared/shareddtypes";
 
 import ProductCommentList from "./ProductCommentList";
 import StockAlert from "./StockAlert";
@@ -26,6 +26,8 @@ import {
     styled,
     Typography,
 } from "@mui/material";
+import NotificationAlert from "../misc/NotificationAlert";
+import {AlertColor} from "@mui/material/Alert";
 
 export type ProductProps = {
     product: Product;
@@ -68,6 +70,19 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     const [starsSelected, setSelectedStars] = useState(0);
     const [currentCartAmount] = useState(0);
     const [loading, setLoading] = React.useState(false);
+    const [notificationStatus, setNotificationStatus] = React.useState(false);
+    const [notification, setNotification] = React.useState<NotificationType>({
+        severity: "success",
+        message: "",
+    });
+
+    function sendNotification(severity: AlertColor, message: string) {
+        setNotificationStatus(true);
+        setNotification({
+            severity: severity,
+            message: message,
+        });
+    }
 
     // We manage the share dialog as intended
     const [openShareDialog, setOpenShareDialog] = React.useState(false);
@@ -84,7 +99,10 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
     const [openReviewDialog, setOpenReviewDialog] = React.useState(false);
 
     const handleClickOpenReviewDialog = () => {
-        setOpenReviewDialog(true);
+        if (props.webId === undefined || props.webId == "") {
+            sendNotification("error", "To add a review you need to log in first!")
+        } else
+            setOpenReviewDialog(true);
     };
 
     const handleCloseReviewDialog = () => {
@@ -234,6 +252,12 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                     addToCart={props.addToCart}
                     review={handleClickOpenReviewDialog}
                     share={handleClickOpenShareDialog}
+                />
+
+                <NotificationAlert
+                    notification={notification}
+                    notificationStatus={notificationStatus}
+                    setNotificationStatus={setNotificationStatus}
                 />
             </React.Fragment>
         );
