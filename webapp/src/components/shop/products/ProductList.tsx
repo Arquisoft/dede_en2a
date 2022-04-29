@@ -1,8 +1,8 @@
 import { Card } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
-import { getCurrentCartAmount } from "../../helpers/ShoppingCartHelper";
-import { CartItem, Product } from "../../shared/shareddtypes";
+import { getCurrentCartAmount } from "../../../helpers/ShoppingCartHelper";
+import { CartItem, Product } from "../../../shared/shareddtypes";
 
 import ProductBox from "./ProductBox";
 

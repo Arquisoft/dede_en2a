@@ -1,7 +1,7 @@
 import React from "react";
 
-import Subtitle from "../utils/Subtitle";
-import Title from "../utils/Title";
+import Subtitle from "../misc/Subtitle";
+import Title from "../misc/Title";
 
 export default function Chart(props: any) {
   const [data, setData] = React.useState(0);

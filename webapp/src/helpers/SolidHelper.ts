@@ -5,6 +5,11 @@ import {
   getUrlAll,
   Thing,
   getUrl,
+  createSolidDataset,
+  buildThing,
+  createThing,
+  saveSolidDatasetAt,
+  setThing,
 } from "@inrupt/solid-client";
 
 import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
@@ -69,4 +74,21 @@ export async function getAddressesFromPod(webId: string): Promise<Address[]> {
 
 export function toStringAddress(address: Address): string {
   return `${address.street}, ${address.postalCode}, ${address.locality}, ${address.region}`;
+}
+
+export async function addAddressToPod(webId: string, address: Address) {
+  let addressSolidDataset = createSolidDataset();
+  const newAddressThing = buildThing(createThing())
+    .addStringNoLocale(VCARD.street_address, address.street)
+    .addStringNoLocale(VCARD.locality, address.locality)
+    .addStringNoLocale(VCARD.region, address.region)
+    .addStringNoLocale(VCARD.postal_code, address.postalCode)
+    .addUrl(VCARD.Type, VCARD.street_address)
+    .build();
+  addressSolidDataset = setThing(addressSolidDataset, newAddressThing);
+  await saveSolidDatasetAt(webId, addressSolidDataset);
+}
+
+export async function editAddressFromPod(webId: string, address: Address) {
+  let addressThingToModify = await getProfile(webId);
 }

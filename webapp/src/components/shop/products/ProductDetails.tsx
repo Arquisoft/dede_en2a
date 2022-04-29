@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getProduct, getReviewsByCode } from "../../api/api";
-import { checkImageExists } from "../../helpers/ImageHelper";
-import { getReviewMean } from "../../helpers/ReviewHelper";
+import { getProduct, getReviewsByCode } from "../../../api/api";
+import { checkImageExists } from "../../../helpers/ImageHelper";
+import { getReviewMean } from "../../../helpers/ReviewHelper";
 
-import { Product, Review } from "../../shared/shareddtypes";
+import { Product, Review } from "../../../shared/shareddtypes";
 
-import ProductCommentList from "./ProductCommentList";
-import StockAlert from "./StockAlert";
-import ProductSpeedDial from "./ProductSpeedDial";
-import ReviewDialog from "./ReviewDialog";
-import ShareDialog from "./ShareDialog";
+import ProductCommentList from "../comments/ProductCommentList";
+import StockAlert from "../misc/StockAlert";
+import ProductSpeedDial from "../misc/ProductSpeedDial";
+import ReviewDialog from "../dialogs/ReviewDialog";
+import ShareDialog from "../dialogs/ShareDialog";
 
 import {
   Breadcrumbs,

@@ -106,15 +106,10 @@ export async function deleteProduct(webId: string, code: string) {
   }
 }
 
-// Mode must be desc or asc. If not default order
-// Category must be Clothes, Decoration, Elecrtonics or Miscellaneous. If not all categories
-export async function filterProductsByCategory(
-  category: string,
-  mode: string
-): Promise<Product[]> {
-  let response = await fetch(
-    apiEndPoint + "/products/filter&order/" + category + "&" + mode
-  );
+// Mode must be desc or asc. In other case: default order will be used.
+// Category must be Clothes, Decoration, Electronics or Miscellaneous. In any other case: all products will be shown
+export async function sortProducts(mode: string): Promise<Product[]> {
+  let response = await fetch(apiEndPoint + "/products/sort/" + mode);
   return response.json();
 }
 

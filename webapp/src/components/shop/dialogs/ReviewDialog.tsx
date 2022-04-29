@@ -14,10 +14,14 @@ import {
 import { AlertColor } from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 
-import { Product, NotificationType, Review } from "../../shared/shareddtypes";
-import { addReview, getReviewsByCodeAndWebId } from "../../api/api";
+import {
+  Product,
+  NotificationType,
+  Review,
+} from "../../../shared/shareddtypes";
+import { addReview, getReviewsByCodeAndWebId } from "../../../api/api";
 
-import NotificationAlert from "../misc/NotificationAlert";
+import NotificationAlert from "../../misc/NotificationAlert";
 
 type ReviewDialogProps = {
   product: Product;

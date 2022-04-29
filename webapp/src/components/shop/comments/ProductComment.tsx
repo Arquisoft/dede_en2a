@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import { Stack, Grid, Paper, Rating, Typography } from "@mui/material";
-import { getNameFromPod } from "../../helpers/SolidHelper";
+import { getNameFromPod } from "../../../helpers/SolidHelper";
 
-import { Review } from "../../shared/shareddtypes";
+import { Review } from "../../../shared/shareddtypes";
 
 type ProductCommentProps = {
   review: Review;

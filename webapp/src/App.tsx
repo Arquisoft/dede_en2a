@@ -2,8 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import {
-  createTheme, CssBaseline,
-  ThemeProvider, useMediaQuery
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  useMediaQuery,
 } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
@@ -21,16 +23,16 @@ import Home from "./components/home/Home";
 import DedeApp from "./components/MainOutlet";
 import NotificationAlert from "./components/misc/NotificationAlert";
 import NavBar from "./components/navigation/NavBar";
-import ProductDetails from "./components/products/ProductDetails";
+import ProductDetails from "./components/shop/products/ProductDetails";
 import RedirectHome from "./components/RedirectHome";
-import Shop from "./components/Shop";
+import Shop from "./components/shop/Shop";
 import SignIn from "./components/userManagement/SignIn";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
 import {
   addProductToCart,
-  removeProductFromCart
+  removeProductFromCart,
 } from "./helpers/ShoppingCartHelper";
 import { getNameFromPod } from "./helpers/SolidHelper";
 
@@ -42,7 +44,7 @@ import "./App.css";
 
 import {
   handleIncomingRedirect,
-  logout
+  logout,
 } from "@inrupt/solid-client-authn-browser";
 
 export default function App(): JSX.Element {
@@ -98,7 +100,7 @@ export default function App(): JSX.Element {
       setProductsInCart,
       setTotalUnitsInCart
     );
-    sendNotification("success", "Product added to the cart")
+    sendNotification("success", "Product added to the cart");
   };
 
   const removeFromCart = (product: Product) => {
@@ -140,7 +142,7 @@ export default function App(): JSX.Element {
   };
 
   React.useEffect(() => {
-    refreshShop()
+    refreshShop();
     // We establish the stored color mode as the active one: if the user reloads we have to remember the preferences
     if (localStorage.getItem("mode") === null)
       localStorage.setItem("mode", mode);

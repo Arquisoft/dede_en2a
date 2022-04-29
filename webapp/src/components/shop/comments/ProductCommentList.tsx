@@ -1,6 +1,6 @@
 import { Grid, Paper, Typography } from "@mui/material";
 
-import { Review } from "../../shared/shareddtypes";
+import { Review } from "../../../shared/shareddtypes";
 
 import ProductComment from "./ProductComment";
 

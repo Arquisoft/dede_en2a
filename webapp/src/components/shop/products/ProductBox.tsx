@@ -10,10 +10,10 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import StockAlert from "./StockAlert";
+import StockAlert from "../misc/StockAlert";
 
-import { checkImageExists } from "../../helpers/ImageHelper";
-import { Product } from "../../shared/shareddtypes";
+import { checkImageExists } from "../../../helpers/ImageHelper";
+import { Product } from "../../../shared/shareddtypes";
 
 type ProductListProps = {
   product: Product;

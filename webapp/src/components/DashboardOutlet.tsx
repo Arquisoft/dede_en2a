@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 import Grid from "@mui/material/Grid";
 
-import DashboardSideBar from "./dashboard/utils/DashboardSideBar";
+import DashboardSideBar from "./dashboard/misc/DashboardSideBar";
 
 type DashboardProps = {
   role: string;
