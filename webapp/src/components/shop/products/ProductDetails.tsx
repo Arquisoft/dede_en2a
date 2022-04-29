@@ -144,7 +144,6 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
               direction="row"
               alignItems="center"
               justifyContent="center"
-              spacing={2}
             >
               <Grid item xs={12} md={6}>
                 <Img
