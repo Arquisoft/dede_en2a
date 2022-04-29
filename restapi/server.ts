@@ -79,8 +79,8 @@ app.get(["/*.pdf"], async function (req, res) {
     };
 
     const ig = new InvoiceGenerator(invoiceData);
-    doc.pipe(res);
-    doc = ig.generate(doc);
+    //doc.pipe(res);
+    ig.generate(doc).pipe(res);
     doc.end();
   }else{
     res.sendFile(path.join(__dirname, "public", 'pdf', "not-found.pdf"));
