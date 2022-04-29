@@ -25,7 +25,7 @@ export async function getUser(webId: string): Promise<User | undefined> {
     apiEndPoint + "/users/findByWebId/" + window.btoa(webId)
   );
 
-  if (response.status === 412)
+  if (response.status === 204)
     return Promise.resolve(undefined); // In case no user has been found
   else return response.json(); // we return the obtained user
 }
