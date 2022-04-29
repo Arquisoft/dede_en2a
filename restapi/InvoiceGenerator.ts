@@ -184,28 +184,35 @@ class InvoiceGenerator {
       .stroke();
   }
 
-  generate() {
-    let theOutput = new PDFGenerator();
+  generate(f: any) {
+    /*this.generateHeaders(f);
+    f.moveDown();*/
+    this.generateCustomerInformation(f);
+    this.generateTable(f);
+    this.generateFooter(f);
+    return f;
+    /*
+    try {
+      let doc = new PDFGenerator();
 
-    const fileName = this.invoice.invoiceNumber + ".pdf";
+      const fileName = this.invoice.invoiceNumber + ".pdf";
 
-    // pipe to a writable stream which would save the result into the same directory
-    theOutput.pipe(
-      fs.createWriteStream(path.join(__dirname, "public", "pdf", fileName))
-    );
+      // pipe to a writable stream which would save the result into the same directory
+      doc.pipe(
+        fs.createWriteStream(path.join(__dirname, "public", "pdf", fileName))
+      );
 
-    this.generateHeaders(theOutput);
-
-    theOutput.moveDown();
-
-    this.generateCustomerInformation(theOutput);
-
-    this.generateTable(theOutput);
-
-    this.generateFooter(theOutput);
-
-    // write out file
-    theOutput.end();
+      this.generateHeaders(f);
+      doc.moveDown();
+      this.generateCustomerInformation(f);
+      this.generateTable(f);
+      this.generateFooter(f);
+        doc.
+      // write out file
+      theOutput.end();
+    } catch (e) {
+      console.log(e);
+    }*/
   }
 }
 

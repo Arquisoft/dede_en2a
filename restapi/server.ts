@@ -5,9 +5,11 @@ import cors from "cors";
 import express, { Application, RequestHandler } from "express";
 import promBundle from "express-prom-bundle";
 import morgan from "morgan";
+import { orderModel } from "./orders/Order";
 import apiOrders from "./orders/OrderRoutes";
 import apiProduct from "./products/ProductRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
+import { userModel } from "./users/User";
 import apiUser from "./users/UserRoutes";
 
 const path = require("path");
@@ -49,13 +51,40 @@ app.get(["/*.png", "/undefined"], function (req, res) {
   }
 });
 
-app.get(["/*.pdf"], function (req, res) {
-  const newpath = path.join(__dirname, "public", "pdf", req.originalUrl);
-  const savePath = path.resolve(newpath);
+app.get(["/*.pdf"], async function (req, res) {
+  const InvoiceGenerator = require("./InvoiceGenerator");
+  const PDFDocument = require("pdfkit");
+  let doc = new PDFDocument();
+  let aux = req.originalUrl.substring(1, req.originalUrl.length - 4);
+  const orderFound = await orderModel.findOne({
+    code: aux,
+  });
+  if (orderFound !== null) {
+    const user = await userModel.findOne({ webId: orderFound.webId });
 
-  if (fs.existsSync(savePath)) {
-    res.sendFile(savePath);
-  }else res.status(505) 
+    const invoiceData = {
+      addresses: {
+        shipping: {
+          name: "",
+          address: orderFound.address,
+          email: user.webId,
+        },
+      },
+      items: orderFound.products,
+      subtotal: orderFound.subtotalPrice,
+      total: orderFound.totalPrice,
+      shippingPrice: orderFound.shippingPrice,
+      invoiceNumber: orderFound.code,
+      dueDate: orderFound.date,
+    };
+
+    const ig = new InvoiceGenerator(invoiceData);
+    doc.pipe(res);
+    doc = ig.generate(doc);
+    doc.end();
+  }else{
+    res.sendFile(path.join(__dirname, "public", 'pdf', "not-found.pdf"));
+  }
 });
 
 app.use(express.static(path.join(__dirname, "public")));
