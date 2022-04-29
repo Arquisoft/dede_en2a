@@ -11,6 +11,8 @@ import { calculateCoordinates } from "../../../helpers/ComputeDistanceHelper";
 import { getPickUpPlacesNearby } from "../../../helpers/ShippingMethodHelper";
 
 import maplibre from "maplibre-gl";
+import { toStringAddress } from "../../../helpers/SolidHelper";
+import { Address } from "../../../shared/shareddtypes";
 
 export default function PickUpLocationsMap(props: any) {
   const [map, setMap] = React.useState<any>(null);
@@ -20,7 +22,7 @@ export default function PickUpLocationsMap(props: any) {
     lat: number,
     lon: number,
     name: string,
-    street_address: string,
+    street_address: Address,
     map: any,
     isHouse: boolean
   ) => {
@@ -41,7 +43,9 @@ export default function PickUpLocationsMap(props: any) {
       anchor: "bottom",
       offset: [0, -32], // height - shadow
     }).setHTML(
-      `<p style="color:black; font-style: italic">${name}</p> <p style="color:black"> ${street_address} </p>`
+      `<p style="color:black; font-style: italic">${name}</p> <p style="color:black"> ${toStringAddress(
+        street_address
+      )} </p>`
     );
 
     let marker = new maplibre.Marker(pickUpPointIcon, {
@@ -60,15 +64,23 @@ export default function PickUpLocationsMap(props: any) {
   };
 
   const refreshMap = async () => {
-    let coords = await calculateCoordinates(props.address);
+    let coords = await calculateCoordinates(toStringAddress(props.address));
     let dist = 500;
     let reps = 0;
 
-    let pickUpPlaces = await getPickUpPlacesNearby(props.address, dist, 10);
+    let pickUpPlaces = await getPickUpPlacesNearby(
+      toStringAddress(props.address),
+      dist,
+      10
+    );
     while (pickUpPlaces.length === 0) {
       dist *= 2;
-      pickUpPlaces = await getPickUpPlacesNearby(props.address, dist, 10);
-      reps++
+      pickUpPlaces = await getPickUpPlacesNearby(
+        toStringAddress(props.address),
+        dist,
+        10
+      );
+      reps++;
     }
 
     const key = process.env.REACT_APP_GEOAPIFY_KEY;
@@ -130,7 +142,7 @@ export default function PickUpLocationsMap(props: any) {
               : "No location has been chosen yet"}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {props.pickUpLocation ? props.address : ""}
+            {props.pickUpLocation ? toStringAddress(props.address) : ""}
           </Typography>
         </CardContent>
       </Card>

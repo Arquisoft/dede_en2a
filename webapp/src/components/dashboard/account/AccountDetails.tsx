@@ -25,10 +25,14 @@ function MyAddresses(props: any) {
     getAddressesFromPod(props.webId)
       .then((elements) =>
         elements.forEach((address) => {
-          let aux = address.split("-");
           let element = {
-            street: aux[0],
-            region: `${aux[1]} - ${aux[2]}`,
+            street: address.street,
+            region:
+              address.postalCode +
+              ", " +
+              address.locality +
+              ", " +
+              address.region,
           };
 
           // If the element to be inserted is not contained in the array

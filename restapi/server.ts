@@ -11,7 +11,7 @@ import apiReviews from "./reviews/ReviewRoutes";
 import apiUser from "./users/UserRoutes";
 
 const path = require("path");
-const fs = require('fs')
+const fs = require("fs");
 
 let helmet = require("helmet");
 
@@ -20,17 +20,13 @@ const app: Application = express();
 const mongoose = require("mongoose");
 const connectionString = process.env.MONGO_DB_URI;
 
-const options: cors.CorsOptions = {
-  origin: ["http://localhost:3000"],
-};
-
 const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
 app.use(metricsMiddleware);
 
 app.use(cors());
 app.use(bp.json());
 
-app.use(bp.urlencoded({ extended: true }));
+app.use(bp.urlencoded({ extended: true, limit: "8mb" }));
 app.use(morgan("dev"));
 
 app.use(apiUser);
@@ -41,18 +37,29 @@ app.use(apiReviews);
 app.use(helmet.hidePoweredBy());
 
 // Method to serve correct images and not-found in case it does not exists
-app.get(['/*.png', '/undefined'], function(req, res) {
-  const a = path.join(__dirname, 'public', 'not-found.png')
-  const ipath = path.join(__dirname, 'public', req.originalUrl)
+app.get(["/*.png", "/undefined"], function (req, res) {
+  const a = path.join(__dirname, "public", "not-found.png");
+  const ipath = path.join(__dirname, "public", req.originalUrl);
+  const savePath = path.resolve(ipath);
 
-  if (fs.existsSync(ipath)) {
-    res.sendFile(ipath)
+  if (fs.existsSync(savePath)) {
+    res.sendFile(savePath);
   } else {
-    res.sendFile(a)
+    res.sendFile(a);
   }
 });
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.get(["/*.pdf"], function (req, res) {
+  const newpath = path.join(__dirname, "public", "pdf", req.originalUrl);
+  const savePath = path.resolve(newpath);
+
+  if (fs.existsSync(savePath)) {
+    res.sendFile(savePath);
+  }else res.status(505) 
+});
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public", "pdf")));
 
 app
   .listen(5000, (): void => {

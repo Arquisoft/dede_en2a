@@ -47,7 +47,8 @@ jobs:
     name: Push webapp Docker Image to GitHub Packages
     runs-on: ubuntu-latest
     env:
-      API_URI: http://${{ secrets.DEPLOY_HOST }}:5000
+      API_URI: https://${{ secrets.API_URI }}
+      CARRIERS_API_URI: https://${{ secrets.CARRIERS_API_URI }}
       MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
       BING_KEY: ${{ secrets.REACT_APP_BING_KEY }}
       PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
@@ -64,7 +65,7 @@ jobs:
           password: ${{ secrets.DOCKER_PUSH_TOKEN }}
           registry: ghcr.io
           workdir: webapp
-          buildargs: API_URI, MAPBOX_KEY, BING_KEY, PAYPAL_CLIENT_ID, GEOAPIFY_KEY
+          buildargs: API_URI, CARRIERS_API_URI, MAPBOX_KEY, BING_KEY, PAYPAL_CLIENT_ID, GEOAPIFY_KEY
   docker-push-restapi:
     name: Push restapi Docker Image to GitHub Packages
     runs-on: ubuntu-latest
@@ -88,10 +89,27 @@ jobs:
           registry: ghcr.io
           workdir: restapi
           buildargs: PORT, MONGO_DB_URI, NODE_ENV, JWT_SECRET, AUTH_EMAIL, AUTH_PASS, SENDGRID_API_KEY
+  docker-push-carriers:
+    name: Push carriers restapi Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    env:
+      CARRIERS_DB_URI: ${{ secrets.CARRIERS_DB_URI}}
+    needs: [unit-test-webapp, unit-test-restapi]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: arquisoft/dede_en2a/carriersapi
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_PUSH_TOKEN }}
+          registry: ghcr.io
+          workdir: carrier-service-api
+          buildargs: CARRIERS_DB_URI
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
-    needs: [docker-push-restapi, docker-push-webapp]
+    needs: [docker-push-restapi, docker-push-webapp, docker-push-carriers]
     steps:
       - name: Deploy over SSH
         uses: fifsky/ssh-action@master

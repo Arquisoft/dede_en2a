@@ -1,15 +1,17 @@
 import * as React from "react";
 
-import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 import { calculateTotal } from "../../helpers/ShoppingCartHelper";
 import { CartItem } from "../../shared/shareddtypes";
+
+import { toStringAddress } from "../../helpers/SolidHelper";
 
 export default function Review(props: any) {
   return (
@@ -63,6 +65,15 @@ export default function Review(props: any) {
           <ListItemText primary="Total:" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             {calculateTotal(props.productsCart, props.shippingCosts)} €
+          </Typography>
+        </ListItem>
+
+        <Divider />
+
+        <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Shipping address:" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            {toStringAddress(props.address)}
           </Typography>
         </ListItem>
       </List>

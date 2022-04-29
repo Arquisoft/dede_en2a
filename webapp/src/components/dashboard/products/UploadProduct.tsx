@@ -56,6 +56,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [weight, setWeight] = useState("");
   const [image, setImage] = useState<string>(DEF_IMAGE);
 
   const getCode = async () => {
@@ -90,12 +91,11 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       setStock("");
       setPrice("");
       setCategory("");
+      setWeight("");
     }
   };
 
   const checkFields = () => {
-    if (file === "" && !props.isForUpdate)
-      return sendErrorNotification("Incorrect file");
     if (!checkNumericField(Number(code)))
       return sendErrorNotification("Incorrect code");
     if (!checkTextField(name)) return sendErrorNotification("Incorrect name");
@@ -105,6 +105,10 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       return sendErrorNotification("Incorrect price");
     if (!checkNumericField(Number(stock)))
       return sendErrorNotification("Incorrect stock");
+    if (!checkNumericField(Number(weight)))
+      return sendErrorNotification("Incorrect weight");
+    if (file === "" && !props.isForUpdate)
+      return sendErrorNotification("Incorrect file");
     handleSubmit();
   };
 
@@ -119,16 +123,22 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
         stock: Number(stock),
         category: category,
         image: code + ".png",
+        weight: Number(weight),
       });
     } else {
-      created = await createProduct(file, {
-        code: code,
-        name: name,
-        description: description,
-        price: Number(price),
-        stock: Number(stock),
-        category: category,
-      });
+      created = await createProduct(
+        file,
+        {
+          code: code,
+          name: name,
+          description: description,
+          price: Number(price),
+          stock: Number(stock),
+          category: category,
+          weight: Number(weight),
+        },
+        props.webId
+      );
     }
     if (created) {
       setNotificationStatus(true);
@@ -180,6 +190,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
       setCategory(p.category);
       setPrice(p.price.toString());
       setStock(p.stock.toString());
+      setWeight(p.weight.toString());
       setImage(p.image);
     }
   }
@@ -199,6 +210,8 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
             {props.isForUpdate ? (
               <TextField
+                name="selection"
+                data-testid="select-product"
                 id="outlined-select-currency"
                 select
                 label="Select"
@@ -227,24 +240,22 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                 ) : (
                   <TextField
                     value={code}
+                    name="code"
                     id="outlined-full-width"
                     label="Product code"
                     style={{ margin: 8 }}
                     type="number"
                     fullWidth
                     required
+                    disabled
                     margin="normal"
                     variant="outlined"
-                    onChange={(event) => {
-                      if (Number(event.target.value) >= minCode)
-                        setCode(event.target.value);
-                      else setCode(minCode.toString());
-                    }}
                   />
                 )}
 
                 <TextField
                   value={name}
+                  name="name"
                   id="outlined-full-width"
                   label="Product name"
                   style={{ margin: 8 }}
@@ -257,6 +268,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={description}
+                  name="description"
                   id="outlined-full-width"
                   label="Product description"
                   style={{ margin: 8 }}
@@ -269,6 +281,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={category}
+                  name="category"
                   select
                   id="outlined-full-width"
                   label="Product category"
@@ -295,6 +308,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={price}
+                  name="price"
                   id="outlined-full-width"
                   label="Product price"
                   style={{ margin: 8 }}
@@ -312,6 +326,7 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
                 <TextField
                   value={stock}
+                  name="stock"
                   id="outlined-full-width"
                   label="Product stock"
                   style={{ margin: 8 }}
@@ -323,6 +338,24 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
                   onChange={(event) => {
                     if (parseInt(event.target.value) < 0) setStock(0 + "");
                     else setStock(parseInt(event.target.value).toString());
+                  }}
+                  inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                />
+
+                <TextField
+                  value={weight}
+                  name="weight"
+                  id="outlined-full-width"
+                  label="Product weight (kg)"
+                  style={{ margin: 8 }}
+                  fullWidth
+                  type="number"
+                  required
+                  margin="normal"
+                  variant="outlined"
+                  onChange={(event) => {
+                    if (parseFloat(event.target.value) < 0.0) setWeight(0 + "");
+                    else setWeight(parseFloat(event.target.value).toString());
                   }}
                   inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 />

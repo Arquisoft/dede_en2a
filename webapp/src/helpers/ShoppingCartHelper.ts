@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { createOrder } from "../api/api";
-import { CartItem, Order, Product } from "../shared/shareddtypes";
+import { Address, CartItem, Order, Product } from "../shared/shareddtypes";
 
 export function calculateTotal(
   products: CartItem[],
@@ -19,7 +19,7 @@ export async function saveOrder(
   products: CartItem[],
   shippingCosts: number,
   webId: string,
-  address: string
+  address: Address
 ) {
   let productCosts: number = calculateTotal(products, 0);
   var orderProducts: Product[] = [];
@@ -32,6 +32,7 @@ export async function saveOrder(
       stock: item.amount,
       image: item.product.image,
       category: item.product.category,
+      weight: item.product.weight,
     };
     orderProducts.push(p);
   });
@@ -40,16 +41,27 @@ export async function saveOrder(
   receivingDate.setDate(receivingDate.getDate() + 3);
   let order: Order = {
     code: uuidv4(),
-    address: address,
+    webId: window.btoa(webId),
+    address:
+      address.street +
+      ", " +
+      address.postalCode +
+      ", " +
+      address.locality +
+      ", " +
+      address.region,
     products: orderProducts,
     date: new Date(),
     subtotalPrice: Number((Math.round(productCosts * 100) / 100).toFixed(2)),
     shippingPrice: Number((Math.round(shippingCosts * 100) / 100).toFixed(2)),
-    totalPrice: Number((Math.round((productCosts + shippingCosts) * 100) / 100).toFixed(2)),
+    totalPrice: Number(
+      (Math.round((productCosts + shippingCosts) * 100) / 100).toFixed(2)
+    ),
     receivedDate: receivingDate,
   };
 
-  await createOrder(webId, JSON.stringify(order));
+  let orderSaved = await createOrder(webId, JSON.stringify(order));
+  return orderSaved.code;
 }
 
 export function getCurrentCartAmount(

@@ -1,5 +1,4 @@
 import bp from "body-parser";
-import cors from "cors";
 import express, { Application, RequestHandler } from "express";
 import promBundle from "express-prom-bundle";
 import { Server } from "http";
@@ -24,7 +23,6 @@ beforeAll(async () => {
   const metricsMiddleware: RequestHandler = promBundle({ includeMethod: true });
   app.use(metricsMiddleware);
 
-  app.use(cors());
   app.use(bp.json());
 
   app.use(bp.urlencoded({ extended: false }));
@@ -51,83 +49,50 @@ afterAll(async () => {
 
 describe("orders", () => {
   let orderCode = uuidv4();
-  
-  let date = new Date()
-  date.setDate(date.getDate() + 2)
+
+  let date = new Date();
+  date.setDate(date.getDate() + 2);
 
   it("Can create order", async () => {
-    const token = await getToken();
     const response: Response = await request(app)
       .post("/orders")
-      .set("token", token)
-      .set("email", "test")
+      .set("token", "test")
       .send({
-        orderCode: orderCode,
-        userEmail: "test",
-        userAddress: "My house",
+        code: orderCode,
+        webId: "test",
+        address: "My house",
         products: [
           {
-            code: "0001",
+            code: "1",
             name: "Super SUS T-Shirt",
             price: 9.5,
             description:
               "Do you wanna show your friends that you are THE GREATEST IMPOSTER? Then this shirt is for you!",
             stock: 1,
-            image: "0001.png",
+            image: "1.png",
             category: "Clothes",
+            weight: 1,
           },
         ],
-        date: new Date(),
-        subtotalPrice: 12.95,
-        shippingPrice: 75.87,
-        totalPrice: 88.82,
-        receivedDate: new Date(),
-      });
-    expect(response.statusCode).toBe(200);
-    expect(response.body.orderCode).toBe(orderCode);
-    expect(response.body.userEmail).toBe("test");
-  });
-
-  it("Can't create order with duplicate order code", async () => {
-    const token = await getToken();
-    const response: Response = await request(app)
-      .post("/orders")
-      .set("token", token)
-      .set("email", "test")
-      .send({
-        orderCode: orderCode,
-        userEmail: "test",
-        userAddress: "My house",
-        products: [],
         date: new Date(),
         subtotalPrice: 0,
         shippingPrice: 0,
         totalPrice: 0,
-        receivedDate: date
+        receivedDate: date,
       });
-    expect(response.statusCode).toBe(412);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.code).toBe(orderCode);
+    expect(response.body.webId).toBe("test");
   });
 
-  it("Can't create order without all fields", async () => {
-    const token = await getToken();
+  it("Can't create order with duplicate order code", async () => {
     const response: Response = await request(app)
       .post("/orders")
-      .set("token", token)
-      .set("email", "test")
+      .set("token", "test")
       .send({
-        userEmail: "test",
-      });
-    expect(response.statusCode).toBe(412);
-  });
-
-  it("Can't create order without token", async () => {
-    const response: Response = await request(app)
-      .post("/orders")
-      .set("email", "test")
-      .send({
-        orderCode: orderCode,
-        userEmail: "test",
-        userAddress: "My house",
+        code: orderCode,
+        webId: "test",
+        address: "My house",
         products: [],
         date: new Date(),
         subtotalPrice: 0,
@@ -135,75 +100,83 @@ describe("orders", () => {
         totalPrice: 0,
         receivedDate: date,
       });
+    expect(response.statusCode).toBe(412);
+  });
+
+  it("Can't create order without all fields", async () => {
+    const response: Response = await request(app)
+      .post("/orders")
+      .set("token", "test")
+      .send({
+        webId: "test",
+      });
+    expect(response.statusCode).toBe(412);
+  });
+
+  it("Can't create order without token", async () => {
+    const response: Response = await request(app).post("/orders").send({
+      code: orderCode,
+      webId: "test",
+      address: "My house",
+      products: [],
+      date: new Date(),
+      subtotalPrice: 0,
+      shippingPrice: 0,
+      totalPrice: 0,
+      receivedDate: date,
+    });
     expect(response.statusCode).toBe(403);
   });
 
-  it("Can get all orders", async () => {
-    const token = await getToken();
+  it("Can get all orders being admin", async () => {
     const response: Response = await request(app)
-      .get("/orders/list")
-      .set("token", token)
-      .set("email", "test");
+      .get("/orders/listForAdminOrModerator")
+      .set("token", "test");
     expect(response.statusCode).toBe(200);
     expect(response.type).toEqual("application/json");
   });
 
   it("Can't get all orders without token", async () => {
-    const response: Response = await request(app)
-      .get("/orders/list")
-      .set("email", "test");
+    const response: Response = await request(app).get(
+      "/orders/listForAdminOrModerator"
+    );
     expect(response.statusCode).toBe(403);
   });
 
   it("Can't get all orders without been admin", async () => {
-    const token: Response = await request(app)
-      .post("/users/requestToken/")
-      .send({
-        email: "test1",
-        password: "test",
-      });
     const response: Response = await request(app)
-      .get("/orders/list")
-      .set("token", token.body)
-      .set("email", "test1");
+      .get("/orders/listForAdminOrModerator")
+      .set("token", "webId");
     expect(response.statusCode).toBe(403);
   });
 
   it("Can get user orders", async () => {
-    const token = await getToken();
     const response: Response = await request(app)
-      .get("/orders")
-      .set("token", token)
-      .set("email", "test");
+      .get("/orders/listForUser")
+      .set("token", "test");
     expect(response.statusCode).toBe(200);
-    expect(response.body[0].orderCode).toBe(
-      "57bbcfbf-611c-4f6b-b087-f7671c3f0eba"
-    );
-    expect(response.body[0].userEmail).toBe("test");
+    expect(response.body[0].code).toBe("b111fff0-389d-4bee-a3f5-37dd90a5e101");
+    expect(response.body[0].webId).toBe("test");
   });
 
-  it("Can not get user orders without token", async () => {
-    const response: Response = await request(app).get("/orders");
+  it("Can't get user orders without token", async () => {
+    const response: Response = await request(app).get("/orders/listForUser");
     expect(response.statusCode).toBe(403);
   });
 
   it("Can get especific user order", async () => {
-    const token = await getToken();
     const response: Response = await request(app)
       .get("/orders/findByOrderCode/" + orderCode)
-      .set("token", token)
-      .set("email", "test");
+      .set("token", "test");
     expect(response.statusCode).toBe(200);
-    expect(response.body.orderCode).toBe(orderCode);
-    expect(response.body.userEmail).toBe("test");
+    expect(response.body.code).toBe(orderCode);
+    expect(response.body.webId).toBe("test");
   });
 
   it("Can't get user non-existing order", async () => {
-    const token = await getToken();
     const response: Response = await request(app)
       .get("/orders/findByOrderCode/a")
-      .set("token", token)
-      .set("email", "test");
+      .set("token", "test");
     expect(response.statusCode).toBe(412);
   });
 
@@ -215,19 +188,9 @@ describe("orders", () => {
   });
 
   it("Can't get order from other user", async () => {
-    const token = await getToken();
     const response: Response = await request(app)
-      .get("/orders/findByOrderCode/23dbcfbf-611c-4f6b-b087-f7671c3f0eba")
-      .set("token", token)
-      .set("email", "test");
-    expect(response.statusCode).toBe(403);
+      .get("/orders/findByOrderCode/c34sfff0-389d-4bee-a3f5-37dd90a5e101")
+      .set("token", "test");
+    expect(response.statusCode).toBe(409);
   });
 });
-
-async function getToken() {
-  const token: Response = await request(app).post("/users/requestToken/").send({
-    email: "test",
-    password: "test",
-  });
-  return token.body;
-}

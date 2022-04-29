@@ -1,3 +1,8 @@
-export const verifyWebID = (webId: String) => {
-  return webId !== undefined && webId !== ""; // TODO: make this work
+import { userModel } from "../users/User";
+
+export const verifyWebID = async (webId: string) => {
+  const aux = webId.trim().toString() + "";
+  const userFound = await userModel.find({ webId: aux });
+  if (userFound.length >= 1) return true;
+  else return false;
 };

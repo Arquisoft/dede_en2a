@@ -37,6 +37,10 @@ export const product = new Schema(
       required: true,
       enum: ["Clothes", "Decoration", "Electronics", "Miscellaneous"],
     },
+    weight: {
+      type: Number,
+      required: true,
+    },
   },
   {
     versionKey: false,

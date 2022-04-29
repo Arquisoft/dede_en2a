@@ -64,12 +64,16 @@ function ProductsHeader(props: any) {
         <React.Fragment>
           <IconButton edge="end">
             <Tooltip title="Add a new product" arrow>
-              <Add onClick={() => navigate("/dashboard/products/add")} />
+              <Add
+                data-testid="add-product"
+                onClick={() => navigate("/dashboard/products/add")}
+              />
             </Tooltip>
           </IconButton>
           <IconButton edge="end">
             <Tooltip title="Update a product" arrow>
               <EditIcon
+                data-testid="edit-product"
                 onClick={() => navigate("/dashboard/products/update")}
               />
             </Tooltip>
@@ -80,7 +84,10 @@ function ProductsHeader(props: any) {
       {isRenderForAdminOnly(props.role) && (
         <IconButton edge="end">
           <Tooltip title="Delete a product" arrow>
-            <Remove onClick={() => navigate("/dashboard/products/delete")} />
+            <Remove
+              data-testid="delete-product"
+              onClick={() => navigate("/dashboard/products/delete")}
+            />
           </Tooltip>
         </IconButton>
       )}

@@ -5,14 +5,16 @@ import Stack from "@mui/material/Stack";
 
 import { getAddressesFromPod } from "../../helpers/SolidHelper";
 import { getUser } from "../../api/api";
+import { Address } from "../../shared/shareddtypes";
 
 import StreetAddress from "./address/StreetAddress";
 
 export default function ShippingAddress(props: any): JSX.Element {
   const [activeStep, setActiveStep] = React.useState(0); // we have to tell which is the active step
-  const [addresses, setAddresses] = React.useState<string[]>([]);
+  const [addresses, setAddresses] = React.useState<Address[]>([]);
   const [loadingItem, setLoadingItem] = React.useState(false);
   const [loadingPage, setLoadingPage] = React.useState(false);
+  const [stringAddress, setStringAddress] = React.useState<string>("");
 
   // We manage the button for going back and forth
   const handleNext = () => {
@@ -23,7 +25,7 @@ export default function ShippingAddress(props: any): JSX.Element {
   };
 
   const isForward = () => {
-    return props.address !== "";
+    return stringAddress !== "";
   };
 
   const handleBack = () => {
@@ -31,7 +33,7 @@ export default function ShippingAddress(props: any): JSX.Element {
 
     // We reset all values to default
     setAddresses([]);
-    props.setAddress("");
+    props.setAddress({});
   };
 
   // We have to get the user and addresses from the DB
@@ -54,6 +56,18 @@ export default function ShippingAddress(props: any): JSX.Element {
       .finally(() => setLoadingItem(false)); // loading process must be finished
   };
 
+  const handleAddress = (address: string) => {
+    let aux = address.split("-");
+    let newAddress: Address = {
+      street: aux[0],
+      postalCode: aux[1],
+      locality: aux[2],
+      region: aux[3],
+    };
+    setStringAddress(address);
+    props.setAddress(newAddress);
+  };
+
   React.useEffect(() => {
     setLoadingPage(true); // we start with the loading process
 
@@ -74,8 +88,8 @@ export default function ShippingAddress(props: any): JSX.Element {
       {!loadingPage && (
         <React.Fragment>
           <StreetAddress
-            address={props.address}
-            setAddress={props.setAddress}
+            address={stringAddress}
+            setAddress={handleAddress}
             addresses={addresses}
             loading={loadingItem}
           />
