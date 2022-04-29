@@ -12,14 +12,16 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 
+import { Address } from "../../../shared/shareddtypes";
+
 type ReviewDialogProps = {
   open: boolean;
+  addressToEdit: Address;
   handleOpen: () => void;
   handleClose: () => void;
 };
 
 export default function ReviewDialog(props: ReviewDialogProps) {
-  const [btnDisabled, setBtnDisabled] = React.useState(false);
   const [streetAddress, setStreetAddress] = React.useState("");
   const [city, setCity] = React.useState("");
   const [postalCode, setPostalCode] = React.useState(0);
@@ -43,6 +45,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
           <TextField
             autoFocus
             label="Street address"
+            defaultValue={props.addressToEdit.street}
             variant="outlined"
             onChange={(event) => {
               setStreetAddress(event.target.value);
@@ -57,6 +60,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             sx={{ my: 1 }}
           >
             <TextField
+              defaultValue={props.addressToEdit.locality}
               label="City"
               variant="outlined"
               onChange={(event) => {
@@ -66,6 +70,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             />
 
             <TextField
+              defaultValue={props.addressToEdit.postalCode}
               label="Postal Code"
               variant="outlined"
               onChange={(event) => {
@@ -82,6 +87,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             sx={{ my: 1 }}
           >
             <TextField
+              defaultValue={props.addressToEdit.region}
               label="Region"
               variant="outlined"
               onChange={(event) => {

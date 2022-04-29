@@ -7,18 +7,16 @@ import Stack from "@mui/material/Stack";
 import { Typography, LinearProgress, Button } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
+
 import { getAddressesFromPod } from "../../../helpers/SolidHelper";
 import AddAddressDialog from "./AddAddressDialog";
 import EditAddressDialog from "./EditAddressDialog";
 
+import { Address } from "../../../shared/shareddtypes";
+
 function MyAddresses(props: any) {
   const [loading, setLoading] = React.useState(false);
-  const [addresses, setAddresses] = React.useState<
-    Array<{
-      street: string;
-      region: string;
-    }>
-  >([]);
+  const [addresses, setAddresses] = React.useState<Array<Address>>([]);
 
   React.useEffect(() => {
     setLoading(true);
@@ -27,12 +25,9 @@ function MyAddresses(props: any) {
         elements.forEach((address) => {
           let element = {
             street: address.street,
-            region:
-              address.postalCode +
-              ", " +
-              address.locality +
-              ", " +
-              address.region,
+            postalCode: address.postalCode,
+            locality: address.locality,
+            region: address.region,
           };
 
           // If the element to be inserted is not contained in the array
@@ -88,7 +83,7 @@ function MyAddresses(props: any) {
                         {address.street}
                       </Typography>
                       <Typography color="text.secondary" variant="subtitle2">
-                        {address.region}
+                        {`${address.postalCode}, ${address.locality}, ${address.region}`}
                       </Typography>
                     </Stack>
 
@@ -97,7 +92,14 @@ function MyAddresses(props: any) {
                       alignItems="space-even"
                       justifyContent="center"
                     >
-                      <Button onClick={props.onClickEdit}>Edit</Button>
+                      <Button
+                        onClick={() => {
+                          props.setAddress(address); // We establish the address to edit to the selected one
+                          props.onClickEdit(); // we open the dialog up
+                        }}
+                      >
+                        Edit
+                      </Button>
                       <Button>Remove</Button>
                     </Stack>
                   </Stack>
@@ -112,6 +114,13 @@ function MyAddresses(props: any) {
 }
 
 export default function AccountDetails(props: any) {
+  const [address, setAddress] = React.useState<Address>({
+    street: "",
+    postalCode: "",
+    locality: "",
+    region: "",
+  });
+
   // We manage the add address dialog as intended
   const [addAddressDialog, setAddAddressDialog] = React.useState(false);
 
@@ -140,6 +149,7 @@ export default function AccountDetails(props: any) {
         <Stack direction="column">
           <MyAddresses
             webId={props.webId}
+            setAddress={setAddress}
             onClickAdd={handleClickOpenAddAddressDialog}
             onClickEdit={handleClickOpenEditAddressDialog}
           />
@@ -154,6 +164,7 @@ export default function AccountDetails(props: any) {
 
       <EditAddressDialog
         open={editAddressDialog}
+        addressToEdit={address}
         handleOpen={handleClickOpenEditAddressDialog}
         handleClose={handleCloseEditAddressDialog}
       />

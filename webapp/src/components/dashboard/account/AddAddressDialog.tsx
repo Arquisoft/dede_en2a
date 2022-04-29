@@ -19,7 +19,6 @@ type ReviewDialogProps = {
 };
 
 export default function ReviewDialog(props: ReviewDialogProps) {
-  const [btnDisabled, setBtnDisabled] = React.useState(false);
   const [streetAddress, setStreetAddress] = React.useState("");
   const [city, setCity] = React.useState("");
   const [postalCode, setPostalCode] = React.useState(0);
