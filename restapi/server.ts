@@ -59,31 +59,36 @@ app.get(["/*.pdf"], async function (req, res) {
   const orderFound = await orderModel.findOne({
     code: aux,
   });
-  if (orderFound !== null) {
-    const user = await userModel.findOne({ webId: orderFound.webId });
+  try {
+    if (orderFound !== null) {
+      const user = await userModel.findOne({ webId: orderFound.webId });
 
-    const invoiceData = {
-      addresses: {
-        shipping: {
-          name: "",
-          address: orderFound.address,
-          email: user.webId,
+      const invoiceData = {
+        addresses: {
+          shipping: {
+            name: "",
+            address: orderFound.address,
+            email: user.webId,
+          },
         },
-      },
-      items: orderFound.products,
-      subtotal: orderFound.subtotalPrice,
-      total: orderFound.totalPrice,
-      shippingPrice: orderFound.shippingPrice,
-      invoiceNumber: orderFound.code,
-      dueDate: orderFound.date,
-    };
+        items: orderFound.products,
+        subtotal: orderFound.subtotalPrice,
+        total: orderFound.totalPrice,
+        shippingPrice: orderFound.shippingPrice,
+        invoiceNumber: orderFound.code,
+        dueDate: orderFound.date,
+      };
 
-    const ig = new InvoiceGenerator(invoiceData);
-    //doc.pipe(res);
-    ig.generate(doc).pipe(res);
-    doc.end();
-  }else{
-    res.sendFile(path.join(__dirname, "public", 'pdf', "not-found.pdf"));
+      const ig = new InvoiceGenerator(invoiceData, doc);
+      //doc.pipe(res);
+      await ig.generate().pipe(res);
+      doc.end();
+    } else {
+      res.sendFile(path.join(__dirname, "public", "pdf", "not-found.pdf"));
+    }
+  } catch (error) {
+    console.log(error)
+    res.sendFile(path.join(__dirname, "public", "pdf", "not-found.pdf"));
   }
 });
 
