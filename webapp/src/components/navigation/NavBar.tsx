@@ -26,16 +26,17 @@ type NavBarProps = {
 function Logo() {
   const Img = styled("img")({
     display: "block",
-    height: "9vh",
-    maxHeight: 100,
-    objectFit: "cover",
+    height: 45,
   });
 
   return (
     <Link to="/shop" color="inherit" style={{ textDecoration: "none" }}>
       <Img
-        alt="DEDE - Fast services"
-        src={checkImageExistsLocally("dede_logo.png")}
+        src={checkImageExistsLocally("dede_logo.svg")}
+        srcSet={`${checkImageExistsLocally(
+          "dede_logo_mobile.svg"
+        )} 500w, ${checkImageExistsLocally("dede_logo.svg")}`}
+        alt="DEDE - Fast service"
       />
     </Link>
   );
@@ -58,14 +59,15 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ px: 1 }}
+        sx={{ px: 2, py: 1 }}
       >
-        <Stack direction="row" alignItems="center">
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <Drawer orientation="vertical" />
-          </Box>
+        <Stack direction="row" alignItems="center" spacing={0}>
+          <Drawer
+            orientation="vertical"
+            sx={{ px: 0, display: { xs: "flex", md: "none" } }}
+          />
           <Logo />
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <NavMenu orientation="horizontal" color="white" />
           </Box>
         </Stack>

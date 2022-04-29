@@ -48,6 +48,7 @@ export default function Drawer(props: any) {
             direction="column"
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
+            sx={{ p: 3 }}
           >
             <NavMenu orientation={props.orientation} color="text.primary" />
           </Grid>
