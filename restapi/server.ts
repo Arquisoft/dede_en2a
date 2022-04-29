@@ -41,10 +41,6 @@ app.get(["/*.png", "/undefined"], function (req, res) {
   const a = path.join(__dirname, "public", "not-found.png");
   const ipath = path.join(__dirname, "public", req.originalUrl);
   const savePath = path.resolve(ipath);
-  console.log(__dirname);
-  console.log(req.originalUrl);
-  console.log(ipath);
-  console.log(savePath);
 
   if (fs.existsSync(savePath)) {
     res.sendFile(savePath);
