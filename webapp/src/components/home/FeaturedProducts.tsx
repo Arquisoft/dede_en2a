@@ -78,6 +78,7 @@ function FeaturedProduct(props: any) {
         />
         <CardActionArea>
           <CardMedia
+            data-testid={"product" + props.tier.code}
             component="img"
             height="250"
             width="100%"
