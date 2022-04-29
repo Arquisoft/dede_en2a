@@ -1,6 +1,6 @@
 import React from "react";
 import { getRates } from "../../../api/carriersApi";
-import { CartItem, Rate } from "../../../shared/shareddtypes";
+import { Address, CartItem, Rate } from "../../../shared/shareddtypes";
 
 import {
   Divider,
@@ -10,7 +10,7 @@ import {
   LinearProgress,
   Radio,
   RadioGroup,
-  Typography
+  Typography,
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -18,7 +18,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 type CarriersRatesGroupProps = {
   setValue: (price: number) => void;
   setCarrierSelected: (selected: boolean) => void;
-  address: String;
+  address: Address;
   rates: Rate[];
   price: number;
   icon: any;
@@ -63,7 +63,7 @@ function CarriersRatesGroup(props: CarriersRatesGroupProps): JSX.Element {
 type CarriersRatesProps = {
   setCarrierSelected: (selected: boolean) => void;
   setCosts: (costs: number) => void;
-  address: String;
+  address: Address;
   price: number;
   cart: CartItem[];
 };
@@ -80,7 +80,7 @@ export default function CarriersRatesForm(
       weights += item.product.weight * item.amount;
     });
     //Obtain the real weight and the postal code
-    return await getRates(weights, "33209");
+    return await getRates(weights, props.address.postalCode);
   };
 
   React.useEffect(() => {
@@ -97,7 +97,7 @@ export default function CarriersRatesForm(
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Carriers Selection</Divider>
 
-      <LinearProgress sx={{ display: loading ? "block" : "none" }}/>
+      <LinearProgress sx={{ display: loading ? "block" : "none" }} />
       {!loading && (
         <React.Fragment>
           <Typography sx={{ pb: 2 }}>

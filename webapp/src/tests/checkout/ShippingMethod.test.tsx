@@ -2,6 +2,7 @@ import { act, fireEvent, screen, render } from "@testing-library/react";
 import ShippingMethod from "../../components/checkout/ShippingMethod";
 import * as solidHelper from "../../helpers/SolidHelper";
 import * as api from "../../api/api";
+import * as computDistanceHelper from "../../helpers/ComputeDistanceHelper";
 import { User, Address, CartItem, Product } from "../../shared/shareddtypes";
 
 const testAddress: Address = {
@@ -46,6 +47,27 @@ const testCartItems: CartItem[] = [
 ];
 
 test("ShippingMethod renders correctly", async () => {
+  jest
+    .spyOn(computDistanceHelper, "obtainShippingMethods")
+    .mockImplementation(
+      (
+        destAddress: Address
+      ): Promise<computDistanceHelper.ShippingMethodType[]> => {
+        return Promise.resolve([
+          {
+            title: "Standard shipping",
+            subtitle: "The fastest shipping method we have!",
+            price: "Select",
+          },
+          {
+            title: "Pick UP",
+            subtitle: "The cheapest method on earth!",
+            price: "0 €",
+          },
+        ]);
+      }
+    );
+
   await act(async () => {
     render(
       <ShippingMethod
