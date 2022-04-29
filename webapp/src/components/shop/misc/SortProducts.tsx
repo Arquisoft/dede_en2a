@@ -18,10 +18,10 @@ type ProductsFilterProps = {
   handleChange: (event: SelectChangeEvent) => void;
 };
 
-export function ProductsFilter(props: ProductsFilterProps) {
+export function SortProducts(props: ProductsFilterProps) {
   return (
     <FormControl variant="standard" sx={{ width: "100%" }} size="small">
-      <InputLabel id="select-order-status">Filter by price...</InputLabel>
+      <InputLabel id="select-order-status">Sort by price...</InputLabel>
       <Select
         labelId="select-product"
         id="select-product"
@@ -29,12 +29,15 @@ export function ProductsFilter(props: ProductsFilterProps) {
         onChange={props.handleChange}
         label="filter"
       >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
         <MenuItem value={props.priceAscending}>
           <Stack direction="row" alignItems="center">
             <ListItemIcon>
               <ArrowUpwardIcon color="primary" fontSize="small" />
             </ListItemIcon>
-            Price: Lower to Higher
+            Lower to higher
           </Stack>
         </MenuItem>
         <MenuItem value={props.priceDescending}>
@@ -42,7 +45,7 @@ export function ProductsFilter(props: ProductsFilterProps) {
             <ListItemIcon>
               <ArrowDownwardIcon color="primary" fontSize="small" />
             </ListItemIcon>
-            Price: Higher to Lower
+            Higher to lower
           </Stack>
         </MenuItem>
       </Select>

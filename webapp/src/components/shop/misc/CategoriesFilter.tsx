@@ -33,6 +33,9 @@ export function CategoriesFilter(props: CategoriesFilterProps) {
         onChange={props.handleChange}
         label="categories"
       >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
         <MenuItem value={props.categoryClothes}>
           <Stack direction="row" alignItems="center">
             <ListItemIcon>

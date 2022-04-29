@@ -13,7 +13,7 @@ import { CartItem, Product } from "../../shared/shareddtypes";
 import { sortProducts } from "../../api/api";
 
 import ProductList from "./products/ProductList";
-import { ProductsFilter } from "./misc/ProductFilter";
+import { SortProducts } from "./misc/SortProducts";
 import { CategoriesFilter } from "./misc/CategoriesFilter";
 
 const priceAscending = "asc";
@@ -37,8 +37,9 @@ function FilteringSection(props: any) {
       alignItems="flex-end"
       justifyContent="space-between"
       sx={{ px: 2 }}
+      spacing={1}
     >
-      <Grid item xs={3}>
+      <Grid item xs={12} md={3}>
         <TextField
           type="text"
           id="search"
@@ -47,8 +48,8 @@ function FilteringSection(props: any) {
           onChange={(event) => props.setSearchTerm(event.target.value)}
         />
       </Grid>
-      <Grid item xs={5}>
-        <ProductsFilter
+      <Grid item xs={5} md={5}>
+        <SortProducts
           sortMode={props.sortMode}
           priceAscending={priceAscending}
           priceDescending={priceDescending}
@@ -57,7 +58,7 @@ function FilteringSection(props: any) {
           }
         />
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={5} md={3}>
         <CategoriesFilter
           categoryFilter={props.categoryFilter}
           categoryClothes={categoryClothes}
@@ -132,15 +133,6 @@ export default function Shop(props: HomeProps): JSX.Element {
 
   return (
     <React.Fragment>
-      <Typography
-        component="h1"
-        variant="h4"
-        align="center"
-        sx={{ mb: 4, mt: 4 }}
-      >
-        Shop
-      </Typography>
-
       <FilteringSection
         setSearchTerm={setSearchTerm}
         sortMode={sortMode}
