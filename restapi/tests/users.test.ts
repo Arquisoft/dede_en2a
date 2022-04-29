@@ -72,7 +72,7 @@ describe("users", () => {
     const response: Response = await request(app).get(
       "/users/findByWebId/something"
     );
-    expect(response.statusCode).toBe(412);
+    expect(response.statusCode).toBe(204);
   });
 
   /**
