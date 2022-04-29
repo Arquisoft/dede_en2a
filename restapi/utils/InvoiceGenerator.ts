@@ -11,7 +11,7 @@ class InvoiceGenerator {
     const shippingAddress = this.invoice.addresses.shipping;
 
     doc
-      //.image("logo.png", 50, 45, { width: 50 })
+      //.image("./dede_logo.png", 50, 45, { width: 50 })
       .fillColor("#444444")
       .fontSize(10)
       .text("DeDe", 200, 50, { align: "right" })
@@ -189,7 +189,7 @@ class InvoiceGenerator {
     const fileName = this.invoice.invoiceNumber + ".pdf";
 
     // pipe to a writable stream which would save the result into the same directory
-    theOutput.pipe(fs.createWriteStream("./utils/pdf/" + fileName));
+    theOutput.pipe(fs.createWriteStream("./public/pdf/" + fileName));
 
     this.generateHeaders(theOutput);
 
