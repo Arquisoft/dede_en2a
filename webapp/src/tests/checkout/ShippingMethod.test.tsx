@@ -1,9 +1,8 @@
 import { act, fireEvent, screen, render } from "@testing-library/react";
 import ShippingMethod from "../../components/checkout/ShippingMethod";
-import * as solidHelper from "../../helpers/SolidHelper";
-import * as api from "../../api/api";
+import * as carriersApi from "../../api/carriersApi";
 import * as computDistanceHelper from "../../helpers/ComputeDistanceHelper";
-import { User, Address, CartItem, Product } from "../../shared/shareddtypes";
+import { Rate, Address, CartItem, Product } from "../../shared/shareddtypes";
 
 const testAddress: Address = {
   street: "Test street",
@@ -46,7 +45,93 @@ const testCartItems: CartItem[] = [
   },
 ];
 
-test("ShippingMethod renders correctly", async () => {
+const rates: Rate[] = [
+  {
+    name: "Test carrier 1",
+    price: 10,
+    time: 24,
+  },
+  {
+    name: "Test carrier 2",
+    price: 20,
+    time: 48,
+  },
+];
+
+test("ShippingMethod renders correctly selecting Standard Shipping", async () => {
+  jest
+    .spyOn(computDistanceHelper, "obtainShippingMethods")
+    .mockImplementation(
+      (
+        destAddress: Address
+      ): Promise<computDistanceHelper.ShippingMethodType[]> => {
+        return Promise.resolve([
+          {
+            title: "Standard shipping",
+            subtitle: "The fastest shipping method we have!",
+            price: "Select",
+          },
+          {
+            title: "Pick UP",
+            subtitle: "The cheapest method on earth!",
+            price: "0 €",
+          },
+        ]);
+      }
+    );
+
+  jest
+    .spyOn(carriersApi, "getRates")
+    .mockImplementation(
+      (weight: number, postalCode: string): Promise<Rate[]> => {
+        return Promise.resolve(rates);
+      }
+    );
+
+  await act(async () => {
+    render(
+      <ShippingMethod
+        address={testAddress}
+        setAddress={() => {}}
+        costs={0}
+        setCosts={() => {}}
+        handleBack={() => {}}
+        handleNext={() => {}}
+        cart={testCartItems}
+      />
+    );
+  });
+
+  //Check that the title is rendered
+  expect(screen.getByText("Shipping method")).toBeInTheDocument();
+
+  //Select the first option
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("Standard shipping"));
+  });
+
+  //Click the next button
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("next-button"));
+  });
+
+  //Check that the title is rendered
+  expect(screen.getByText("Carriers Selection")).toBeInTheDocument();
+
+  //Select the first carrier
+  await act(async () => {
+    fireEvent.click(screen.getByText("Test carrier 1 - 10.00 €"));
+  });
+
+  //Click the next button
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("next-button"));
+  });
+
+  expect(screen.getByText("Delivery")).toBeInTheDocument();
+});
+
+test("ShippingMethod renders correctly selecting Pick UP", async () => {
   jest
     .spyOn(computDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
@@ -85,14 +170,84 @@ test("ShippingMethod renders correctly", async () => {
   //Check that the title is rendered
   expect(screen.getByText("Shipping method")).toBeInTheDocument();
 
-  //Check that the description is rendered
-  expect(
-    screen.getByText(
-      "Those are the shipping methods we have in our site; feel free to choose any of them:"
-    )
-  ).toBeInTheDocument();
+  //Select the first option
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("Pick UP"));
+  });
 
-  //Check that both shipping methods are rendered
-  expect(screen.getByText("Standard shipping")).toBeInTheDocument();
-  expect(screen.getByText("Pick UP")).toBeInTheDocument();
+  //Click the next button
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("next-button"));
+  });
+
+  //Check that the title is rendered
+  expect(screen.getByText("Pick UP locations")).toBeInTheDocument();
+});
+
+test("Back button works", async () => {
+  jest
+    .spyOn(computDistanceHelper, "obtainShippingMethods")
+    .mockImplementation(
+      (
+        destAddress: Address
+      ): Promise<computDistanceHelper.ShippingMethodType[]> => {
+        return Promise.resolve([
+          {
+            title: "Standard shipping",
+            subtitle: "The fastest shipping method we have!",
+            price: "Select",
+          },
+          {
+            title: "Pick UP",
+            subtitle: "The cheapest method on earth!",
+            price: "0 €",
+          },
+        ]);
+      }
+    );
+
+  jest
+    .spyOn(carriersApi, "getRates")
+    .mockImplementation(
+      (weight: number, postalCode: string): Promise<Rate[]> => {
+        return Promise.resolve(rates);
+      }
+    );
+  await act(async () => {
+    render(
+      <ShippingMethod
+        address={testAddress}
+        setAddress={() => {}}
+        costs={0}
+        setCosts={() => {}}
+        handleBack={() => {}}
+        handleNext={() => {}}
+        cart={testCartItems}
+      />
+    );
+  });
+
+  //Check that the title is rendered
+  expect(screen.getByText("Shipping method")).toBeInTheDocument();
+
+  //Select the first option
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("Standard shipping"));
+  });
+
+  //Click the next button
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("next-button"));
+  });
+
+  //Check that the title is rendered
+  expect(screen.getByText("Carriers Selection")).toBeInTheDocument();
+
+  //Click the next button
+  await act(async () => {
+    fireEvent.click(screen.getByTestId("back-button"));
+  });
+
+  //Check that the title is rendered
+  expect(screen.getByText("Shipping method")).toBeInTheDocument();
 });
