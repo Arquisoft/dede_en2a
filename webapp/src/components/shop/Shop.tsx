@@ -36,7 +36,7 @@ function FilteringSection(props: any) {
       container
       alignItems="flex-end"
       justifyContent="space-between"
-      sx={{ px: 2 }}
+      sx={{ py: 1, px: 2 }}
       spacing={1}
     >
       <Grid item xs={12} md={3}>
@@ -78,7 +78,7 @@ export default function Shop(props: HomeProps): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
   const [itemsPerPage] = useState(12);
-
+  const [numberOfPages, setNumberOfPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortMode, setSortMode] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -120,15 +120,18 @@ export default function Shop(props: HomeProps): JSX.Element {
     setProducts(products); // We establish the products to the retrieved ones
   };
 
-  const obtainNumberOfPages = () => {
-    return props.products.length % itemsPerPage === 0
-      ? Math.floor(props.products.length / itemsPerPage)
-      : Math.floor(props.products.length / itemsPerPage) + 1;
+  const refreshNumberOfPages = () => {
+    setNumberOfPages(
+      products.length % itemsPerPage === 0
+        ? Math.floor(products.length / itemsPerPage)
+        : Math.floor(products.length / itemsPerPage) + 1
+    );
   };
 
   React.useEffect(() => {
     props.refreshShop();
     retrieveProducts(props.products);
+    refreshNumberOfPages();
   }, [searchTerm, sortMode, categoryFilter]);
 
   return (
@@ -152,7 +155,7 @@ export default function Shop(props: HomeProps): JSX.Element {
         />
 
         <Pagination
-          count={obtainNumberOfPages()}
+          count={numberOfPages}
           page={page}
           onChange={handlePageChange}
           showFirstButton
