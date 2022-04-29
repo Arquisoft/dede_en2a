@@ -13,7 +13,7 @@ class InvoiceGenerator {
 
     doc
       //.image("./dede_logo.png", 50, 45, { width: 50 })
-      .fillColor("#444444")
+      //.fillColor("#444444")
       .fontSize(10)
       .text("DeDe", 200, 50, { align: "right" })
       .text("Calle Valdes Salas 26", 200, 65, { align: "right" })
@@ -39,7 +39,7 @@ class InvoiceGenerator {
   }
 
   generateCustomerInformation(doc: any) {
-    doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
+    doc./*fillColor("#444444").*/fontSize(20).text("Invoice", 50, 160);
 
     this.generateHr(doc, 185);
 
