@@ -8,6 +8,8 @@ import { Typography, LinearProgress, Button } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 import { getAddressesFromPod } from "../../../helpers/SolidHelper";
+import AddAddressDialog from "./AddAddressDialog";
+import EditAddressDialog from "./EditAddressDialog";
 
 function MyAddresses(props: any) {
   const [loading, setLoading] = React.useState(false);
@@ -51,6 +53,7 @@ function MyAddresses(props: any) {
               <Paper
                 variant="outlined"
                 component={Button}
+                onClick={props.onClickAdd}
                 sx={{ width: "100%", height: 200 }}
               >
                 <Stack
@@ -90,7 +93,7 @@ function MyAddresses(props: any) {
                       alignItems="space-even"
                       justifyContent="center"
                     >
-                      <Button>Edit</Button>
+                      <Button onClick={props.onClickEdit}>Edit</Button>
                       <Button>Remove</Button>
                     </Stack>
                   </Stack>
@@ -105,13 +108,51 @@ function MyAddresses(props: any) {
 }
 
 export default function AccountDetails(props: any) {
+  // We manage the add address dialog as intended
+  const [addAddressDialog, setAddAddressDialog] = React.useState(false);
+
+  const handleClickOpenAddAddressDialog = () => {
+    setAddAddressDialog(true);
+  };
+
+  const handleCloseAddAddressDialog = () => {
+    setAddAddressDialog(false);
+  };
+
+  // We manage the edit address dialog as intended
+  const [editAddressDialog, setEditAddressDialog] = React.useState(false);
+
+  const handleClickOpenEditAddressDialog = () => {
+    setEditAddressDialog(true);
+  };
+
+  const handleCloseEditAddressDialog = () => {
+    setEditAddressDialog(false);
+  };
+
   return (
     <React.Fragment>
       <Paper sx={{ m: 2, p: 2 }}>
         <Stack direction="column">
-          <MyAddresses webId={props.webId} />
+          <MyAddresses
+            webId={props.webId}
+            onClickAdd={handleClickOpenAddAddressDialog}
+            onClickEdit={handleClickOpenEditAddressDialog}
+          />
         </Stack>
       </Paper>
+
+      <AddAddressDialog
+        open={addAddressDialog}
+        handleOpen={handleClickOpenAddAddressDialog}
+        handleClose={handleCloseAddAddressDialog}
+      />
+
+      <EditAddressDialog
+        open={editAddressDialog}
+        handleOpen={handleClickOpenEditAddressDialog}
+        handleClose={handleCloseEditAddressDialog}
+      />
     </React.Fragment>
   );
 }

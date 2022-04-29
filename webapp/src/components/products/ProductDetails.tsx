@@ -102,7 +102,7 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
 
   useEffect(() => {
     setLoading(true);
-    obtainProductDetails(id + "").finally(() => setLoading(false)); // TODO: check that removing setCurrentCart works
+    obtainProductDetails(id + "").finally(() => setLoading(false));
   }, []);
 
   // In case we are retrieving the elements from the db...
@@ -138,14 +138,13 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
       <React.Fragment>
         <ShopBreadcrumbs product={product.name} />
         <Grid>
-          <Paper elevation={8} sx={{ m: 3, p: 2 }}>
+          <Paper elevation={8} sx={{ m: 3 }}>
             <Grid
               container
               direction="row"
               alignItems="center"
               justifyContent="center"
               spacing={2}
-              sx={{ p: 2 }}
             >
               <Grid item xs={12} md={6}>
                 <Img
@@ -154,7 +153,14 @@ export default function ProductDetails(props: ProductProps): JSX.Element {
                 />
               </Grid>
 
-              <Grid container item xs={12} md={6} direction={"column"}>
+              <Grid
+                container
+                item
+                xs={12}
+                md={6}
+                direction={"column"}
+                sx={{ p: 2 }}
+              >
                 <Typography component="h1" variant="h5">
                   {product.name}
                 </Typography>
