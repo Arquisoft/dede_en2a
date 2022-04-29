@@ -1,5 +1,6 @@
 const PDFGenerator = require("pdfkit");
 const fs = require("fs");
+const path = require("path");
 
 class InvoiceGenerator {
   invoice: any;
@@ -189,7 +190,9 @@ class InvoiceGenerator {
     const fileName = this.invoice.invoiceNumber + ".pdf";
 
     // pipe to a writable stream which would save the result into the same directory
-    theOutput.pipe(fs.createWriteStream("./public/pdf/" + fileName));
+    theOutput.pipe(
+      fs.createWriteStream(path.join(__dirname, "public", "pdf", fileName))
+    );
 
     this.generateHeaders(theOutput);
 

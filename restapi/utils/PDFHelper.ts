@@ -6,7 +6,7 @@ const PDFGenerator = require("pdfkit");
 
 export const createPDF = async (code: string) => {
   if (process.env.MONGO_DB_URI === undefined) return;
-  const InvoiceGenerator = require("./InvoiceGenerator");
+  const InvoiceGenerator = require("../InvoiceGenerator");
 
   const orderFound = await orderModel.findOne({
     code: code,
