@@ -27,6 +27,7 @@ import ProductDetails from "./components/shop/products/ProductDetails";
 import RedirectHome from "./components/RedirectHome";
 import Shop from "./components/shop/Shop";
 import SignIn from "./components/userManagement/SignIn";
+import AuthWrapper from "./components/AuthWrapper";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
@@ -211,117 +212,119 @@ export default function App(): JSX.Element {
             toggleColorMode={toggleColorMode}
             webId={webId}
           />
-          <Routes>
-            <Route path="/" element={<DedeApp />}>
-              <Route index element={<Home />} />
-              <Route
-                path="shop"
-                element={
-                  <Shop
-                    products={products}
-                    productsInCart={productsInCart}
-                    refreshShop={refreshShop}
-                    addToCart={addToCart}
-                  />
-                }
-              />
-              <Route
-                path="cart"
-                element={
-                  <ShoppingCart
-                    productsInCart={productsInCart}
-                    totalUnitsInCart={totalUnitsInCart}
-                    addToCart={addToCart}
-                    removeFromCart={removeFromCart}
-                    webId={webId}
-                  />
-                }
-              />
-              <Route
-                path="checkout"
-                element={
-                  <Checkout
-                    productsInCart={productsInCart}
-                    handleDeleteCart={handleDeleteCart}
-                    webId={webId}
-                    sendNotification={sendNotification}
-                  />
-                }
-              />
-              <Route path="sign-in" element={<SignIn webId={webId} />} />
-              <Route
-                path="product/:id"
-                element={
-                  <ProductDetails
-                    product={null as any}
-                    addToCart={addToCart}
-                    webId={webId}
-                  />
-                }
-              />
-            </Route>
-            <Route path="dashboard" element={<DashboardOutlet role={role} />}>
-              <Route
-                index
-                element={<DashboardContent webId={webId} role={role} />}
-              />
-              <Route
-                path="account"
-                element={<AccountDetails webId={webId} />}
-              />
-              <Route
-                path="orders"
-                element={<OrderList webId={webId} role={"user"} />}
-              />
-              <Route
-                path="order/:code"
-                element={<OrderDetails webId={webId} />}
-              />
-              <Route path="products" element={<ProductList role={role} />} />
-              <Route
-                path="products/add"
-                element={
-                  <UploadProduct
-                    refreshShop={refreshShop}
-                    isForUpdate={false}
-                    products={products}
-                    webId={webId}
-                    role={role}
-                  />
-                }
-              />
-              <Route
-                path="products/delete"
-                element={
-                  <DeleteProduct
-                    products={products}
-                    refreshShop={refreshShop}
-                    webId={webId}
-                    role={role}
-                  />
-                }
-              />
-              <Route
-                path="products/update"
-                element={
-                  <UploadProduct
-                    refreshShop={refreshShop}
-                    isForUpdate={true}
-                    products={products}
-                    webId={webId}
-                    role={role}
-                  />
-                }
-              />
-            </Route>
-            <Route path="*" element={<RedirectHome />}></Route>
-          </Routes>
+          <AuthWrapper>
+            <Routes>
+              <Route path="/" element={<DedeApp />}>
+                <Route index element={<Home />} />
+                <Route
+                  path="shop"
+                  element={
+                    <Shop
+                      products={products}
+                      productsInCart={productsInCart}
+                      refreshShop={refreshShop}
+                      addToCart={addToCart}
+                    />
+                  }
+                />
+                <Route
+                  path="cart"
+                  element={
+                    <ShoppingCart
+                      productsInCart={productsInCart}
+                      totalUnitsInCart={totalUnitsInCart}
+                      addToCart={addToCart}
+                      removeFromCart={removeFromCart}
+                      webId={webId}
+                    />
+                  }
+                />
+                <Route
+                  path="checkout"
+                  element={
+                    <Checkout
+                      productsInCart={productsInCart}
+                      handleDeleteCart={handleDeleteCart}
+                      webId={webId}
+                      sendNotification={sendNotification}
+                    />
+                  }
+                />
+                <Route path="sign-in" element={<SignIn webId={webId} />} />
+                <Route
+                  path="product/:id"
+                  element={
+                    <ProductDetails
+                      product={null as any}
+                      addToCart={addToCart}
+                      webId={webId}
+                    />
+                  }
+                />
+              </Route>
+              <Route path="dashboard" element={<DashboardOutlet role={role} />}>
+                <Route
+                  index
+                  element={<DashboardContent webId={webId} role={role} />}
+                />
+                <Route
+                  path="account"
+                  element={<AccountDetails webId={webId} />}
+                />
+                <Route
+                  path="orders"
+                  element={<OrderList webId={webId} role={"user"} />}
+                />
+                <Route
+                  path="order/:code"
+                  element={<OrderDetails webId={webId} />}
+                />
+                <Route path="products" element={<ProductList role={role} />} />
+                <Route
+                  path="products/add"
+                  element={
+                    <UploadProduct
+                      refreshShop={refreshShop}
+                      isForUpdate={false}
+                      products={products}
+                      webId={webId}
+                      role={role}
+                    />
+                  }
+                />
+                <Route
+                  path="products/delete"
+                  element={
+                    <DeleteProduct
+                      products={products}
+                      refreshShop={refreshShop}
+                      webId={webId}
+                      role={role}
+                    />
+                  }
+                />
+                <Route
+                  path="products/update"
+                  element={
+                    <UploadProduct
+                      refreshShop={refreshShop}
+                      isForUpdate={true}
+                      products={products}
+                      webId={webId}
+                      role={role}
+                    />
+                  }
+                />
+              </Route>
+              <Route path="*" element={<RedirectHome />}></Route>
+            </Routes>
 
-          <NotificationAlert
-            notification={notification}
-            notificationStatus={notificationStatus}
-            setNotificationStatus={setNotificationStatus}
-          />
+            <NotificationAlert
+              notification={notification}
+              notificationStatus={notificationStatus}
+              setNotificationStatus={setNotificationStatus}
+            />
+          </AuthWrapper>
         </Router>
       </PayPalScriptProvider>
     </ThemeProvider>
