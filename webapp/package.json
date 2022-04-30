@@ -41,7 +41,7 @@
     "start": "react-scripts --max_old_space_size=4096 start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test --coverage",
-    "test:e2e": "start-server-and-test prod 3000 'jest --rootDir=e2e --config=./e2e/jest.config.ts'",
+    "test:e2e": "start-server-and-test 'npm --prefix ../restapi start' http://localhost:5000/products prod 3000 'jest --rootDir=e2e --config=./e2e/jest.config.ts'",
     "eject": "react-scripts eject",
     "prod": "ts-node-dev ./server.ts"
   },
