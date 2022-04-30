@@ -464,8 +464,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#section-solution-strategy">4. Solution Strategy</a>
 <ul class="sectlevel2">
-<li><a href="#_4_1_technology_decisions">4.1. 4.1 Technology Decisions</a></li>
-<li><a href="#_4_2_top_level_decompostition">4.2. 4.2 Top-level Decompostition</a></li>
+<li><a href="#_technology_decisions">4.1. Technology Decisions</a></li>
+<li><a href="#_top_level_decompostition">4.2. Top-level Decompostition</a></li>
 <li><a href="#_approaches_to_achieve_top_quality_goals">4.3. Approaches to achieve top quality goals</a></li>
 <li><a href="#_organizational_decisions">4.4. Organizational decisions</a></li>
 </ul>
@@ -986,9 +986,9 @@ together with a mapping table showing the relationships between channels and inp
 <h2 id="section-solution-strategy">4. Solution Strategy</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_4_1_technology_decisions">4.1. 4.1 Technology Decisions</h3>
+<h3 id="_technology_decisions">4.1. Technology Decisions</h3>
 <div class="sect3">
-<h4 id="_4_1_1_technology_stack">4.1.1. 4.1.1 Technology Stack</h4>
+<h4 id="_technology_stack">4.1.1. Technology Stack</h4>
 <div class="paragraph">
 <p>In order to develop the application and satisfy the constraint we decided this technologies:</p>
 </div>
@@ -1008,9 +1008,9 @@ together with a mapping table showing the relationships between channels and inp
 </div>
 </div>
 <div class="sect2">
-<h3 id="_4_2_top_level_decompostition">4.2. 4.2 Top-level Decompostition</h3>
+<h3 id="_top_level_decompostition">4.2. Top-level Decompostition</h3>
 <div class="sect3">
-<h4 id="_4_2_1_ides">4.2.1. 4.2.1 IDEs</h4>
+<h4 id="_ides">4.2.1. IDEs</h4>
 <div class="paragraph">
 <p>Our choice is Visual Studio Code mainly because is available for many platforms such as Windows/Ios/Linux and via plugins it supports many coding languages and documentation. Git is integrated for version control.</p>
 </div>
@@ -1370,7 +1370,7 @@ when your infrastructure is more complex.</p>
 <h3 id="_infrastructure_level_1">7.1. Infrastructure Level 1</h3>
 <div class="imageblock">
 <div class="content">
-<img src="./images/07_DeploymentView.png" alt="07 DeploymentView" width="829" height="796">
+<img src="./images/07_DeploymentView.png" alt="07 DeploymentView" width="793" height="701">
 </div>
 </div>
 <div class="paragraph">
@@ -1523,7 +1523,7 @@ on this list.</p>
 <h3 id="_domain_model">8.1. Domain model</h3>
 <div class="imageblock">
 <div class="content">
-<img src="./images/DomainModel.png" alt="DomainModel" width="189" height="535">
+<img src="./images/DomainModel.png" alt="DomainModel" width="188" height="610">
 </div>
 </div>
 </div>
@@ -1649,6 +1649,12 @@ on this list.</p>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>| <strong>Order resume</strong>
+| Users will be able to download a PDF with a resume of the order after making it (and on their dashboards)
+| We had many problems while trying to acomplish this feature, with creation of PDFs, sending emails and package installations (as stated next)
+| <a href="https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2314:-Email-with-order-resume">ADR #14</a></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_deprecated_decisions">9.2. Deprecated decisions</h3>
