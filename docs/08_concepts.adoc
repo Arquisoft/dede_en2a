@@ -55,12 +55,9 @@ image:08-Crosscutting-Concepts-Structure-EN.png["Possible topics for crosscuttin
 [plantuml, "DomainModel", png]
 ----
 object User{
-    name : String
     webId : String
-    email : String
-    password: String
     role : String
-    verified : boolean
+    isVerified : boolean
 }
 
 object Product{
@@ -70,16 +67,25 @@ object Product{
     price: double
     stock: int
     image: String
+    category: String
+    weight: double
 }
 
 object Order{
-    orderCode: String
-    totalPrice: double
+    code: String
+    webId: String
+    address: String
+    products: Product[]
+    date: Date
+    subtotalPrice: double
     shippingPrice: double
-    orderReceived: boolean
+    totalPrice: double
+    receivedDate: Date
 }
 
 object Review{
+    webId: String
+    productCode: String
     rating: int
     comment: String
 }
