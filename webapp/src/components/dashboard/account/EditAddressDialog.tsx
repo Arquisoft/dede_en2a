@@ -10,18 +10,20 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 
 import { Address } from "../../../shared/shareddtypes";
 
-type ReviewDialogProps = {
+type EditAddressDialogProps = {
   open: boolean;
   addressToEdit: Address;
   handleOpen: () => void;
   handleClose: () => void;
+  sendNotification: (severity: AlertColor, message: string) => void;
 };
 
-export default function ReviewDialog(props: ReviewDialogProps) {
+export default function EditAddressDialog(props: EditAddressDialogProps) {
   const [streetAddress, setStreetAddress] = React.useState("");
   const [city, setCity] = React.useState("");
   const [postalCode, setPostalCode] = React.useState(0);

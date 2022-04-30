@@ -10,28 +10,55 @@ import {
   DialogTitle,
   Button,
 } from "@mui/material";
+import { AlertColor } from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 
-type ReviewDialogProps = {
+import { addAddressToPod } from "../../../helpers/SolidHelper";
+
+type AddAddressDialogProps = {
   open: boolean;
+  webId: string;
   handleOpen: () => void;
   handleClose: () => void;
+  sendNotification: (severity: AlertColor, message: string) => void;
 };
 
-export default function ReviewDialog(props: ReviewDialogProps) {
+export default function AddAddressDialog(props: AddAddressDialogProps) {
   const [streetAddress, setStreetAddress] = React.useState("");
   const [city, setCity] = React.useState("");
   const [postalCode, setPostalCode] = React.useState(0);
   const [region, setRegion] = React.useState("");
   const [country, setCountry] = React.useState("");
 
-  const handleConfirm = async () => {};
+  const handleConfirm = async () => {
+    addAddressToPod(props.webId, {
+      street: streetAddress,
+      locality: city,
+      postalCode: postalCode.toString(),
+      region: region,
+    }).then(
+      (e) => {
+        props.sendNotification(
+          "success",
+          "The provided address has been saved in your POD!"
+        );
+        props.handleClose(); // We close the dialog
+      },
+      (error) => {
+        props.sendNotification(
+          "error",
+          "An error ocurred saving the provided address. Nothing has been saved :("
+        );
+        props.handleClose();
+      }
+    );
+  };
 
   return (
     <React.Fragment>
       <Dialog maxWidth="sm" open={props.open} onClose={props.handleClose}>
         <DialogTitle>
-          Fill the form in order you to create a new address!
+          Fill the form in order you to add a new address!
         </DialogTitle>
         <DialogContent>
           <DialogContentText>

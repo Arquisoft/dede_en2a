@@ -4,39 +4,44 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
+import { AlertColor } from "@mui/material/Alert";
 import { Typography, LinearProgress, Button } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 
+import { NotificationType } from "../../../shared/shareddtypes";
 import { getAddressesFromPod } from "../../../helpers/SolidHelper";
 import AddAddressDialog from "./AddAddressDialog";
 import EditAddressDialog from "./EditAddressDialog";
+import NotificationAlert from "../../misc/NotificationAlert";
 
 import { Address } from "../../../shared/shareddtypes";
 
 function MyAddresses(props: any) {
   const [loading, setLoading] = React.useState(false);
-  const [addresses, setAddresses] = React.useState<Array<Address>>([]);
+  const [addresses] = React.useState<Array<Address>>([]);
 
   React.useEffect(() => {
     setLoading(true);
-    getAddressesFromPod(props.webId)
-      .then((elements) =>
-        elements.forEach((address) => {
-          let element = {
-            street: address.street,
-            postalCode: address.postalCode,
-            locality: address.locality,
-            region: address.region,
-          };
+    if (props.webId !== undefined && props.webId !== "")
+      // If we have provided a valid WebID
+      getAddressesFromPod(props.webId)
+        .then((elements) =>
+          elements.forEach((address) => {
+            let element = {
+              street: address.street,
+              postalCode: address.postalCode,
+              locality: address.locality,
+              region: address.region,
+            };
 
-          // If the element to be inserted is not contained in the array
-          if (!addresses.some((e) => e.street === element.street))
-            addresses.push(element);
-        })
-      )
-      .finally(() => setLoading(false));
-  }, []);
+            // If the element to be inserted is not contained in the array
+            if (!addresses.some((e) => e.street === element.street))
+              addresses.push(element);
+          })
+        )
+        .finally(() => setLoading(false));
+  }, [props.webId]);
 
   return (
     <React.Fragment>
@@ -48,7 +53,7 @@ function MyAddresses(props: any) {
       {!loading && (
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
-            <Grid item xs={6} md={4}>
+            <Grid item xs={6} md={4} key={"add"}>
               <Paper
                 variant="outlined"
                 component={Button}
@@ -66,7 +71,7 @@ function MyAddresses(props: any) {
               </Paper>
             </Grid>
             {addresses.map((address) => (
-              <Grid item xs={6} md={4}>
+              <Grid item xs={6} md={4} key={address.street}>
                 <Paper variant="outlined">
                   <Stack
                     direction="column"
@@ -143,6 +148,21 @@ export default function AccountDetails(props: any) {
     setEditAddressDialog(false);
   };
 
+  // Notifications must be sent in order us to inform the user
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
+  function sendNotification(severity: AlertColor, message: string) {
+    setNotificationStatus(true);
+    setNotification({
+      severity: severity,
+      message: message,
+    });
+  }
+
   return (
     <React.Fragment>
       <Paper sx={{ m: 2, p: 2 }}>
@@ -158,8 +178,10 @@ export default function AccountDetails(props: any) {
 
       <AddAddressDialog
         open={addAddressDialog}
+        webId={props.webId}
         handleOpen={handleClickOpenAddAddressDialog}
         handleClose={handleCloseAddAddressDialog}
+        sendNotification={sendNotification}
       />
 
       <EditAddressDialog
@@ -167,6 +189,13 @@ export default function AccountDetails(props: any) {
         addressToEdit={address}
         handleOpen={handleClickOpenEditAddressDialog}
         handleClose={handleCloseEditAddressDialog}
+        sendNotification={sendNotification}
+      />
+
+      <NotificationAlert
+        notification={notification}
+        notificationStatus={notificationStatus}
+        setNotificationStatus={setNotificationStatus}
       />
     </React.Fragment>
   );

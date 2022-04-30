@@ -71,7 +71,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           </Box>
         </Stack>
 
-        <Stack direction="row" alignItems="center">
+        <Stack direction="row" alignItems="center" spacing={1}>
           <ThemeSlider
             onChange={props.toggleColorMode}
             checked={props.mode === "dark"}

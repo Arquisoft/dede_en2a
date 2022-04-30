@@ -12,6 +12,8 @@ import {
   setThing,
 } from "@inrupt/solid-client";
 
+import { fetch } from "@inrupt/solid-client-authn-browser";
+
 import { FOAF, VCARD } from "@inrupt/vocab-common-rdf";
 import { Address } from "../shared/shareddtypes";
 
@@ -77,7 +79,12 @@ export function toStringAddress(address: Address): string {
 }
 
 export async function addAddressToPod(webId: string, address: Address) {
-  let addressSolidDataset = createSolidDataset();
+  let profileDocumentURI = webId.split("#")[0]; // we remove the right hand side of the # for consistency
+  let solidDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
+
+  console.log(webId);
+
+  // We create the address
   const newAddressThing = buildThing(createThing())
     .addStringNoLocale(VCARD.street_address, address.street)
     .addStringNoLocale(VCARD.locality, address.locality)
@@ -85,8 +92,18 @@ export async function addAddressToPod(webId: string, address: Address) {
     .addStringNoLocale(VCARD.postal_code, address.postalCode)
     .addUrl(VCARD.Type, VCARD.street_address)
     .build();
-  addressSolidDataset = setThing(addressSolidDataset, newAddressThing);
-  await saveSolidDatasetAt(webId, addressSolidDataset);
+
+  // We have to store also the hasAddress :)
+  let hasAddress = getThing(solidDataset, VCARD.hasAddress) as Thing;
+  if (hasAddress === null) return Promise.reject(); // We reject the promise :(
+  hasAddress = buildThing(hasAddress)
+    .addUrl(VCARD.street_address, newAddressThing.url)
+    .build();
+
+  solidDataset = setThing(solidDataset, newAddressThing);
+  solidDataset = setThing(solidDataset, hasAddress);
+
+  return await saveSolidDatasetAt(webId, solidDataset, { fetch: fetch });
 }
 
 export async function editAddressFromPod(webId: string, address: Address) {
