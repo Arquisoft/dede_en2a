@@ -76,12 +76,12 @@ Those are the different decisions we have taken for developing our project. They
 | Users all around the world will be able to connect to our application!
 | It's the first time we do this process, that is, some troubles are arising. More in more, we have never worked with Docker.
 | https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2313%3A-Application-hosting[ADR #13]
-|===
 
 | *Order resume*
 | Users will be able to download a PDF with a resume of the order after making it (and on their dashboards)
 | We had many problems while trying to acomplish this feature, with creation of PDFs, sending emails and package installations (as stated next)
 | https://github.com/Arquisoft/dede_en2a/wiki/ADR-%2314:-Email-with-order-resume[ADR #14]
+|===
 
 === Deprecated decisions
 
