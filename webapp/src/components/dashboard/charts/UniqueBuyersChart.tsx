@@ -1,14 +1,23 @@
 import React from "react";
 
+import { getOrdersForUser } from "../../../api/api";
 import Subtitle from "../misc/Subtitle";
 import Title from "../misc/Title";
 
 export default function Chart(props: any) {
   const [data, setData] = React.useState(0);
-  const [orderWebIDs] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    // TODO: Refactor this
+    let clientIds: string[] = [];
+    getOrdersForUser(props.webId, props.role)
+      .then((orders) =>
+        orders.forEach((order) => {
+          if (!clientIds.includes(order.webId)) clientIds.push(order.webId);
+        })
+      )
+      .finally(() => {
+        setData(clientIds.length);
+      });
   }, []);
 
   return (
