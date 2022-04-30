@@ -18,6 +18,10 @@ defineFeature(feature, (test) => {
         waitUntil: "networkidle0",
       })
       .catch(() => {});
+
+    /*page.on("request", (interceptedRequest) => {
+      console.log(interceptedRequest.url());
+    });*/
   });
 
   test("A user enters the webpage", ({ given, when, then }) => {
@@ -25,21 +29,34 @@ defineFeature(feature, (test) => {
       const text = await page.evaluate(() => document.body.textContent);
       expect(text).toMatch("Welcome");
       expect(text).toContain("AMONG US™ CryptoBro");
-      const button = await page.evaluate(() => document.getElementsByName('Button'));
-      console.log(button)
-
-      //await expect(page).toClick('button', { text: 'Start shopping' })
     });
 
     when("I go to shop section", async () => {
+      await expect(page).toClick("a", { text: "Start shopping" });
+      expect(page.url()).toContain("/shop");
+      await delay(1000);
     });
 
-    then("Products from the DB are displayed", async () => {});
+    then("Products from the DB are displayed", async () => {
+      const text = await page.evaluate(() => document.body.textContent);
+      expect(text).toContain("Super SUS T-Shirt");
+      expect(text).toContain("The Sussier Bag");
+      expect(text).toContain('Among Us "Calle" pack');
+      expect(text).toContain("Not sus T-Shirt");
+      expect(text).toContain('"Sus Cough" Mask');
+      expect(text).toContain("Among Us Airpods' Cover");
+      expect(text).toContain("Sussy Chains");
+      expect(text).toContain("Imposters Delicious Chocolate");
+      expect(text).toContain("Car Personalized Sticker");
+      expect(text).toContain('Among Us "CryptoBro"');
+      expect(text).toContain("Among Us Music Vinyl");
+      expect(text).toContain("Among Us Pencil Case");
+    });
   });
+});
 
-  afterAll(async () => {
-    browser.close();
-  });
+afterAll(async () => {
+  browser.close();
 });
 
 function delay(time: number) {
