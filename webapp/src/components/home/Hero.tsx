@@ -50,6 +50,7 @@ export default function Hero() {
               variant="contained"
               component={Link}
               to="shop"
+              id="shop"
               sx={{ textAlign: "center" }}
             >
               Start shopping
