@@ -5,9 +5,11 @@ import cors from "cors";
 import express, { Application, RequestHandler } from "express";
 import promBundle from "express-prom-bundle";
 import morgan from "morgan";
+import { orderModel } from "./orders/Order";
 import apiOrders from "./orders/OrderRoutes";
 import apiProduct from "./products/ProductRoutes";
 import apiReviews from "./reviews/ReviewRoutes";
+import { userModel } from "./users/User";
 import apiUser from "./users/UserRoutes";
 
 const path = require("path");
@@ -42,25 +44,56 @@ app.get(["/*.png", "/undefined"], function (req, res) {
   const ipath = path.join(__dirname, "public", req.originalUrl);
   const savePath = path.resolve(ipath);
 
-  if (savePath.startsWith(__dirname + "\\public") && fs.existsSync(savePath)) {
+  if (fs.existsSync(savePath)) {
     res.sendFile(savePath);
   } else {
     res.sendFile(a);
   }
 });
 
-app.get(["/*.pdf"], function (req, res) {
-  const ipath = path.join(__dirname, "utils", "pdf", req.originalUrl);
-  const savePath = path.resolve(ipath);
-  console.log(ipath);
+app.get(["/*.pdf"], async function (req, res) {
+  const InvoiceGenerator = require("./InvoiceGenerator");
+  const PDFDocument = require("pdfkit");
+  let doc = new PDFDocument();
+  let aux = req.originalUrl.substring(1, req.originalUrl.length - 4);
+  const orderFound = await orderModel.findOne({
+    code: aux,
+  });
+  try {
+    if (orderFound !== null) {
+      const user = await userModel.findOne({ webId: orderFound.webId });
 
-  if (savePath.startsWith(__dirname + "\\utils") && fs.existsSync(savePath)) {
-    res.sendFile(savePath);
+      const invoiceData = {
+        addresses: {
+          shipping: {
+            name: "",
+            address: orderFound.address,
+            email: user.webId,
+          },
+        },
+        items: orderFound.products,
+        subtotal: orderFound.subtotalPrice,
+        total: orderFound.totalPrice,
+        shippingPrice: orderFound.shippingPrice,
+        invoiceNumber: orderFound.code,
+        dueDate: orderFound.date,
+      };
+
+      const ig = new InvoiceGenerator(invoiceData, doc);
+      //doc.pipe(res);
+      await ig.generate().pipe(res);
+      doc.end();
+    } else {
+      res.sendFile(path.join(__dirname, "public", "pdf", "not-found.pdf"));
+    }
+  } catch (error) {
+    console.log(error)
+    res.sendFile(path.join(__dirname, "public", "pdf", "not-found.pdf"));
   }
 });
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "utils", "pdf")));
+app.use(express.static(path.join(__dirname, "public", "pdf")));
 
 app
   .listen(5000, (): void => {
