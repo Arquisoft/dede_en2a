@@ -95,6 +95,7 @@ export default function ShippingMethod(props: any): JSX.Element {
         alignItems="center"
       >
         <Button
+          data-testid="next-button"
           hidden={activeStep === 0}
           disabled={!isForward()}
           onClick={() => handleNext("")}
@@ -104,6 +105,7 @@ export default function ShippingMethod(props: any): JSX.Element {
           Next
         </Button>
         <Button
+          data-testid="back-button"
           hidden={activeStep === 2}
           onClick={handleBack}
           variant="outlined"
