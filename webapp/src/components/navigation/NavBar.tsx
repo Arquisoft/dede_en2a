@@ -62,12 +62,11 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         sx={{ px: 2, py: 1 }}
       >
         <Stack direction="row" alignItems="center" spacing={0}>
-          <Drawer
-            orientation="vertical"
-            sx={{ px: 0, display: { xs: "flex", md: "none" } }}
-          />
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <Drawer orientation="vertical" />
+          </Box>
           <Logo />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ px: 1, display: { xs: "none", md: "flex" } }}>
             <NavMenu orientation="horizontal" color="white" />
           </Box>
         </Stack>

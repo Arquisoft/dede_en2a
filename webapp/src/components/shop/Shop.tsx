@@ -117,10 +117,10 @@ export default function Shop(props: HomeProps): JSX.Element {
     if (sortMode.length > 0) products = await sort();
     if (searchTerm.length > 0) products = search(products);
     if (categoryFilter.length > 0) products = filterByCategory(products);
-    setProducts(products); // We establish the products to the retrieved ones
+    return products;
   };
 
-  const refreshNumberOfPages = () => {
+  const refreshNumberOfPages = (products: Product[]) => {
     setNumberOfPages(
       products.length % itemsPerPage === 0
         ? Math.floor(products.length / itemsPerPage)
@@ -130,8 +130,10 @@ export default function Shop(props: HomeProps): JSX.Element {
 
   React.useEffect(() => {
     props.refreshShop();
-    retrieveProducts(props.products);
-    refreshNumberOfPages();
+    retrieveProducts(props.products).then((products) => {
+      setProducts(products); // We establish the products to the retrieved ones
+      refreshNumberOfPages(products);
+    });
   }, [searchTerm, sortMode, categoryFilter]);
 
   return (
