@@ -15,7 +15,7 @@ export async function getPickUpPlacesNearby(
   maxResults: number
 ) {
   let locations: PickupLocation[] = [];
-  const coords = await calculateCoordinates(address);
+  const coords = (await calculateCoordinates(address)) as any;
   const x = coords.features[0].geometry.coordinates[0];
   const y = coords.features[0].geometry.coordinates[1];
 

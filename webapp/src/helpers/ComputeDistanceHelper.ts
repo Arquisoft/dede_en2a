@@ -48,7 +48,7 @@ export const showMapRoute = async (destCoords: String) => {
 };
 
 export const getCoordinatesFromAddress = async (address: String) => {
-  let coords = await calculateCoordinates(address);
+  let coords = (await calculateCoordinates(address)) as any;
 
   let lat = coords.features[0].geometry.coordinates[1];
   let lon = coords.features[0].geometry.coordinates[0];
@@ -63,13 +63,17 @@ export async function calculateCoordinates(address: String) {
     ".json?access_token=" +
     process.env.REACT_APP_MAPBOX_KEY;
 
-  return await fetch(url, { method: "GET" })
+  let responseFinal;
+
+  await fetch(url, { method: "GET" })
     .then((response: any) => {
-      return response.data;
+      responseFinal = response.json();
     })
     .catch((error: any) => {
       console.log(error);
     });
+
+  return responseFinal;
 }
 
 async function getDistanceDriving(destCoords: String) {

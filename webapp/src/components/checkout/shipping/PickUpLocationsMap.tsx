@@ -64,7 +64,9 @@ export default function PickUpLocationsMap(props: any) {
   };
 
   const refreshMap = async () => {
-    let coords = await calculateCoordinates(toStringAddress(props.address));
+    let coords = (await calculateCoordinates(
+      toStringAddress(props.address)
+    )) as any;
     let dist = 500;
     let reps = 0;
 
