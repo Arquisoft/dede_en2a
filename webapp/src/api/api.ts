@@ -1,3 +1,4 @@
+import { error } from "console";
 import { Order, Product, Review, User } from "../shared/shareddtypes";
 
 const apiEndPoint = process.env.REACT_APP_API_URI || "http://localhost:5000";
@@ -224,17 +225,24 @@ export async function addReview(review: Review): Promise<boolean> {
 }
 
 export async function modifyReview(review: Review): Promise<boolean> {
-  let response = await fetch(apiEndPoint + "/reviews/" + review.productCode + "/" + window.btoa(review.webId), {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      token: window.btoa(review.webId),
-    },
-    body: JSON.stringify({
-      rating: review.rating,
-      comment: review.comment
-    }),
-  });
+  let response = await fetch(
+    apiEndPoint +
+      "/reviews/" +
+      review.productCode +
+      "/" +
+      window.btoa(review.webId),
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        token: window.btoa(review.webId),
+      },
+      body: JSON.stringify({
+        rating: review.rating,
+        comment: review.comment,
+      }),
+    }
+  );
   if (response.status === 200) {
     return true;
   } else return false;
@@ -267,6 +275,8 @@ export async function getPlaces(
   let places;
   await fetch(url, {
     method: "GET",
-  }).then((response) => (places = response.json()));
+  }).then((response) =>
+    (places = response.json()).catch((error) => console.log(error))
+  );
   return places;
 }

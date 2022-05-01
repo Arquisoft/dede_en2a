@@ -68,7 +68,7 @@ export function calculateCoordinates(address: String) {
       return response.data;
     })
     .catch((error: any) => {
-      return error;
+      console.log(error);
     });
 }
 
