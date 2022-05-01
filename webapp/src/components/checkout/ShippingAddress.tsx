@@ -1,27 +1,43 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import { AlertColor } from "@mui/material/Alert";
 
 import { getAddressesFromPod } from "../../helpers/SolidHelper";
 import { getUser } from "../../api/api";
-import { Address } from "../../shared/shareddtypes";
+import { Address, NotificationType } from "../../shared/shareddtypes";
 
 import StreetAddress from "./address/StreetAddress";
+import NotificationAlert from "../misc/NotificationAlert";
 
 export default function ShippingAddress(props: any): JSX.Element {
-  const [activeStep, setActiveStep] = React.useState(0); // we have to tell which is the active step
+  const navigate = useNavigate();
+
   const [addresses, setAddresses] = React.useState<Address[]>([]);
   const [loadingItem, setLoadingItem] = React.useState(false);
   const [loadingPage, setLoadingPage] = React.useState(false);
   const [stringAddress, setStringAddress] = React.useState<string>("");
 
+  // Notifications must be sent in order us to inform the user
+  const [notificationStatus, setNotificationStatus] = React.useState(false);
+  const [notification, setNotification] = React.useState<NotificationType>({
+    severity: "success",
+    message: "",
+  });
+
+  function sendNotification(severity: AlertColor, message: string) {
+    setNotificationStatus(true);
+    setNotification({
+      severity: severity,
+      message: message,
+    });
+  }
+
   // We manage the button for going back and forth
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
-
-    // An address has been provided
-    if (activeStep === 1) props.handleNext();
+    props.handleNext();
   };
 
   const isForward = () => {
@@ -35,17 +51,17 @@ export default function ShippingAddress(props: any): JSX.Element {
 
   const refreshAddresses = async () => {
     setLoadingItem(true); // we start with the loading process
-    getAddressesFromPod(props.webId) // we retrieve the addresses from the pod
-      .then(
-        (
-          response // then we iterate over the retrieved addresses and store them in the state
-        ) =>
-          response.forEach((address) => {
-            // foreach address we check if it has already been stored
-            if (!addresses.some((e) => e.street === address.street))
-              addresses.push(address); // in case it's not repeated => store it
-          })
-      )
+    getAddressesFromPod(props.webId)
+      .then((elements) => {
+        console.log(elements);
+        if (elements.length === 0) {
+          sendNotification(
+            "error",
+            "No address could be loaded from your POD. You are being redirected to the dashboard where you can add or edit them."
+          );
+          setTimeout(() => navigate("/dashboard/account"), 5000);
+        } else setAddresses(elements);
+      })
       .finally(() => setLoadingItem(false)); // loading process must be finished
   };
 
@@ -67,11 +83,7 @@ export default function ShippingAddress(props: any): JSX.Element {
     // for the first time the page renders we have to check if a user is logged in
     refreshUser()
       .then((user) => {
-        if (user) {
-          refreshAddresses().then(
-            () => setActiveStep(1) // we move to the second step
-          ); // we have to load the addresses
-        }
+        if (user) refreshAddresses();
       })
       .finally(() => setLoadingPage(false)); // loading process must be finished
   }, [props.webId]);
@@ -103,6 +115,12 @@ export default function ShippingAddress(props: any): JSX.Element {
               Next
             </Button>
           </Stack>
+
+          <NotificationAlert
+            notification={notification}
+            notificationStatus={notificationStatus}
+            setNotificationStatus={setNotificationStatus}
+          />
         </React.Fragment>
       )}
     </React.Fragment>
