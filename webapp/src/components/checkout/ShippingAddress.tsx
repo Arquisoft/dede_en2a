@@ -98,6 +98,7 @@ export default function ShippingAddress(props: any): JSX.Element {
               onClick={handleNext}
               variant="contained"
               className="m-1"
+              data-testid="next-button"
             >
               Next
             </Button>

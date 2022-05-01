@@ -1,16 +1,19 @@
 const PDFGenerator = require("pdfkit");
 const fs = require("fs");
+const path = require("path");
 
 class InvoiceGenerator {
   invoice: any;
-  constructor(invoice: any) {
+  doc: any;
+  constructor(invoice: any, doc: any) {
     this.invoice = invoice;
+    this.doc = doc;
   }
 
-  generateHeaders(doc: any) {
+  generateHeaders() {
     const shippingAddress = this.invoice.addresses.shipping;
 
-    doc
+    this.doc
       //.image("./dede_logo.png", 50, 45, { width: 50 })
       .fillColor("#444444")
       .fontSize(10)
@@ -22,7 +25,7 @@ class InvoiceGenerator {
     const beginningOfPage = 50;
     const endOfPage = 550;
 
-    doc.moveTo(beginningOfPage, 250).lineTo(endOfPage, 250).stroke();
+    this.doc.moveTo(beginningOfPage, 250).lineTo(endOfPage, 250).stroke();
   }
 
   formatCurrency(cents: number) {
@@ -37,14 +40,14 @@ class InvoiceGenerator {
     return year + "/" + month + "/" + day;
   }
 
-  generateCustomerInformation(doc: any) {
-    doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
+  generateCustomerInformation() {
+    this.doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
 
-    this.generateHr(doc, 185);
+    this.generateHr(185);
 
     const customerInformationTop = 200;
 
-    doc
+    this.doc
       .fontSize(10)
       .text("Invoice code:", 50, customerInformationTop)
       .font("Helvetica-Bold")
@@ -78,11 +81,10 @@ class InvoiceGenerator {
       )
       .moveDown();
 
-    this.generateHr(doc, 252);
+    this.generateHr(252);
   }
 
   generateTableRow(
-    doc: any,
     y: any,
     item: any,
     description: any,
@@ -90,7 +92,7 @@ class InvoiceGenerator {
     quantity: any,
     lineTotal: any
   ) {
-    doc
+    this.doc
       .fontSize(10)
       .text(item, 50, y)
       .text(description, 150, y)
@@ -99,13 +101,12 @@ class InvoiceGenerator {
       .text(lineTotal, 0, y, { align: "right" });
   }
 
-  generateTable(doc: any) {
+  generateTable() {
     let i;
     const invoiceTableTop = 330;
 
-    doc.font("Helvetica-Bold");
+    this.doc.font("Helvetica-Bold");
     this.generateTableRow(
-      doc,
       invoiceTableTop,
       "Code",
       "Item",
@@ -113,14 +114,13 @@ class InvoiceGenerator {
       "Quantity",
       "Line Total"
     );
-    this.generateHr(doc, invoiceTableTop + 20);
-    doc.font("Helvetica");
+    this.generateHr(invoiceTableTop + 20);
+    this.doc.font("Helvetica");
 
     for (i = 0; i < this.invoice.items.length; i++) {
       const item = this.invoice.items[i];
       const position = invoiceTableTop + (i + 1) * 30;
       this.generateTableRow(
-        doc,
         position,
         item.code,
         item.name,
@@ -129,12 +129,11 @@ class InvoiceGenerator {
         this.formatCurrency(item.price * item.stock)
       );
 
-      this.generateHr(doc, position + 20);
+      this.generateHr(position + 20);
     }
 
     const subtotalPosition = invoiceTableTop + (i + 1) * 30;
     this.generateTableRow(
-      doc,
       subtotalPosition,
       "",
       "",
@@ -145,7 +144,6 @@ class InvoiceGenerator {
 
     const shippingPricePosition = subtotalPosition + 20;
     this.generateTableRow(
-      doc,
       shippingPricePosition,
       "",
       "",
@@ -154,11 +152,10 @@ class InvoiceGenerator {
       this.formatCurrency(this.invoice.shippingPrice)
     );
 
-    this.generateHr(doc, shippingPricePosition + 20);
+    this.generateHr(shippingPricePosition + 20);
 
     const totalPricePosition = shippingPricePosition + 40;
     this.generateTableRow(
-      doc,
       totalPricePosition,
       "",
       "",
@@ -168,14 +165,14 @@ class InvoiceGenerator {
     );
   }
 
-  generateFooter(doc: any) {
-    doc.fontSize(10).text(`Thank you for buying in DeDe. `, 50, 700, {
+  generateFooter() {
+    this.doc.fontSize(10).text(`Thank you for buying in DeDe. `, 50, 700, {
       align: "center",
     });
   }
 
-  generateHr(doc: any, y: number) {
-    doc
+  generateHr(y: number) {
+    this.doc
       .strokeColor("#aaaaaa")
       .lineWidth(1)
       .moveTo(50, y)
@@ -184,25 +181,12 @@ class InvoiceGenerator {
   }
 
   generate() {
-    let theOutput = new PDFGenerator();
-
-    const fileName = this.invoice.invoiceNumber + ".pdf";
-
-    // pipe to a writable stream which would save the result into the same directory
-    theOutput.pipe(fs.createWriteStream("./public/pdf/" + fileName));
-
-    this.generateHeaders(theOutput);
-
-    theOutput.moveDown();
-
-    this.generateCustomerInformation(theOutput);
-
-    this.generateTable(theOutput);
-
-    this.generateFooter(theOutput);
-
-    // write out file
-    theOutput.end();
+    this.generateHeaders();
+    this.doc.moveDown();
+    this.generateCustomerInformation();
+    this.generateTable();
+    this.generateFooter();
+    return this.doc;
   }
 }
 

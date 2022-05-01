@@ -83,7 +83,12 @@ export default function Review(props: any) {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Button variant="contained" onClick={props.handleNext} className="m-1">
+        <Button
+          variant="contained"
+          onClick={props.handleNext}
+          className="m-1"
+          data-testid="next-button"
+        >
           Next
         </Button>
 

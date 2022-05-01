@@ -23,6 +23,7 @@ function CustomRadioGroup(props: any) {
         <RadioGroup value={props.value} onChange={handleChange}>
           {props.radioItems.map((radioItem: Address) => (
             <FormControlLabel
+              data-testid={`${radioItem.street}`}
               control={
                 <Radio icon={props.icon} checkedIcon={props.checkedIcon} />
               }

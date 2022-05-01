@@ -11,8 +11,13 @@ api.get(
 api.post("/reviews", ReviewController.createReview);
 
 api.get(
-  "/reviews/listByCodeAndWebId/:productCode/:webId",
-  ReviewController.getReviewsByProductAndUser
+    "/reviews/listByCodeAndWebId/:productCode/:webId",
+    ReviewController.getReviewsByProductAndUser
+);
+
+api.put(
+    "/reviews/:productCode/:webId",
+    ReviewController.modifyReview
 );
 
 export default api;

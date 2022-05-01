@@ -27,7 +27,7 @@ export async function obtainShippingMethods(
   // We return the different shipping methods and the costs for each of them
   return [
     {
-      title: "Correos",
+      title: "Standard shipping",
       subtitle: "The fastest shipping method we have!",
       price: "Select",
     },
