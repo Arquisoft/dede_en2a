@@ -93,7 +93,7 @@ export default function Shop(props: HomeProps): JSX.Element {
 
   const search = (products: Product[]) => {
     let temporalProducts: Product[] = [];
-    products.map((product) => {
+    products.forEach((product) => {
       // In case the product starts with the searching term
       if (product.name.toLowerCase().startsWith(searchTerm.toLowerCase()))
         temporalProducts.push(product);
@@ -103,7 +103,7 @@ export default function Shop(props: HomeProps): JSX.Element {
 
   const filterByCategory = (products: Product[]) => {
     let temporalProducts: Product[] = [];
-    products.map((product) => {
+    products.forEach((product) => {
       if (product.category === categoryFilter) temporalProducts.push(product);
     });
     return temporalProducts;
