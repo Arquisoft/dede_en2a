@@ -223,6 +223,23 @@ export async function addReview(review: Review): Promise<boolean> {
   } else return false;
 }
 
+export async function modifyReview(review: Review): Promise<boolean> {
+  let response = await fetch(apiEndPoint + "/reviews/" + review.productCode + "/" + window.btoa(review.webId), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      token: window.btoa(review.webId),
+    },
+    body: JSON.stringify({
+      rating: review.rating,
+      comment: review.comment
+    }),
+  });
+  if (response.status === 200) {
+    return true;
+  } else return false;
+}
+
 // PLACES
 
 export async function getPlaces(

@@ -32,6 +32,7 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",
     "recharts": "^2.1.9",
+    "ts-node": "^10.7.0",
     "typescript": "^4.5.4",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.2"
@@ -40,7 +41,7 @@
     "start": "react-scripts --max_old_space_size=4096 start",
     "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test --coverage",
-    "test:e2e": "start-server-and-test 'npm --prefix ../restapi start' http://localhost:5000/api/users/list prod 3000 'cd e2e && jest'",
+    "test:e2e": "start-server-and-test 'npm --prefix ../restapi start' http://localhost:5000/products prod 3000 'jest --rootDir=e2e --config=./e2e/jest.config.ts'",
     "eject": "react-scripts eject",
     "prod": "ts-node-dev ./server.ts"
   },

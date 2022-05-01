@@ -10,10 +10,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
-import { getOrderByCode } from "../../../api/api";
-import { Order, Product } from "../../../shared/shareddtypes";
+import { Stack } from "@mui/material";
 import Divider from "@mui/material/Divider";
+import { getOrderByCode } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
+import { Order, Product } from "../../../shared/shareddtypes";
+import DownloadButtton from "../../checkout/DownloadButton";
 import StatusMessage from "./StatusMessage";
 
 type OrderDetailsProps = {
@@ -148,11 +150,18 @@ export default function OrderDetails(props: OrderDetailsProps): JSX.Element {
         Order details
       </Typography>
       <OrderList order={order} />
-      <Link to="/dashboard/orders" style={{ textDecoration: "none" }}>
-        <Button variant="outlined" className="m-1">
-          Go back
-        </Button>
-      </Link>
+      <Stack
+        direction="row-reverse"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Link to="/dashboard/orders" style={{ textDecoration: "none" }}>
+          <Button variant="outlined" className="m-1">
+            Go back
+          </Button>
+        </Link>
+        <DownloadButtton pdf={code} />
+      </Stack>
     </Container>
   );
 }
