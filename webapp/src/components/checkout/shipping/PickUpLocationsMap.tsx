@@ -73,6 +73,7 @@ export default function PickUpLocationsMap(props: any) {
       dist,
       10
     );
+    /*
     while (pickUpPlaces.length === 0) {
       dist *= 2;
       pickUpPlaces = await getPickUpPlacesNearby(
@@ -81,7 +82,7 @@ export default function PickUpLocationsMap(props: any) {
         10
       );
       reps++;
-    }
+    }*/
 
     const key = process.env.REACT_APP_GEOAPIFY_KEY;
     const style = "https://maps.geoapify.com/v1/styles/positron/style.json";
