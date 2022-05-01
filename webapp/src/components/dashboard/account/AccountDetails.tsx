@@ -13,6 +13,7 @@ import { NotificationType } from "../../../shared/shareddtypes";
 import { getAddressesFromPod } from "../../../helpers/SolidHelper";
 import AddAddressDialog from "./AddAddressDialog";
 import EditAddressDialog from "./EditAddressDialog";
+import RemoveAddressDialog from "./RemoveAddressDialog";
 import NotificationAlert from "../../misc/NotificationAlert";
 
 import { Address } from "../../../shared/shareddtypes";
@@ -106,7 +107,14 @@ function MyAddresses(props: any) {
                       >
                         Edit
                       </Button>
-                      <Button>Remove</Button>
+                      <Button
+                        onClick={() => {
+                          props.setAddress(address); // We establish the address to remove to the selected one
+                          props.onClickRemove(); // we open the dialog up
+                        }}
+                      >
+                        Remove
+                      </Button>
                     </Stack>
                   </Stack>
                 </Paper>
@@ -149,6 +157,17 @@ export default function AccountDetails(props: any) {
     setEditAddressDialog(false);
   };
 
+  // We manage the edit address dialog as intended
+  const [removeAddressDialog, setRemoveAddressDialog] = React.useState(false);
+
+  const handleClickOpenRemoveAddressDialog = () => {
+    setRemoveAddressDialog(true);
+  };
+
+  const handleCloseRemoveAddressDialog = () => {
+    setRemoveAddressDialog(false);
+  };
+
   // Notifications must be sent in order us to inform the user
   const [notificationStatus, setNotificationStatus] = React.useState(false);
   const [notification, setNotification] = React.useState<NotificationType>({
@@ -173,6 +192,7 @@ export default function AccountDetails(props: any) {
             setAddress={setAddress}
             onClickAdd={handleClickOpenAddAddressDialog}
             onClickEdit={handleClickOpenEditAddressDialog}
+            onClickRemove={handleClickOpenRemoveAddressDialog}
           />
         </Stack>
       </Paper>
@@ -191,6 +211,15 @@ export default function AccountDetails(props: any) {
         addressToEdit={address}
         handleOpen={handleClickOpenEditAddressDialog}
         handleClose={handleCloseEditAddressDialog}
+        sendNotification={sendNotification}
+      />
+
+      <RemoveAddressDialog
+        open={removeAddressDialog}
+        webId={props.webId}
+        url={address.url}
+        handleOpen={handleClickOpenRemoveAddressDialog}
+        handleClose={handleCloseRemoveAddressDialog}
         sendNotification={sendNotification}
       />
 

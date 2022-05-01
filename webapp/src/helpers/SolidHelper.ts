@@ -5,11 +5,12 @@ import {
   getUrlAll,
   Thing,
   getUrl,
-  createSolidDataset,
+  removeUrl,
   buildThing,
   createThing,
   saveSolidDatasetAt,
   setThing,
+  removeThing,
 } from "@inrupt/solid-client";
 
 import { fetch } from "@inrupt/solid-client-authn-browser";
@@ -132,6 +133,26 @@ export async function editAddressFromPod(webId: string, address: Address) {
     .build();
 
   solidDataset = setThing(solidDataset, addressToEditThing);
+
+  return await saveSolidDatasetAt(webId, solidDataset, { fetch: fetch });
+}
+
+export async function deleteAddressFromPod(webId: string, url: string) {
+  let profileDocumentURI = webId.split("#")[0]; // we remove the right hand side of the # for consistency
+  let solidDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
+  console.log(solidDataset);
+  // We obtain the address from the POD and the hasAddress
+  let address = getThing(solidDataset, url) as Thing;
+  let hasAddress = buildThing(await getProfile(webId))
+    .removeUrl(VCARD.hasAddress, url)
+    .build();
+
+  if (hasAddress === null || address === null) return Promise.reject();
+  // We remove the address
+  solidDataset = removeThing(solidDataset, address);
+  // We remove the link to hasAddress
+  hasAddress = removeUrl(hasAddress, VCARD.hasAddress, url);
+  solidDataset = setThing(solidDataset, hasAddress);
 
   return await saveSolidDatasetAt(webId, solidDataset, { fetch: fetch });
 }
