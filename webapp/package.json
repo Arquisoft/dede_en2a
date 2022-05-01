@@ -45,6 +45,11 @@
     "eject": "react-scripts eject",
     "prod": "ts-node-dev ./server.ts"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{tsx}"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

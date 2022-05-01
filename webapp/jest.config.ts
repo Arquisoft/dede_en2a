@@ -1,8 +1,8 @@
 export default {
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.{tsx}"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
-  collectCoverage: true,
-  collectCoverageFrom: ["**/*.tsx"],
   testTimeout: 150000,
 };

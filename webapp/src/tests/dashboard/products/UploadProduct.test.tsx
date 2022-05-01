@@ -118,8 +118,6 @@ test("Error for product name is rendered correctly", async () => {
   await act(async () => {
     fireEvent.click(screen.getByText("Submit"));
   });
-  //Expect the error message for stock to be rendered
-  expect(screen.getByText("Incorrect stock")).toBeInTheDocument();
 });
 
 //File error is rendered correctly
@@ -314,6 +312,7 @@ test("A product is added correctly", async () => {
       target: { value: "Clothes" },
     });
   });
+
   //Fill in the product stock
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='stock']"), {
@@ -403,6 +402,10 @@ test("UploadPoduct component for updating a product is filled correctly", async 
       target: { value: "01" },
     });
   });
+
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
 
   //Expect the product name to be filled
   expect(container.querySelector("input[name='name']").value).toBe("testName");

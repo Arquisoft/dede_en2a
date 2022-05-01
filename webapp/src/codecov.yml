@@ -1,0 +1,6 @@
+ignore:
+  - "helpers"
+  - "api"
+  - "shared"
+  - "**/App"
+  - "**/index"

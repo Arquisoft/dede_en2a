@@ -64,7 +64,6 @@ export const createOrder: RequestHandler = async (req, res) => {
       const orderSaved = await order.save();
       res.json(orderSaved);
     } catch (error) {
-      console.log(error)
       res.status(412).json();
     }
   else res.status(403).json();
