@@ -73,7 +73,7 @@ describe("reviews", () => {
     );
     expect(response.statusCode).toBe(200);
     expect(response.type).toEqual("application/json");
-    expect(response.body.length).toBe(1)
+    expect(response.body.length).toBe(1);
   });
 
   it("Can get non-existing review of a user for a product. Response length 0", async () => {
@@ -81,7 +81,7 @@ describe("reviews", () => {
       "/reviews/listByCodeAndWebId/0/test"
     );
     expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBe(0)
+    expect(response.body.length).toBe(0);
   });
 
   it("Can't get create a review without webId on headers for verification", async () => {
@@ -106,5 +106,30 @@ describe("reviews", () => {
       });
     expect(response.statusCode).toBe(412);
     expect(response.body.message).toBe("The data is not valid");
+  });
+
+  it("Can update a review ", async () => {
+    const response: Response = await request(app)
+      .put("/reviews/" + code + "/test")
+      .set("token", "test")
+      .send({
+        webId: "test",
+        productCode: code, //We use a random code so that way we can create different reviews as only 1 per person and product is allowed
+        rating: 2,
+        comment: "Reshula",
+      });
+    expect(response.statusCode).toBe(200);
+  });
+
+  it("Can't update a review without webId for verification", async () => {
+    const response: Response = await request(app)
+      .put("/reviews/" + code + "/test")
+      .send({
+        webId: "test",
+        productCode: code, //We use a random code so that way we can create different reviews as only 1 per person and product is allowed
+        rating: 2,
+        comment: "Reshula",
+      });
+    expect(response.statusCode).toBe(403);
   });
 });
