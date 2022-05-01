@@ -25,7 +25,8 @@ async function getProfile(webId: string): Promise<Thing> {
 
 export async function getNameFromPod(webId: string) {
   if (webId === "" || webId === undefined) return "Name not found"; // we return the empty string
-  return getStringNoLocale(await getProfile(webId), FOAF.name) as string;
+  let name = getStringNoLocale(await getProfile(webId), FOAF.name);
+  return name !== null ? name : "No name :(";
 }
 
 export async function getEmailsFromPod(webId: string) {
@@ -82,8 +83,6 @@ export async function addAddressToPod(webId: string, address: Address) {
   let profileDocumentURI = webId.split("#")[0]; // we remove the right hand side of the # for consistency
   let solidDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
 
-  console.log(webId);
-
   // We create the address
   const newAddressThing = buildThing(createThing())
     .addStringNoLocale(VCARD.street_address, address.street)
@@ -95,10 +94,15 @@ export async function addAddressToPod(webId: string, address: Address) {
 
   // We have to store also the hasAddress :)
   let hasAddress = getThing(solidDataset, VCARD.hasAddress) as Thing;
-  if (hasAddress === null) return Promise.reject(); // We reject the promise :(
-  hasAddress = buildThing(hasAddress)
-    .addUrl(VCARD.street_address, newAddressThing.url)
-    .build();
+  if (hasAddress === null)
+    // we create the thing as it has not been done before :(
+    hasAddress = buildThing(await getProfile(webId))
+      .addUrl(VCARD.hasAddress, newAddressThing.url)
+      .build();
+  else
+    hasAddress = buildThing(hasAddress)
+      .addUrl(VCARD.hasAddress, newAddressThing.url)
+      .build();
 
   solidDataset = setThing(solidDataset, newAddressThing);
   solidDataset = setThing(solidDataset, hasAddress);

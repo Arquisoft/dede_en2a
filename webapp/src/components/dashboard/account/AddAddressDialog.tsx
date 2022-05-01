@@ -49,6 +49,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
           "error",
           "An error ocurred saving the provided address. Nothing has been saved :("
         );
+        console.log(error);
         props.handleClose();
       }
     );
