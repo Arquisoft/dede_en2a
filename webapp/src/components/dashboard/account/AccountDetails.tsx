@@ -20,30 +20,16 @@ import { Address } from "../../../shared/shareddtypes";
 
 function MyAddresses(props: any) {
   const [loading, setLoading] = React.useState(false);
-  const [addresses] = React.useState<Array<Address>>([]);
+  const [addresses, setAddresses] = React.useState<Array<Address>>([]);
 
   React.useEffect(() => {
     setLoading(true);
     if (props.webId !== undefined && props.webId !== "")
       // If we have provided a valid WebID
       getAddressesFromPod(props.webId)
-        .then((elements) =>
-          elements.forEach((address) => {
-            let element = {
-              street: address.street,
-              postalCode: address.postalCode,
-              locality: address.locality,
-              region: address.region,
-              url: address.url,
-            };
-
-            // If the element to be inserted is not contained in the array
-            if (!addresses.some((e) => e.url === element.url))
-              addresses.push(element);
-          })
-        )
+        .then((elements) => setAddresses(elements))
         .finally(() => setLoading(false));
-  }, [props.webId]);
+  }, [props.webId, props.refreshComponent]);
 
   return (
     <React.Fragment>
@@ -128,6 +114,7 @@ function MyAddresses(props: any) {
 }
 
 export default function AccountDetails(props: any) {
+  const [refreshComponent, setRefreshComponent] = React.useState(false);
   const [address, setAddress] = React.useState<Address>({
     street: "",
     postalCode: "",
@@ -188,6 +175,7 @@ export default function AccountDetails(props: any) {
       <Paper sx={{ m: 2, p: 2 }}>
         <Stack direction="column">
           <MyAddresses
+            refreshComponent={refreshComponent}
             webId={props.webId}
             setAddress={setAddress}
             onClickAdd={handleClickOpenAddAddressDialog}
@@ -203,6 +191,9 @@ export default function AccountDetails(props: any) {
         handleOpen={handleClickOpenAddAddressDialog}
         handleClose={handleCloseAddAddressDialog}
         sendNotification={sendNotification}
+        setRefreshComponent={() =>
+          setRefreshComponent((prevValue) => !prevValue)
+        }
       />
 
       <EditAddressDialog
@@ -212,6 +203,9 @@ export default function AccountDetails(props: any) {
         handleOpen={handleClickOpenEditAddressDialog}
         handleClose={handleCloseEditAddressDialog}
         sendNotification={sendNotification}
+        setRefreshComponent={() =>
+          setRefreshComponent((prevValue) => !prevValue)
+        }
       />
 
       <RemoveAddressDialog
@@ -221,6 +215,9 @@ export default function AccountDetails(props: any) {
         handleOpen={handleClickOpenRemoveAddressDialog}
         handleClose={handleCloseRemoveAddressDialog}
         sendNotification={sendNotification}
+        setRefreshComponent={() =>
+          setRefreshComponent((prevValue) => !prevValue)
+        }
       />
 
       <NotificationAlert

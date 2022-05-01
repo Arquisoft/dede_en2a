@@ -21,6 +21,7 @@ type AddAddressDialogProps = {
   handleOpen: () => void;
   handleClose: () => void;
   sendNotification: (severity: AlertColor, message: string) => void;
+  setRefreshComponent: () => void;
 };
 
 export default function AddAddressDialog(props: AddAddressDialogProps) {
@@ -42,6 +43,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
           "success",
           "The provided address has been saved in your POD!"
         );
+        props.setRefreshComponent();
         props.handleClose(); // We close the dialog
       },
       (error) => {

@@ -23,6 +23,7 @@ type EditAddressDialogProps = {
   handleOpen: () => void;
   handleClose: () => void;
   sendNotification: (severity: AlertColor, message: string) => void;
+  setRefreshComponent: () => void;
 };
 
 export default function EditAddressDialog(props: EditAddressDialogProps) {
@@ -45,6 +46,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
           "success",
           "We have edited the address in your POD!"
         );
+        props.setRefreshComponent();
         props.handleClose(); // We close the dialog
       },
       (error) => {

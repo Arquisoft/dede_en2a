@@ -14,6 +14,7 @@ type RemoveAddressDialogProps = {
   handleOpen: () => void;
   handleClose: () => void;
   sendNotification: (severity: AlertColor, message: string) => void;
+  setRefreshComponent: () => void;
 };
 
 export default function RemoveAddressDialog(props: RemoveAddressDialogProps) {
@@ -30,6 +31,7 @@ export default function RemoveAddressDialog(props: RemoveAddressDialogProps) {
             "success",
             "The address has been removed from your POD!"
           );
+          props.setRefreshComponent();
           props.handleClose(); // We close the dialog
         },
         (error) => {

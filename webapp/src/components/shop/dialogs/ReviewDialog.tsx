@@ -60,8 +60,6 @@ export default function ReviewDialog(props: ReviewDialogProps) {
         // There is a review
         setRating(oldReviews[0].rating);
         setComment(oldReviews[0].comment);
-        console.log(comment);
-        console.log(oldReviews[0].comment);
         sendNotification("info", "Loaded old review for edition!");
       }
     };
