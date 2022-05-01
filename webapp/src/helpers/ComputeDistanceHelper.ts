@@ -1,5 +1,4 @@
 import { Address } from "../shared/shareddtypes";
-import axios, * as others from "axios";
 
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
 
@@ -21,9 +20,9 @@ export async function obtainShippingMethods(
     destAddress.locality +
     ", " +
     destAddress.region;
-  //let coords = await getCoordinatesFromAddress(stringAddress);
+  let coords = await getCoordinatesFromAddress(stringAddress);
   // We compute the total distance that the package has to travel
-  //let distance = await getDistanceDriving(coords);
+  let distance = await getDistanceDriving(coords);
 
   // We return the different shipping methods and the costs for each of them
   return [
@@ -57,6 +56,8 @@ export const getCoordinatesFromAddress = async (address: String) => {
 };
 
 export function calculateCoordinates(address: String) {
+  const axios = require("axios");
+
   return axios
     .get(
       "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
@@ -73,6 +74,8 @@ export function calculateCoordinates(address: String) {
 }
 
 function getDistanceDriving(destCoords: String) {
+  const axios = require("axios");
+
   return axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
@@ -88,6 +91,8 @@ function getDistanceDriving(destCoords: String) {
 }
 
 function getRouteImage(destCoords: String) {
+  const axios = require("axios");
+
   return axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
