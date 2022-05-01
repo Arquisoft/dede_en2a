@@ -56,7 +56,7 @@ export const getCoordinatesFromAddress = async (address: String) => {
   return lat + "," + lon; //e.g 36.23423,-5.23423
 };
 
-export function calculateCoordinates(address: String) {
+export async function calculateCoordinates(address: String) {
   return axios
     .get(
       "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
@@ -72,7 +72,7 @@ export function calculateCoordinates(address: String) {
     });
 }
 
-function getDistanceDriving(destCoords: String) {
+async function getDistanceDriving(destCoords: String) {
   return axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
@@ -87,7 +87,7 @@ function getDistanceDriving(destCoords: String) {
     });
 }
 
-function getRouteImage(destCoords: String) {
+async function getRouteImage(destCoords: String) {
   return axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
