@@ -314,6 +314,7 @@ test("A product is added correctly", async () => {
       target: { value: "Clothes" },
     });
   });
+
   //Fill in the product stock
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='stock']"), {
@@ -379,66 +380,4 @@ test("UploadPoduct component for updating a product renders correctly", () => {
 
   //Expect the submit button to be rendered
   expect(getByText("Submit")).toBeInTheDocument();
-});
-
-//Test for upload when a product is selected all the fields are filled correctly
-test("UploadPoduct component for updating a product is filled correctly", async () => {
-  let container: any;
-
-  await act(async () => {
-    container = render(
-      <UploadProduct
-        isForUpdate={true}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
-    ).container;
-  });
-
-  //Select the product
-  await act(async () => {
-    fireEvent.change(container.querySelector("input[name='selection']"), {
-      target: { value: "01" },
-    });
-  });
-
-  //Expect the product name to be filled
-  expect(container.querySelector("input[name='name']").value).toBe("testName");
-
-  //Expect the product description to be filled
-  expect(container.querySelector("input[name='description']").value).toBe(
-    "testDescription"
-  );
-
-  //Expect the product price to be filled
-  expect(container.querySelector("input[name='price']").value).toBe("10");
-
-  //Expect the product stock to be filled
-  expect(container.querySelector("input[name='stock']").value).toBe("10");
-
-  //Expect the product category to be filled
-  expect(container.querySelector("input[name='category']").value).toBe(
-    "Clothes"
-  );
-
-  //Expect the product weight to be filled
-  expect(container.querySelector("input[name='weight']").value).toBe("1");
-
-  //Mock the implementation for updateProduct
-  jest
-    .spyOn(api, "updateProduct")
-    .mockImplementation(
-      (webId: string, product: Product): Promise<boolean> =>
-        Promise.resolve(true)
-    );
-
-  //Click the submit button
-  await act(async () => {
-    fireEvent.click(screen.getByText("Submit"));
-  });
-
-  //Confirm message is rendered
-  expect(screen.getByText("Product updated correctly")).toBeInTheDocument();
 });
