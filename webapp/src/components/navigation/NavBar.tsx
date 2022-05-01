@@ -61,7 +61,7 @@ export default function NavBar(props: NavBarProps): JSX.Element {
         justifyContent="space-between"
         sx={{ px: 2, py: 1 }}
       >
-        <Stack direction="row" alignItems="center" spacing={0}>
+        <Stack direction="row" alignItems="center">
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <Drawer orientation="vertical" />
           </Box>
@@ -71,16 +71,20 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           </Box>
         </Stack>
 
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack direction="row" alignItems="center">
           <ThemeSlider
             onChange={props.toggleColorMode}
             checked={props.mode === "dark"}
           />
-          <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
-          <UserMenuButton
-            logCurrentUserOut={props.logCurrentUserOut}
-            webId={props.webId}
-          />
+          <Box sx={{ display: { xs: "none", mobile: "flex" } }}>
+            <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
+          </Box>
+          <Stack sx={{ ml: 1 }}>
+            <UserMenuButton
+              logCurrentUserOut={props.logCurrentUserOut}
+              webId={props.webId}
+            />
+          </Stack>
         </Stack>
       </Stack>
     </AppBar>

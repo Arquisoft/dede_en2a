@@ -48,6 +48,15 @@ import {
   logout,
 } from "@inrupt/solid-client-authn-browser";
 
+declare module "@mui/material/styles" {
+  interface BreakpointOverrides {
+    mobile: true; // adds the `mobile` breakpoint
+    tablet: true;
+    laptop: true;
+    desktop: true;
+  }
+}
+
 export default function App(): JSX.Element {
   // Some variables to perform calculations in an easier way
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -88,6 +97,19 @@ export default function App(): JSX.Element {
       createTheme({
         palette: {
           mode,
+        },
+        breakpoints: {
+          values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+            mobile: 330,
+            tablet: 640,
+            laptop: 1024,
+            desktop: 1200,
+          },
         },
       }),
     [mode]

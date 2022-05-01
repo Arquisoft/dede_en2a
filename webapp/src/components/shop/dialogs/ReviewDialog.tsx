@@ -1,25 +1,30 @@
 import * as React from "react";
+import { useEffect } from "react";
 
 import {
-  Divider,
-  TextField,
-  Rating,
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button,
+  Divider,
+  Rating,
+  TextField,
 } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 
 import {
-  Product,
   NotificationType,
+  Product,
   Review,
 } from "../../../shared/shareddtypes";
-import { addReview, getReviewsByCodeAndWebId } from "../../../api/api";
+import {
+  addReview,
+  getReviewsByCodeAndWebId,
+  modifyReview,
+} from "../../../api/api";
 
 import NotificationAlert from "../../misc/NotificationAlert";
 
@@ -31,6 +36,7 @@ type ReviewDialogProps = {
   open: boolean;
   handleOpen: () => void;
   handleClose: () => void;
+  handleConfirm: () => void;
 };
 
 export default function ReviewDialog(props: ReviewDialogProps) {
@@ -42,6 +48,27 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     severity: "success",
     message: "",
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const oldReviews: Review[] = await getReviewsByCodeAndWebId(
+        props.product.code,
+        props.webId
+      );
+
+      if (oldReviews.length > 0) {
+        // There is a review
+        setRating(oldReviews[0].rating);
+        setComment(oldReviews[0].comment);
+        console.log(comment);
+        console.log(oldReviews[0].comment);
+        sendNotification("info", "Loaded old review for edition!");
+      }
+    };
+    if (props.open) {
+      fetchData();
+    }
+  }, [props.open]);
 
   function sendNotification(severity: AlertColor, message: string) {
     setNotificationStatus(true);
@@ -65,15 +92,6 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     if (props.webId === "") {
       sendNotification("error", "You must log in first!");
     } else {
-      let reviews = await getReviewsByCodeAndWebId(
-        props.product.code,
-        props.webId
-      );
-
-      // In case the user has reviewed this product
-      if (reviews.length > 0)
-        sendNotification("error", "You have already reviewed this product!");
-
       // We create the review
       let createdReview: Review = {
         rating: rating,
@@ -82,10 +100,31 @@ export default function ReviewDialog(props: ReviewDialogProps) {
         productCode: props.product.code,
       };
 
-      if (await addReview(createdReview))
-        sendNotification("success", "Review added correctly!");
-      else
-        sendNotification("error", "There was an error creating your review!");
+      let reviews = await getReviewsByCodeAndWebId(
+        props.product.code,
+        props.webId
+      );
+
+      // In case the user has reviewed this product
+      if (reviews.length > 0) {
+        reviews[0].rating = createdReview.rating;
+        reviews[0].comment = createdReview.comment;
+
+        if (await modifyReview(createdReview)) {
+          sendNotification("success", "Review modified correctly!");
+          props.handleConfirm();
+        } else
+          sendNotification(
+            "error",
+            "There was an error modifying your review!"
+          );
+      } else {
+        if (await addReview(createdReview)) {
+          sendNotification("success", "Review added correctly!");
+          props.handleConfirm();
+        } else
+          sendNotification("error", "There was an error creating your review!");
+      }
     }
   };
 
@@ -117,6 +156,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             label="Comment"
             multiline
             variant="outlined"
+            value={comment}
             onChange={(event) => {
               setComment(event.target.value);
             }}

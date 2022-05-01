@@ -28,6 +28,7 @@ export default function ProductComment(
             direction="row"
             alignItems="center"
             justifyContent="space-between"
+            flexWrap="wrap"
           >
             <Typography variant="h6">{name}</Typography>
 

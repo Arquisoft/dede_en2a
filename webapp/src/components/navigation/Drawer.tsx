@@ -31,7 +31,6 @@ export default function Drawer(props: any) {
         color="inherit"
         aria-label="menu"
         onClick={toggleDrawer(true)}
-        sx={{ mr: 2 }}
       >
         <MenuIcon />
       </IconButton>
