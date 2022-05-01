@@ -1,5 +1,5 @@
 import { fireEvent, render } from "@testing-library/react";
-import ProductDetails from "../../components/products/ProductDetails";
+import ProductDetails from "../../components/shop/products/ProductDetails";
 import { Product } from "../../shared/shareddtypes";
 
 //Test that the product details page renders correctly

@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import ProductList from "../../components/products/ProductList";
+import ProductList from "../../components/shop/products/ProductList";
 import { Product } from "../../shared/shareddtypes";
 
 test("A list of products is rendered", async () => {

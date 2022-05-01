@@ -34,7 +34,7 @@ export default function Hero() {
             color="white"
             gutterBottom
           >
-            Welcome to DeDe
+            Welcome to DEDE
           </Typography>
           <Typography variant="h5" align="center" color="white" paragraph>
             We are creating an app for you to order the products you want - as

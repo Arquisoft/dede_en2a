@@ -1,6 +1,6 @@
 import { Grid, Paper, Typography } from "@mui/material";
 
-import { Review } from "../../shared/shareddtypes";
+import { Review } from "../../../shared/shareddtypes";
 
 import ProductComment from "./ProductComment";
 
@@ -17,7 +17,7 @@ export default function ProductCommentList(
         User opinions about this product!
       </Typography>
       {props.reviews.length > 0 && (
-        <Grid container rowSpacing={5}>
+        <Grid container spacing={3}>
           {props.reviews.map((review: Review) => (
             <Grid
               item

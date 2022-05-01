@@ -1,5 +1,5 @@
 import { fireEvent, render } from "@testing-library/react";
-import StockAlert from "../components/products/StockAlert";
+import StockAlert from "../components/shop/misc/StockAlert";
 
 test("Stock available > 10 is rendered correctly", async () => {
   const { getByText, container } = render(<StockAlert stock={50} amount={0} />);

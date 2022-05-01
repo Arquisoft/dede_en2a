@@ -42,7 +42,8 @@ export default function ShippingAddress(props: any): JSX.Element {
         ) =>
           response.forEach((address) => {
             // foreach address we check if it has already been stored
-            if (!addresses.includes(address)) addresses.push(address); // in case it's not repeated => store it
+            if (!addresses.some((e) => e.street === address.street))
+              addresses.push(address); // in case it's not repeated => store it
           })
       )
       .finally(() => setLoadingItem(false)); // loading process must be finished
@@ -73,7 +74,7 @@ export default function ShippingAddress(props: any): JSX.Element {
         }
       })
       .finally(() => setLoadingPage(false)); // loading process must be finished
-  }, []);
+  }, [props.webId]);
 
   return (
     <React.Fragment>

@@ -1,6 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import ProductBox from "../../components/products/ProductBox";
+import ProductBox from "../../components/shop/products/ProductBox";
 import { CartItem, Product } from "../../shared/shareddtypes";
 
 test("A product is rendered", async () => {

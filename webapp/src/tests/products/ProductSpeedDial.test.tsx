@@ -1,76 +1,84 @@
 import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import ProductSpeedDial from "../../components/products/ProductSpeedDial";
-
+import ProductSpeedDial from "../../components/shop/misc/ProductSpeedDial";
 
 const empty = () => {};
 
 test("The dial is rendered", async () => {
+  const { container } = render(
+    <Router>
+      <ProductSpeedDial addToCart={empty} review={empty} share={empty} />
+    </Router>
+  );
 
-    const { container } = render(
-        <Router>
-            <ProductSpeedDial addToCart={empty} review={empty} share={empty}/>
-        </Router>
-    );
+  let addButton = container.querySelector(
+    "[aria-label='Add to Shopping Cart']"
+  );
+  expect(addButton).toBeInTheDocument();
 
-    let addButton = container.querySelector("[aria-label='Add to Shopping Cart']");
-    expect(addButton).toBeInTheDocument();
+  let reviewButton = container.querySelector("[aria-label='Review item']");
+  expect(reviewButton).toBeInTheDocument();
 
-    let reviewButton = container.querySelector("[aria-label='Review item']");
-    expect(reviewButton).toBeInTheDocument();
-
-    let shareButton = container.querySelector("[aria-label='Share']");
-    expect(shareButton).toBeInTheDocument();
-
+  let shareButton = container.querySelector("[aria-label='Share']");
+  expect(shareButton).toBeInTheDocument();
 });
 
 test("The Add Button Works", async () => {
+  let works = false;
+  const buttonTest = () => {
+    works = true;
+  };
 
-    let works = false;
-    const buttonTest = () => {works = true;};
+  const { container } = render(
+    <Router>
+      <ProductSpeedDial addToCart={buttonTest} review={empty} share={empty} />
+    </Router>
+  );
 
-    const { container } = render(
-        <Router>
-            <ProductSpeedDial addToCart={buttonTest} review={empty} share={empty}/>
-        </Router>
-    );
+  let addButton = container.querySelector(
+    "[aria-label='Add to Shopping Cart']"
+  ) as HTMLElement;
+  fireEvent.click(addButton);
 
-    let addButton = container.querySelector("[aria-label='Add to Shopping Cart']") as HTMLElement;
-    fireEvent.click(addButton);
-
-    expect(works).toBe(true);
+  expect(works).toBe(true);
 });
 
 test("The Review Button Works", async () => {
+  let works = false;
+  const buttonTest = () => {
+    works = true;
+  };
 
-    let works = false;
-    const buttonTest = () => {works = true;};
+  const { container } = render(
+    <Router>
+      <ProductSpeedDial addToCart={empty} review={buttonTest} share={empty} />
+    </Router>
+  );
 
-    const { container } = render(
-        <Router>
-            <ProductSpeedDial addToCart={empty} review={buttonTest} share={empty}/>
-        </Router>
-    );
+  let addButton = container.querySelector(
+    "[aria-label='Review item']"
+  ) as HTMLElement;
+  fireEvent.click(addButton);
 
-    let addButton = container.querySelector("[aria-label='Review item']") as HTMLElement;
-    fireEvent.click(addButton);
-
-    expect(works).toBe(true);
+  expect(works).toBe(true);
 });
 
 test("The Share Button Works", async () => {
+  let works = false;
+  const buttonTest = () => {
+    works = true;
+  };
 
-    let works = false;
-    const buttonTest = () => {works = true;};
+  const { container } = render(
+    <Router>
+      <ProductSpeedDial addToCart={empty} review={empty} share={buttonTest} />
+    </Router>
+  );
 
-    const {container} = render(
-        <Router>
-            <ProductSpeedDial addToCart={empty} review={empty} share={buttonTest}/>
-        </Router>
-    );
+  let addButton = container.querySelector(
+    "[aria-label='Share']"
+  ) as HTMLElement;
+  fireEvent.click(addButton);
 
-    let addButton = container.querySelector("[aria-label='Share']") as HTMLElement;
-    fireEvent.click(addButton);
-
-    expect(works).toBe(true);
+  expect(works).toBe(true);
 });
