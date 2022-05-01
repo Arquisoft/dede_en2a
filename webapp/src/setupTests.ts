@@ -3,10 +3,12 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
-import * as computeDistanceHelper from "./helpers/ComputeDistanceHelper";
+import * as ShippingMethodHelper from "./helpers/ShippingMethodHelper";
 window.URL.createObjectURL = jest.fn();
 jest
-  .spyOn(computeDistanceHelper, "getCoordinatesFromAddress")
-  .mockImplementation((destAddress: String) => {
-    return Promise.resolve("36.23423,-5.23423");
-  });
+  .spyOn(ShippingMethodHelper, "getPickUpPlacesNearby")
+  .mockImplementation(
+    (address: String, radiusMeters: number, maxResults: number) => {
+      return Promise.resolve([]);
+    }
+  );
