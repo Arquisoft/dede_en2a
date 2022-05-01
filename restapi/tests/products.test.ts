@@ -197,47 +197,19 @@ describe("prodcuts", () => {
   /*
    Testing filtering and ordering products
    */
-  it("Can filter by category", async () => {
+  it("Can order by price ascendant", async () => {
     const response: Response = await request(app)
-      .get("/products/filter&order/Electronics&A")
-      .send();
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ category: "Electronics" }),
-      ])
-    );
-  });
-
-  it("Can filter by category and order by price", async () => {
-    const response: Response = await request(app)
-      .get("/products/filter&order/Electronics&asc")
-      .send();
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ category: "Electronics" }),
-      ])
-    );
-    expect(response.body[0].price).toBe(20.99);
-  });
-
-  it("Can order by price", async () => {
-    const response: Response = await request(app)
-      .get("/products/filter&order/Category&asc")
+      .get("/products/sort/asc")
       .send();
     expect(response.statusCode).toBe(200);
     expect(response.body[0].price).toBe(1.99);
   });
 
-  it("Check normal order when 'wrong' input", async () => {
+  it("Can order by price descendant", async () => {
     const response: Response = await request(app)
-      .get("/products/filter&order/a&a")
+      .get("/products/sort/desc")
       .send();
     expect(response.statusCode).toBe(200);
-    expect(response.body[0].price).toBe(9.5);
-    expect(response.body[0].code).toBe("1");
-    expect(response.body[1].price).toBe(33.99);
-    expect(response.body[1].code).toBe("2");
+    expect(response.body[0].price).toBe(33.99);
   });
 });
