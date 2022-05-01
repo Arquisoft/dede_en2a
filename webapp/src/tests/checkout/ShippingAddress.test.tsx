@@ -3,6 +3,7 @@ import ShippingAddress from "../../components/checkout/ShippingAddress";
 import * as solidHelper from "../../helpers/SolidHelper";
 import * as api from "../../api/api";
 import { User, Address } from "../../shared/shareddtypes";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const testsAddresses: Address[] = [
   {
@@ -39,12 +40,14 @@ test("ShippingAddress renders correctly", async () => {
   //Render the component with await act
   await act(async () => {
     getByText = render(
-      <ShippingAddress
-        address={{}}
-        setAddress={() => {}}
-        webId={user.webId}
-        handleNext={handleNext}
-      />
+      <Router>
+        <ShippingAddress
+          address={{}}
+          setAddress={() => {}}
+          webId={user.webId}
+          handleNext={handleNext}
+        />
+      </Router>
     ).getByText;
   });
 
