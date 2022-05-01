@@ -2,7 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 import {
   Button,
-  Container, Divider, Paper, Stack, Typography
+  Container,
+  Divider,
+  Paper,
+  Stack,
+  Typography,
 } from "@mui/material";
 
 import FeaturedProducts from "../home/FeaturedProducts";
@@ -48,9 +52,15 @@ export default function ShoppingCart(props: ShoppingCartProps): JSX.Element {
 
             <Button
               variant="contained"
-              disabled={props.productsInCart.length === 0 || props.webId === ""}
-              onClick={() => navigate("/checkout")}
-              className="m-1"
+              disabled={
+                props.productsInCart.length === 0 ||
+                props.webId === "" ||
+                props.webId === undefined
+              }
+              onClick={() => {
+                navigate("/checkout");
+              }}
+              sx={{ m: 1 }}
             >
               Proceed to checkout
             </Button>
