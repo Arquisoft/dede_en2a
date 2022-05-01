@@ -33,10 +33,11 @@ function MyAddresses(props: any) {
               postalCode: address.postalCode,
               locality: address.locality,
               region: address.region,
+              url: address.url,
             };
 
             // If the element to be inserted is not contained in the array
-            if (!addresses.some((e) => e.street === element.street))
+            if (!addresses.some((e) => e.url === element.url))
               addresses.push(element);
           })
         )
@@ -71,7 +72,7 @@ function MyAddresses(props: any) {
               </Paper>
             </Grid>
             {addresses.map((address) => (
-              <Grid item xs={6} md={4} key={address.street}>
+              <Grid item xs={6} md={4} key={address.url}>
                 <Paper variant="outlined">
                   <Stack
                     direction="column"
@@ -186,6 +187,7 @@ export default function AccountDetails(props: any) {
 
       <EditAddressDialog
         open={editAddressDialog}
+        webId={props.webId}
         addressToEdit={address}
         handleOpen={handleClickOpenEditAddressDialog}
         handleClose={handleCloseEditAddressDialog}

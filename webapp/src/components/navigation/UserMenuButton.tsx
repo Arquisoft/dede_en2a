@@ -120,7 +120,7 @@ export default function UserMenuButton(props: any): JSX.Element {
   else
     return (
       <Link to="/sign-in" style={{ textDecoration: "none" }}>
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" sx={{ pl: 1 }}>
           Sign-In
         </Button>
       </Link>

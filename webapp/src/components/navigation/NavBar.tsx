@@ -79,12 +79,10 @@ export default function NavBar(props: NavBarProps): JSX.Element {
           <Box sx={{ display: { xs: "none", mobile: "flex" } }}>
             <ShoppingCartButton totalUnitsInCart={props.totalUnitsInCart} />
           </Box>
-          <Stack sx={{ ml: 1 }}>
-            <UserMenuButton
-              logCurrentUserOut={props.logCurrentUserOut}
-              webId={props.webId}
-            />
-          </Stack>
+          <UserMenuButton
+            logCurrentUserOut={props.logCurrentUserOut}
+            webId={props.webId}
+          />
         </Stack>
       </Stack>
     </AppBar>

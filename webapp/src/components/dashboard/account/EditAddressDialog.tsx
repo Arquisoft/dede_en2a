@@ -14,9 +14,11 @@ import { AlertColor } from "@mui/material/Alert";
 import SendIcon from "@mui/icons-material/Send";
 
 import { Address } from "../../../shared/shareddtypes";
+import { editAddressFromPod } from "../../../helpers/SolidHelper";
 
 type EditAddressDialogProps = {
   open: boolean;
+  webId: string;
   addressToEdit: Address;
   handleOpen: () => void;
   handleClose: () => void;
@@ -30,7 +32,37 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
   const [region, setRegion] = React.useState("");
   const [country, setCountry] = React.useState("");
 
-  const handleConfirm = async () => {};
+  const handleConfirm = async () => {
+    editAddressFromPod(props.webId, {
+      street: streetAddress,
+      locality: city,
+      postalCode: postalCode.toString(),
+      region: region,
+      url: props.addressToEdit.url,
+    }).then(
+      (e) => {
+        props.sendNotification(
+          "success",
+          "We have edited the address in your POD!"
+        );
+        props.handleClose(); // We close the dialog
+      },
+      (error) => {
+        props.sendNotification(
+          "error",
+          "An error ocurred editing the address. Nothing has been saved :("
+        );
+        props.handleClose();
+      }
+    );
+  };
+
+  React.useEffect(() => {
+    setStreetAddress(props.addressToEdit.street);
+    setCity(props.addressToEdit.locality);
+    setPostalCode(Number(props.addressToEdit.postalCode));
+    setRegion(props.addressToEdit.region);
+  }, [props.addressToEdit]);
 
   return (
     <React.Fragment>
@@ -45,9 +77,8 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
           </DialogContentText>
 
           <TextField
-            autoFocus
+            value={streetAddress}
             label="Street address"
-            defaultValue={props.addressToEdit.street}
             variant="outlined"
             onChange={(event) => {
               setStreetAddress(event.target.value);
@@ -62,7 +93,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
             sx={{ my: 1 }}
           >
             <TextField
-              defaultValue={props.addressToEdit.locality}
+              value={city}
               label="City"
               variant="outlined"
               onChange={(event) => {
@@ -72,7 +103,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
             />
 
             <TextField
-              defaultValue={props.addressToEdit.postalCode}
+              value={postalCode}
               label="Postal Code"
               variant="outlined"
               onChange={(event) => {
@@ -89,7 +120,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
             sx={{ my: 1 }}
           >
             <TextField
-              defaultValue={props.addressToEdit.region}
+              value={region}
               label="Region"
               variant="outlined"
               onChange={(event) => {
@@ -99,6 +130,8 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
             />
 
             <TextField
+              autoFocus
+              value={country}
               label="Country"
               variant="outlined"
               onChange={(event) => {

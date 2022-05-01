@@ -69,6 +69,7 @@ export async function getAddressesFromPod(webId: string): Promise<Address[]> {
         postalCode: postal_code,
         locality: locality,
         region: region,
+        url: addressURL,
       });
   }
 
@@ -111,5 +112,26 @@ export async function addAddressToPod(webId: string, address: Address) {
 }
 
 export async function editAddressFromPod(webId: string, address: Address) {
-  let addressThingToModify = await getProfile(webId);
+  if (address.url === undefined) return Promise.reject(); // No URL has been provided
+
+  let profileDocumentURI = webId.split("#")[0]; // we remove the right hand side of the # for consistency
+  let solidDataset = await getSolidDataset(profileDocumentURI); // obtain the dataset from the URI
+
+  // We obtain the address from the POD
+  let addressToEditThing = getThing(solidDataset, address.url) as Thing;
+
+  // In case nothing has been retrieved :(
+  if (addressToEditThing === null) return Promise.reject();
+
+  // We modify the address in the POD
+  addressToEditThing = buildThing(addressToEditThing)
+    .setStringNoLocale(VCARD.street_address, address.street)
+    .setStringNoLocale(VCARD.locality, address.locality)
+    .setStringNoLocale(VCARD.region, address.region)
+    .setStringNoLocale(VCARD.postal_code, address.postalCode)
+    .build();
+
+  solidDataset = setThing(solidDataset, addressToEditThing);
+
+  return await saveSolidDatasetAt(webId, solidDataset, { fetch: fetch });
 }
