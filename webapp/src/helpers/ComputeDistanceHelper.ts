@@ -57,13 +57,13 @@ export const getCoordinatesFromAddress = async (address: String) => {
 };
 
 export async function calculateCoordinates(address: String) {
-  return await axios
-    .get(
-      "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-        address +
-        ".json?access_token=" +
-        process.env.REACT_APP_MAPBOX_KEY
-    )
+  const url =
+    "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
+    address +
+    ".json?access_token=" +
+    process.env.REACT_APP_MAPBOX_KEY;
+
+  return await fetch(url, { method: "GET" })
     .then((response: any) => {
       return response.data;
     })
