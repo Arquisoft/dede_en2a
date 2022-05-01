@@ -52,7 +52,6 @@ test("DeleteProduct renders correctly", () => {
   expect(getByText("Delete")).toBeInTheDocument();
 });
 
-/*
 //Test that the form is filled when a product is selected
 test("DeleteProduct form is filled when a product is selected", async () => {
   let container: any;
@@ -74,6 +73,9 @@ test("DeleteProduct form is filled when a product is selected", async () => {
       target: { value: "01" },
     });
   });
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
 
   //Check that the form is filled correctly
   expect(container.querySelector("input[name='code']").value).toBe("01");
@@ -87,7 +89,7 @@ test("DeleteProduct form is filled when a product is selected", async () => {
   expect(container.querySelector("input[name='category']").value).toBe(
     "Clothes"
   );
-});*/
+});
 
 //Test when the delete button is clicked and no product is selected the notification is shown
 test("DeleteProduct notification is shown when no product is selected", async () => {
@@ -113,7 +115,6 @@ test("DeleteProduct notification is shown when no product is selected", async ()
   expect(screen.getByText("Select a product to delete"));
 });
 
-/*
 //Test the error when trying to delete a product.
 test("DeleteProduct error is shown when trying to delete a product", async () => {
   let container: any;
@@ -136,6 +137,10 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
     });
   });
 
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
+
   //Mock the implementation of the deleteProduct function
   jest
     .spyOn(api, "deleteProduct")
@@ -150,9 +155,8 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
 
   //Check that the error is shown
   expect(screen.getByText("There was a problem while deleting"));
-});*/
+});
 
-/*
 //Test the success when trying to delete a product.
 test("DeleteProduct success is shown when trying to delete a product", async () => {
   let container: any;
@@ -175,6 +179,10 @@ test("DeleteProduct success is shown when trying to delete a product", async () 
     });
   });
 
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
+
   //Mock the implementation of the deleteProduct function
   jest
     .spyOn(api, "deleteProduct")
@@ -189,4 +197,4 @@ test("DeleteProduct success is shown when trying to delete a product", async () 
 
   //Check that the success is shown
   expect(screen.getByText("Product deleted correctly"));
-});*/
+});
