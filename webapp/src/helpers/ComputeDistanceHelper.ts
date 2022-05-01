@@ -20,9 +20,9 @@ export async function obtainShippingMethods(
     destAddress.locality +
     ", " +
     destAddress.region;
-  let coords = await getCoordinatesFromAddress(stringAddress);
+  //let coords = await getCoordinatesFromAddress(stringAddress);
   // We compute the total distance that the package has to travel
-  let distance = await getDistanceDriving(coords);
+  //let distance = await getDistanceDriving(coords);
 
   // We return the different shipping methods and the costs for each of them
   return [
