@@ -57,39 +57,34 @@ function FeaturedProduct(props: any) {
   let navigate = useNavigate();
 
   return (
-    <React.Fragment>
-      <Card>
-        <CardHeader
-          title={props.tier.title}
-          subheader={props.tier.subheader}
-          titleTypographyProps={{ align: "center" }}
-          subheaderTypographyProps={{
-            align: "center",
-          }}
-          action={
-            props.tier.title === "AMONG US™ T-shirt" ? <StarIcon /> : null
-          }
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[200]
-                : theme.palette.grey[700],
-          }}
+    <Card>
+      <CardHeader
+        title={props.tier.title}
+        subheader={props.tier.subheader}
+        titleTypographyProps={{ align: "center" }}
+        subheaderTypographyProps={{
+          align: "center",
+        }}
+        action={props.tier.title === "AMONG US™ T-shirt" ? <StarIcon /> : null}
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.grey[200]
+              : theme.palette.grey[700],
+        }}
+      />
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="250"
+          width="100%"
+          alt="Image of the product"
+          src={checkImageExists(props.tier.image)}
+          onClick={() => navigate("/product/" + props.tier.code)}
+          sx={{ m: 0, p: 0, objectFit: "cover" }}
         />
-        <CardActionArea>
-          <CardMedia
-            data-testid={"product" + props.tier.code}
-            component="img"
-            height="250"
-            width="100%"
-            alt="Image of the product"
-            src={checkImageExists(props.tier.image)}
-            onClick={() => navigate("/product/" + props.tier.code)}
-            sx={{ m: 0, p: 0, objectFit: "cover" }}
-          />
-        </CardActionArea>
-      </Card>
-    </React.Fragment>
+      </CardActionArea>
+    </Card>
   );
 }
 

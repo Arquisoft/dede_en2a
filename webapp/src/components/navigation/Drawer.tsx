@@ -31,7 +31,6 @@ export default function Drawer(props: any) {
         color="inherit"
         aria-label="menu"
         onClick={toggleDrawer(true)}
-        sx={{ mr: 2 }}
       >
         <MenuIcon />
       </IconButton>
@@ -48,6 +47,7 @@ export default function Drawer(props: any) {
             direction="column"
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
+            sx={{ p: 3 }}
           >
             <NavMenu orientation={props.orientation} color="text.primary" />
           </Grid>

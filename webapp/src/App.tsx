@@ -2,8 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import {
-  createTheme, CssBaseline,
-  ThemeProvider, useMediaQuery
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  useMediaQuery,
 } from "@mui/material";
 import { AlertColor } from "@mui/material/Alert";
 
@@ -21,16 +23,17 @@ import Home from "./components/home/Home";
 import DedeApp from "./components/MainOutlet";
 import NotificationAlert from "./components/misc/NotificationAlert";
 import NavBar from "./components/navigation/NavBar";
-import ProductDetails from "./components/products/ProductDetails";
+import ProductDetails from "./components/shop/products/ProductDetails";
 import RedirectHome from "./components/RedirectHome";
-import Shop from "./components/Shop";
+import Shop from "./components/shop/Shop";
 import SignIn from "./components/userManagement/SignIn";
+import AuthWrapper from "./components/AuthWrapper";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
 import {
   addProductToCart,
-  removeProductFromCart
+  removeProductFromCart,
 } from "./helpers/ShoppingCartHelper";
 import { getNameFromPod } from "./helpers/SolidHelper";
 
@@ -42,8 +45,17 @@ import "./App.css";
 
 import {
   handleIncomingRedirect,
-  logout
+  logout,
 } from "@inrupt/solid-client-authn-browser";
+
+declare module "@mui/material/styles" {
+  interface BreakpointOverrides {
+    mobile: true; // adds the `mobile` breakpoint
+    tablet: true;
+    laptop: true;
+    desktop: true;
+  }
+}
 
 export default function App(): JSX.Element {
   // Some variables to perform calculations in an easier way
@@ -86,6 +98,19 @@ export default function App(): JSX.Element {
         palette: {
           mode,
         },
+        breakpoints: {
+          values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+            mobile: 330,
+            tablet: 640,
+            laptop: 1024,
+            desktop: 1200,
+          },
+        },
       }),
     [mode]
   );
@@ -98,7 +123,7 @@ export default function App(): JSX.Element {
       setProductsInCart,
       setTotalUnitsInCart
     );
-    sendNotification("success", "Product added to the cart")
+    sendNotification("success", "Product added to the cart");
   };
 
   const removeFromCart = (product: Product) => {
@@ -140,7 +165,7 @@ export default function App(): JSX.Element {
   };
 
   React.useEffect(() => {
-    refreshShop()
+    refreshShop();
     // We establish the stored color mode as the active one: if the user reloads we have to remember the preferences
     if (localStorage.getItem("mode") === null)
       localStorage.setItem("mode", mode);
@@ -209,117 +234,119 @@ export default function App(): JSX.Element {
             toggleColorMode={toggleColorMode}
             webId={webId}
           />
-          <Routes>
-            <Route path="/" element={<DedeApp />}>
-              <Route index element={<Home />} />
-              <Route
-                path="shop"
-                element={
-                  <Shop
-                    products={products}
-                    productsInCart={productsInCart}
-                    refreshShop={refreshShop}
-                    addToCart={addToCart}
-                  />
-                }
-              />
-              <Route
-                path="cart"
-                element={
-                  <ShoppingCart
-                    productsInCart={productsInCart}
-                    totalUnitsInCart={totalUnitsInCart}
-                    addToCart={addToCart}
-                    removeFromCart={removeFromCart}
-                    webId={webId}
-                  />
-                }
-              />
-              <Route
-                path="checkout"
-                element={
-                  <Checkout
-                    productsInCart={productsInCart}
-                    handleDeleteCart={handleDeleteCart}
-                    webId={webId}
-                    sendNotification={sendNotification}
-                  />
-                }
-              />
-              <Route path="sign-in" element={<SignIn webId={webId} />} />
-              <Route
-                path="product/:id"
-                element={
-                  <ProductDetails
-                    product={null as any}
-                    addToCart={addToCart}
-                    webId={webId}
-                  />
-                }
-              />
-            </Route>
-            <Route path="dashboard" element={<DashboardOutlet role={role} />}>
-              <Route
-                index
-                element={<DashboardContent webId={webId} role={role} />}
-              />
-              <Route
-                path="account"
-                element={<AccountDetails webId={webId} />}
-              />
-              <Route
-                path="orders"
-                element={<OrderList webId={webId} role={"user"} />}
-              />
-              <Route
-                path="order/:code"
-                element={<OrderDetails webId={webId} />}
-              />
-              <Route path="products" element={<ProductList role={role} />} />
-              <Route
-                path="products/add"
-                element={
-                  <UploadProduct
-                    refreshShop={refreshShop}
-                    isForUpdate={false}
-                    products={products}
-                    webId={webId}
-                    role={role}
-                  />
-                }
-              />
-              <Route
-                path="products/delete"
-                element={
-                  <DeleteProduct
-                    products={products}
-                    refreshShop={refreshShop}
-                    webId={webId}
-                    role={role}
-                  />
-                }
-              />
-              <Route
-                path="products/update"
-                element={
-                  <UploadProduct
-                    refreshShop={refreshShop}
-                    isForUpdate={true}
-                    products={products}
-                    webId={webId}
-                    role={role}
-                  />
-                }
-              />
-            </Route>
-            <Route path="*" element={<RedirectHome />}></Route>
-          </Routes>
+          <AuthWrapper>
+            <Routes>
+              <Route path="/" element={<DedeApp />}>
+                <Route index element={<Home />} />
+                <Route
+                  path="shop"
+                  element={
+                    <Shop
+                      products={products}
+                      productsInCart={productsInCart}
+                      refreshShop={refreshShop}
+                      addToCart={addToCart}
+                    />
+                  }
+                />
+                <Route
+                  path="cart"
+                  element={
+                    <ShoppingCart
+                      productsInCart={productsInCart}
+                      totalUnitsInCart={totalUnitsInCart}
+                      addToCart={addToCart}
+                      removeFromCart={removeFromCart}
+                      webId={webId}
+                    />
+                  }
+                />
+                <Route
+                  path="checkout"
+                  element={
+                    <Checkout
+                      productsInCart={productsInCart}
+                      handleDeleteCart={handleDeleteCart}
+                      webId={webId}
+                      sendNotification={sendNotification}
+                    />
+                  }
+                />
+                <Route path="sign-in" element={<SignIn webId={webId} />} />
+                <Route
+                  path="product/:id"
+                  element={
+                    <ProductDetails
+                      product={null as any}
+                      addToCart={addToCart}
+                      webId={webId}
+                    />
+                  }
+                />
+              </Route>
+              <Route path="dashboard" element={<DashboardOutlet role={role} />}>
+                <Route
+                  index
+                  element={<DashboardContent webId={webId} role={role} />}
+                />
+                <Route
+                  path="account"
+                  element={<AccountDetails webId={webId} />}
+                />
+                <Route
+                  path="orders"
+                  element={<OrderList webId={webId} role={"user"} />}
+                />
+                <Route
+                  path="order/:code"
+                  element={<OrderDetails webId={webId} />}
+                />
+                <Route path="products" element={<ProductList role={role} />} />
+                <Route
+                  path="products/add"
+                  element={
+                    <UploadProduct
+                      refreshShop={refreshShop}
+                      isForUpdate={false}
+                      products={products}
+                      webId={webId}
+                      role={role}
+                    />
+                  }
+                />
+                <Route
+                  path="products/delete"
+                  element={
+                    <DeleteProduct
+                      products={products}
+                      refreshShop={refreshShop}
+                      webId={webId}
+                      role={role}
+                    />
+                  }
+                />
+                <Route
+                  path="products/update"
+                  element={
+                    <UploadProduct
+                      refreshShop={refreshShop}
+                      isForUpdate={true}
+                      products={products}
+                      webId={webId}
+                      role={role}
+                    />
+                  }
+                />
+              </Route>
+              <Route path="*" element={<RedirectHome />}></Route>
+            </Routes>
 
-          <NotificationAlert
-            notification={notification}
-            notificationStatus={notificationStatus}
-            setNotificationStatus={setNotificationStatus}
-          />
+            <NotificationAlert
+              notification={notification}
+              notificationStatus={notificationStatus}
+              setNotificationStatus={setNotificationStatus}
+            />
+          </AuthWrapper>
         </Router>
       </PayPalScriptProvider>
     </ThemeProvider>

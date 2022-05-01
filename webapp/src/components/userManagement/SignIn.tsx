@@ -22,13 +22,13 @@ export default function SignIn(props: any) {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // The default behaviour of the button is to resubmit.
+    // The default behavior of the button is to resubmit.
     // This prevents the page from reloading.
     e.preventDefault();
     // Login will redirect the user away so that they can log in the OIDC issuer,
     // and back to the provided redirect URL (which should be controlled by your app).
     login({
-      redirectUrl: window.location.origin, // we redirect to the home page
+      redirectUrl: window.location.href, // we redirect to the actual page
       oidcIssuer: identityProvider,
       clientName: "DEDE - Decentralized Delivery",
     });

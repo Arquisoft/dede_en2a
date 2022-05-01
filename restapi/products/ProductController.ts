@@ -81,30 +81,6 @@ export const updateProduct: RequestHandler = async (req, res) => {
   }
 };
 
-export const filterAndOrderBy: RequestHandler = async (req, res) => {
-  let mode = req.params.mode;
-  const category = req.params.category;
-  let products;
-
-  if (
-    category !== "Clothes" &&
-    category !== "Decoration" &&
-    category !== "Electronics" &&
-    category !== "Miscellaneous"
-  ) {
-    if (mode !== "asc" && mode !== "desc") {
-      products = await productModel.find();
-    } else {
-      products = await productModel.find().sort({ price: mode });
-    }
-  } else {
-    if (mode !== "asc" && mode !== "desc") {
-      products = await productModel.find({ category: category });
-    } else {
-      products = await productModel
-        .find({ category: category })
-        .sort({ price: mode });
-    }
-  }
-  return res.json(products);
+export const sortProducts: RequestHandler = async (req, res) => {
+  return res.json(await productModel.find().sort({ price: req.params.mode }));
 };

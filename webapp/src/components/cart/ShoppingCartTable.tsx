@@ -110,7 +110,7 @@ function ShoppingCart(props: ShoppingCartProps): JSX.Element {
             </TableBody>
           </Table>
         </TableContainer>
-        <Typography variant="h6" className="m-2">
+        <Typography variant="h6" align="right" sx={{ mt: 1 }}>
           Total Price -{" "}
           {
             calculateTotal(props.productsInCart, 0) // There are no shipping costs yet here

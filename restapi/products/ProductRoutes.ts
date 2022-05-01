@@ -8,10 +8,7 @@ api.get("/products", ProductController.getProducts);
 
 api.get("/products/listByCode/:code", ProductController.getProduct);
 
-api.get(
-  "/products/filter&order/:category&:mode",
-  ProductController.filterAndOrderBy
-);
+api.get("/products/sort/:mode", ProductController.sortProducts);
 
 api.post("/products", multer.single("image"), ProductController.createProduct);
 

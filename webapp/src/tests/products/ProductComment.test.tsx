@@ -1,5 +1,5 @@
 import { render, act, screen } from "@testing-library/react";
-import ProductComment from "../../components/products/ProductComment";
+import ProductComment from "../../components/shop/comments/ProductComment";
 import { Review } from "../../shared/shareddtypes";
 import * as SolidHelper from "../../helpers/SolidHelper";
 

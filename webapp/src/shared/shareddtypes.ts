@@ -64,4 +64,5 @@ export type Address = {
   postalCode: string;
   locality: string;
   region: string;
+  url?: string;
 };
