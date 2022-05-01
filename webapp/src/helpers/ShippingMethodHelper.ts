@@ -19,7 +19,7 @@ export async function getPickUpPlacesNearby(
   const x = coords.features[0].geometry.coordinates[0];
   const y = coords.features[0].geometry.coordinates[1];
 
-  const places = await getPlaces(x, y, radiusMeters, maxResults);
+  const places = await getPlaces(x, y, radiusMeters, 10);
   places.features.forEach((feature: any) => {
     locations.push({
       lat: feature.geometry.coordinates[0],

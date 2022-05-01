@@ -144,9 +144,9 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
   //Mock the implementation of the deleteProduct function
   jest
     .spyOn(api, "deleteProduct")
-    .mockImplementation(
-      (webId: string, code: string): Promise<boolean> => Promise.resolve(false)
-    );
+    .mockImplementation((webId: string, code: string): Promise<boolean> => {
+      return Promise.resolve(false);
+    });
 
   //Click the delete button
   await act(async () => {
