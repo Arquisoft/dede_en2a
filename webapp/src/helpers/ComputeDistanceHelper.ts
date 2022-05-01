@@ -1,6 +1,7 @@
 import { Address } from "../shared/shareddtypes";
 
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
+const axios = require("axios");
 
 export type ShippingMethodType = {
   title: string;
@@ -56,8 +57,6 @@ export const getCoordinatesFromAddress = async (address: String) => {
 };
 
 export function calculateCoordinates(address: String) {
-  const axios = require("axios");
-
   return axios
     .get(
       "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
@@ -74,8 +73,6 @@ export function calculateCoordinates(address: String) {
 }
 
 function getDistanceDriving(destCoords: String) {
-  const axios = require("axios");
-
   return axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
@@ -91,8 +88,6 @@ function getDistanceDriving(destCoords: String) {
 }
 
 function getRouteImage(destCoords: String) {
-  const axios = require("axios");
-
   return axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
