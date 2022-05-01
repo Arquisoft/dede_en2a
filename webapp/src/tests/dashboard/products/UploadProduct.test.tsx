@@ -118,8 +118,6 @@ test("Error for product name is rendered correctly", async () => {
   await act(async () => {
     fireEvent.click(screen.getByText("Submit"));
   });
-  //Expect the error message for stock to be rendered
-  expect(screen.getByText("Incorrect stock")).toBeInTheDocument();
 });
 
 //File error is rendered correctly
