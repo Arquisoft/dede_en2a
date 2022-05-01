@@ -73,9 +73,13 @@ test("DeleteProduct form is filled when a product is selected", async () => {
       target: { value: "01" },
     });
   });
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
 
   //Check that the form is filled correctly
   expect(container.querySelector("input[name='code']").value).toBe("01");
+
   expect(container.querySelector("input[name='name']").value).toBe("testName");
   expect(container.querySelector("input[name='description']").value).toBe(
     "testDescription"
@@ -133,12 +137,16 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
     });
   });
 
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
+
   //Mock the implementation of the deleteProduct function
   jest
     .spyOn(api, "deleteProduct")
-    .mockImplementation(
-      (webId: string, code: string): Promise<boolean> => Promise.resolve(false)
-    );
+    .mockImplementation((webId: string, code: string): Promise<boolean> => {
+      return Promise.resolve(false);
+    });
 
   //Click the delete button
   await act(async () => {
@@ -170,6 +178,10 @@ test("DeleteProduct success is shown when trying to delete a product", async () 
       target: { value: "01" },
     });
   });
+
+  const autocomplete = screen.getByTestId("select-product");
+  fireEvent.keyDown(autocomplete, { key: "ArrowDown" });
+  fireEvent.keyDown(autocomplete, { key: "Enter" });
 
   //Mock the implementation of the deleteProduct function
   jest

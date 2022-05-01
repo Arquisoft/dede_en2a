@@ -11,6 +11,7 @@ import {
   CartItem,
   Product,
 } from "../../shared/shareddtypes";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const testsAddress: Address = {
   street: "Test street",
@@ -118,12 +119,14 @@ test("Checkout renders correctly", async () => {
 
   await act(async () => {
     render(
-      <Checkout
-        productsInCart={testCartItems}
-        handleDeleteCart={() => {}}
-        webId={"https://test.webId.com"}
-        sendNotification={() => {}}
-      />
+      <Router>
+        <Checkout
+          productsInCart={testCartItems}
+          handleDeleteCart={() => {}}
+          webId={"https://test.webId.com"}
+          sendNotification={() => {}}
+        />
+      </Router>
     );
   });
 

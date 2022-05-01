@@ -1,8 +1,9 @@
 import { act, fireEvent, screen, render } from "@testing-library/react";
 import ShippingMethod from "../../components/checkout/ShippingMethod";
 import * as carriersApi from "../../api/carriersApi";
-import * as computDistanceHelper from "../../helpers/ComputeDistanceHelper";
+import * as computeDistanceHelper from "../../helpers/ComputeDistanceHelper";
 import { Rate, Address, CartItem, Product } from "../../shared/shareddtypes";
+import { ShippingMethodType } from "../../helpers/ComputeDistanceHelper";
 
 const testAddress: Address = {
   street: "Test street",
@@ -60,11 +61,9 @@ const rates: Rate[] = [
 
 test("ShippingMethod renders correctly selecting Standard Shipping", async () => {
   jest
-    .spyOn(computDistanceHelper, "obtainShippingMethods")
+    .spyOn(computeDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
-      (
-        destAddress: Address
-      ): Promise<computDistanceHelper.ShippingMethodType[]> => {
+      (destAddress: Address): Promise<ShippingMethodType[]> => {
         return Promise.resolve([
           {
             title: "Standard shipping",
@@ -133,11 +132,9 @@ test("ShippingMethod renders correctly selecting Standard Shipping", async () =>
 
 test("ShippingMethod renders correctly selecting Pick UP", async () => {
   jest
-    .spyOn(computDistanceHelper, "obtainShippingMethods")
+    .spyOn(computeDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
-      (
-        destAddress: Address
-      ): Promise<computDistanceHelper.ShippingMethodType[]> => {
+      (destAddress: Address): Promise<ShippingMethodType[]> => {
         return Promise.resolve([
           {
             title: "Standard shipping",
@@ -186,11 +183,9 @@ test("ShippingMethod renders correctly selecting Pick UP", async () => {
 
 test("Back button works", async () => {
   jest
-    .spyOn(computDistanceHelper, "obtainShippingMethods")
+    .spyOn(computeDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
-      (
-        destAddress: Address
-      ): Promise<computDistanceHelper.ShippingMethodType[]> => {
+      (destAddress: Address): Promise<ShippingMethodType[]> => {
         return Promise.resolve([
           {
             title: "Standard shipping",

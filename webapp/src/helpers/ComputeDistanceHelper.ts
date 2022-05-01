@@ -1,6 +1,7 @@
 import { Address } from "../shared/shareddtypes";
 
 const fromCoords: String = "43.35513026876176, -5.851290035687373"; //Coordinates of EII
+const axios = require("axios");
 
 export type ShippingMethodType = {
   title: string;
@@ -47,7 +48,7 @@ export const showMapRoute = async (destCoords: String) => {
 };
 
 export const getCoordinatesFromAddress = async (address: String) => {
-  let coords = await calculateCoordinates(address);
+  let coords = (await calculateCoordinates(address)) as any;
 
   let lat = coords.features[0].geometry.coordinates[1];
   let lon = coords.features[0].geometry.coordinates[0];
@@ -55,28 +56,28 @@ export const getCoordinatesFromAddress = async (address: String) => {
   return lat + "," + lon; //e.g 36.23423,-5.23423
 };
 
-export function calculateCoordinates(address: String) {
-  const axios = require("axios");
+export async function calculateCoordinates(address: String) {
+  const url =
+    "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
+    address +
+    ".json?access_token=" +
+    process.env.REACT_APP_MAPBOX_KEY;
 
-  return axios
-    .get(
-      "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-        address +
-        ".json?access_token=" +
-        process.env.REACT_APP_MAPBOX_KEY
-    )
+  let responseFinal;
+
+  await fetch(url, { method: "GET" })
     .then((response: any) => {
-      return response.data;
+      responseFinal = response.json();
     })
     .catch((error: any) => {
-      return error;
+      console.log(error);
     });
+
+  return responseFinal;
 }
 
-function getDistanceDriving(destCoords: String) {
-  const axios = require("axios");
-
-  return axios
+async function getDistanceDriving(destCoords: String) {
+  return await axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Routes?wp.0=" +
         fromCoords +
@@ -90,10 +91,8 @@ function getDistanceDriving(destCoords: String) {
     });
 }
 
-function getRouteImage(destCoords: String) {
-  const axios = require("axios");
-
-  return axios
+async function getRouteImage(destCoords: String) {
+  return await axios
     .get(
       "https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/Routes?wp.0=" +
         fromCoords +
