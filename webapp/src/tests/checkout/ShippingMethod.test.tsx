@@ -1,9 +1,9 @@
-import { act, fireEvent, screen, render } from "@testing-library/react";
-import ShippingMethod from "../../components/checkout/ShippingMethod";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import * as carriersApi from "../../api/carriersApi";
+import ShippingMethod from "../../components/checkout/ShippingMethod";
 import * as computeDistanceHelper from "../../helpers/ComputeDistanceHelper";
-import { Rate, Address, CartItem, Product } from "../../shared/shareddtypes";
 import { ShippingMethodType } from "../../helpers/ComputeDistanceHelper";
+import { Address, CartItem, Product, Rate } from "../../shared/shareddtypes";
 
 const testAddress: Address = {
   street: "Test street",
@@ -58,6 +58,19 @@ const rates: Rate[] = [
     time: 48,
   },
 ];
+
+const shippingMethods: ShippingMethodType[]= [
+  {
+    title: "Standard shipping",
+    subtitle: "The fastest shipping method we have!",
+    price: "Select",
+  },
+  {
+    title: "Pick UP",
+    subtitle: "The cheapest method on earth!",
+    price: "0 €",
+  },
+]
 
 test("ShippingMethod renders correctly selecting Standard Shipping", async () => {
   jest
@@ -135,18 +148,7 @@ test("ShippingMethod renders correctly selecting Pick UP", async () => {
     .spyOn(computeDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
       (destAddress: Address): Promise<ShippingMethodType[]> => {
-        return Promise.resolve([
-          {
-            title: "Standard shipping",
-            subtitle: "The fastest shipping method we have!",
-            price: "Select",
-          },
-          {
-            title: "Pick UP",
-            subtitle: "The cheapest method on earth!",
-            price: "0 €",
-          },
-        ]);
+        return Promise.resolve(shippingMethods);
       }
     );
 
@@ -186,18 +188,7 @@ test("Back button works", async () => {
     .spyOn(computeDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
       (destAddress: Address): Promise<ShippingMethodType[]> => {
-        return Promise.resolve([
-          {
-            title: "Standard shipping",
-            subtitle: "The fastest shipping method we have!",
-            price: "Select",
-          },
-          {
-            title: "Pick UP",
-            subtitle: "The cheapest method on earth!",
-            price: "0 €",
-          },
-        ]);
+        return Promise.resolve(shippingMethods);
       }
     );
 
