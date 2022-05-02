@@ -110,6 +110,7 @@ test("ShippingMethod renders correctly selecting Standard Shipping", async () =>
         handleBack={() => {}}
         handleNext={() => {}}
         cart={testCartItems}
+        setDays={jest.fn()}
       />
     );
   });
@@ -162,6 +163,7 @@ test("ShippingMethod renders correctly selecting Pick UP", async () => {
         handleBack={() => {}}
         handleNext={() => {}}
         cart={testCartItems}
+        setDays={jest.fn()}
       />
     );
   });
@@ -209,6 +211,7 @@ test("Back button works", async () => {
         handleBack={() => {}}
         handleNext={() => {}}
         cart={testCartItems}
+        setDays={jest.fn()}
       />
     );
   });

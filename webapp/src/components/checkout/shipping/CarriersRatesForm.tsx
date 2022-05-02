@@ -10,7 +10,7 @@ import {
   LinearProgress,
   Radio,
   RadioGroup,
-  Typography,
+  Typography
 } from "@mui/material";
 
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -23,12 +23,16 @@ type CarriersRatesGroupProps = {
   price: number;
   icon: any;
   checkedIcon: any;
+  setDays: (days: number) => void;
 };
 
 function CarriersRatesGroup(props: CarriersRatesGroupProps): JSX.Element {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setValue(parseFloat((event.target as HTMLInputElement).value));
+    const aux = (event.target as HTMLInputElement).value
+    props.setValue(parseFloat(aux.split('-')[0]));
     props.setCarrierSelected(true);
+    props.setDays(parseFloat(aux.split('-')[1])/24);
+    console.log(aux)
   };
 
   return (
@@ -40,7 +44,7 @@ function CarriersRatesGroup(props: CarriersRatesGroupProps): JSX.Element {
               control={
                 <Radio icon={props.icon} checkedIcon={props.checkedIcon} />
               }
-              value={rate.price}
+              value={rate.price+'-'+rate.time}
               label={
                 <React.Fragment>
                   <Typography>
@@ -66,6 +70,7 @@ type CarriersRatesProps = {
   address: Address;
   price: number;
   cart: CartItem[];
+  setDays: (days: number) => void;
 };
 
 export default function CarriersRatesForm(
@@ -113,6 +118,7 @@ export default function CarriersRatesForm(
               address={props.address}
               icon={<LocalShippingIcon />}
               checkedIcon={<LocalShippingIcon />}
+              setDays={props.setDays}
             />
           )}
         </React.Fragment>

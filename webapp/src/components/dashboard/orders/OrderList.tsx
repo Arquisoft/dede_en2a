@@ -122,7 +122,7 @@ function OrderHeader(props: any) {
         <OrderTitle
           state={props.state}
           handleChange={props.handleChange}
-          title={"Your orders, " + props.name} // TODO: refactor this
+          title={"Your orders, " + props.name}
           refreshOrderList={props.refreshOrderList}
         />
       );

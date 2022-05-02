@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import StoreIcon from "@mui/icons-material/Store";
 import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
 
 const menuList: {
   name: string;
@@ -26,6 +27,11 @@ const menuList: {
     name: "Cart",
     icon: <ShoppingCartIcon fontSize="small" />,
     link: "cart",
+  },
+  {
+    name: "About",
+    icon: <InfoIcon fontSize="small" />,
+    link: "about",
   },
 ];
 
