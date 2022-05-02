@@ -80,6 +80,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
 
           <TextField
             value={streetAddress}
+            name="street"
             label="Street address"
             variant="outlined"
             onChange={(event) => {
@@ -96,6 +97,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
           >
             <TextField
               value={city}
+              name="city"
               label="City"
               variant="outlined"
               onChange={(event) => {
@@ -106,6 +108,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
 
             <TextField
               value={postalCode}
+              name="postalCode"
               label="Postal Code"
               variant="outlined"
               onChange={(event) => {
@@ -123,6 +126,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
           >
             <TextField
               value={region}
+              name="region"
               label="Region"
               variant="outlined"
               onChange={(event) => {
@@ -134,6 +138,7 @@ export default function EditAddressDialog(props: EditAddressDialogProps) {
             <TextField
               autoFocus
               value={country}
+              name="country"
               label="Country"
               variant="outlined"
               onChange={(event) => {
