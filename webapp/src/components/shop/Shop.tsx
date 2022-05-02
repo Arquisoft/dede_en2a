@@ -39,6 +39,7 @@ function FilteringSection(props: any) {
     >
       <Grid item xs={12} md={3}>
         <TextField
+          name="search"
           type="text"
           id="search"
           label="Search..."

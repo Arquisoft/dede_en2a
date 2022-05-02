@@ -137,6 +137,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
             Rank the product from 0 to 5 stars:
           </DialogContentText>
           <Rating
+            name="rating"
             value={rating}
             onChange={(event, newValue) => {
               if (newValue != null) {
@@ -149,6 +150,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
           />
           <Divider />
           <TextField
+            name="comment"
             autoFocus
             id="outlined-basic"
             label="Comment"
@@ -165,7 +167,7 @@ export default function ReviewDialog(props: ReviewDialogProps) {
         </DialogContent>
         <DialogActions>
           <Button
-            disabled={rating === 0 || comment === ""}
+            disabled={comment === ""}
             onClick={handleConfirm}
             startIcon={<SendIcon />}
           >
