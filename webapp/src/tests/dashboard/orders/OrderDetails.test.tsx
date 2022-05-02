@@ -49,7 +49,7 @@ test("renders details", async () => {
   await act(async () => {
     render(
       <Router>
-        <OrderDetails webId={"http://testid.com"} />
+        <OrderDetails webId={"https://testid.com"} />
       </Router>
     );
   });
