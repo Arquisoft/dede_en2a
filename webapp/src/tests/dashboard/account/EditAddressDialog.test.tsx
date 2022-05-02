@@ -52,52 +52,23 @@ test("EditAddressDialog renders correctly", async () => {
   ).toBe("New street");
 
   //Change the postal code
-  await act(async () => {
-    fireEvent.change(document.querySelector("input[name='postalCode']")!, {
-      target: { value: "33210" },
-    });
+  fireEvent.change(document.querySelector("input[name='postalCode']")!, {
+    target: { value: "33210" },
   });
-
-  //Check the postal code has been changed
-  expect(
-    (document.getElementsByName("postalCode")[0] as HTMLInputElement).value
-  ).toBe("33210");
 
   //Change the locality
-  await act(async () => {
-    fireEvent.change(document.querySelector("input[name='city']")!, {
-      target: { value: "New city" },
-    });
+  fireEvent.change(document.querySelector("input[name='city']")!, {
+    target: { value: "New city" },
   });
-
-  //Check the locality has been changed
-  expect(
-    (document.getElementsByName("city")[0] as HTMLInputElement).value
-  ).toBe("New city");
-
   //Change the region
-  await act(async () => {
-    fireEvent.change(document.querySelector("input[name='region']")!, {
-      target: { value: "New region" },
-    });
+  fireEvent.change(document.querySelector("input[name='region']")!, {
+    target: { value: "New region" },
   });
-
-  //Check the region has been changed
-  expect(
-    (document.getElementsByName("region")[0] as HTMLInputElement).value
-  ).toBe("New region");
 
   //Change the country
-  await act(async () => {
-    fireEvent.change(document.querySelector("input[name='country']")!, {
-      target: { value: "New country" },
-    });
+  fireEvent.change(document.querySelector("input[name='country']")!, {
+    target: { value: "New country" },
   });
-
-  //Check the country has been changed
-  expect(
-    (document.getElementsByName("country")[0] as HTMLInputElement).value
-  ).toBe("New country");
 
   //Check that the save button appears
   expect(screen.getByText("Modify my information")).toBeInTheDocument();
