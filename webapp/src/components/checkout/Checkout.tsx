@@ -32,6 +32,7 @@ export default function Checkout(props: CheckoutProps) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [address, setAddress] = React.useState<Address>({} as Address);
   const [costs, setCosts] = React.useState<number>(Number());
+  const [daysToSend, setDaystoSend] = React.useState(3);
   const [orderCode, setOrderCode] = React.useState<string>("");
 
   const steps = getSteps();
@@ -57,7 +58,13 @@ export default function Checkout(props: CheckoutProps) {
   const saveOrderToDB = async () => {
     if (props.webId !== "") {
       setOrderCode(
-        await saveOrder(props.productsInCart, costs, props.webId, address)
+        await saveOrder(
+          props.productsInCart,
+          costs,
+          props.webId,
+          address,
+          daysToSend
+        )
       );
       props.handleDeleteCart();
     }
@@ -84,6 +91,7 @@ export default function Checkout(props: CheckoutProps) {
             handleBack={handleBack}
             handleNext={handleNext}
             cart={props.productsInCart}
+            setDays={setDaystoSend}
           />
         );
       case 2:

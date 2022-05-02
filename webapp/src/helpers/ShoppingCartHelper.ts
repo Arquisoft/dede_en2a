@@ -19,7 +19,8 @@ export async function saveOrder(
   products: CartItem[],
   shippingCosts: number,
   webId: string,
-  address: Address
+  address: Address,
+  daysToSend: number
 ) {
   let productCosts: number = calculateTotal(products, 0);
   var orderProducts: Product[] = [];
@@ -38,7 +39,7 @@ export async function saveOrder(
   });
 
   let receivingDate = new Date();
-  receivingDate.setDate(receivingDate.getDate() + 3);
+  receivingDate.setDate(receivingDate.getDate() + daysToSend);
   let order: Order = {
     code: uuidv4(),
     webId: window.btoa(webId),

@@ -1,7 +1,7 @@
-import { act, fireEvent, screen, render } from "@testing-library/react";
-import CarriersRatesForm from "../../../components/checkout/shipping/CarriersRatesForm";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import * as carriersApi from "../../../api/carriersApi";
-import { Rate, Address, CartItem, Product } from "../../../shared/shareddtypes";
+import CarriersRatesForm from "../../../components/checkout/shipping/CarriersRatesForm";
+import { Address, CartItem, Product, Rate } from "../../../shared/shareddtypes";
 
 const testsAddress: Address = {
   street: "Test street",
@@ -69,6 +69,7 @@ test("CarriersRatesForm renders correctly", async () => {
 
   let setCarrierSelected = jest.fn();
   let setCosts = jest.fn();
+  let setDays = jest.fn();
 
   await act(async () => {
     render(
@@ -78,6 +79,7 @@ test("CarriersRatesForm renders correctly", async () => {
         address={testsAddress}
         price={0}
         cart={testCartItems}
+        setDays={setDays}
       />
     );
   });
