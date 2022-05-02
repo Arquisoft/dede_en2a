@@ -55,9 +55,11 @@ export async function updateProduct(webId: string, product: Product) {
 
     body: JSON.stringify({
       name: product.name,
+      category: product.category,
       price: product.price,
       description: product.description,
       stock: product.stock,
+      weight: product.weight,
     }),
   });
   if (response.status === 200) {
@@ -78,18 +80,15 @@ export async function createProduct(
     data.append(key, body[key]);
   }
   // We must send authorization through body because form-data request do not allow headers
-  data.append("token", window.btoa(webId));
+  data.append("webId", window.btoa(webId));
 
   let response = await fetch(apiEndPoint + "/products", {
     method: "POST",
     body: data,
   });
 
-  if (response.status === 200) {
-    return true;
-  } else {
-    return false;
-  }
+  if (response.status === 200) return true;
+  else return false;
 }
 
 export async function deleteProduct(webId: string, code: string) {

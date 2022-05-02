@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -56,46 +55,36 @@ function CustomRadioGroup(props: any) {
   );
 }
 
+function AddressesListing(props: any) {
+  return (
+    <React.Fragment>
+      <Typography sx={{ pb: 2 }}>
+        Choose one of your valid addresses. We will only consider the one you
+        chose as the valid one:
+      </Typography>
+      <CustomRadioGroup
+        value={props.address}
+        setValue={props.setAddress}
+        radioItems={props.addresses}
+        icon={<ApartmentIcon />}
+        checkedIcon={<ApartmentIcon />}
+      />
+    </React.Fragment>
+  );
+}
+
 export default function StreetAddress(props: any) {
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (!props.loading && props.address.length === 0)
-      // Redirect to a place where addresses can be modified
-      setTimeout(() => navigate("/dashboard/account"), 5000);
-  }, [props.loading, props.address]);
-
   return (
     <React.Fragment>
       <Divider sx={{ mb: 2 }}>Street Address</Divider>
 
       <LinearProgress sx={{ display: props.loading ? "block" : "none" }} />
       {!props.loading && (
-        <React.Fragment>
-          {props.addresses.length > 0 && (
-            <React.Fragment>
-              <Typography sx={{ pb: 2 }}>
-                Choose one of your valid addresses. We will only consider the
-                one you chose as the valid one:
-              </Typography>
-              <CustomRadioGroup
-                value={props.address}
-                setValue={props.setAddress}
-                radioItems={props.addresses}
-                icon={<ApartmentIcon />}
-                checkedIcon={<ApartmentIcon />}
-              />
-            </React.Fragment>
-          )}
-          {props.addresses.length === 0 && (
-            <React.Fragment>
-              <Typography sx={{ pb: 2 }}>
-                No address could be loaded from your POD. You are being
-                redirected to a form where you can register a new Address.
-              </Typography>
-            </React.Fragment>
-          )}
-        </React.Fragment>
+        <AddressesListing
+          address={props.address}
+          setAddress={props.setAddress}
+          addresses={props.addresses}
+        />
       )}
     </React.Fragment>
   );

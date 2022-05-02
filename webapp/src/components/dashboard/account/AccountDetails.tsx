@@ -71,6 +71,7 @@ function MyAddresses(props: any) {
                       direction="column"
                       alignItems="center"
                       justifyContent="center"
+                      sx={{ p: 1 }}
                     >
                       <Typography variant="subtitle1">
                         {address.street}
@@ -82,7 +83,7 @@ function MyAddresses(props: any) {
 
                     <Stack
                       direction="row"
-                      alignItems="space-even"
+                      alignItems="space-around"
                       justifyContent="center"
                     >
                       <Button
