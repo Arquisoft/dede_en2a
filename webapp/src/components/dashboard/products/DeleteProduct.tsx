@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+
 import {
   Autocomplete,
   Box,
@@ -8,22 +11,20 @@ import {
   Stack,
   styled,
   TextField,
+  Grid,
+  Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+
 import { deleteProduct } from "../../../api/api";
 import { checkImageExists } from "../../../helpers/ImageHelper";
 import { NotificationType, Product } from "../../../shared/shareddtypes";
 import NotificationAlert from "../../misc/NotificationAlert";
 
-const DEF_IMAGE: string =
-  process.env.REACT_APP_API_URI || "http://localhost:5000" + "/not-found.png";
-
 const Img = styled("img")({
   display: "block",
-  width: "22.2vw",
-  height: "22.2vw",
+  width: "100%",
   objectFit: "cover",
+  marginTop: 8,
 });
 
 type DeleteProductProps = {
@@ -125,17 +126,19 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
       <React.Fragment>
         <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
           <Paper
-            variant="outlined"
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+            elevation={1}
           >
-            <h1 style={{ margin: 8 }}>Delete a product</h1>
+            <Typography variant="h4" component="h1">
+              Delete a product
+            </Typography>
 
             <Autocomplete
               disablePortal
               id="outlined-select-currency"
               data-testid="select-product"
               fullWidth
-              style={{ margin: 8 }}
+              sx={{ p: 1 }}
               renderInput={(params) => (
                 <TextField {...params} name="selection" label="Select" />
               )}
@@ -148,25 +151,23 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
               isOptionEqualToValue={(a, b) => a.product.code === b.product.code}
             />
 
-            <Stack
-              direction="row"
-              spacing={2}
-              justifyContent="space-evenly"
-              alignItems="stretch"
-            >
-              <div>
+            <Typography variant="h6" component="h1">
+              Information of the product to be deleted
+            </Typography>
+
+            <Grid container id="textInput" spacing={1} sx={{ p: 1 }}>
+              <Grid item sm={6}>
                 <TextField
                   disabled
                   value={code}
                   name="code"
                   id="outlined-full-width"
                   label="Product code"
-                  style={{ margin: 8 }}
                   type="number"
                   fullWidth
                   required
-                  margin="normal"
-                  variant="outlined"
+                  margin="dense"
+                  variant="filled"
                 />
 
                 <TextField
@@ -175,11 +176,10 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   name="name"
                   id="outlined-full-width"
                   label="Product name"
-                  style={{ margin: 8 }}
                   fullWidth
                   required
-                  margin="normal"
-                  variant="outlined"
+                  margin="dense"
+                  variant="filled"
                 />
 
                 <TextField
@@ -188,11 +188,10 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   name="description"
                   id="outlined-full-width"
                   label="Product description"
-                  style={{ margin: 8 }}
                   fullWidth
                   required
-                  margin="normal"
-                  variant="outlined"
+                  margin="dense"
+                  variant="filled"
                 />
 
                 <TextField
@@ -201,11 +200,10 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   name="category"
                   id="outlined-full-width"
                   label="Product category"
-                  style={{ margin: 8 }}
                   fullWidth
                   required
-                  margin="normal"
-                  variant="outlined"
+                  margin="dense"
+                  variant="filled"
                 />
 
                 <TextField
@@ -214,26 +212,26 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   name="price"
                   id="outlined-full-width"
                   label="Product price"
-                  style={{ margin: 8 }}
                   fullWidth
                   required
-                  margin="normal"
+                  margin="dense"
                   type="number"
-                  variant="outlined"
+                  variant="filled"
                 />
+              </Grid>
 
+              <Grid item sm={6}>
                 <TextField
                   disabled
                   value={stock}
                   name="stock"
                   id="outlined-full-width"
                   label="Product stock"
-                  style={{ margin: 8 }}
                   fullWidth
                   type="number"
                   required
-                  margin="normal"
-                  variant="outlined"
+                  margin="dense"
+                  variant="filled"
                 />
 
                 <TextField
@@ -241,23 +239,33 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
                   value={weight}
                   id="outlined-full-width"
                   label="Product weight (kg)"
-                  style={{ margin: 8 }}
                   fullWidth
                   type="number"
                   required
-                  margin="normal"
-                  variant="outlined"
+                  margin="dense"
+                  variant="filled"
                 />
-              </div>
-              <Box>
-                <Card style={{ margin: 8, display: "block" }}>
-                  <Img src={image} />
-                </Card>
-              </Box>
+
+                <Img
+                  height={191}
+                  src={checkImageExists(
+                    image === ""
+                      ? "not-found.png"
+                      : image.substring(new URL(image).origin.length)
+                  )}
+                />
+              </Grid>
+            </Grid>
+
+            <Stack direction="row" justifyContent="space-between" sx={{ p: 1 }}>
+              <Link to="/dashboard/products" style={{ textDecoration: "none" }}>
+                <Button> Back </Button>
+              </Link>
+
+              <Button variant="contained" onClick={handleDeleteProduct}>
+                Delete
+              </Button>
             </Stack>
-            <Box textAlign="center">
-              <Button onClick={handleDeleteProduct}> Delete </Button>
-            </Box>
           </Paper>
         </Container>
 
