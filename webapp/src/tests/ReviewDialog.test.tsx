@@ -1,13 +1,6 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  act,
-  prettyDOM,
-} from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { fireEvent, render, screen, act } from "@testing-library/react";
 import ReviewDialog from "../components/shop/dialogs/ReviewDialog";
-import { CartItem, Product, Review } from "../shared/shareddtypes";
+import { Product, Review } from "../shared/shareddtypes";
 import * as api from "../api/api";
 
 const testProduct: Product = {
