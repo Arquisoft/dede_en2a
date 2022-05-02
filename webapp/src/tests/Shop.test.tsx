@@ -1,14 +1,8 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  act,
-  prettyDOM,
-} from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
+import * as api from "../api/api";
 import Shop from "../components/shop/Shop";
 import { CartItem, Product } from "../shared/shareddtypes";
-import * as api from "../api/api";
 
 const testProducts: Product[] = [
   {
@@ -53,9 +47,10 @@ test("Shop renders correctly", async () => {
     render(
       <Router>
         <Shop
-          products={testProducts}
           productsInCart={testCartItems}
-          refreshShop={() => {}}
+          refreshShop={() => {
+            return Promise.resolve(testProducts);
+          }}
           addToCart={() => {}}
         />
       </Router>
