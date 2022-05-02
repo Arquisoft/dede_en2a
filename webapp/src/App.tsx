@@ -144,10 +144,11 @@ export default function App(): JSX.Element {
   };
 
   // We define a function for refreshing the shop itself
-  const refreshShop = React.useCallback(async () => {
+  const refreshShop: () => Promise<Product[]> = React.useCallback(async () => {
     // We obtain the products from the Database
     const dbProducts: Product[] = await getProducts();
     setProducts(dbProducts); // and set the products to the state
+    return dbProducts;
   }, []);
 
   const logCurrentUserOut = () => {
@@ -243,7 +244,6 @@ export default function App(): JSX.Element {
                   path="shop"
                   element={
                     <Shop
-                      products={products}
                       productsInCart={productsInCart}
                       refreshShop={refreshShop}
                       addToCart={addToCart}

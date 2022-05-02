@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   Grid,
   Stack,
-  Typography,
   Pagination,
   SelectChangeEvent,
   TextField,
@@ -24,9 +23,8 @@ const categoryElectronics = "Electronics";
 const categoryMiscellaneous = "Miscellaneous";
 
 type HomeProps = {
-  products: Product[];
   productsInCart: CartItem[];
-  refreshShop: () => void;
+  refreshShop: () => Promise<Product[]>;
   addToCart: (product: Product) => void;
 };
 
@@ -129,10 +127,11 @@ export default function Shop(props: HomeProps): JSX.Element {
   };
 
   React.useEffect(() => {
-    props.refreshShop();
-    retrieveProducts(props.products).then((products) => {
-      setProducts(products); // We establish the products to the retrieved ones
-      refreshNumberOfPages(products);
+    props.refreshShop().then((productsFromDb) => {
+      retrieveProducts(productsFromDb).then((products) => {
+        setProducts(products); // We establish the products to the retrieved ones
+        refreshNumberOfPages(products);
+      });
     });
   }, [searchTerm, sortMode, categoryFilter]);
 
