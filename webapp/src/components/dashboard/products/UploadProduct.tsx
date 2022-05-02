@@ -58,7 +58,6 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   const [file, setFile] = useState("");
   const [code, setCode] = useState("");
   const [value, setValue] = useState<any | null>(null);
-  const [minCode, setMinCode] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
@@ -89,10 +88,8 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
 
       topProduct = sortedProducts.at(0);
 
-      if (topProduct !== undefined) {
+      if (topProduct !== undefined)
         setCode((Number(topProduct.code) + 1).toString());
-        setMinCode(Number(topProduct.code) + 1);
-      }
     }
   };
 
