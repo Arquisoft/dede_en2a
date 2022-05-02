@@ -1,48 +1,35 @@
 import { render, fireEvent, act, screen } from "@testing-library/react";
-import EditAddressDialog from "../../../components/dashboard/account/EditAddressDialog";
-import { Address } from "../../../shared/shareddtypes";
+import AddAddressDialog from "../../../components/dashboard/account/AddAddressDialog";
 import * as solidHelper from "../../../helpers/SolidHelper";
 
-const testsAddress: Address = {
-  street: "Test street",
-  postalCode: "33209",
-  locality: "Test locality",
-  region: "Test region",
-  url: "https://test.com",
-};
-
-test("EditAddressDialog renders correctly", async () => {
-  jest.spyOn(solidHelper, "editAddressFromPod").mockImplementation(() => {
+test("AddAddressDialog renders correctly", async () => {
+  jest.spyOn(solidHelper, "addAddressToPod").mockImplementation(() => {
     return Promise.resolve({} as any);
   });
 
   let setRefreshComponent = jest.fn();
-  let handleClose = jest.fn();
   render(
-    <EditAddressDialog
+    <AddAddressDialog
       open={true}
       webId={"https://test.webId.com"}
-      addressToEdit={testsAddress}
       handleOpen={() => {}}
-      handleClose={handleClose}
+      handleClose={() => {}}
       sendNotification={() => {}}
       setRefreshComponent={setRefreshComponent}
     />
   );
 
   expect(
-    screen.getByText(
-      "Here you can edit your personal information regarding this address"
-    )
+    screen.getByText("Fill the form in order you to add a new address!")
   ).toBeInTheDocument();
   expect(
     screen.getByText(
-      "You are editing the actual address on your POD. No personal information will be registered in our systems."
+      "Notice that the following will be stored in a decentralized way. Meaning we won't store any of this information. It will be registered as a new address in your POD."
     )
   ).toBeInTheDocument();
 
   //Change the street address
-  fireEvent.change(document.querySelector("input[value='Test street']")!, {
+  fireEvent.change(document.querySelector("input[name='street']")!, {
     target: { value: "New street" },
   });
 
@@ -100,24 +87,24 @@ test("EditAddressDialog renders correctly", async () => {
   ).toBe("New country");
 
   //Check that the save button appears
-  expect(screen.getByText("Modify my information")).toBeInTheDocument();
+  expect(screen.getByText("Save my information")).toBeInTheDocument();
 
   //Click on the save button
   await act(async () => {
-    fireEvent.click(screen.getByText("Modify my information"));
+    fireEvent.click(screen.getByText("Save my information"));
   });
 
   //Check refreshComponent has been called
   expect(setRefreshComponent).toHaveBeenCalled();
 
   //Change the mock to give an error
-  jest.spyOn(solidHelper, "editAddressFromPod").mockImplementation(() => {
+  jest.spyOn(solidHelper, "addAddressToPod").mockImplementation(() => {
     return Promise.reject({} as any);
   });
 
   //Click on the save button
   await act(async () => {
-    fireEvent.click(screen.getByText("Modify my information"));
+    fireEvent.click(screen.getByText("Save my information"));
   });
 
   expect(setRefreshComponent).toHaveBeenCalledTimes(1);
