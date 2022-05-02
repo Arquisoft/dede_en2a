@@ -98,33 +98,63 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
   }, []);
 
   const emptyFields = () => {
-    if (!props.isForUpdate) {
-      setImage(DEF_IMAGE);
-      setFile("");
-      getCode();
-      setName("");
-      setDescription("");
-      setStock("");
-      setPrice("");
-      setCategory("");
-      setWeight("");
-    }
+    setImage(DEF_IMAGE);
+    setFile("");
+    setValue(null);
+    getCode();
+    setName("");
+    setDescription("");
+    setStock("");
+    setPrice("");
+    setCategory("");
+    setWeight("");
   };
 
   const checkFields = () => {
-    if (!checkNumericField(Number(code)))
-      return sendErrorNotification("Incorrect code");
-    if (!checkTextField(name)) return sendErrorNotification("Incorrect name");
+    if (value === null && props.isForUpdate)
+      return sendErrorNotification(
+        "You have to choose a product for you to edit it :("
+      );
+    if (!checkTextField(name))
+      return sendErrorNotification(
+        name === ""
+          ? "No name for the product has been provided. Check it!"
+          : "Incorrect name. Please provide a valid one"
+      );
     if (!checkTextField(description))
-      return sendErrorNotification("Incorrect description");
+      return sendErrorNotification(
+        description === ""
+          ? "No description has been provided. Check it!"
+          : "Incorrect description. Please provide a valid one"
+      );
+    if (category === "")
+      return sendErrorNotification(
+        "No category has been provided. This field is mandatory"
+      );
     if (!checkNumericField(Number(price)))
-      return sendErrorNotification("Incorrect price");
+      return sendErrorNotification(
+        Number(price) <= 0
+          ? "Price cannot be a number below 0. Please modify it"
+          : "Incorrect price. Please provide a valid one"
+      );
     if (!checkNumericField(Number(stock)))
-      return sendErrorNotification("Incorrect stock");
+      return sendErrorNotification(
+        Number(stock) <= 0
+          ? "Stock cannot be a number below 0. Please modify it"
+          : "Incorrect stock. Please provide a valid one"
+      );
     if (!checkNumericField(Number(weight)))
-      return sendErrorNotification("Incorrect weight");
+      return sendErrorNotification(
+        Number(weight) <= 0
+          ? "Weight cannot be a number below 0. Please modify it"
+          : "Incorrect weight. Please provide a valid one"
+      );
     if (file === "" && !props.isForUpdate)
-      return sendErrorNotification("Incorrect file");
+      return sendErrorNotification(
+        file === ""
+          ? "No file has been provided. This field is mandatory"
+          : "Incorrect file. Please provide a valid one"
+      );
     handleSubmit();
   };
 

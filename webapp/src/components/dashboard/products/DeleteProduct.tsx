@@ -111,6 +111,7 @@ export default function DeleteProduct(props: DeleteProductProps): JSX.Element {
 
   const emptyFields = () => {
     setCode("");
+    setValue(null);
     setName("");
     setDescription("");
     setCategory("");

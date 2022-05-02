@@ -55,9 +55,11 @@ export async function updateProduct(webId: string, product: Product) {
 
     body: JSON.stringify({
       name: product.name,
+      category: product.category,
       price: product.price,
       description: product.description,
       stock: product.stock,
+      weight: product.weight,
     }),
   });
   if (response.status === 200) {

@@ -32,7 +32,7 @@ export const createProduct: RequestHandler = async (req, res) => {
         // Empty field that must have content since it is required
         // 412 erorr is usually used for Precondition Failed
         res.status(412).json({
-          message: "Icomplete data",
+          message: "Incomplete data",
         });
       } else if (error.name === "MongoServerError" && error.code === 11000) {
         // Duplicated key that must be unique
