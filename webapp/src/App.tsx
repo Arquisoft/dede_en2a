@@ -28,6 +28,7 @@ import RedirectHome from "./components/RedirectHome";
 import Shop from "./components/shop/Shop";
 import SignIn from "./components/userManagement/SignIn";
 import AuthWrapper from "./components/AuthWrapper";
+import About from "./components/about/About";
 
 import { CartItem, NotificationType, Product } from "./shared/shareddtypes";
 
@@ -206,14 +207,14 @@ export default function App(): JSX.Element {
     );
 
     // Retrieve the cart from the session in case the user refreshes the page
-    const sessionCart = localStorage.getItem("cart"); // TODO: check if something can be modified
+    const sessionCart = localStorage.getItem("cart");
     if (sessionCart) {
       let cart: CartItem[] = JSON.parse(sessionCart);
 
       let units: number = 0;
       cart.forEach((cartItem) => (units += cartItem.amount));
       setTotalUnitsInCart(units);
-      setProductsInCart(cart); //Set the cart when the componenet is rendered
+      setProductsInCart(cart); //Set the cart when the component is rendered
     } else localStorage.setItem("cart", JSON.stringify([]));
   }, []);
 
@@ -273,6 +274,7 @@ export default function App(): JSX.Element {
                   }
                 />
                 <Route path="sign-in" element={<SignIn webId={webId} />} />
+                <Route path="about" element={<About />} />
                 <Route
                   path="product/:id"
                   element={
