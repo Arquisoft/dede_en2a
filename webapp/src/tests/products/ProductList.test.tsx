@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import ProductList from "../../components/shop/products/ProductList";
 import { Product } from "../../shared/shareddtypes";
@@ -27,16 +27,21 @@ test("A list of products is rendered", async () => {
     },
   ];
 
+  let addToCart = jest.fn();
   const { getAllByText } = render(
     <Router>
       <ProductList
         products={products}
         productsInCart={[]}
-        addToCart={() => {}}
+        addToCart={addToCart}
       />
     </Router>
   );
 
   expect(getAllByText(products[0].name).length).toEqual(2);
   expect(getAllByText(products[0].description).length).toEqual(2);
+
+  fireEvent.click(getAllByText("Add product")[0]);
+
+  expect(addToCart).toHaveBeenCalledTimes(1);
 });
