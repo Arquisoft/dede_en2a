@@ -11,7 +11,6 @@ Juan -right-> DeDe: interacts with
 
 DeDe <-right-> pod: gets data
 ----
-****
 
 Motivation::
 _DEDE_ application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check the state of the orders.  All the data that belongs to the user is stored safely in their _PODs_.
@@ -30,7 +29,6 @@ Contained Building Blocks::
 |*PODs service*
 |Has the aim to access each user's personal POD.
 |===
-****
 
 === Level 2
 [plantuml, "level2", png]
