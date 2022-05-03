@@ -2,7 +2,6 @@
 == Design Decisions
 
 === Accepted decisions
-
 Those are the different decisions we have taken for developing our project. They are ordered by importance:
 
 [options="header",cols="1,2,2,2"]
@@ -12,12 +11,12 @@ Those are the different decisions we have taken for developing our project. They
 |Disadvantages
 |Link to the ADR
 
-| *Typescript*
+| *TypeScript*
 | Solves one of the hardest inconveniences of using JavaScript: dynamic binding. This project is increasing its popularity among developers: probably the future of the web.
 | None of us has ever used this programming language. Indeed, we are not experts in JavaScript neither.
 | This decision was not taken by us, we were told to use it in the project's assignment.
 
-| *React*
+| *React.js*
 | Aimed for simplifying the Frontend development process. Well documented. Developed by one of the biggest tech-companies: Facebook.
 | Not only we are not experts in TypeScript, but we aren't familiarized with this library neither.
 | This decision was not taken by us, we were told to use it in the project's assignment.
@@ -32,7 +31,7 @@ Those are the different decisions we have taken for developing our project. They
 | We have to learn it from scratch: we have never worked with it. We are not as familiarized with JavaScript.
 | https://github.com/Arquisoft/dede_en2a/wiki/ADR-%236%3A-Backend-framework[ADR #6]
 
-| *Express*
+| *Express.js*
 | Express is easy to use, minimalist and works well with the technology stack we have chosen: MERN.
 | It's the first time we are working with Express.
 | https://github.com/Arquisoft/dede_en2a/wiki/ADR-%235%3A-REST-API[ADR #5]

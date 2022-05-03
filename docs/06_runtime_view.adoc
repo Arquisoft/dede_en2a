@@ -1,13 +1,8 @@
 [[section-runtime-view]]
 == Runtime View
 
-This section, at this moment, is very poor. We will greatly increase it once we have started working with the project
-and once we know how many optional features we will implement.
-
 === User adds item to their shopping cart
-
-
-Once the user logs in, they can select any product they want and add it to their shopping cart.
+Once the user logs-in, they can select any product they want and add them to their shopping cart.
 
 [plantuml,"Add Item Diagram",png]
 ----
@@ -39,13 +34,10 @@ DeDe -> DataBase: Inserts the item to Juan's cart
 DeDe <-- DataBase: Confirms addition
 
 Juan <- DeDe: Shows confimation message
-
 ----
 
 === User confirms their shopping cart
-
-
-Once the user is happy with the product selected, they can confirm the purchase.
+Once the user feels happy with the products selected, they can confirm the purchase.
 
 [plantuml,"Cart Confirmation Diagram",png]
 ----
@@ -83,20 +75,15 @@ end note
 
 DeDe -> Pod: Request desired address
 
-
 DeDe <-- Pod: Return Juan's address
 |||
 DeDe -> DeDe: Compute delivery costs
 |||
 DeDe --> Juan: Shows price with delivery
-
 ----
 
-
 === User accepts the final price
-
-
-Once the user sees the final price, including delivery, they must accept it, and then the system will prepare the package for delivery.
+Once the user sees the final price, including delivery, they must accept it. Then, the system will prepare the package for delivery.
 
 [plantuml,"Finish Purchase Diagram",png]
 ----
@@ -118,15 +105,10 @@ DeDe <-- DataBase: Confirm Insertion
 |||
 
 Juan <-- DeDe: Shows confirmation message
-
-
 ----
 
-
-=== User reviews orders previously done
-
-
-A logged-in user can always look at the orders they have previously done.
+=== User checks orders previously performed
+A logged user can always look at the orders they have previously done.
 
 [plantuml,"Review Orders Diagram",png]
 ----
@@ -164,5 +146,4 @@ DeDe <-- DataBase: Returns order details
 |||
 
 Juan <-- DeDe: Shows order details
-
 ----

@@ -41,47 +41,47 @@ In this section, point 1.2 is being extended, describing them all with a differe
 |We must protect data from users. This means, application will only take essential data. Not only that, but also in a decentralized way.
 |Data from users will be retrieved in a decentralized way, from the user's pod. Only the username, password and street (for us to know where we have to deliver the package) will be stored. In the sign-up form and checkout the data is not stored, but retrieved from the POD.
 |We had to change the way we implemented the sign-up form and create a new checkout process where data is retrieved from the POD. This is strictly related to the usability scenario as we have to refactor those sections of the application in such a way that a user with no experience will be able to successfully perform any task.
-|High
+|_High_
 
 |*Performance*
 |It won't matter the usability, nor the overall aesthetics of the applications if the user leaves the site as it won't load as fast as he expects. More in more, there's nothing more frustrating than waiting for something to load. This means, user interaction must be done as fluent as possible.
 |We will aim for the application to load in less than 1.5 seconds; indeed, 47% of the internet users expect a site to load in 2 seconds or less, so we are focusing in doing it better than the average.
 | We will have to refactor large pieces of code for us to have the best performances possible: one example is using pagination for the shop not to load all the items at once.
-|High
+|_High_
 
 |*Usability*
 |The user won't purchase any item if he is not able to reach the shopping cart, or have some feedback for that product from other customers.
 |We aim for 90% of the users to be able to complete any -separate- task in less than 2 minutes, without any previous knowledge of the app.
 |We have included a rating system for the application. This way the user will have a measure of the quality of each item we offer. Not only that but we have also included some loading effects in case we are waiting for a response from a third party system.
-|High
+|_High_
 
 |*Security*
 |We wont be able to develop a good product unless data is stored in a secure place. If the user doesn't trust in our site, he won't purchase any item: just leave the app.
 |Data must not be accessible for any third parties. Data from users will be stored in a secure system.
 |Highly related to the privacy requirement, we had made plenty of changes for the application to be as secure as possible: one example is preventing NoSQL injections from happening from text fields in forms.
-|High
+|_High_
 
 |*Reliability*
 |Errors from the application have to be handled by the application itself, it shouldn't crash!
 |The user will be unconscious from system crashes happening. In case some error takes place, it will be properly handled.
 |A big effort will be put into preventing errors. This is strongly related with the maintainability part, where implementing a feature is much more than making it work.
-|High
+|_High_
 
 |*Maintainability*
 |Modifications will take place, so we have to enforce ourselves to code in such a way that maintaining our code will be an easy task.
 |Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher excellence-ratios: 0.5 defects per 1000 lines of code.
 |A higher effort will be devoted when implementing a new feature but it will be highly rewarded when modifications take place!
-|Medium
+|_Medium_
 
 |*Freedom*
 |We are developing in a green field: Solid PODS. This means, we expect no one else will take as much effort as we did for implementing our system. Our code is available in a repository with plenty of documentation.
 |The whole project, including all the components: code, documentation... Must be uploaded to a public repository, for it to be accessible to anyone in any place.
 |A public repository with every discussion, issue or decision recorded.
-|Medium
+|_Medium_
 
 |*Portability*
 |The application will be available for any kind of device. Users surf the internet in plenty of different devices: cell phones, tablets, desktop computers, laptops... Even wearables!
 |We will make the user experience as good as possible for the more different devices as possible.
 |We have to put an effort on making our front-end responsive for it to work with any device.
-|Low-Medium
+|_Low-Medium_
 |===

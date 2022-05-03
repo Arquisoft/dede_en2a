@@ -1,13 +1,5 @@
 [[section-building-block-view]]
-
-
-== Building Block View
-[role="arc42help"]
-
-
-=== Level 1 Whitebox Overall System
-[role="arc42help"]
-
+=== Level 1: Whitebox of the Overall System
 [plantuml, "level1", png]
 ----
 Actor Juan
@@ -19,24 +11,27 @@ Juan -right-> DeDe: interacts with
 DeDe <-right-> pod: gets data
 ----
 ****
+
 Motivation::
-
-DEDE application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check and be updated of their state. 
-All the data that belongs to the user is stored safely in their POD's.
-
+_DEDE_ application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check the state of the orders.  All the data that belongs to the user is stored safely in their _PODs_.
 
 Contained Building Blocks::
 [options="header",cols="1,3"]
 |===
 |Name| Description
-|User | Client of the application which will interact with it
-|DEDE | System developed to be used by the users. Through it information in the PODs will be taken.  
-|Pod's service| Has the aim to access each user personal pod
+
+|*User* 
+|Client of the application which will interact with it.
+
+|*DEDE application* 
+|System developed to be used by the users. Through it information in the PODs will be taken.  
+
+|*PODs service*
+|Has the aim to access each user's personal POD.
 |===
 ****
 
 === Level 2
-[role="arc42help"]
 [plantuml, "level2", png]
 ----
 Actor Juan
@@ -55,23 +50,24 @@ da <--> pod: get address
 ----
 
 Motivation::
-
-Shows how the application will work internally in general terms. The client through the interface will get the data requested by using the Data Access layer.
-
+Shows how the application will work internally in general terms. The client, through the user interface, will get the data requested by using the _DAL_ (_Data Access Layer_).
 
 Contained Building Blocks::
 [options="header",cols="1,3"]
 |===
 |Name| Description
-|User Interface | The user will interact with this interface to request any information about the deliveries or program any service.
-|Data Access | The layer that will provide and request information from and to the pods and the database
-|MongoDB | Database used to stored the minimum data needed from the users
+
+|*User Interface* 
+|The user will interact with this UI to request any information about the deliveries or request any service. This means, the user will be able to perform any task in our system through this.
+
+|*Data Access*
+|The layer that will provide and request information from and to the _PODs_ and the _Database_.
+
+|*MongoDB* 
+|_Database_ used to stored the minimum data as possible from the users. Only the street address will be stored, as in a real life e-commerce shop, we *must* store it.
 |===
 
-
 === Level 3
-[role="arc42help"]
-
 [plantuml, "level3", png]
 ----
 Actor Juan
@@ -118,25 +114,46 @@ sol <-down-> pod:acceses
 res <-down-> db:data
 ----
 ****
+
 Motivation::
-
-Detailed structure of the system application. Focused in the components of the User Interface and Data Access.
-
+Detailed structure of the system. Focused on the components of the _User Interface_ and _Data Access_.
 
 Contained Building Blocks::
 [options="header",cols="1,3"]
 |===
 |Name| Description
-|Views | Parts of the application which the user is going to interact with during experience with the system
-|Home |  Initial screen for the application
-|Shop | View where all the products are show 
-|Shopping cart | The user has a shopping cart where he will can see the products previously selected and change the amount of the product.
-|Sign in |  Here the user will log in into their personal account if they have previously created one
-|Sign up | Allows the client to create a new account for the application
-|Orders | Here the user can find any information related with their deliveries, like their state or details
-|Log out | It signs out the application from the last user.
-|Check out | In the check out the user can finish with his purchase.
-|RestAPI | The application asks the RestAPI for the information needed and this asks and returns it from the MongoDB.
-|PayPal Api | Api from PayPal used in the checkout for the users to pay their purchase.
+
+|*Views* 
+|Sections of the application where the user is going to interact with the system.
+
+|*Home*
+|Initial screen of the application. A welcome message is going to be displayed as well as the featured products.
+
+|*Shop*
+|View where all the products are shown. Here the user is going to be able to interact with them through a search field, filtering, sorting and pagination.
+
+|*Shopping cart*
+|The user has a shopping cart where he will see the products previously selected and change the amount of it (number of desired products to order).
+
+|*Sign-in*
+|Here the user will log-in into their personal account. In case they have created one previously.
+
+|*Sign-up*
+|Allows the client to create a new account for the application. This process will take place only once for each user.
+
+|*Orders*
+|Here the user can find any information related to their orders. Such as its state or details.
+
+|*Log-out*
+|It logs the user out from the application.
+
+|*Checkout*
+|At this point, the user can perform a purchase of the desired products.
+
+|*RestAPI*
+|The application resquest the _RestAPI_ for the information needed. Receiving a response from _MongoDB_.
+
+|*PayPal API*
+|API from _PayPal_ used in the checkout for the users to pay their purchase. In case this is performed successfully, an order will be generated.
 |===
 ****

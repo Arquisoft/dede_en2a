@@ -3,12 +3,11 @@
 //
 // ====================================
 
-= image:LogoASW.png[arc42] DeDe_en_02a
+= image:dede_logo.svg[arc42] DEDE EN_2A
 // toc-title definition MUST follow document title without blank line!
 :toc: left
 :toc-title: Table of Contents
 :imagesdir: ./images
-
 
 //additional style for arc42 help callouts
 ifdef::basebackend-html[]

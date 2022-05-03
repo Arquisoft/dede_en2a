@@ -1,38 +1,5 @@
 [[section-deployment-view]]
-
-
 == Deployment View
-
-[role="arc42help"]
-****
-.Content
-The deployment view describes:
-
- 1. the technical infrastructure used to execute your system, with infrastructure elements like geographical locations, environments, computers, processors, channels and net topologies as well as other infrastructure elements and
-
-2. the mapping of (software) building blocks to that infrastructure elements.
-
-Often systems are executed in different environments, e.g. development environment, test environment, production environment. In such cases you should document all relevant environments.
-
-Especially document the deployment view when your software is executed as distributed system with more then one computer, processor, server or container or when you design and construct your own hardware processors and chips.
-
-From a software perspective it is sufficient to capture those elements of the infrastructure that are needed to show the deployment of your building blocks. Hardware architects can go beyond that and describe the infrastructure to any level of detail they need to capture.
-
-.Motivation
-Software does not run without hardware.
-This underlying infrastructure can and will influence your system and/or some
-cross-cutting concepts. Therefore, you need to know the infrastructure.
-
-.Form
-
-Maybe the highest level deployment diagram is already contained in section 3.2. as
-technical context with your own infrastructure as ONE black box. In this section you will
-zoom into this black box using additional deployment diagrams:
-
-* UML offers deployment diagrams to express that view. Use it, probably with nested diagrams,
-when your infrastructure is more complex.
-* When your (hardware) stakeholders prefer other kinds of diagrams rather than the deployment diagram, let them use any kind that is able to show nodes and channels of the infrastructure.
-****
 
 === Infrastructure Level 1
 
@@ -73,19 +40,28 @@ WebApp <-d- User
 ----
 
 .Motivation
-For development and testing the execution environment will be on each student's machine. But for the production phase it will be deployed in a _Dockerized_ environment hosted on Azure. Our goal is to have a correct understanding of Docker, the infrastructure over which our system will be deployed.
-
+For developing and testing, the execution environment will be running on the maching of each student. But, at the production stage, it will be deployed in a _Dockerized_ environment hosted on _Azure_. Our goal is to have a correct understanding of _Docker_: the infrastructure over which our system will be deployed.
 
 .Quality and/or performance features
-The performance on the deployment build will depend on the user's internet connection as well as on the Azure servers used for the deployment of the app, since those factors are out of our hand. But the performance of the application can be maxed with some coding approaches, then, privacy and security will be our main concerns to aim for the best and more secure expirience for the user. 
+The performance on the deployment build will depend on the user's internet connection as well as on the _Azure_ servers used for the deployment of the app. Since those factors are out of our hand, we can do nothing with that. But the performance of the application can be maxed out with some coding approaches - then - privacy and security will be our main concerns for achieving the best and securest user's experience. 
 
 .Mapping of building blocks to infrastructure
 [options="header",cols="1,2"]
 |===
 |Element|Description
-| WebApp | The front end of our application. It will be rendered by a web browser, which will be executed over the user device
-| RestAPI | The back-end of our application. It will run on the Azure server.
-| MongoDB | Database of our application
-| POD provider | Solid pods will be provided by Solid Community
-| Carrier API | API created to provide the costs for shipping 
+
+|*WebApp*
+|The frontend of our application. It will be rendered by a web browser which will be executed ont the user's device.
+
+|*RestAPI*
+|The back-end of our application. It will run on the Azure server.
+
+|*MongoDB*
+|Database chosen for the application
+
+|*POD provider*
+|_Solid PODs_ will be provided by _solidcommunity.org_ or _Inrupt_.
+
+|*Carrier API*
+|API created to calculate the costs of the shipping for different carriers.
 |===
