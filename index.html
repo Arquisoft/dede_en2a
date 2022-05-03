@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.17">
-<title>DeDe_en_02a</title>
+<title>DEDE EN_2A</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,7 +438,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1><span class="image"><img src="./images/LogoASW.png" alt="arc42"></span> DeDe_en_02a</h1>
+<h1><span class="image"><img src="./images/dede_logo.svg" alt="arc42"></span> DEDE EN_2A</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
@@ -540,26 +540,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 }
 </style>
 <hr>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This version of the template contains some help and explanations.
-It is used for familiarization with arc42 and the understanding of the concepts.
-For documentation of your own system you use better the <em>plain</em> version.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1070,8 +1050,6 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 <img src="./images/level1.png" alt="level1" width="452" height="91">
 </div>
 </div>
-<div class="sidebarblock">
-<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Motivation</dt>
@@ -1107,8 +1085,6 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_level_2">5.2. Level 2</h3>
@@ -1160,8 +1136,6 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 <img src="./images/level3.png" alt="level3" width="1200" height="454">
 </div>
 </div>
-<div class="sidebarblock">
-<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Motivation</dt>
@@ -1229,8 +1203,6 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1782,14 +1754,14 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 <div class="sect2">
 <h3 id="_unitary_testing_webapp">13.1. Unitary testing: WebApp</h3>
 <div class="paragraph">
-<p>We made use of Jest and React testing library for testing the WebApp part of our project. We tried to take into account several tips and good-practises for testing by <a href="https://kentcdodds.com">Kent C Dodds</a>, creator of the react testing library.</p>
+<p>We made use of <em>Jest</em> and <em>React</em> testing library for testing the WebApp part of our project. We tried to take into account several tips and good-practises for testing by <a href="https://kentcdodds.com">Kent C Dodds</a>, creator of the react testing library.</p>
 </div>
 <div class="paragraph">
-<p>We needed to verify that isolated parts of DeDe worked as expected by rendering and trying all the possible scenarios. In some cases it became difficult or even impossible to do. Unitary testing has difficulty since it has to be tested without dependencies and to do so,some methods must be mocked.</p>
+<p>We needed to verify that isolated parts of DeDe worked as expected by rendering and trying all the possible scenarios. In some cases it became difficult or even impossible to do. Unitary testing has difficulty since it has to be tested without dependencies and to do so, some methods must be mocked.</p>
 </div>
 <div class="paragraph">
 <p>It was neccessary to add the 'data-testid' to some inputs or use the querySelector function to retrieve the components to be tested
-When the component relied on asynchronous API calls, we mocked their implementation and also the resolve of the promises resulting.</p>
+When the component relied on asynchronous <em>API</em> calls, we mocked their implementation and also the resolve of the promises resulting.</p>
 </div>
 <div class="paragraph">
 <p>In the end, we have 80 tests distributed in 42 different suites, hitting a 71% of the available code.</p>
@@ -1798,10 +1770,10 @@ When the component relied on asynchronous API calls, we mocked their implementat
 <div class="sect2">
 <h3 id="_unitary_testing_restapi">13.2. Unitary testing: RestAPI</h3>
 <div class="paragraph">
-<p>For testing that our RestAPI was working as expected, first we created a test database so that way it didn&#8217;t mix with the production one.</p>
+<p>For testing that our <em>RestAPI</em> was working as expected, first we created a test database so that way it didn&#8217;t mix with the production one.</p>
 </div>
 <div class="paragraph">
-<p>The approach taken was to made different requests to the RestAPI and comparing the expected status code to the one of each response. That way we can verify that the behaviour is the expected one, and in the cases that some data may be retrieved, some checkings are also made.</p>
+<p>The approach taken was to made different requests to the <em>RestAPI</em> and comparing the expected status code to the one of each response. That way we can verify that the behaviour is the expected one, and in the cases that some data may be retrieved, some checkings are also made.</p>
 </div>
 <div class="paragraph">
 <p>In then end, we have 41 tests distributed in 4 different suites, hitting a 98% of the available code.</p>
@@ -1813,7 +1785,7 @@ When the component relied on asynchronous API calls, we mocked their implementat
 <p>We used Jest and Cucumber to perform integration testing in our app. Thanks to cucumber, we could design integration tests following the syntax "Given, When, Then". This allowed for better understandability of the code as well as easier debugging.</p>
 </div>
 <div class="paragraph">
-<p>As our app relies in some external technology, SOLID Pods, it wasn&#8217;t impossible to mock the login so only the some funcionalities could be tested. We manage to modify some http request to store the webId neccessary to get data from the database, but some conditions on our code avoids not verify users to access some views, therefore many things couldn&#8217;t be tested</p>
+<p>As our app relies in some external technology, <em>SOLID PODs</em>, it wasn&#8217;t impossible to mock the login so only some funcionalities could be tested. We manage to modify some http request to store the webId neccessary to get data from the database, but some conditions on our code avoids not verify users to access some views, therefore many things couldn&#8217;t be tested</p>
 </div>
 <div class="paragraph">
 <p>In the end we manage to have 3 e2e tests:</p>
@@ -1902,6 +1874,12 @@ When the component relied on asynchronous API calls, we mocked their implementat
 </div>
 <div class="sect2">
 <h3 id="_load_testing">13.4. Load testing</h3>
+<div class="paragraph">
+<p>Load testing is a process of testing the performance of a system by simulating a large number of users accessing the system. This tests are important to ensure the performance quality goal defined previously. In our case, to perform this test we used Gatling tool. This tool allows to record an action in the website and later simulate this actions but with a large number of users. Finally, we can see the results of the test and the average time of all the requests and a more complete report of the test.</p>
+</div>
+<div class="paragraph">
+<p>In our case, we managed to achieve a load test of the app with a 20 users per second and a total duration of 10 seconds. The results obtained reflect that the average time of the requests was in all the cases less than 1200ms. This is a good result since we have a lot of users accessing the app and the average time of the requests is less than 1.5 seconds. Moreover, the 60% of the requests take less than 800ms.</p>
+</div>
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>About arc42</strong></p>
@@ -1928,7 +1906,7 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-03 20:00:12 +0200
+Last updated 2022-05-03 20:15:16 +0200
 </div>
 </div>
 </body>
