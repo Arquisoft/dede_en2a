@@ -54,17 +54,25 @@ test("Dial systems works", async () => {
     .spyOn(api, "getReviewsByCodeAndWebId")
     .mockImplementation(() => Promise.resolve([]));
 
-  jest.spyOn(api, "addReview").mockImplementation(() => Promise.resolve(true));
+  jest
+    .spyOn(api, "getReviewsByCode")
+    .mockImplementation(() => Promise.resolve([]));
+
+  jest
+    .spyOn(api, "getProduct")
+    .mockImplementation(() => Promise.resolve(product));
 
   const onAdd = jest.fn();
 
-  const { getByText } = render(
-    <ProductDetails
-      product={product}
-      addToCart={onAdd}
-      webId={"https://webid.com"}
-    />
-  );
+  await act(async () => {
+    render(
+      <ProductDetails
+        product={product}
+        addToCart={onAdd}
+        webId={"https://webid.com"}
+      />
+    );
+  });
 
   //Check that the dial for adding works correctly
   fireEvent.click(screen.getByTestId("product-speed-dial"));
@@ -82,26 +90,16 @@ test("Dial systems works", async () => {
     screen.getByText("In this dialog you can give us a review of the product!")
   ).toBeInTheDocument();
 
-  //Check that the review dialog works correctly
-  await act(async () => {
-    fireEvent.change(document.getElementsByName("comment")[0], {
-      target: { value: "New comment" },
-    });
-  });
-
-  await act(async () => {
-    fireEvent.change(document.getElementsByName("rating")[0], {
-      target: { value: 3 },
-    });
-  });
-
-  //Click the confirm button
-  await act(async () => {
-    fireEvent.click(screen.getByText("Send your Review"));
-  });
-
-  //Check if the notification is shown
-  expect(screen.getByText("Review added correctly!")).toBeInTheDocument();
+  //Simulate the close
+  fireEvent.keyDown(
+    screen.getByText("In this dialog you can give us a review of the product!"),
+    {
+      key: "Escape",
+      code: "Escape",
+      keyCode: 27,
+      charCode: 27,
+    }
+  );
 
   //Check that the dial for share works correctly
   fireEvent.click(screen.getByTestId("product-speed-dial"));
