@@ -1,0 +1,64 @@
+== Testing
+
+=== Unitary testing: WebApp
+
+We made use of Jest and React testing library for testing the WebApp part of our project. We tried to take into account several tips and good-practises for testing by https://kentcdodds.com[Kent C Dodds], creator of the react testing library. 
+
+We needed to verify that isolated parts of DeDe worked as expected by rendering and trying all the possible scenarios. In some cases it became difficult or even impossible to do. Unitary testing has difficulty since it has to be tested without dependencies and to do so,some methods must be mocked.
+
+It was neccessary to add the 'data-testid' to some inputs or use the querySelector function to retrieve the components to be tested
+When the component relied on asynchronous API calls, we mocked their implementation and also the resolve of the promises resulting.
+
+In the end, we have 80 tests distributed in 42 different suites, hitting a 71% of the available code.
+
+=== Unitary testing: RestAPI
+
+For testing that our RestAPI was working as expected, first we created a test database so that way it didn't mix with the production one.
+
+The approach taken was to made different requests to the RestAPI and comparing the expected status code to the one of each response. That way we can verify that the behaviour is the expected one, and in the cases that some data may be retrieved, some checkings are also made.
+
+In then end, we have 41 tests distributed in 4 different suites, hitting a 98% of the available code.
+
+=== Integration testing
+
+We used Jest and Cucumber to perform integration testing in our app. Thanks to cucumber, we could design integration tests following the syntax "Given, When, Then". This allowed for better understandability of the code as well as easier debugging.
+
+As our app relies in some external technology, SOLID Pods, it wasn't impossible to mock the login so only the some funcionalities could be tested. We manage to modify some http request to store the webId neccessary to get data from the database, but some conditions on our code avoids not verify users to access some views, therefore many things couldn't be tested
+
+In the end we manage to have 3 e2e tests:
+
+====
+
+ * Feature: Getting products from DB
+
+ * Scenario: A user enters the webpage
+    - Given A user on home page
+    - When I go to shop section
+    - Then Products from the DB are displayed
+
+====
+
+====
+
+ * Feature: Getting orders of a user from DB
+
+ * Scenario: A logged user wants to see its orders
+    - Given A logged user on the app
+    - When I go to orders tab on dashboard
+    - Then My orders from the DB are displayed
+
+====
+
+====
+
+ * Feature: Getting reviews from DB
+
+ * Scenario: A user enters a product info and sees the reviews
+    - Given A user on shop
+    - When I enter on a product page
+    - Then Info and reviews of the product are requested and displayed
+
+====
+
+
+=== Load testing
