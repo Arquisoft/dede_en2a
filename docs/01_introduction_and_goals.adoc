@@ -5,19 +5,30 @@
 
 The functional requirements that the application will have:
 
-* The users will be able to select products to buy. Also they will be able to search for a specific product or filter them.
+* The login process is delegated to a POD provider (that you can choose from). This means, the fewer information will be stored and the system will be as decentralized as possible.
+
+* The users will be able to select products to buy. Also they will be able to search for a specific product or filter them. Sorting by price is also possible.
 
 * Once the user has selected the products:
-** They will be able to see the shopping cart and modify the units of each product.
-** The system will calculate the shipping costs using different carrier APIs depending on the user's address.
-** The user will be able to see the final cost of the order and select the payment method complete the order.
-** The system will simulate the order shipping and will notify the user the different states.
+** They will be able to see the shopping cart and modify the units of each product. The user is also able to remove the products from the cart.
+** The system will calculate the shipping costs using a custom - created by us - _carrier API_ depending on the user's address. _Pick up locations_ can also be chosen from the list of available shipping methods, in such a case, you will be able to choose a near-by place where your package will be delivered. 
+** The user will be able to see the final cost of the order and select the payment method to complete the order. After an order is completed, the user may download a _bill_ of the actual order.
+** The system will simulate the order shipping and will notify the user the status of the package: ordered, received...
 
-* The user will be able to see the orders done.
-* The user will be able to see reviews of the products.
+* In a separate part of the application, the user will be able to manage list important information:
+** The user will be able to see the orders done by him. In case an admin is watching, all the orders will be listed.
+** A moderator or admin will be able to add, edit or remove products.
+** Account information will also be modifiable directly from the app. Thus, you will be able to modify the addresses in your POD: add, edit or remove them.
 
-* The application will be implemented using the React framework and TypeScript.
-* The application should be accesible and deployed using a continuos integration system.
+* A detailed version of the product listing will also be available for the user:
+** Information regarding the description, price, stock, number of reviews...
+** The user will be able to see reviews of the products. And also write or edit them. Not only that, but no personal information will be stored, the system will obtain it from the POD.
+
+* The application will be implemented using the _React_ framework and _TypeScript_.
+
+* An about page will be shown. There you will have information of the project itself: how we created it, the technology used (we advocate for transparency), to name a few.
+
+* The application should be accessible and deployed using a _continuous integration system_.
 
 === Quality Goals
 
@@ -29,32 +40,32 @@ The functional requirements that the application will have:
 |Priority
 
 |*Privacy*
-|"Your data, your choice"
+|_Your data, your choice_.
 |The only way for us to ensure privacy is allowing users to know what we do with their data. This is only possible if the source code is available for anyone to read it. More in more, we will allow users to use their data as they please, not as we do.
 |High
 
 |*Performance*
-|"80% of the effects come from 20% of the causes"
+|_80% of the effects come from 20% of the causes_.
 |We will aim for the application to load in less than 1.5 seconds; indeed, 47% of the internet users expect a site to load in 2 seconds or less, so we are focusing in doing it better than the average. 
 |High
 
 |*Usability*
-|"If a user is having a problem, it's our problem."
+|_If a user is having a problem, it's our problem_.
 |We aim for 90% of the users to be able to complete any -separate- task in less than 2 minutes, without any previous knowledge of the app.
 |High
 
 |*Security*
-|We wont be able to develop a good product unless data is stored in a secure place.
-|Data must not be accesible for any third parties. Data from users will be stored in a secure system.
+|_We wont be able to develop a good product unless data is stored in a secure place_.
+|Data must not be accessible for any third parties. Data from users will be stored in a secure system.
 |High
 
-|*Maintanability*
-|"Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live."
-|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher execellence-ratios: 0.5 defects per 1000 lines of code.
+|*Maintainability*
+|_Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live_.
+|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher excellence-ratios: 0.5 defects per 1000 lines of code.
 |Medium
 
 |*Freedom*
-|"Free, as in freedom"
+|_Free, as in freedom_.
 |The whole project, including all the components: code, documentation... Must be uploaded to a public repository, for it to be accessible to anyone in any place.
 |Medium
 |===
@@ -64,8 +75,8 @@ The functional requirements that the application will have:
 [options="header",cols="1,2,2"]
 |===
 |Role/Name|Contact|Expectations
-| Students | Lorenzo La Rocca, Álvaro Rodríguez González, Pablo Lopez Amado, Andrés Martínez Rodríguez, Ángel Iglesias Préstamo and Noelia Iglesias Cuesta | Main developers of the application. They will develop the whole application and hence they will improve their teamwork capacity and coding skills.
-| Teachers | José Emilio Labra Gallo and Pablo González González | They will supervise students work, make sure they are going in the right direction and help them if necessary.
-| Users | Anyone that uses the application | Users will be the ones using the application so they have to find it easy to use, intuitive and practical.
-| Empathy | Empathy.co is the commerce Search & Discovery platform built for trust with over 150 Developers and Search Engineers | They are interested in the project, especially in the part that deals with SOLID Pods because they are used and are important in their working area. Also to offer students business practices
+| *Students* | _Álvaro Rodríguez González_, _Pablo Lopez Amado,_ _Andrés Martínez Rodríguez_, _Ángel Iglesias Préstamo_ and _Noelia Iglesias Cuesta_. _Lorenzo_ left the group in an early stage of the application. | Main developers of the application. They will develop the whole application and hence they will improve their teamwork capacity and coding skills.
+| *Teachers* | _José Emilio Labra Gallo_ and _Pablo González González_ | They will supervise students work, make sure they are going in the right direction and help us if necessary.
+| *Users* | Anyone using the application. | Users will be the ones using the application so they have to find it easy to use, intuitive and practical.
+| *Empathy* | Empathy.co built the commerce _Search & Discovery_ platform for trust. With over 150 Developers and Search Engineers. | They are interested in the project, especially in the part that deals with SOLID Pods because they are used and are important in their working area. Also to offer students business practices
 |===

@@ -39,9 +39,12 @@ We have identified these risks and technical debts we might face during this pro
 |Technical debt
 |Brief description
 
+|*SOLID APIs*
+| There are some known issues regarding _SOLID APIs_ that - indeed - we faced during the development of this project. One example to that, is the page redirection on refresh. If you do so, you will notice that you are redirect to the login page as soon as you refresh the page. That is caused because _SOLID login features_ work like that: they store in some kind of cookie the redirection page after performing the login. As _handleIncomeRedirect_ calls login, it will perform the exact same behavior as the previous execution. They are dealing with this issue and information can be found: https://github.com/inrupt/solid-client-authn-js/issues/1647[#1647] or https://github.com/inrupt/solid-client-authn-js/issues/1473[#1473].
+
 |*Client internet connection* 
 | In case the user has a weak Internet connection - and the use of different services we consume from external APIs - the application will run quite slowly. This is an issue involving every application has. We made the decision of using different services, this cannot be undone.
 
 |*Services going down* 
-| If any of the services we consume goes down, that is, we have a strong dependency with external APIs we have no control of. If Inrupt, Bing, Geoapify or any other API fails, some of our features won't work as intended.
+| If any of the services we consume goes down, that is, we have a strong dependency with external APIs we have no control of. If _Inrupt_, _Bing_, _Geoapify_ or any other API fails, some of our features won't work as intended.
 |===

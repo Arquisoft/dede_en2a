@@ -1,26 +1,6 @@
 [[section-system-scope-and-context]]
 == System Scope and Context
 
-
-[role="arc42help"]
-****
-.Contents
-System scope and context - as the name suggests - delimits your system (i.e. your scope) from all its communication partners
-(neighboring systems and users, i.e. the context of your system). It thereby specifies the external interfaces.
-
-If necessary, differentiate the business context (domain specific inputs and outputs) from the technical context (channels, protocols, hardware).
-
-.Motivation
-The domain interfaces and technical interfaces to communication partners are among your system's most critical aspects. Make sure that you completely understand them.
-
-.Form
-Various options:
-
-* Context diagrams
-* Lists of communication partners and their interfaces.
-****
-
-
 === Business Context
 
 [plantuml, "ContextDiagramComponent", png]
@@ -49,54 +29,44 @@ component "Bing Maps" as Bing
 |===
 |Entity|Input|Output
 
-|User
+|*User*
 |User will receive the service provided by the app.
 |The user will create the pod and store there their information and also it will manage the app to order products to buy.
 
-|WebApp
+|*webapp*
 |The app will display information stored in the database and show it to the user. Also it will receive the information from the user using the PODs.
 |It will make requests to the RestApi in order to get information about users, products, orders, etc. Also store the orders done by the users. 
 
-|RestApi
+|*RestAPI*
 |From the app, the api will receive requests to get information stored in the database and the database will return the result of performing queries.
 |The api will send queries to the database and convert the response received in order to send back the information in a proper way for the WebApp.
 
-|Database
+|*Database*
 |The database will receive queries to get information (products, orders, users,...) from the RestApi.
 |It will return the result of performing the queries received.
 
-|Solid PODs
+|*Solid PODs*
 |It will receive petitions from the WebApp to get information about the users.
 |Will return users' information, mainly the addresses to calculate the shipping costs for orders.
 |===
 
 === Technical Context
 
-[role="arc42help"]
-****
-.Contents
-Technical interfaces (channels and transmission media) linking your system to its environment. In addition a mapping of domain specific input/output to the channels, i.e. an explanation with I/O uses which channel.
-
-.Motivation
-Many stakeholders make architectural decision based on the technical interfaces between the system and its context. Especially infrastructure or hardware designers decide these technical interfaces.
-
-.Form
-E.g. UML deployment diagram describing channels to neighboring systems,
-together with a mapping table showing the relationships between channels and input/output.
-
-****
-
 For this app we are using:
-
-- SOLID: The SOLID Pods store information from the user and the app will access the Pod to get the user data
-- React: Open-source library to ease the develop the user interface
-- Typescript
 
 [options="header",cols="1,2"]
 |===
 |Technical Interface | Description
-|SOLID|Architecture that determines the structure of the data management of the project. Data is decentralized and protected stored on Pods
-|SOLID Pod|Data management unit used to store confidential and personal information according to the SOLID architecture.
-|Typescript|Language used to program the user interface 
-|React|Library to ease the programming of the application.
+
+|*SOLID specification*
+|Architecture that determines the structure of the data management of the project. Data is _decentralized_ and stored in a secure way on PODs.
+
+|*SOLID PODs*
+|Data management unit used to store confidential and personal information according to the _SOLID_ architecture.
+
+|*TypeScript*
+|Language used to program both the user interface and the backend. It was created by _Microsoft_ as an enhancement to _JavaScript_.
+
+|*React.js*
+|Library to ease the - frontend - programming of the application.
 |===
