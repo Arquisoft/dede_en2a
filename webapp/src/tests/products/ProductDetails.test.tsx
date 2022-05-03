@@ -49,7 +49,7 @@ test("Adds product to cart", () => {
 });
 
 //Test that the dial system works well
-test("Adds product to cart", async () => {
+test("Dial systems works", async () => {
   jest
     .spyOn(api, "getReviewsByCodeAndWebId")
     .mockImplementation(() => Promise.resolve([]));
