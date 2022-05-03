@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -9,6 +8,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import { Stack } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -133,7 +133,10 @@ function OrderList(props: OrderListProps): JSX.Element {
 export default function OrderDetails(props: OrderDetailsProps): JSX.Element {
   const { code } = useParams<keyof ProductDets>() as ProductDets;
 
+  const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<Order>();
+
+  const navigate = useNavigate();
 
   const obtainOrder = async () => {
     if (props.webId !== undefined)
@@ -141,7 +144,8 @@ export default function OrderDetails(props: OrderDetailsProps): JSX.Element {
   };
 
   useEffect(() => {
-    obtainOrder();
+    setLoading(true);
+    obtainOrder().finally(() => setLoading(false));
   }, []);
 
   return (
@@ -149,14 +153,19 @@ export default function OrderDetails(props: OrderDetailsProps): JSX.Element {
       <Typography component="h1" variant="h4" align="center">
         Order details
       </Typography>
-      <OrderList order={order} />
+      <LinearProgress sx={{ display: loading ? "block" : "none", my: 2 }} />
+      {!loading && <OrderList order={order} />}
       <Stack
         direction="row-reverse"
         justifyContent="space-between"
         alignItems="center"
       >
         <Link to="/dashboard/orders" style={{ textDecoration: "none" }}>
-          <Button variant="outlined" className="m-1">
+          <Button
+            variant="outlined"
+            onClick={() => navigate(-1)}
+            className="m-1"
+          >
             Go back
           </Button>
         </Link>
