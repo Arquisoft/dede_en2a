@@ -468,56 +468,60 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_top_level_decomposition">4.2. Top-level Decomposition</a></li>
 <li><a href="#_approaches_to_achieve_top_quality_goals">4.3. Approaches to achieve top quality goals</a></li>
 <li><a href="#_organizational_decisions">4.4. Organizational decisions</a></li>
-<li><a href="#section-building-block-view">4.5. Level 1: Whitebox of the Overall System</a></li>
-<li><a href="#_level_2">4.6. Level 2</a></li>
-<li><a href="#_level_3">4.7. Level 3</a></li>
 </ul>
 </li>
-<li><a href="#section-runtime-view">5. Runtime View</a>
+<li><a href="#section-building-block-view">5. Building block view</a>
 <ul class="sectlevel2">
-<li><a href="#_user_adds_item_to_their_shopping_cart">5.1. User adds item to their shopping cart</a></li>
-<li><a href="#_user_confirms_their_shopping_cart">5.2. User confirms their shopping cart</a></li>
-<li><a href="#_user_accepts_the_final_price">5.3. User accepts the final price</a></li>
-<li><a href="#_user_checks_orders_previously_performed">5.4. User checks orders previously performed</a></li>
+<li><a href="#_level_1_whitebox_of_the_overall_system">5.1. Level 1: Whitebox of the Overall System</a></li>
+<li><a href="#_level_2">5.2. Level 2</a></li>
+<li><a href="#_level_3">5.3. Level 3</a></li>
 </ul>
 </li>
-<li><a href="#section-deployment-view">6. Deployment View</a>
+<li><a href="#section-runtime-view">6. Runtime View</a>
 <ul class="sectlevel2">
-<li><a href="#_infrastructure_level_1">6.1. Infrastructure Level 1</a></li>
+<li><a href="#_user_adds_item_to_their_shopping_cart">6.1. User adds item to their shopping cart</a></li>
+<li><a href="#_user_confirms_their_shopping_cart">6.2. User confirms their shopping cart</a></li>
+<li><a href="#_user_accepts_the_final_price">6.3. User accepts the final price</a></li>
+<li><a href="#_user_checks_orders_previously_performed">6.4. User checks orders previously performed</a></li>
 </ul>
 </li>
-<li><a href="#section-concepts">7. Cross-cutting Concepts</a>
+<li><a href="#section-deployment-view">7. Deployment View</a>
 <ul class="sectlevel2">
-<li><a href="#_domain_model">7.1. Domain model</a></li>
-<li><a href="#_security">7.2. Security</a></li>
-<li><a href="#_testability">7.3. Testability</a></li>
+<li><a href="#_infrastructure_level_1">7.1. Infrastructure Level 1</a></li>
 </ul>
 </li>
-<li><a href="#section-design-decisions">8. Design Decisions</a>
+<li><a href="#section-concepts">8. Cross-cutting Concepts</a>
 <ul class="sectlevel2">
-<li><a href="#_accepted_decisions">8.1. Accepted decisions</a></li>
-<li><a href="#_deprecated_decisions">8.2. Deprecated decisions</a></li>
+<li><a href="#_domain_model">8.1. Domain model</a></li>
+<li><a href="#_security">8.2. Security</a></li>
+<li><a href="#_testability">8.3. Testability</a></li>
 </ul>
 </li>
-<li><a href="#section-quality-scenarios">9. Quality Requirements</a>
+<li><a href="#section-design-decisions">9. Design Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_quality_tree">9.1. Quality Tree</a></li>
-<li><a href="#_quality_scenarios">9.2. Quality Scenarios</a></li>
+<li><a href="#_accepted_decisions">9.1. Accepted decisions</a></li>
+<li><a href="#_deprecated_decisions">9.2. Deprecated decisions</a></li>
 </ul>
 </li>
-<li><a href="#section-technical-risks">10. Risks and Technical Debts</a>
+<li><a href="#section-quality-scenarios">10. Quality Requirements</a>
 <ul class="sectlevel2">
-<li><a href="#_risks">10.1. Risks</a></li>
-<li><a href="#_technical_debts">10.2. Technical debts</a></li>
+<li><a href="#_quality_tree">10.1. Quality Tree</a></li>
+<li><a href="#_quality_scenarios">10.2. Quality Scenarios</a></li>
 </ul>
 </li>
-<li><a href="#section-glossary">11. Glossary</a></li>
-<li><a href="#_testing">12. Testing</a>
+<li><a href="#section-technical-risks">11. Risks and Technical Debts</a>
 <ul class="sectlevel2">
-<li><a href="#_unitary_testing_webapp">12.1. Unitary testing: WebApp</a></li>
-<li><a href="#_unitary_testing_restapi">12.2. Unitary testing: RestAPI</a></li>
-<li><a href="#_integration_testing">12.3. Integration testing</a></li>
-<li><a href="#_load_testing">12.4. Load testing</a></li>
+<li><a href="#_risks">11.1. Risks</a></li>
+<li><a href="#_technical_debts">11.2. Technical debts</a></li>
+</ul>
+</li>
+<li><a href="#section-glossary">12. Glossary</a></li>
+<li><a href="#_testing">13. Testing</a>
+<ul class="sectlevel2">
+<li><a href="#_unitary_testing_webapp">13.1. Unitary testing: WebApp</a></li>
+<li><a href="#_unitary_testing_restapi">13.2. Unitary testing: RestAPI</a></li>
+<li><a href="#_integration_testing">13.3. Integration testing</a></li>
+<li><a href="#_load_testing">13.4. Load testing</a></li>
 </ul>
 </li>
 </ul>
@@ -1054,8 +1058,13 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 <div style="page-break-after: always;"></div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="section-building-block-view">5. Building block view</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="section-building-block-view">4.5. Level 1: Whitebox of the Overall System</h3>
+<h3 id="_level_1_whitebox_of_the_overall_system">5.1. Level 1: Whitebox of the Overall System</h3>
 <div class="imageblock">
 <div class="content">
 <img src="./images/level1.png" alt="level1" width="452" height="91">
@@ -1102,7 +1111,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_level_2">4.6. Level 2</h3>
+<h3 id="_level_2">5.2. Level 2</h3>
 <div class="imageblock">
 <div class="content">
 <img src="./images/level2.png" alt="level2" width="547" height="261">
@@ -1145,7 +1154,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </table>
 </div>
 <div class="sect2">
-<h3 id="_level_3">4.7. Level 3</h3>
+<h3 id="_level_3">5.3. Level 3</h3>
 <div class="imageblock">
 <div class="content">
 <img src="./images/level3.png" alt="level3" width="1200" height="454">
@@ -1227,10 +1236,10 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-runtime-view">5. Runtime View</h2>
+<h2 id="section-runtime-view">6. Runtime View</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_user_adds_item_to_their_shopping_cart">5.1. User adds item to their shopping cart</h3>
+<h3 id="_user_adds_item_to_their_shopping_cart">6.1. User adds item to their shopping cart</h3>
 <div class="paragraph">
 <p>Once the user logs-in, they can select any product they want and add them to their shopping cart.</p>
 </div>
@@ -1241,7 +1250,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_user_confirms_their_shopping_cart">5.2. User confirms their shopping cart</h3>
+<h3 id="_user_confirms_their_shopping_cart">6.2. User confirms their shopping cart</h3>
 <div class="paragraph">
 <p>Once the user feels happy with the products selected, they can confirm the purchase.</p>
 </div>
@@ -1252,7 +1261,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_user_accepts_the_final_price">5.3. User accepts the final price</h3>
+<h3 id="_user_accepts_the_final_price">6.3. User accepts the final price</h3>
 <div class="paragraph">
 <p>Once the user sees the final price, including delivery, they must accept it. Then, the system will prepare the package for delivery.</p>
 </div>
@@ -1263,7 +1272,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_user_checks_orders_previously_performed">5.4. User checks orders previously performed</h3>
+<h3 id="_user_checks_orders_previously_performed">6.4. User checks orders previously performed</h3>
 <div class="paragraph">
 <p>A logged user can always look at the orders they have previously done.</p>
 </div>
@@ -1277,10 +1286,10 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-deployment-view">6. Deployment View</h2>
+<h2 id="section-deployment-view">7. Deployment View</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_infrastructure_level_1">6.1. Infrastructure Level 1</h3>
+<h3 id="_infrastructure_level_1">7.1. Infrastructure Level 1</h3>
 <div class="imageblock">
 <div class="content">
 <img src="./images/07_DeploymentView.png" alt="07 DeploymentView" width="737" height="703">
@@ -1334,10 +1343,10 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-concepts">7. Cross-cutting Concepts</h2>
+<h2 id="section-concepts">8. Cross-cutting Concepts</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_domain_model">7.1. Domain model</h3>
+<h3 id="_domain_model">8.1. Domain model</h3>
 <div class="imageblock">
 <div class="content">
 <img src="./images/DomainModel.png" alt="DomainModel" width="278" height="347">
@@ -1345,7 +1354,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_security">7.2. Security</h3>
+<h3 id="_security">8.2. Security</h3>
 <div class="paragraph">
 <p><em>Security</em> is a very important concept in the context of a system. As we are managing information from users, it is important to ensure that the information is safe and that the system is not compromised. So, we decided to store in our system the minimum information necessary and obtain the other from the <em>PODs</em>. Also we decided to encrypt the users' passwords, if any.</p>
 </div>
@@ -1354,7 +1363,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testability">7.3. Testability</h3>
+<h3 id="_testability">8.3. Testability</h3>
 <div class="paragraph">
 <p>In order to ensure the correct functioning of the system, we decided to implement <em>unit tests</em> for most of the components. Also we implemented <em>e2e tests</em> to check that the full system is working properly and that the user experience is good.</p>
 </div>
@@ -1363,10 +1372,10 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-design-decisions">8. Design Decisions</h2>
+<h2 id="section-design-decisions">9. Design Decisions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_accepted_decisions">8.1. Accepted decisions</h3>
+<h3 id="_accepted_decisions">9.1. Accepted decisions</h3>
 <div class="paragraph">
 <p>Those are the different decisions we have taken for developing our project. They are ordered by importance:</p>
 </div>
@@ -1474,7 +1483,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </table>
 </div>
 <div class="sect2">
-<h3 id="_deprecated_decisions">8.2. Deprecated decisions</h3>
+<h3 id="_deprecated_decisions">9.2. Deprecated decisions</h3>
 <div class="paragraph">
 <p>Some decisions we made during the development of the project, but that were reconsidered:</p>
 </div>
@@ -1510,10 +1519,10 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">9. Quality Requirements</h2>
+<h2 id="section-quality-scenarios">10. Quality Requirements</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_quality_tree">9.1. Quality Tree</h3>
+<h3 id="_quality_tree">10.1. Quality Tree</h3>
 <div class="imageblock">
 <div class="content">
 <img src="./images/Quality%20tree.png" alt="Quality tree" width="303" height="514">
@@ -1521,7 +1530,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_scenarios">9.2. Quality Scenarios</h3>
+<h3 id="_quality_scenarios">10.2. Quality Scenarios</h3>
 <div class="paragraph">
 <p>In this section, point 1.2 is being extended, describing them all with a different perspective in mind:</p>
 </div>
@@ -1606,13 +1615,13 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-technical-risks">10. Risks and Technical Debts</h2>
+<h2 id="section-technical-risks">11. Risks and Technical Debts</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We have identified these risks and technical debts we might face during this project. They are ordered by priority from higher to lower.</p>
 </div>
 <div class="sect2">
-<h3 id="_risks">10.1. Risks</h3>
+<h3 id="_risks">11.1. Risks</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 23.0769%;">
@@ -1656,7 +1665,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </table>
 </div>
 <div class="sect2">
-<h3 id="_technical_debts">10.2. Technical debts</h3>
+<h3 id="_technical_debts">11.2. Technical debts</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 37.5%;">
@@ -1688,7 +1697,7 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">11. Glossary</h2>
+<h2 id="section-glossary">12. Glossary</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1768,10 +1777,10 @@ First delivery due by <em>February 22, 2022</em>, while the second is by <em>Mar
 </div>
 </div>
 <div class="sect1">
-<h2 id="_testing">12. Testing</h2>
+<h2 id="_testing">13. Testing</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_unitary_testing_webapp">12.1. Unitary testing: WebApp</h3>
+<h3 id="_unitary_testing_webapp">13.1. Unitary testing: WebApp</h3>
 <div class="paragraph">
 <p>We made use of Jest and React testing library for testing the WebApp part of our project. We tried to take into account several tips and good-practises for testing by <a href="https://kentcdodds.com">Kent C Dodds</a>, creator of the react testing library.</p>
 </div>
@@ -1787,7 +1796,7 @@ When the component relied on asynchronous API calls, we mocked their implementat
 </div>
 </div>
 <div class="sect2">
-<h3 id="_unitary_testing_restapi">12.2. Unitary testing: RestAPI</h3>
+<h3 id="_unitary_testing_restapi">13.2. Unitary testing: RestAPI</h3>
 <div class="paragraph">
 <p>For testing that our RestAPI was working as expected, first we created a test database so that way it didn&#8217;t mix with the production one.</p>
 </div>
@@ -1799,7 +1808,7 @@ When the component relied on asynchronous API calls, we mocked their implementat
 </div>
 </div>
 <div class="sect2">
-<h3 id="_integration_testing">12.3. Integration testing</h3>
+<h3 id="_integration_testing">13.3. Integration testing</h3>
 <div class="paragraph">
 <p>We used Jest and Cucumber to perform integration testing in our app. Thanks to cucumber, we could design integration tests following the syntax "Given, When, Then". This allowed for better understandability of the code as well as easier debugging.</p>
 </div>
@@ -1892,7 +1901,7 @@ When the component relied on asynchronous API calls, we mocked their implementat
 </div>
 </div>
 <div class="sect2">
-<h3 id="_load_testing">12.4. Load testing</h3>
+<h3 id="_load_testing">13.4. Load testing</h3>
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p><strong>About arc42</strong></p>
@@ -1919,7 +1928,7 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-03 19:24:16 +0200
+Last updated 2022-05-03 20:00:12 +0200
 </div>
 </div>
 </body>
