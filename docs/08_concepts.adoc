@@ -92,7 +92,7 @@ User *--> Review
 
 === Security
 
-Security is a very important concept in the context of a system, because we are managing information from users. It is important to ensure that the information is secure and that the system is not compromised. So, we decided to store in our system the minimun information necessary and obtain the other from the PODs. Also we decided to encrypt the users' passwords.
+Security is a very important concept in the context of a system, because we are managing information from users. It is important to ensure that the information is secure and that the system is not compromised. So, we decided to store in our system the minimum information necessary and obtain the other from the PODs. Also we decided to encrypt the users' passwords.
 
 Also we added security in the backend to prevent unauthorized requests to the RestAPI, as well as to prevent the insertion of malicious code.
 

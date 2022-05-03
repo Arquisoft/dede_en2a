@@ -21,7 +21,7 @@ DeDe <-right-> pod: gets data
 ****
 Motivation::
 
-Dede application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check and be updated of their state. 
+DEDE application is the general structure of a system in which users will have the possibility to send their deliveries to any place they want and check and be updated of their state. 
 All the data that belongs to the user is stored safely in their POD's.
 
 
@@ -30,7 +30,7 @@ Contained Building Blocks::
 |===
 |Name| Description
 |User | Client of the application which will interact with it
-|Dede | System developed to be used by the users. Through it information in the PODs will be taken.  
+|DEDE | System developed to be used by the users. Through it information in the PODs will be taken.  
 |Pod's service| Has the aim to access each user personal pod
 |===
 ****
@@ -130,13 +130,13 @@ Contained Building Blocks::
 |Views | Parts of the application which the user is going to interact with during experience with the system
 |Home |  Initial screen for the application
 |Shop | View where all the products are show 
-|Shopping cart | The user has a shoppin cart where he will can see the products previosly selected and change the amount of the product.
+|Shopping cart | The user has a shopping cart where he will can see the products previously selected and change the amount of the product.
 |Sign in |  Here the user will log in into their personal account if they have previously created one
 |Sign up | Allows the client to create a new account for the application
 |Orders | Here the user can find any information related with their deliveries, like their state or details
 |Log out | It signs out the application from the last user.
 |Check out | In the check out the user can finish with his purchase.
-|Restapi | The application asks the restapi for the information needed and this asks and returns it from the MongoDB.
+|RestAPI | The application asks the RestAPI for the information needed and this asks and returns it from the MongoDB.
 |PayPal Api | Api from PayPal used in the checkout for the users to pay their purchase.
 |===
 ****

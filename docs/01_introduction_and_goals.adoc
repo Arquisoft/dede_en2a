@@ -17,7 +17,7 @@ The functional requirements that the application will have:
 * The user will be able to see reviews of the products.
 
 * The application will be implemented using the React framework and TypeScript.
-* The application should be accesible and deployed using a continuos integration system.
+* The application should be accessible and deployed using a continuos integration system.
 
 === Quality Goals
 
@@ -45,12 +45,12 @@ The functional requirements that the application will have:
 
 |*Security*
 |We wont be able to develop a good product unless data is stored in a secure place.
-|Data must not be accesible for any third parties. Data from users will be stored in a secure system.
+|Data must not be accessible for any third parties. Data from users will be stored in a secure system.
 |High
 
-|*Maintanability*
+|*Maintainability*
 |"Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live."
-|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher execellence-ratios: 0.5 defects per 1000 lines of code.
+|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher excellence-ratios: 0.5 defects per 1000 lines of code.
 |Medium
 
 |*Freedom*

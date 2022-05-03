@@ -35,7 +35,7 @@
 |The team is made out of six people, in case someone leaves we will a bit compromised
 
 |*Testing*
-|Different scenarios will be taken into account to test a correct behaviour of the app
+|Different scenarios will be taken into account to test a correct behavior of the app
 
 |*Meetings*
 |We will discuss the organization of the tasks to do in a meeting at each laboratory class. In case we need to arrange an extraordinary meeting we will have to fix our schedules as we do not have the same timetables

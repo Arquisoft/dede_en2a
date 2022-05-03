@@ -73,7 +73,7 @@ WebApp <-d- User
 ----
 
 .Motivation
-For development and testing the execution environment will be on each student's machine. But for the production phase it will be deployed in a Dockerized environment hosted on Azure. Our goal is to have a correct understanding of Docker, the infrastructure over which our system will be deployed.
+For development and testing the execution environment will be on each student's machine. But for the production phase it will be deployed in a _Dockerized_ environment hosted on Azure. Our goal is to have a correct understanding of Docker, the infrastructure over which our system will be deployed.
 
 
 .Quality and/or performance features
@@ -84,7 +84,7 @@ The performance on the deployment build will depend on the user's internet conne
 |===
 |Element|Description
 | WebApp | The front end of our application. It will be rendered by a web browser, which will be executed over the user device
-| RestApi | The back-end of our application. It will run on the Azure server.
+| RestAPI | The back-end of our application. It will run on the Azure server.
 | MongoDB | Database of our application
 | POD provider | Solid pods will be provided by Solid Community
 | Carrier API | API created to provide the costs for shipping 

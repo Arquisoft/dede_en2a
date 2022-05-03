@@ -34,14 +34,14 @@ The initial choice for diagrams and are two tools which are UMLet and PlantUML.
 
 |*Usability*
 |The user will perform the task he wants to do without any trouble.
-|The use of CSS and JS frameworks that are preconfigured with that in mind. More in more, we will take advantage from the knowledge we earned from other subjects like SEW (Software y Estándares para la Web). Some techniques such as metaphors or conventions, will be used.
+|The use of CSS and JS frameworks that are pre-configured with that in mind. More in more, we will take advantage from the knowledge we earned from other subjects like SEW (Software y Estándares para la Web). Some techniques such as metaphors or conventions, will be used.
 
 |*Maintanability*
-|The code we write will be easy to read and modify. No spaguetti code or any kind of code smells.
-|We will implement design patterns and follow code conventions in order to achive a clean code. More in more, we will write code with tests in mind, covering more than the 50% of the project.
+|The code we write will be easy to read and modify. No spaghetti code or any kind of code smells.
+|We will implement design patterns and follow code conventions in order to achieve a clean code. More in more, we will write code with tests in mind, covering more than the 50% of the project.
 
 |*Freedom*
-|The project will be accesible for everyone to read it. This will include future students.
+|The project will be accessible for everyone to read it. This will include future students.
 |By means of a public repository anything from our project will be available for everybody.
 |===
 

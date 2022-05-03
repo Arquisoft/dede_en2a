@@ -57,19 +57,19 @@ In this section, point 1.2 is being extended, describing them all with a differe
 
 |*Security*
 |We wont be able to develop a good product unless data is stored in a secure place. If the user doesn't trust in our site, he won't purchase any item: just leave the app.
-|Data must not be accesible for any third parties. Data from users will be stored in a secure system.
+|Data must not be accessible for any third parties. Data from users will be stored in a secure system.
 |Highly related to the privacy requirement, we had made plenty of changes for the application to be as secure as possible: one example is preventing NoSQL injections from happening from text fields in forms.
 |High
 
 |*Reliability*
 |Errors from the application have to be handled by the application itself, it shouldn't crash!
 |The user will be unconscious from system crashes happening. In case some error takes place, it will be properly handled.
-|A big effort will be put into preventing errorrs. This is strongly related with the maintanability part, where implementing a feature is much more than making it work.
+|A big effort will be put into preventing errors. This is strongly related with the maintainability part, where implementing a feature is much more than making it work.
 |High
 
-|*Maintanability*
+|*Maintainability*
 |Modifications will take place, so we have to enforce ourselves to code in such a way that maintaining our code will be an easy task.
-|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher execellence-ratios: 0.5 defects per 1000 lines of code.
+|Software industry averages 1-25 errors per 1000 lines of code. We will aim for higher excellence-ratios: 0.5 defects per 1000 lines of code.
 |A higher effort will be devoted when implementing a new feature but it will be highly rewarded when modifications take place!
 |Medium
 
