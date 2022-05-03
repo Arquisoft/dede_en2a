@@ -1,18 +1,18 @@
 [[section-solution-strategy]]
 == Solution Strategy
 
-=== 4.1 Technology Decisions
+=== Technology Decisions
 
-==== 4.1.1 Technology Stack
+==== Technology Stack
 In order to _develop_ the application and fullfil the constraints we decided to use the following _technologies_:
 
 * *MongoDB*: we chose to use _MongoDB_ during our last meeting on the 14th of February. Also _Mongoose_ for simplifying everything up.
 * *SOLID specification*: lets people store their data securely in decentralized data stores called _POD_.
 * *React.js*: is a _JavaScript_ library for creating UIs for web applications that is easy to learn. 
 
-=== 4.2 Top-level Decomposition
+=== Top-level Decomposition
 
-==== 4.2.1 IDE
+==== IDE
 Our choice is _Visual Studio Code_ mainly because is available for many platforms such as _Windows_, _MacOS_ or _Linux_ and via _plug-ins_ it supports many programming languages and can be easily enhanced. _Git_ is a built-in feature included for _version control_. 
 
 ==== Diagramming tools

@@ -6,37 +6,43 @@
 [plantuml, "07_DeploymentView", png]
 ----
 node AzureServer{
-    node DockerContainer {
-        component RestApi
+    node DockerContainer1 {
+        component RestAPI
+    }
+    node DockerContainer2 {
+        component WebApp
+    }
+    node DockerContainer3 {
+        component CarrierAPI
     }
 }
 
 node UserDevice {
     node WebBrowser {
-        component WebApp
+        component WebAppImage
     }
 }
 
-database DatabaseServer {
+database MongoDBAtlas{
     component MongoDB
 }
 
 Actor User
 
 cloud SOLID_POD
-cloud CarrierAPI
 cloud BingMaps
 cloud Geoapify
 cloud PayPalAPI
 
-RestApi -u-> MongoDB : "access information"
-WebApp -l-> SOLID_POD : "access user data"
-WebApp -l-> BingMaps : "provides maps and route image"
-WebApp -r-> Geoapify : "get near places"
-WebApp -r-> PayPalAPI : "provides paying system"
-RestApi -d-> WebApp : "supply data"
-RestApi -r-> CarrierAPI : "calculate routes prices"
-WebApp <-d- User
+RestAPI -u-> MongoDB : "access information"
+WebAppImage -d-> SOLID_POD : "access user data"
+WebAppImage -d-> BingMaps : "provides maps and route image"
+WebAppImage -d-> Geoapify : "get near places"
+WebAppImage -r-> PayPalAPI : "provides paying system"
+RestAPI -l-> WebApp : "supply data"
+WebApp -r-> CarrierAPI : "request routes prices"
+WebApp -d-> WebAppImage : 'shows on user device'
+WebAppImage <-l- User
 ----
 
 .Motivation
