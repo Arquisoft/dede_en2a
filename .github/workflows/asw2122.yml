@@ -36,6 +36,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: false
+      REACT_APP_API_URI: http://${{ secrets.DEPLOY_HOST }}:5000
+      MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
