@@ -88,6 +88,8 @@ In order to do that, the system will not store personal information from custome
 - _User e-mail_: dedeen2a@gmail.com
 - _Password_: dedeen2a 
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 <!-- GETTING STARTED -->
 
 ## 🏁 Getting started
