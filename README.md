@@ -39,6 +39,12 @@
       </ul>
     </li>
     <li>
+      <a href="#🔨-using-the-app">About The Project</a>
+      <ul>
+        <a href="#💸-paypal-account-for-testing-the-application">PayPal account for testing the application</a>
+      </ul>
+    </li>
+    <li>
       <a href="#🏁-getting-started">Getting Started</a>
     </li>
         <li>
@@ -72,6 +78,15 @@ In order to do that, the system will not store personal information from custome
 - [Mongoose.js](https://mongoosejs.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- USING THE APP -->
+
+## 🔨 Using the app
+
+### 💸 PayPal account for testing the application
+
+- _User e-mail_: dedeen2a@gmail.com
+- _Password_: dedeen2a 
 
 <!-- GETTING STARTED -->
 
