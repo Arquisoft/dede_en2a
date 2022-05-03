@@ -3,12 +3,11 @@
 //
 // ====================================
 
-= image:LogoASW.png[arc42] DeDe_en_02a
+= image:dede_logo.svg[arc42] DEDE EN_2A
 // toc-title definition MUST follow document title without blank line!
 :toc: left
 :toc-title: Table of Contents
 :imagesdir: ./images
-
 
 //additional style for arc42 help callouts
 ifdef::basebackend-html[]
@@ -28,17 +27,6 @@ endif::basebackend-html[]
 
 // horizontal line
 ***
-
-[role="arc42help"]
-****
-[NOTE]
-====
-This version of the template contains some help and explanations.
-It is used for familiarization with arc42 and the understanding of the concepts.
-For documentation of your own system you use better the _plain_ version.
-====
-****
-
 
 // numbering from here on
 :numbered:
