@@ -60,6 +60,7 @@ function OrderFilter(props: any) {
     <FormControl variant="standard">
       <InputLabel id="select-order-status">Show</InputLabel>
       <Select
+        data-testid="order-status-select"
         labelId="select-order-status"
         id="select-order-status"
         value={props.state}
@@ -69,7 +70,9 @@ function OrderFilter(props: any) {
         <MenuItem value={ALL}>
           <em>All</em>
         </MenuItem>
-        <MenuItem value={RECEIVED}>Received</MenuItem>
+        <MenuItem data-test-id="received-button" value={RECEIVED}>
+          Received
+        </MenuItem>
         <MenuItem value={SHIPPING}>Shipping</MenuItem>
       </Select>
     </FormControl>
@@ -119,7 +122,7 @@ function OrderHeader(props: any) {
         <OrderTitle
           state={props.state}
           handleChange={props.handleChange}
-          title={"Your orders, " + props.name} // TODO: refactor this
+          title={"Your orders, " + props.name}
           refreshOrderList={props.refreshOrderList}
         />
       );
@@ -150,6 +153,7 @@ function OrderTableItem(props: OrderTableItemProps): JSX.Element {
       </TableCell>
       <TableCell align="center">
         <Button
+          data-testid={"button-" + props.order.code}
           variant="contained"
           color="secondary"
           className="m-1"

@@ -1,4 +1,4 @@
-//require("dotenv").config();
+require("dotenv").config();
 
 import bp from "body-parser";
 import cors from "cors";

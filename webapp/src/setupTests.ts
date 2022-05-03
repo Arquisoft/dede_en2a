@@ -4,6 +4,9 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 import * as ShippingMethodHelper from "./helpers/ShippingMethodHelper";
+import { TextEncoder, TextDecoder } from "util";
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder as any;
 window.URL.createObjectURL = jest.fn();
 jest
   .spyOn(ShippingMethodHelper, "getPickUpPlacesNearby")

@@ -21,13 +21,13 @@ test("FeaturedProducts is rendered", async () => {
 });
 
 test("Click on featured product", async () => {
-  const { container } = render(
+  const { container, getByTestId } = render(
     <Router>
       <FeaturedProducts />
     </Router>
   );
 
-  const addButton = getByTestId(container, "product10");
+  const addButton = getByTestId("10");
   fireEvent.click(addButton);
   expect(window.location.pathname).toBe("/product/10");
 });

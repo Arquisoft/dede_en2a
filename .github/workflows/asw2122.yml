@@ -31,18 +31,18 @@ jobs:
       - run: npm ci
       - run: npm test
       - uses: codecov/codecov-action@v2
-  #e2e-tests:
-  #needs: [unit-test-webapp, unit-test-restapi]
-  #runs-on: ubuntu-latest
-  #steps:
-  # - uses: actions/checkout@v2
-  #- uses: actions/setup-node@v2
-  #  with:
-  #   node-version: 16
-  #- run: npm --prefix webapp install
-  #- run: npm --prefix restapi install
-  #- run: npm --prefix webapp run build
-  #- run: npm --prefix webapp run test:e2e
+  e2e-tests:
+    needs: [unit-test-webapp, unit-test-restapi]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16
+    - run: npm --prefix webapp install
+    - run: npm --prefix restapi install
+    - run: npm --prefix webapp run build
+    - run: npm --prefix webapp run test:e2e
   docker-push-webapp:
     name: Push webapp Docker Image to GitHub Packages
     runs-on: ubuntu-latest
@@ -54,7 +54,7 @@ jobs:
       PAYPAL_CLIENT_ID: ${{ secrets.REACT_APP_PAYPAL_CLIENT_ID }}
       GEOAPIFY_KEY: ${{ secrets.REACT_APP_GEOAPIFY_KEY }}
       SKIP_PREFLIGHT_CHECK: true
-    needs: [unit-test-webapp, unit-test-restapi]
+    needs: [e2e-tests]
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Registry
@@ -77,7 +77,7 @@ jobs:
       AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
       AUTH_PASS: ${{ secrets.AUTH_PASS }}
       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-    needs: [unit-test-webapp, unit-test-restapi]
+    needs: [e2e-tests]
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Registry
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARRIERS_DB_URI: ${{ secrets.CARRIERS_DB_URI}}
-    needs: [unit-test-webapp, unit-test-restapi]
+    needs: [e2e-tests]
     steps:
       - uses: actions/checkout@v2
       - name: Publish to Registry

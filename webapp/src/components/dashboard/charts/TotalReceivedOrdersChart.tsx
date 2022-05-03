@@ -8,12 +8,15 @@ export default function Chart(props: any) {
   const [data, setData] = React.useState<number>(0);
 
   React.useEffect(() => {
-    getOrdersForUser(props.webId, props.role).then((orders) =>
-      orders.forEach((order) => {
-        if (new Date(order.receivedDate).getTime() <= new Date().getTime())
-          setData(data + 1);
-      })
-    );
+    let receivedOrders = 0;
+    getOrdersForUser(props.webId, props.role)
+      .then((orders) =>
+        orders.forEach((order) => {
+          if (new Date().getTime() > new Date(order.receivedDate).getTime())
+            receivedOrders++;
+        })
+      )
+      .finally(() => setData(receivedOrders));
   }, []);
 
   return (

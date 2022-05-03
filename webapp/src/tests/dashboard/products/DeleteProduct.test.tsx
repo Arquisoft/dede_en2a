@@ -1,40 +1,21 @@
-import { render, fireEvent, act, screen } from "@testing-library/react";
-import DeleteProduct from "../../../components/dashboard/products/DeleteProduct";
-import { Product } from "../../../shared/shareddtypes";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import * as api from "../../../api/api";
+import DeleteProduct from "../../../components/dashboard/products/DeleteProduct";
+import { testProducts } from "../../../helpers/TestHelper";
 
-const products: Product[] = [
-  {
-    code: "01",
-    name: "testName",
-    description: "testDescription",
-    price: 10,
-    stock: 10,
-    image: "9999.png",
-    category: "Clothes",
-    weight: 1,
-  },
-  {
-    code: "02",
-    name: "testName2",
-    description: "testDescription2",
-    price: 20,
-    stock: 20,
-    image: "8888.png",
-    category: "Decoration",
-    weight: 1,
-  },
-];
 
 //Test that the DeleteProduct component renders correctly
 test("DeleteProduct renders correctly", () => {
   const { getByText } = render(
+    <Router>
     <DeleteProduct
-      products={products}
+      products={testProducts}
       webId="https://test.com"
       role="admin"
       refreshShop={() => {}}
     />
+    </Router>
   );
 
   //Check that the title is rendered correctly
@@ -58,12 +39,14 @@ test("DeleteProduct form is filled when a product is selected", async () => {
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
-        products={products}
+        products={testProducts}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
@@ -78,14 +61,14 @@ test("DeleteProduct form is filled when a product is selected", async () => {
   fireEvent.keyDown(autocomplete, { key: "Enter" });
 
   //Check that the form is filled correctly
-  expect(container.querySelector("input[name='code']").value).toBe("01");
+  expect(container.querySelector("input[name='code']").value).toBe("02");
 
-  expect(container.querySelector("input[name='name']").value).toBe("testName");
+  expect(container.querySelector("input[name='name']").value).toBe("Test product 2");
   expect(container.querySelector("input[name='description']").value).toBe(
-    "testDescription"
+    "Test product 2 description"
   );
-  expect(container.querySelector("input[name='price']").value).toBe("10");
-  expect(container.querySelector("input[name='stock']").value).toBe("10");
+  expect(container.querySelector("input[name='price']").value).toBe("200");
+  expect(container.querySelector("input[name='stock']").value).toBe("20");
   expect(container.querySelector("input[name='category']").value).toBe(
     "Clothes"
   );
@@ -97,12 +80,14 @@ test("DeleteProduct notification is shown when no product is selected", async ()
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
-        products={products}
+        products={testProducts}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
@@ -121,12 +106,14 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
-        products={products}
+        products={testProducts}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
@@ -163,12 +150,14 @@ test("DeleteProduct success is shown when trying to delete a product", async () 
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
-        products={products}
+        products={testProducts}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 

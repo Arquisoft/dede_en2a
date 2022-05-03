@@ -71,6 +71,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
 
           <TextField
             autoFocus
+            name="street"
             label="Street address"
             variant="outlined"
             onChange={(event) => {
@@ -87,6 +88,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
           >
             <TextField
               label="City"
+              name="city"
               variant="outlined"
               onChange={(event) => {
                 setCity(event.target.value);
@@ -97,6 +99,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
             <TextField
               label="Postal Code"
               variant="outlined"
+              name="postalCode"
               onChange={(event) => {
                 setPostalCode(Number(event.target.value));
               }}
@@ -113,6 +116,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
             <TextField
               label="Region"
               variant="outlined"
+              name="region"
               onChange={(event) => {
                 setRegion(event.target.value);
               }}
@@ -121,6 +125,7 @@ export default function AddAddressDialog(props: AddAddressDialogProps) {
 
             <TextField
               label="Country"
+              name="country"
               variant="outlined"
               onChange={(event) => {
                 setCountry(event.target.value);

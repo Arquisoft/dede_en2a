@@ -1,43 +1,17 @@
-import { render, fireEvent } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import ShoppingCart from "../../components/cart/ShoppingCart";
+import { testCartItems } from '../../helpers/TestHelper';
 import { CartItem } from "../../shared/shareddtypes";
 
 //Test for the ShoppingCart component, receives a list of cart items and it is rendered properly.
 test("A list of two cart items is rendered", async () => {
-  const cart: CartItem[] = [
-    {
-      product: {
-        code: "9999",
-        name: "Producto 1",
-        description: "Descripcion Producto",
-        price: 10,
-        stock: 20,
-        image: "",
-        category: "Electronics",
-        weight: 1,
-      },
-      amount: 1,
-    },
-    {
-      product: {
-        code: "9998",
-        name: "Producto 2",
-        description: "Descripcion Producto",
-        price: 15,
-        stock: 10,
-        image: "",
-        category: "Clothes",
-        weight: 1,
-      },
-      amount: 2,
-    },
-  ];
+
 
   const { getByText } = render(
     <Router>
       <ShoppingCart
-        productsInCart={cart}
+        productsInCart={testCartItems}
         totalUnitsInCart={2}
         addToCart={() => {}}
         removeFromCart={() => {}}
@@ -53,7 +27,7 @@ test("A list of two cart items is rendered", async () => {
   expect(getByText("Proceed to checkout")).toBeInTheDocument();
 
   //Check that the total price is rendered
-  expect(getByText("Total Price - 40€")).toBeInTheDocument();
+  expect(getByText("Total Price - 500€")).toBeInTheDocument();
 
   //Check that if we click the checkout button, it navigates to the checkout page
   fireEvent.click(getByText("Proceed to checkout"));

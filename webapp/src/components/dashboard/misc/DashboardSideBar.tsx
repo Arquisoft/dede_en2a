@@ -1,8 +1,8 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import Paper from "@mui/material/Paper";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
@@ -16,9 +16,15 @@ type DashboardSideBarProps = {
 };
 
 export default function DashboardSideBar(props: DashboardSideBarProps) {
+  const [value, setValue] = React.useState(0);
+
   return (
     <BottomNavigation
       showLabels
+      value={value}
+      onChange={(event, newValue) => {
+        setValue(newValue);
+      }}
       sx={{
         position: "fixed",
         bottom: 0,
@@ -53,7 +59,7 @@ export default function DashboardSideBar(props: DashboardSideBarProps) {
       <BottomNavigationAction
         component={Link}
         to="account"
-        label="Account Details"
+        label="Account"
         icon={<ManageAccountsIcon />}
       />
     </BottomNavigation>

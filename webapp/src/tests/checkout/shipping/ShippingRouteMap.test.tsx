@@ -1,14 +1,7 @@
-import { act, fireEvent, screen, render } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import ShippingRouteMap from "../../../components/checkout/shipping/ShippingRouteMap";
 import * as computeDistanceHelper from "../../../helpers/ComputeDistanceHelper";
-import { Address } from "../../../shared/shareddtypes";
-
-const testsAddress: Address = {
-  street: "Test street",
-  postalCode: "Test code",
-  locality: "Test locality",
-  region: "Test region",
-};
+import { testAddress } from "../../../helpers/TestHelper";
 
 test("ShippingRouteMap renders correctly", async () => {
   jest
@@ -18,7 +11,7 @@ test("ShippingRouteMap renders correctly", async () => {
     });
 
   await act(async () => {
-    render(<ShippingRouteMap address={testsAddress} costs={100} />);
+    render(<ShippingRouteMap address={testAddress} costs={100} />);
   });
 
   expect(screen.getByText("Delivery")).toBeInTheDocument();

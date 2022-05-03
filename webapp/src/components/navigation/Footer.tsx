@@ -20,7 +20,12 @@ export default function Footer(): JSX.Element {
         spacing={1}
       >
         <Typography align="center">Made with </Typography>
-        <FavoriteIcon color="error" />
+        <FavoriteIcon
+          onClick={() => {
+            window.location.href = "https://github.com/Arquisoft/dede_en2a";
+          }}
+          color="error"
+        />
         <Typography align="center"> in Asturias</Typography>
       </Stack>
     </Box>

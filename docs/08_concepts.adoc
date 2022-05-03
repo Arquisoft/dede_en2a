@@ -1,57 +1,7 @@
 [[section-concepts]]
 == Cross-cutting Concepts
 
-
-[role="arc42help"]
-****
-.Content
-This section describes overall, principal regulations and solution ideas that are
-relevant in multiple parts (= cross-cutting) of your system.
-Such concepts are often related to multiple building blocks.
-They can include many different topics, such as
-
-* domain models
-* architecture patterns or design patterns
-* rules for using specific technology
-* principal, often technical decisions of overall decisions
-* implementation rules
-
-.Motivation
-Concepts form the basis for _conceptual integrity_ (consistency, homogeneity)
-of the architecture. Thus, they are an important contribution to achieve inner qualities of your system.
-
-Some of these concepts cannot be assigned to individual building blocks
-(e.g. security or safety). This is the place in the template that we provided for a
-cohesive specification of such concepts.
-
-.Form
-The form can be varied:
-
-* concept papers with any kind of structure
-* cross-cutting model excerpts or scenarios using notations of the architecture views
-* sample implementations, especially for technical concepts
-* reference to typical usage of standard frameworks (e.g. using Hibernate for object/relational mapping)
-
-.Structure
-A potential (but not mandatory) structure for this section could be:
-
-* Domain concepts
-* User Experience concepts (UX)
-* Safety and security concepts
-* Architecture and design patterns
-* "Under-the-hood"
-* development concepts
-* operational concepts
-
-Note: it might be difficult to assign individual concepts to one specific topic
-on this list.
-
-image:08-Crosscutting-Concepts-Structure-EN.png["Possible topics for crosscutting concepts"]
-****
-
-
 === Domain model
-
 [plantuml, "DomainModel", png]
 ----
 object User{
@@ -92,10 +42,10 @@ User *--> Review
 
 === Security
 
-Security is a very important concept in the context of a system, because we are managing information from users. It is important to ensure that the information is secure and that the system is not compromised. So, we decided to store in our system the minimun information necessary and obtain the other from the PODs. Also we decided to encrypt the users' passwords.
+_Security_ is a very important concept in the context of a system. As we are managing information from users, it is important to ensure that the information is safe and that the system is not compromised. So, we decided to store in our system the minimum information necessary and obtain the other from the _PODs_. Also we decided to encrypt the users' passwords, if any.
 
-Also we added security in the backend to prevent unauthorized requests to the RestAPI, as well as to prevent the insertion of malicious code.
+Also, we added security in the _backend_ to prevent unauthorized requests to the RestAPI, as well as for preventing the execution of malicious code.
 
 === Testability
 
-In order to ensure the correct functioning of the system, we decided to implement unit tests for each component. Also we implement e2e tests to check that the full system is working properly and that the user experience is good.
+In order to ensure the correct functioning of the system, we decided to implement _unit tests_ for most of the components. Also we implemented _e2e tests_ to check that the full system is working properly and that the user experience is good.

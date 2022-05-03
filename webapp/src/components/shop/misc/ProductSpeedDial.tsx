@@ -28,12 +28,14 @@ export default function ProductSpeedDial(props: ProductSpeedDialProps) {
 
   return (
     <SpeedDial
+      data-testid="product-speed-dial"
       ariaLabel="SpeedDial basic example"
       sx={{ position: "fixed", bottom: 16, right: 16 }}
       icon={<SpeedDialIcon />}
     >
       {actions.map((action) => (
         <SpeedDialAction
+          data-testid={action.name}
           key={action.name}
           icon={action.icon}
           tooltipTitle={action.name}

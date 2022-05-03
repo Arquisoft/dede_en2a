@@ -72,7 +72,7 @@ export default function UserMenuButton(props: any): JSX.Element {
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title="User management options">
           <IconButton onClick={handleOpenUserMenu} size="large" color="inherit">
-            <AccountCircle />
+            <AccountCircle data-testid={"user-button"} />
           </IconButton>
         </Tooltip>
 

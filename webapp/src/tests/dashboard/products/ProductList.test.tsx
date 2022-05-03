@@ -1,38 +1,16 @@
-import { render, fireEvent, act, screen } from "@testing-library/react";
-import ProductList from "../../../components/dashboard/products/ProductList";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Product } from "../../../shared/shareddtypes";
 import * as api from "../../../api/api";
-
-const products: Product[] = [
-  {
-    code: "01",
-    name: "testName",
-    description: "testDescription",
-    price: 10,
-    stock: 10,
-    image: "9999.png",
-    category: "Clothes",
-    weight: 1,
-  },
-  {
-    code: "02",
-    name: "testName2",
-    description: "testDescription2",
-    price: 20,
-    stock: 20,
-    image: "8888.png",
-    category: "Decoration",
-    weight: 2,
-  },
-];
+import ProductList from "../../../components/dashboard/products/ProductList";
+import { testProducts } from "../../../helpers/TestHelper";
+import { Product } from "../../../shared/shareddtypes";
 
 //Test that the product list is rendered correctly
 test("ProductList renders correctly", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation((): Promise<Product[]> => Promise.resolve(testProducts));
 
   await act(async () => {
     render(
@@ -58,7 +36,7 @@ test("ProductList add button redirects to /add", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation((): Promise<Product[]> => Promise.resolve(testProducts));
 
   await act(async () => {
     render(
@@ -81,7 +59,7 @@ test("ProductList edit button redirects to /update", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation((): Promise<Product[]> => Promise.resolve(testProducts));
 
   await act(async () => {
     render(
@@ -104,7 +82,7 @@ test("ProductList edit button redirects to /delete", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation((): Promise<Product[]> => Promise.resolve(testProducts));
 
   await act(async () => {
     render(

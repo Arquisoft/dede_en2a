@@ -69,6 +69,7 @@ export default function ShippingMethod(props: any): JSX.Element {
             address={props.address}
             price={props.price}
             cart={props.cart}
+            setDays={props.setDays}
           />
         );
       case 2:
