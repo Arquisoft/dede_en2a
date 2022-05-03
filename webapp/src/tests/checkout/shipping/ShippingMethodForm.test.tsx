@@ -1,14 +1,8 @@
-import { act, fireEvent, screen, render } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import ShippingMethodForm from "../../../components/checkout/shipping/ShippingMethodForm";
 import * as computeDistanceHelper from "../../../helpers/ComputeDistanceHelper";
+import { testAddress } from "../../../helpers/TestHelper";
 import { Address } from "../../../shared/shareddtypes";
-
-const testsAddress: Address = {
-  street: "Test street",
-  postalCode: "Test code",
-  locality: "Test locality",
-  region: "Test region",
-};
 
 test("ShippingMethodForm renders correctly", async () => {
   jest
@@ -36,7 +30,7 @@ test("ShippingMethodForm renders correctly", async () => {
       <ShippingMethodForm
         shippingMethod={""}
         setShippingMethod={setShippingMethod}
-        address={testsAddress}
+        address={testAddress}
         handleNext={handleNext}
       />
     );

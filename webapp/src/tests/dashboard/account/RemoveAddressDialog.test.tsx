@@ -1,5 +1,4 @@
-import { setRef } from "@mui/material";
-import { render, fireEvent, act, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import RemoveAddressDialog from "../../../components/dashboard/account/RemoveAddressDialog";
 import * as solidHelper from "../../../helpers/SolidHelper";
 

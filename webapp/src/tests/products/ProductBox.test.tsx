@@ -1,19 +1,13 @@
 import { fireEvent, render } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import ProductBox from "../../components/shop/products/ProductBox";
+import { testProducts } from '../../helpers/TestHelper';
 import { CartItem, Product } from "../../shared/shareddtypes";
 
+const product: Product = testProducts[0]
+product.stock=100
+
 test("A product is rendered", async () => {
-  const product: Product = {
-    code: "9999",
-    name: "Producto Prueba 1",
-    description: "Descripcion Prueba 1",
-    price: 10,
-    stock: 20,
-    image: "9999.png",
-    category: "Electronics",
-    weight: 1,
-  };
 
   const { getByText, container } = render(
     <Router>
@@ -27,23 +21,13 @@ test("A product is rendered", async () => {
 
   //Check that the default image is rendered
   const image = container.querySelector("img") as HTMLImageElement;
-  expect(image.src).toContain("http://localhost:5000/9999.png");
+  expect(image.src).toContain("http://localhost:5000/01.png");
 
   //Check that the info about stock is rendered correctly
   expect(getByText("Stock available!")).toBeInTheDocument();
 });
 
 test("A product is added to the cart", async () => {
-  const product: Product = {
-    code: "9999",
-    name: "Producto Prueba 1",
-    description: "Descripcion Prueba 1",
-    price: 10,
-    stock: 20,
-    image: "",
-    category: "Electronics",
-    weight: 1,
-  };
   const cart: CartItem[] = [];
 
   const { getByText } = render(
@@ -64,16 +48,6 @@ test("A product is added to the cart", async () => {
 });
 
 test("URL to product details works", async () => {
-  const product: Product = {
-    code: "9999",
-    name: "Producto Prueba 1",
-    description: "Descripcion Prueba 1",
-    price: 10,
-    stock: 20,
-    image: "",
-    category: "Electronics",
-    weight: 1,
-  };
   const cart: CartItem[] = [];
 
   const { container } = render(

@@ -1,27 +1,10 @@
-import { render, act, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import ProductCommentList from "../../components/shop/comments/ProductCommentList";
-import { Review } from "../../shared/shareddtypes";
 import * as SolidHelper from "../../helpers/SolidHelper";
+import { reviews } from "../../helpers/TestHelper";
 
 //Test that a list of reviews is rendered correctly
 test("Renders a list of reviews", async () => {
-  const reviews: Review[] = [
-    {
-      webId:
-        "aHR0cHM6Ly9hbmdlbGlwMjMwMy5zb2xpZGNvbW11bml0eS5uZXQvcHJvZmlsZS9jYXJkI2",
-      productCode: "9999",
-      rating: 4,
-      comment: "This is the first test comment",
-    },
-    {
-      webId:
-        "aHR0cHM6Ly9hbmdlbqweqwjMwMy5zb2xpZGNvbW11bml0eS5uZXQvcHJvZmlsZS9jYXJkI2",
-      productCode: "9998",
-      rating: 5,
-      comment: "This is the second test comment",
-    },
-  ];
-
   //Mock the implemenatation of getNameFromPod
   jest
     .spyOn(SolidHelper, "getNameFromPod")

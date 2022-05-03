@@ -1,15 +1,7 @@
-import { render, fireEvent, act, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import EditAddressDialog from "../../../components/dashboard/account/EditAddressDialog";
-import { Address } from "../../../shared/shareddtypes";
 import * as solidHelper from "../../../helpers/SolidHelper";
-
-const testsAddress: Address = {
-  street: "Test street",
-  postalCode: "33209",
-  locality: "Test locality",
-  region: "Test region",
-  url: "https://test.com",
-};
+import { testsAddresses } from "../../../helpers/TestHelper";
 
 test("EditAddressDialog renders correctly", async () => {
   jest.spyOn(solidHelper, "editAddressFromPod").mockImplementation(() => {
@@ -22,7 +14,7 @@ test("EditAddressDialog renders correctly", async () => {
     <EditAddressDialog
       open={true}
       webId={"https://test.webId.com"}
-      addressToEdit={testsAddress}
+      addressToEdit={testsAddresses[0]}
       handleOpen={() => {}}
       handleClose={handleClose}
       sendNotification={() => {}}

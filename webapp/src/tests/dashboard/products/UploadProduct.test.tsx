@@ -1,45 +1,24 @@
-import { render, fireEvent, act, screen } from "@testing-library/react";
-import UploadProduct from "../../../components/dashboard/products/UploadProduct";
-import { Product } from "../../../shared/shareddtypes";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as api from "../../../api/api";
-
-const products: Product[] = [
-  {
-    code: "01",
-    name: "testName",
-    description: "testDescription",
-    price: 10,
-    stock: 10,
-    image: "9999.png",
-    category: "Clothes",
-    weight: 1,
-  },
-  {
-    code: "02",
-    name: "testName2",
-    description: "testDescription2",
-    price: 20,
-    stock: 20,
-    image: "8888.png",
-    category: "Decoration",
-    weight: 1,
-  },
-];
-
+import UploadProduct from "../../../components/dashboard/products/UploadProduct";
+import { testProducts } from "../../../helpers/TestHelper";
+import { Product } from "../../../shared/shareddtypes";
 //Test the upload product component for adding a product is rendered correctly
 test("UploadPoduct component for adding a product renders correctly", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation(
+      (): Promise<Product[]> => Promise.resolve(testProducts)
+    );
 
   await act(async () => {
     render(
       <Router>
         <UploadProduct
           isForUpdate={false}
-          products={products}
+          products={testProducts}
           refreshShop={() => {}}
           webId="https://testId.com/"
           role="admin"
@@ -69,7 +48,9 @@ test("Error for product name is rendered correctly", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation(
+      (): Promise<Product[]> => Promise.resolve(testProducts)
+    );
 
   let container: any;
   await act(async () => {
@@ -77,7 +58,7 @@ test("Error for product name is rendered correctly", async () => {
       <Router>
         <UploadProduct
           isForUpdate={false}
-          products={products}
+          products={testProducts}
           refreshShop={() => {}}
           webId="https://testId.com/"
           role="admin"
@@ -97,7 +78,7 @@ test("Error for product name is rendered correctly", async () => {
 
   //Fill in the product name
   fireEvent.change(container.querySelector("input[name='name']"), {
-    target: { value: "testName" },
+    target: { value: "Test product 1" },
   });
   //Click the submit button
   await act(async () => {
@@ -110,7 +91,7 @@ test("Error for product name is rendered correctly", async () => {
 
   //Fill in the product description
   fireEvent.change(container.querySelector("textarea[name='description']"), {
-    target: { value: "testDescription" },
+    target: { value: "Test product 1 description" },
   });
   //Click the submit button
   await act(async () => {
@@ -123,7 +104,7 @@ test("Error for product name is rendered correctly", async () => {
 
   //Fill in the product price
   fireEvent.change(container.querySelector("input[name='price']"), {
-    target: { value: "10" },
+    target: { value: "100" },
   });
   //Click the submit button
   await act(async () => {
@@ -136,7 +117,9 @@ test("File error is rendered correctly", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation(
+      (): Promise<Product[]> => Promise.resolve(testProducts)
+    );
 
   let container: any;
   await act(async () => {
@@ -144,7 +127,7 @@ test("File error is rendered correctly", async () => {
       <Router>
         <UploadProduct
           isForUpdate={false}
-          products={products}
+          products={testProducts}
           refreshShop={() => {}}
           webId="https://testId.com/"
           role="admin"
@@ -155,17 +138,17 @@ test("File error is rendered correctly", async () => {
 
   //Fill in the product name
   fireEvent.change(container.querySelector("input[name='name']"), {
-    target: { value: "testName" },
+    target: { value: "Test product 1" },
   });
 
   //Fill in the product description
   fireEvent.change(container.querySelector("textarea[name='description']"), {
-    target: { value: "testDescription" },
+    target: { value: "Test product 1 description" },
   });
 
   //Fill in the product price
   fireEvent.change(container.querySelector("input[name='price']"), {
-    target: { value: "10" },
+    target: { value: "100" },
   });
 
   //Fill in the product stock
@@ -175,7 +158,7 @@ test("File error is rendered correctly", async () => {
 
   //Fill in the product weight
   fireEvent.change(container.querySelector("input[name='weight']"), {
-    target: { value: "10" },
+    target: { value: "1" },
   });
 
   //Click the submit button
@@ -193,7 +176,9 @@ test("A product with a repeated code is tried to add, error message is rendered 
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation(
+      (): Promise<Product[]> => Promise.resolve(testProducts)
+    );
 
   let container: any;
   await act(async () => {
@@ -201,7 +186,7 @@ test("A product with a repeated code is tried to add, error message is rendered 
       <Router>
         <UploadProduct
           isForUpdate={false}
-          products={products}
+          products={testProducts}
           refreshShop={() => {}}
           webId="https://testId.com/"
           role="admin"
@@ -213,21 +198,21 @@ test("A product with a repeated code is tried to add, error message is rendered 
   //Fill in the product name
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='name']"), {
-      target: { value: "testName" },
+      target: { value: "Test product 1" },
     });
   });
 
   //Fill in the product description
   await act(async () => {
     fireEvent.change(container.querySelector("textarea[name='description']"), {
-      target: { value: "testDescription" },
+      target: { value: "Test product 1 description" },
     });
   });
 
   //Fill in the product price
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='price']"), {
-      target: { value: "10" },
+      target: { value: "100" },
     });
   });
 
@@ -274,7 +259,9 @@ test("A product is added correctly", async () => {
   //Mock the implementation of getProducts
   jest
     .spyOn(api, "getProducts")
-    .mockImplementation((): Promise<Product[]> => Promise.resolve(products));
+    .mockImplementation(
+      (): Promise<Product[]> => Promise.resolve(testProducts)
+    );
 
   let container: any;
   await act(async () => {
@@ -282,7 +269,7 @@ test("A product is added correctly", async () => {
       <Router>
         <UploadProduct
           isForUpdate={false}
-          products={products}
+          products={testProducts}
           refreshShop={() => {}}
           webId="https://testId.com/"
           role="admin"
@@ -307,21 +294,21 @@ test("A product is added correctly", async () => {
   //Fill in the product name
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='name']"), {
-      target: { value: "testName" },
+      target: { value: "Test product 1" },
     });
   });
 
   //Fill in the product description
   await act(async () => {
     fireEvent.change(container.querySelector("textarea[name='description']"), {
-      target: { value: "testDescription" },
+      target: { value: "Test product 1 description" },
     });
   });
 
   //Fill in the product price
   await act(async () => {
     fireEvent.change(container.querySelector("input[name='price']"), {
-      target: { value: "10" },
+      target: { value: "100" },
     });
   });
 
@@ -375,7 +362,7 @@ test("UploadPoduct component for updating a product renders correctly", () => {
     <Router>
       <UploadProduct
         isForUpdate={true}
-        products={products}
+        products={testProducts}
         refreshShop={() => {}}
         webId="https://testId.com/"
         role="admin"
@@ -410,7 +397,7 @@ test("UploadPoduct component for updating a product is filled correctly", async 
       <Router>
         <UploadProduct
           isForUpdate={true}
-          products={products}
+          products={testProducts}
           refreshShop={() => {}}
           webId="https://testId.com/"
           role="admin"
@@ -431,18 +418,20 @@ test("UploadPoduct component for updating a product is filled correctly", async 
   fireEvent.keyDown(autocomplete, { key: "Enter" });
 
   //Expect the product name to be filled
-  expect(container.querySelector("input[name='name']").value).toBe("testName");
+  expect(container.querySelector("input[name='name']").value).toBe(
+    "Test product 2"
+  );
 
   //Expect the product description to be filled
   expect(container.querySelector("textarea[name='description']").value).toBe(
-    "testDescription"
+    "Test product 2 description"
   );
 
   //Expect the product price to be filled
-  expect(container.querySelector("input[name='price']").value).toBe("10");
+  expect(container.querySelector("input[name='price']").value).toBe("200");
 
   //Expect the product stock to be filled
-  expect(container.querySelector("input[name='stock']").value).toBe("10");
+  expect(container.querySelector("input[name='stock']").value).toBe("20");
 
   //Expect the product category to be filled
   expect(container.querySelector("input[name='category']").value).toBe(
@@ -450,7 +439,7 @@ test("UploadPoduct component for updating a product is filled correctly", async 
   );
 
   //Expect the product weight to be filled
-  expect(container.querySelector("input[name='weight']").value).toBe("1");
+  expect(container.querySelector("input[name='weight']").value).toBe("2");
 
   //Mock the implementation for updateProduct
   jest

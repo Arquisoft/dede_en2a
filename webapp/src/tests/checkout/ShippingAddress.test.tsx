@@ -1,18 +1,10 @@
-import { act, fireEvent, screen, render } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import * as api from "../../api/api";
 import ShippingAddress from "../../components/checkout/ShippingAddress";
 import * as solidHelper from "../../helpers/SolidHelper";
-import * as api from "../../api/api";
-import { User, Address } from "../../shared/shareddtypes";
-import { BrowserRouter as Router } from "react-router-dom";
-
-const testsAddresses: Address[] = [
-  {
-    street: "Test street",
-    postalCode: "Test code",
-    locality: "Test locality",
-    region: "Test region",
-  },
-];
+import { testAddress } from '../../helpers/TestHelper';
+import { User } from "../../shared/shareddtypes";
 
 //Check that the ShippingAddress component renders correctly
 test("ShippingAddress renders correctly", async () => {
@@ -26,7 +18,7 @@ test("ShippingAddress renders correctly", async () => {
   jest
     .spyOn(solidHelper, "getAddressesFromPod")
     .mockImplementation((webId: string) => {
-      return Promise.resolve(testsAddresses);
+      return Promise.resolve([testAddress]);
     });
 
   //Mock the implementation of the getUser function

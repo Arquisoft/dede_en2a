@@ -2,41 +2,9 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as api from "../api/api";
 import Shop from "../components/shop/Shop";
-import { CartItem, Product } from "../shared/shareddtypes";
+import { testCartItems, testProducts } from "../helpers/TestHelper";
 
-const testProducts: Product[] = [
-  {
-    code: "01",
-    name: "Test product 1",
-    description: "Test product 1 description",
-    price: 100,
-    stock: 10,
-    image: "01.png",
-    category: "Decoration",
-    weight: 1,
-  },
-  {
-    code: "02",
-    name: "Test product 2",
-    description: "Test product 2 description",
-    price: 200,
-    stock: 20,
-    image: "02.png",
-    category: "Clothes",
-    weight: 2,
-  },
-];
 
-const testCartItems: CartItem[] = [
-  {
-    product: testProducts[0],
-    amount: 1,
-  },
-  {
-    product: testProducts[1],
-    amount: 2,
-  },
-];
 
 test("Shop renders correctly", async () => {
   jest

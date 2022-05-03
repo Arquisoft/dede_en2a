@@ -1,20 +1,12 @@
 import { fireEvent, render } from "@testing-library/react";
 import ProductDetails from "../../components/shop/products/ProductDetails";
-import { Product } from "../../shared/shareddtypes";
+import { testProducts } from "../../helpers/TestHelper";
+
+const product = testProducts[0];
+product.stock=100
 
 //Test that the product details page renders correctly
 test("Renders product details page", () => {
-  const product: Product = {
-    code: "9999",
-    name: "Test Product",
-    description: "Test Product Description",
-    price: 9.99,
-    stock: 15,
-    image: "",
-    category: "Electronics",
-    weight: 1,
-  };
-
   const { getByText, getAllByText } = render(
     <ProductDetails product={product} addToCart={() => {}} webId={""} />
   );
@@ -33,17 +25,6 @@ test("Renders product details page", () => {
 
 //Test that the add button works correctly
 test("Adds product to cart", () => {
-  const product: Product = {
-    code: "9999",
-    name: "Test Product",
-    description: "Test Product Description",
-    price: 9.99,
-    stock: 15,
-    image: "",
-    category: "Electronics",
-    weight: 1,
-  };
-
   const onAdd = jest.fn();
 
   const { getByText } = render(

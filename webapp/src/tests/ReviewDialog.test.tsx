@@ -1,18 +1,10 @@
-import { fireEvent, render, screen, act } from "@testing-library/react";
-import ReviewDialog from "../components/shop/dialogs/ReviewDialog";
-import { Product, Review } from "../shared/shareddtypes";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import * as api from "../api/api";
+import ReviewDialog from "../components/shop/dialogs/ReviewDialog";
+import { testProducts } from "../helpers/TestHelper";
+import { Product, Review } from "../shared/shareddtypes";
 
-const testProduct: Product = {
-  code: "01",
-  name: "Test product 1",
-  description: "Test product 1 description",
-  price: 100,
-  stock: 10,
-  image: "",
-  category: "Test category",
-  weight: 1,
-};
+const testProduct: Product = testProducts[0];
 
 const review: Review = {
   webId: "https://test.web.id",

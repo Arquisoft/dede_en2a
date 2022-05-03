@@ -3,92 +3,15 @@ import * as carriersApi from "../../api/carriersApi";
 import ShippingMethod from "../../components/checkout/ShippingMethod";
 import * as computeDistanceHelper from "../../helpers/ComputeDistanceHelper";
 import { ShippingMethodType } from "../../helpers/ComputeDistanceHelper";
-import { Address, CartItem, Product, Rate } from "../../shared/shareddtypes";
-
-const testAddress: Address = {
-  street: "Test street",
-  postalCode: "Test code",
-  locality: "Test locality",
-  region: "Test region",
-};
-
-const testProducts: Product[] = [
-  {
-    code: "01",
-    name: "Test product 1",
-    description: "Test product 1 description",
-    price: 100,
-    stock: 10,
-    image: "",
-    category: "Test category",
-    weight: 1,
-  },
-  {
-    code: "02",
-    name: "Test product 2",
-    description: "Test product 2 description",
-    price: 200,
-    stock: 20,
-    image: "",
-    category: "Test category",
-    weight: 2,
-  },
-];
-
-const testCartItems: CartItem[] = [
-  {
-    product: testProducts[0],
-    amount: 1,
-  },
-  {
-    product: testProducts[1],
-    amount: 2,
-  },
-];
-
-const rates: Rate[] = [
-  {
-    name: "Test carrier 1",
-    price: 10,
-    time: 24,
-  },
-  {
-    name: "Test carrier 2",
-    price: 20,
-    time: 48,
-  },
-];
-
-const shippingMethods: ShippingMethodType[]= [
-  {
-    title: "Standard shipping",
-    subtitle: "The fastest shipping method we have!",
-    price: "Select",
-  },
-  {
-    title: "Pick UP",
-    subtitle: "The cheapest method on earth!",
-    price: "0 €",
-  },
-]
+import { rates, shippingMethods, testAddress, testCartItems } from '../../helpers/TestHelper';
+import { Address, Rate } from "../../shared/shareddtypes";
 
 test("ShippingMethod renders correctly selecting Standard Shipping", async () => {
   jest
     .spyOn(computeDistanceHelper, "obtainShippingMethods")
     .mockImplementation(
       (destAddress: Address): Promise<ShippingMethodType[]> => {
-        return Promise.resolve([
-          {
-            title: "Standard shipping",
-            subtitle: "The fastest shipping method we have!",
-            price: "Select",
-          },
-          {
-            title: "Pick UP",
-            subtitle: "The cheapest method on earth!",
-            price: "0 €",
-          },
-        ]);
+        return Promise.resolve(shippingMethods);
       }
     );
 

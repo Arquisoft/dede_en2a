@@ -1,17 +1,7 @@
-import { render, fireEvent, act, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import AccountDetails from "../../../components/dashboard/account/AccountDetails";
-import { Address } from "../../../shared/shareddtypes";
 import * as solidHelper from "../../../helpers/SolidHelper";
-
-const testsAddresses: Address[] = [
-  {
-    street: "Test street",
-    postalCode: "Test code",
-    locality: "Test locality",
-    region: "Test region",
-    url: "https://test.com",
-  },
-];
+import { testsAddresses } from "../../../helpers/TestHelper";
 
 test("AccountDetails renders correctly", async () => {
   jest

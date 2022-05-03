@@ -1,32 +1,9 @@
+import { act, render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Order, Product } from "../../../shared/shareddtypes";
-import { render, fireEvent, act, screen } from "@testing-library/react";
-import OrderDetails from "../../../components/dashboard/orders/OrderDetails";
 import * as api from "../../../api/api";
-import * as solidHelper from "../../../helpers/SolidHelper";
-
-const testProducts: Product[] = [
-  {
-    code: "01",
-    name: "Test product 1",
-    description: "Test product 1 description",
-    price: 100,
-    stock: 1,
-    image: "",
-    category: "Test category",
-    weight: 1,
-  },
-  {
-    code: "02",
-    name: "Test product 2",
-    description: "Test product 2 description",
-    price: 200,
-    stock: 2,
-    image: "",
-    category: "Test category",
-    weight: 2,
-  },
-];
+import OrderDetails from "../../../components/dashboard/orders/OrderDetails";
+import { testProducts } from "../../../helpers/TestHelper";
+import { Order } from "../../../shared/shareddtypes";
 
 const testOrder: Order = {
   code: "Testordercode",
