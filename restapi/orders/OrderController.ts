@@ -6,12 +6,14 @@ import { orderModel } from "./Order";
 
 export const getOrder: RequestHandler = async (req, res) => {
   const webId = req.headers.token + "";
+  const user = await userModel.findOne({ webId: webId });
+
   if (await verifyWebID(webId)) {
     const orderFound = await orderModel.findOne({
       code: req.params.code,
     });
     if (orderFound) {
-      if (webId === orderFound.webId) {
+      if (webId === orderFound.webId || user.role !== "user") {
         return res.json(orderFound);
       } else {
         return res.status(409).json();
