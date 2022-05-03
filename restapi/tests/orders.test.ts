@@ -187,10 +187,17 @@ describe("orders", () => {
     expect(response.statusCode).toBe(403);
   });
 
-  it("Can't get order from other user", async () => {
+  it("Can get order from other user as admin", async () => {
     const response: Response = await request(app)
       .get("/orders/findByOrderCode/c34sfff0-389d-4bee-a3f5-37dd90a5e101")
       .set("token", "test");
     expect(response.statusCode).toBe(200);
+  });
+
+  it("Can't get order from other user", async () => {
+    const response: Response = await request(app)
+      .get("/orders/findByOrderCode/c34sfff0-389d-4bee-a3f5-37dd90a5e101")
+      .set("token", "webId");
+    expect(response.statusCode).toBe(409);
   });
 });
