@@ -9,7 +9,7 @@ import io.gatling.jdbc.Predef._
 class ShopView extends Simulation {
 
   private val httpProtocol = http
-    .baseUrl("http://20.25.24.200:3000")
+    .baseUrl("https://20.25.24.200:3000")
     .inferHtmlResources(AllowList(), DenyList())
     .acceptHeader("image/avif,image/webp,*/*")
     .acceptEncodingHeader("gzip, deflate")
