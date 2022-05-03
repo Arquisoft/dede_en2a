@@ -24,7 +24,7 @@
     ·
     <a href="https://github.com/Arquisoft/dede_en2a/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/Arquisoft/dede_en2a/issues">Request Feature</a>
   </p>
 </div>
 
