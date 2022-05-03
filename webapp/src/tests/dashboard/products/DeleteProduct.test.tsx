@@ -1,5 +1,6 @@
 import { render, fireEvent, act, screen } from "@testing-library/react";
 import DeleteProduct from "../../../components/dashboard/products/DeleteProduct";
+import {BrowserRouter as Router} from "react-router-dom";
 import { Product } from "../../../shared/shareddtypes";
 import * as api from "../../../api/api";
 
@@ -29,12 +30,14 @@ const products: Product[] = [
 //Test that the DeleteProduct component renders correctly
 test("DeleteProduct renders correctly", () => {
   const { getByText } = render(
+    <Router>
     <DeleteProduct
       products={products}
       webId="https://test.com"
       role="admin"
       refreshShop={() => {}}
     />
+    </Router>
   );
 
   //Check that the title is rendered correctly
@@ -58,12 +61,14 @@ test("DeleteProduct form is filled when a product is selected", async () => {
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
         products={products}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
@@ -97,12 +102,14 @@ test("DeleteProduct notification is shown when no product is selected", async ()
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
         products={products}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
@@ -121,12 +128,14 @@ test("DeleteProduct error is shown when trying to delete a product", async () =>
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
         products={products}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
@@ -163,12 +172,14 @@ test("DeleteProduct success is shown when trying to delete a product", async () 
 
   await act(async () => {
     container = render(
+      <Router>
       <DeleteProduct
         products={products}
         webId="https://test.com"
         role="admin"
         refreshShop={() => {}}
       />
+      </Router>
     ).container;
   });
 
