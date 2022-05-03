@@ -62,3 +62,7 @@ In the end we manage to have 3 e2e tests:
 
 
 === Load testing
+
+Load testing is a process of testing the performance of a system by simulating a large number of users accessing the system. This tests are important to ensure the performance quality goal defined previously. In our case, to perform this test we used Gatling tool. This tool allows to record an action in the website and later simulate this actions but with a large number of users. Finally, we can see the results of the test and the average time of all the requests and a more complete report of the test.
+
+In our case, we managed to achieve a load test of the app with a 20 users per second and a total duration of 10 seconds. The results obtained reflect that the average time of the requests was in all the cases less than 1200ms. This is a good result since we have a lot of users accessing the app and the average time of the requests is less than 1.5 seconds. Moreover, the 60% of the requests take less than 800ms.
