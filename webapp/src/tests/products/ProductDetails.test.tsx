@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, act } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import * as api from "../../api/api";
 import ProductDetails from "../../components/shop/products/ProductDetails";
 import { testProducts } from "../../helpers/TestHelper";
 
 const product = testProducts[0];
-product.stock=100
+product.stock = 100;
 
 //Test that the product details page renders correctly
 test("Renders product details page", () => {
