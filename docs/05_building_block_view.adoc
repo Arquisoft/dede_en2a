@@ -114,12 +114,11 @@ ck-down->de
 sol <-down-> pod:acceses
 res <-down-> db:data
 ----
-****
 
-==== Motivation
+Motivation::
 Detailed structure of the system. Focused on the components of the _User Interface_ and _Data Access_.
 
-==== Contained Building Blocks
+Contained Building Blocks::
 [options="header",cols="1,3"]
 |===
 |Name| Description
@@ -157,4 +156,3 @@ Detailed structure of the system. Focused on the components of the _User Interfa
 |*PayPal API*
 |API from _PayPal_ used in the checkout for the users to pay their purchase. In case this is performed successfully, an order will be generated.
 |===
-****
