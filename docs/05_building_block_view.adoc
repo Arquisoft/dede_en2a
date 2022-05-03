@@ -1,4 +1,5 @@
 [[section-building-block-view]]
+== Building block view
 === Level 1: Whitebox of the Overall System
 [plantuml, "level1", png]
 ----
