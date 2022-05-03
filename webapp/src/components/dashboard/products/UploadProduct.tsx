@@ -127,10 +127,6 @@ export default function UploadProduct(props: UploadProductProps): JSX.Element {
           ? "No description has been provided. Check it!"
           : "Incorrect description. Please provide a valid one"
       );
-    if (category === "")
-      return sendErrorNotification(
-        "No category has been provided. This field is mandatory"
-      );
     if (!checkNumericField(Number(price)))
       return sendErrorNotification(
         Number(price) <= 0

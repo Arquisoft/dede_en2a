@@ -1,6 +1,7 @@
 import { render, fireEvent, act, screen } from "@testing-library/react";
 import UploadProduct from "../../../components/dashboard/products/UploadProduct";
 import { Product } from "../../../shared/shareddtypes";
+import { BrowserRouter as Router } from "react-router-dom";
 import * as api from "../../../api/api";
 
 const products: Product[] = [
@@ -35,13 +36,15 @@ test("UploadPoduct component for adding a product renders correctly", async () =
 
   await act(async () => {
     render(
-      <UploadProduct
-        isForUpdate={false}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
+      <Router>
+        <UploadProduct
+          isForUpdate={false}
+          products={products}
+          refreshShop={() => {}}
+          webId="https://testId.com/"
+          role="admin"
+        />
+      </Router>
     );
   });
 
@@ -49,13 +52,13 @@ test("UploadPoduct component for adding a product renders correctly", async () =
   expect(screen.getByText("Add product")).toBeInTheDocument();
 
   //Expect the form to be rendered
-  expect(screen.getByText("Product code")).toBeInTheDocument();
-  expect(screen.getByText("Product name")).toBeInTheDocument();
-  expect(screen.getByText("Product description")).toBeInTheDocument();
-  expect(screen.getByText("Product price")).toBeInTheDocument();
-  expect(screen.getByText("Product category")).toBeInTheDocument();
-  expect(screen.getByText("Product stock")).toBeInTheDocument();
-  expect(screen.getByText("Product weight (kg)")).toBeInTheDocument();
+  expect(screen.getByText("Code")).toBeInTheDocument();
+  expect(screen.getByText("Name of the product")).toBeInTheDocument();
+  expect(screen.getByText("Write a description")).toBeInTheDocument();
+  expect(screen.getByText("Price")).toBeInTheDocument();
+  expect(screen.getByText("Category")).toBeInTheDocument();
+  expect(screen.getByText("Available stock")).toBeInTheDocument();
+  expect(screen.getByText("Weight in kilograms")).toBeInTheDocument();
 
   //Expect the submit button to be rendered
   expect(screen.getByText("Submit")).toBeInTheDocument();
@@ -71,13 +74,15 @@ test("Error for product name is rendered correctly", async () => {
   let container: any;
   await act(async () => {
     container = render(
-      <UploadProduct
-        isForUpdate={false}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
+      <Router>
+        <UploadProduct
+          isForUpdate={false}
+          products={products}
+          refreshShop={() => {}}
+          webId="https://testId.com/"
+          role="admin"
+        />
+      </Router>
     ).container;
   });
 
@@ -86,7 +91,9 @@ test("Error for product name is rendered correctly", async () => {
     fireEvent.click(screen.getByText("Submit"));
   });
   //Expect the error message for name to be rendered
-  expect(screen.getByText("Incorrect name")).toBeInTheDocument();
+  expect(
+    screen.getByText("No name for the product has been provided. Check it!")
+  ).toBeInTheDocument();
 
   //Fill in the product name
   fireEvent.change(container.querySelector("input[name='name']"), {
@@ -97,10 +104,12 @@ test("Error for product name is rendered correctly", async () => {
     fireEvent.click(screen.getByText("Submit"));
   });
   //Expect the error message for description to be rendered
-  expect(screen.getByText("Incorrect description")).toBeInTheDocument();
+  expect(
+    screen.getByText("No description has been provided. Check it!")
+  ).toBeInTheDocument();
 
   //Fill in the product description
-  fireEvent.change(container.querySelector("input[name='description']"), {
+  fireEvent.change(container.querySelector("textarea[name='description']"), {
     target: { value: "testDescription" },
   });
   //Click the submit button
@@ -108,7 +117,9 @@ test("Error for product name is rendered correctly", async () => {
     fireEvent.click(screen.getByText("Submit"));
   });
   //Expect the error message for price to be rendered
-  expect(screen.getByText("Incorrect price")).toBeInTheDocument();
+  expect(
+    screen.getByText("Price cannot be a number below 0. Please modify it")
+  ).toBeInTheDocument();
 
   //Fill in the product price
   fireEvent.change(container.querySelector("input[name='price']"), {
@@ -130,13 +141,15 @@ test("File error is rendered correctly", async () => {
   let container: any;
   await act(async () => {
     container = render(
-      <UploadProduct
-        isForUpdate={false}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
+      <Router>
+        <UploadProduct
+          isForUpdate={false}
+          products={products}
+          refreshShop={() => {}}
+          webId="https://testId.com/"
+          role="admin"
+        />
+      </Router>
     ).container;
   });
 
@@ -146,7 +159,7 @@ test("File error is rendered correctly", async () => {
   });
 
   //Fill in the product description
-  fireEvent.change(container.querySelector("input[name='description']"), {
+  fireEvent.change(container.querySelector("textarea[name='description']"), {
     target: { value: "testDescription" },
   });
 
@@ -170,7 +183,9 @@ test("File error is rendered correctly", async () => {
     fireEvent.click(screen.getByText("Submit"));
   });
   //Expect the error message for file to be rendered
-  expect(screen.getByText("Incorrect file")).toBeInTheDocument();
+  expect(
+    screen.getByText("No file has been provided. This field is mandatory")
+  ).toBeInTheDocument();
 });
 
 //A product with a repeated code is tried to add, error message is rendered correctly
@@ -183,13 +198,15 @@ test("A product with a repeated code is tried to add, error message is rendered 
   let container: any;
   await act(async () => {
     container = render(
-      <UploadProduct
-        isForUpdate={false}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
+      <Router>
+        <UploadProduct
+          isForUpdate={false}
+          products={products}
+          refreshShop={() => {}}
+          webId="https://testId.com/"
+          role="admin"
+        />
+      </Router>
     ).container;
   });
 
@@ -202,7 +219,7 @@ test("A product with a repeated code is tried to add, error message is rendered 
 
   //Fill in the product description
   await act(async () => {
-    fireEvent.change(container.querySelector("input[name='description']"), {
+    fireEvent.change(container.querySelector("textarea[name='description']"), {
       target: { value: "testDescription" },
     });
   });
@@ -262,13 +279,15 @@ test("A product is added correctly", async () => {
   let container: any;
   await act(async () => {
     container = render(
-      <UploadProduct
-        isForUpdate={false}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
+      <Router>
+        <UploadProduct
+          isForUpdate={false}
+          products={products}
+          refreshShop={() => {}}
+          webId="https://testId.com/"
+          role="admin"
+        />
+      </Router>
     ).container;
   });
 
@@ -294,7 +313,7 @@ test("A product is added correctly", async () => {
 
   //Fill in the product description
   await act(async () => {
-    fireEvent.change(container.querySelector("input[name='description']"), {
+    fireEvent.change(container.querySelector("textarea[name='description']"), {
       target: { value: "testDescription" },
     });
   });
@@ -353,13 +372,15 @@ test("A product is added correctly", async () => {
 //Test the UploadProduct component for updating a product is rendered correctly
 test("UploadPoduct component for updating a product renders correctly", () => {
   const { getByText, getByTestId } = render(
-    <UploadProduct
-      isForUpdate={true}
-      products={products}
-      refreshShop={() => {}}
-      webId="https://testId.com/"
-      role="admin"
-    />
+    <Router>
+      <UploadProduct
+        isForUpdate={true}
+        products={products}
+        refreshShop={() => {}}
+        webId="https://testId.com/"
+        role="admin"
+      />
+    </Router>
   );
 
   //Expect title to be rendered
@@ -369,12 +390,12 @@ test("UploadPoduct component for updating a product renders correctly", () => {
   expect(getByTestId("select-product")).toBeInTheDocument();
 
   //Expect the form to be rendered
-  expect(getByText("Product name")).toBeInTheDocument();
-  expect(getByText("Product description")).toBeInTheDocument();
-  expect(getByText("Product price")).toBeInTheDocument();
-  expect(getByText("Product category")).toBeInTheDocument();
-  expect(getByText("Product stock")).toBeInTheDocument();
-  expect(getByText("Product weight (kg)")).toBeInTheDocument();
+  expect(screen.getByText("Name of the product")).toBeInTheDocument();
+  expect(screen.getByText("Write a description")).toBeInTheDocument();
+  expect(screen.getByText("Price")).toBeInTheDocument();
+  expect(screen.getByText("Category")).toBeInTheDocument();
+  expect(screen.getByText("Available stock")).toBeInTheDocument();
+  expect(screen.getByText("Weight in kilograms")).toBeInTheDocument();
 
   //Expect the submit button to be rendered
   expect(getByText("Submit")).toBeInTheDocument();
@@ -386,13 +407,15 @@ test("UploadPoduct component for updating a product is filled correctly", async 
 
   await act(async () => {
     container = render(
-      <UploadProduct
-        isForUpdate={true}
-        products={products}
-        refreshShop={() => {}}
-        webId="https://testId.com/"
-        role="admin"
-      />
+      <Router>
+        <UploadProduct
+          isForUpdate={true}
+          products={products}
+          refreshShop={() => {}}
+          webId="https://testId.com/"
+          role="admin"
+        />
+      </Router>
     ).container;
   });
 
@@ -411,7 +434,7 @@ test("UploadPoduct component for updating a product is filled correctly", async 
   expect(container.querySelector("input[name='name']").value).toBe("testName");
 
   //Expect the product description to be filled
-  expect(container.querySelector("input[name='description']").value).toBe(
+  expect(container.querySelector("textarea[name='description']").value).toBe(
     "testDescription"
   );
 
