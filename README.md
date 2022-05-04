@@ -86,7 +86,12 @@ In order to do that, the system will not store personal information from custome
 ### 💸 PayPal account for testing the application
 
 - _User e-mail_: dedeen2a@gmail.com
-- _Password_: dedeen2a 
+- _Password_: dedeen2a
+
+- _Card Type_: MasterCard
+- _Card Number_: 5110926992639155
+- _Expiration Date_: 05/2027
+- _CVV_: 664
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
