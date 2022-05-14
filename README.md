@@ -22,6 +22,8 @@
     <br />
     <a href="https://www.dedeen2a.tk/">View Demo</a>
     ·
+    <a href="https://www.youtube.com/watch?v=4LG93JEGACs">Promotional video</a>
+    ·
     <a href="https://github.com/Arquisoft/dede_en2a/issues">Report Bug</a>
     ·
     <a href="https://github.com/Arquisoft/dede_en2a/issues">Request Feature</a>
